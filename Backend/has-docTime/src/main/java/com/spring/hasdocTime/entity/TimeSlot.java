@@ -1,0 +1,74 @@
+package com.spring.hasdocTime.entity;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.sql.Time;
+import java.util.Objects;
+import java.util.Set;
+
+@Entity
+@Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "time_slot")
+@JsonIdentityInfo(
+        scope = TimeSlot.class,
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
+public class TimeSlot {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "start_time")
+    private Time startTime;
+
+    @Column(name = "end_Time")
+    private Time endTime;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "department_id", referencedColumnName = "id")
+    private Department department;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "available_time_slot",
+            joinColumns = @JoinColumn(name = "time_slot_id"),
+            inverseJoinColumns = @JoinColumn(name = "doctor_id")
+    )
+    private Set<Doctor> availableDoctors;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "booked_time_slot",
+            joinColumns = @JoinColumn(name = "time_slot_id"),
+            inverseJoinColumns = @JoinColumn(name = "doctor_id")
+    )
+    private Set<Doctor> bookedDoctors;
+
+    @OneToOne(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL)
+    private PostAppointmentData appointmentData;
+
+    @OneToOne(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL)
+    private Appointment appointment;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TimeSlot that = (TimeSlot) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+}

@@ -1,0 +1,2 @@
+ALTER TABLE user
+MODIFY blood_group VARCHAR(15) NOT NULL;
