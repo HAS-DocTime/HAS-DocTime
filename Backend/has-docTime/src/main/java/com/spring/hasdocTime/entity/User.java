@@ -1,9 +1,7 @@
 package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.spring.hasdocTime.dao.PatientChronicIllnessDaoImpl;
 import com.spring.hasdocTime.utills.BloodGroup;
 import com.spring.hasdocTime.utills.Gender;
 import com.spring.hasdocTime.utills.Role;
@@ -11,8 +9,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Data
@@ -73,16 +71,16 @@ public class User {
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<PatientChronicIllness> patientChronicIllness;
+    private List<PatientChronicIllness> patientChronicIllness;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Appointment> appointments;
+    private List<Appointment> appointments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<PostAppointmentData> appointmentData;
+    private List<PostAppointmentData> appointmentData;
 
     @ManyToMany(mappedBy = "users", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private Set<Symptom> symptoms;
+    private List<Symptom> symptoms;
 
     @Override
     public boolean equals(Object o) {

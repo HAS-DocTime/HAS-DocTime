@@ -3,6 +3,7 @@ package com.spring.hasdocTime.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.*;
 
 import java.util.Objects;
@@ -45,7 +46,7 @@ public class Appointment {
     private TimeSlot timeSlotForAppointment;
 
     @ManyToMany(mappedBy = "appointments", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
-    private Set<Symptom> symptoms;
+    private List<Symptom> symptoms;
 
     @Override
     public boolean equals(Object o) {

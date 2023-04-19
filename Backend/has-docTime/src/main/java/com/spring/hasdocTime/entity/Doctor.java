@@ -7,6 +7,7 @@ package com.spring.hasdocTime.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.*;
 
 import java.util.Set;
@@ -49,16 +50,16 @@ public class Doctor {
     private boolean isAvailable;
     
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "availableDoctors")
-    private Set<TimeSlot> availableTimeSlots;
+    private List<TimeSlot> availableTimeSlots;
     
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "bookedDoctors")
-    private Set<TimeSlot> bookedTimeSlots;
+    private List<TimeSlot> bookedTimeSlots;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
-    private Set<Appointment> appointments;
+    private List<Appointment> appointments;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
-    private Set<PostAppointmentData> postAppointmentData;
+    private List<PostAppointmentData> postAppointmentData;
 
     @Override
     public boolean equals(Object o) {

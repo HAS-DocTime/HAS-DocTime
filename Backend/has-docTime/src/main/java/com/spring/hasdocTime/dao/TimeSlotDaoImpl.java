@@ -68,7 +68,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             timeSlot.setAppointmentData(postAppointmentData);
         }
 
-        Set<Doctor> availableDoctors = new HashSet<>();
+        List<Doctor> availableDoctors = new ArrayList<>();
         if(timeSlot.getAvailableDoctors() != null){
             for(Doctor d: timeSlot.getAvailableDoctors()){
                 if(d.getId() != 0){
@@ -79,7 +79,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             }
         }
 
-        Set<Doctor> bookedDoctors = new HashSet<>();
+        List<Doctor> bookedDoctors = new ArrayList<>();
         if(timeSlot.getBookedDoctors() != null){
             for(Doctor d: timeSlot.getBookedDoctors()){
                 if(d.getId() != 0){
@@ -109,7 +109,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             PostAppointmentData postAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId()).get();
             timeSlot.setAppointmentData(postAppointmentData);
 
-            Set<Doctor> availableDoctors = new HashSet<>();
+            List<Doctor> availableDoctors = new ArrayList<>();
             for(Doctor d: timeSlot.getAvailableDoctors()){
                 if(d.getId() != 0){
                     Doctor doctor = doctorRepository.findById(d.getId()).get();
@@ -118,7 +118,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
                 }
             }
 
-            Set<Doctor> bookedDoctors = new HashSet<>();
+            List<Doctor> bookedDoctors = new ArrayList<>();
             for(Doctor d: timeSlot.getBookedDoctors()){
                 if(d.getId() != 0){
                     Doctor doctor = doctorRepository.findById(d.getId()).get();

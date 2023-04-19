@@ -63,7 +63,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
             TimeSlot timeSlot = timeSlotRepository.findById(appointment.getTimeSlotForAppointment().getId()).get();
             appointment.setTimeSlotForAppointment(timeSlot);
         }
-        Set<Symptom> symptoms = new HashSet<>();
+        List<Symptom> symptoms = new ArrayList<>();
         for(Symptom s: appointment.getSymptoms()){
             if(s.getId() != 0){
                 Symptom symptom = symptomRepository.findById(s.getId()).get();
@@ -86,7 +86,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
             TimeSlot timeSlot = timeSlotRepository.findById(appointment.getTimeSlotForAppointment().getId()).get();
             appointment.setTimeSlotForAppointment(timeSlot);
 
-            Set<Symptom> symptoms = new HashSet<>();
+            List<Symptom> symptoms = new ArrayList<>();
             for(Symptom s: appointment.getSymptoms()){
                 if(s.getId() != 0){
                     Symptom symptom = symptomRepository.findById(s.getId()).get();

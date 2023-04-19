@@ -17,8 +17,6 @@ import com.spring.hasdocTime.interfc.DoctorInterface;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
@@ -62,8 +60,8 @@ public class DepartmentDaoImpl implements DepartmentInterface {
             symptomsWithData.add(symptomWithData);
         }
         department.setSymptoms(symptomsWithData);
-        Set<Doctor> doctors = department.getDoctors();
-        Set<Doctor> doctorsWithData = new HashSet<>();
+        List<Doctor> doctors = department.getDoctors();
+        List<Doctor> doctorsWithData = new ArrayList<>();
         for(Doctor doctor : doctors){
             Doctor doctorWithData;
             if(doctor.getId()!=0){
