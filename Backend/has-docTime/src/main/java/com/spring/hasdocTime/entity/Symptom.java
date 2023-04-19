@@ -28,25 +28,25 @@ public class Symptom {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "patient_symptom",
-            joinColumns = @JoinColumn(name = "patient_id"),
-            inverseJoinColumns = @JoinColumn(name = "symptom_id"))
+            joinColumns = @JoinColumn(name = "symptom_id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id"))
     private List<User> users;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
     @JoinTable(
             name = "department_symptom",
-            joinColumns = @JoinColumn(name = "department_id"),
-            inverseJoinColumns = @JoinColumn(name = "symptom_id"))
+            joinColumns = @JoinColumn(name = "symptom_id"),
+            inverseJoinColumns = @JoinColumn(name = "department_id"))
     private List<Department> departments;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH})
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "appointment_symptom",
-            joinColumns = @JoinColumn(name = "appointment_id"),
-            inverseJoinColumns = @JoinColumn(name = "symptom_id"))
+            joinColumns = @JoinColumn(name = "symptom_id"),
+            inverseJoinColumns = @JoinColumn(name = "appointment_id"))
     private List<Appointment> appointments;
 
     @Override

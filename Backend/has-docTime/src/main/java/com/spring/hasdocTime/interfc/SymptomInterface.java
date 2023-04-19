@@ -1,9 +1,11 @@
 package com.spring.hasdocTime.interfc;
 
 import com.spring.hasdocTime.entity.Symptom;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface SymptomInterface {
 
     public Symptom getSymptom(int id);
