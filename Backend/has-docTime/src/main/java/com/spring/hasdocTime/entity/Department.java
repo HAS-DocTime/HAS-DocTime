@@ -7,6 +7,7 @@ package com.spring.hasdocTime.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.*;
 
 import java.util.Objects;
@@ -43,18 +44,18 @@ public class Department {
     @Column(name="time_duration")
     private int timeDuration;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
-    private Set<Doctor> doctors;
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+    private List<Doctor> doctors;
     
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "department_symptom",
             joinColumns = @JoinColumn(name = "department_id"),
             inverseJoinColumns = @JoinColumn(name="symptom_id")
     )
-    private Set<Symptom> symptoms;
+    private List<Symptom> symptoms;
     
     @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
-    private Set<TimeSlot> timeSlots;
+    private List<TimeSlot> timeSlots;
 
 
     @Override

@@ -9,5 +9,4 @@ public class HasDocTimeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HasDocTimeApplication.class, args);
 	}
-
 }

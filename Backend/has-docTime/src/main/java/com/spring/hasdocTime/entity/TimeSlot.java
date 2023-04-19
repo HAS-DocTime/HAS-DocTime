@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Time;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class TimeSlot {
             joinColumns = @JoinColumn(name = "time_slot_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
-    private Set<Doctor> availableDoctors;
+    private List<Doctor> availableDoctors;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -51,7 +52,7 @@ public class TimeSlot {
             joinColumns = @JoinColumn(name = "time_slot_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
-    private Set<Doctor> bookedDoctors;
+    private List<Doctor> bookedDoctors;
 
     @OneToOne(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL)
     private PostAppointmentData appointmentData;

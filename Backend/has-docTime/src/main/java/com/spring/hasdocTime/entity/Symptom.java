@@ -7,7 +7,6 @@ import lombok.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "symptom")
@@ -34,21 +33,21 @@ public class Symptom {
             name = "patient_symptom",
             joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "symptom_id"))
-    private Set<User> users;
+    private List<User> users;
 
     @ManyToMany
     @JoinTable(
             name = "department_symptom",
             joinColumns = @JoinColumn(name = "department_id"),
             inverseJoinColumns = @JoinColumn(name = "symptom_id"))
-    private Set<Department> departments;
+    private List<Department> departments;
 
     @ManyToMany(cascade = {CascadeType.REFRESH})
     @JoinTable(
             name = "appointment_symptom",
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "symptom_id"))
-    private Set<Appointment> appointments;
+    private List<Appointment> appointments;
 
     @Override
     public boolean equals(Object o) {

@@ -2,6 +2,7 @@ package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.*;
 
 import java.util.Objects;
@@ -28,7 +29,7 @@ public class ChronicIllness {
     private String name;
 
     @OneToMany(mappedBy = "chronicIllness", cascade = CascadeType.ALL)
-    private Set<PatientChronicIllness> patientChronicIllnesses;
+    private List<PatientChronicIllness> patientChronicIllnesses;
 
     @Override
     public boolean equals(Object o) {
