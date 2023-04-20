@@ -1,8 +1,7 @@
 package com.spring.hasdocTime.dao;
 
-import com.electronwill.nightconfig.core.conversion.SpecClassInArray;
+
 import com.spring.hasdocTime.entity.ChronicIllness;
-import com.spring.hasdocTime.entity.PatientChronicIllness;
 import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
