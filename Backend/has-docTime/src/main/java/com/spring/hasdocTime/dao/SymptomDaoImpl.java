@@ -51,7 +51,7 @@ public class SymptomDaoImpl implements SymptomInterface {
 
     @Override
     public Symptom createSymptom(Symptom symptom) {
-        symptom.setId(0);
+//        symptom.setId(0);
 
         // Users
         List<User> users = symptom.getUsers();
