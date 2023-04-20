@@ -79,7 +79,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PostAppointmentData> appointmentData;
 
-    @ManyToMany(mappedBy = "users", cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "patient_symptom",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "symptom_id"))
     private List<Symptom> symptoms;
 
     @Override

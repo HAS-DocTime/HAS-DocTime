@@ -1,12 +1,16 @@
 package com.spring.hasdocTime.dao;
 
 
-import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.interfc.UserInterface;
+import com.spring.hasdocTime.repository.ChronicIllnessRepository;
+import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
+import com.spring.hasdocTime.repository.SymptomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +19,18 @@ public class UserDaoImpl implements UserInterface {
 
     private UserRepository userRepository;
 
+    private PatientChronicIllnessRepository patientChronicIllnessRepository;
+
+    private ChronicIllnessRepository chronicIllnessRepository;
+
+    private SymptomRepository symptomRepository;
+
     @Autowired
-    public UserDaoImpl(UserRepository userRepository) {
+    public UserDaoImpl(UserRepository userRepository, PatientChronicIllnessRepository patientChronicIllnessRepository,ChronicIllnessRepository chronicIllnessRepository, SymptomRepository symptomRepository) {
         this.userRepository = userRepository;
+        this.patientChronicIllnessRepository = patientChronicIllnessRepository;
+        this.chronicIllnessRepository = chronicIllnessRepository;
+        this.symptomRepository = symptomRepository;
     }
 
     @Override
@@ -36,7 +49,32 @@ public class UserDaoImpl implements UserInterface {
 
     @Override
     public User createUser(User user) {
-        user.setId(0);
+        List<Symptom> symptomList = user.getSymptoms();
+        List<Symptom> newSymptomList = new ArrayList<>();
+        for(Symptom symptom : symptomList) {
+            if(symptom.getId() == 0) {
+                symptom = symptomRepository.save(symptom);
+            }
+            newSymptomList.add(symptomRepository.findById(symptom.getId()).get());
+        }
+        user.setSymptoms(newSymptomList);
+
+        List<PatientChronicIllness> patientChronicIllnessList = user.getPatientChronicIllness();
+        for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
+            patientChronicIllness.setUser(user);
+            CompositeKeyPatientChronicIllness compositeKey;
+            if(patientChronicIllness.getChronicIllness().getId() == 0){
+                ChronicIllness chronicIllness = chronicIllnessRepository.save(patientChronicIllness.getChronicIllness());
+                compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), chronicIllness.getId());
+            }
+            else{
+                ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
+                patientChronicIllness.setChronicIllness(chronicIllness);
+                compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
+            }
+            patientChronicIllness.setId(compositeKey);
+        }
+
         return userRepository.save(user);
     }
 
@@ -46,8 +84,7 @@ public class UserDaoImpl implements UserInterface {
         if(oldUser.isPresent()) {
             User oldUserObj = oldUser.get();
             user.setId(oldUserObj.getId());
-            userRepository.save(user);
-            return user;
+            return createUser(user);
         }
         return null;
     }

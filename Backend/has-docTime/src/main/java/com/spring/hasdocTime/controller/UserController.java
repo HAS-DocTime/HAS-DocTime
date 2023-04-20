@@ -48,18 +48,18 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Doctor> createUser(@RequestBody User theUser) {
+    public ResponseEntity<User> createUser(@RequestBody User theUser) {
         User user = userService.createUser(theUser);
         return new ResponseEntity(user, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Doctor> updateUser(@PathVariable("id") int id, @RequestBody User theUser) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User theUser) {
         User user =  userService.updateUser(id, theUser);
         if(user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return new ResponseEntity(user, HttpStatus.CREATED);
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
