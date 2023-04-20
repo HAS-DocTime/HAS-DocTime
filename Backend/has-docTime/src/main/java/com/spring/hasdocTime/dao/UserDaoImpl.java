@@ -49,7 +49,7 @@ public class UserDaoImpl implements UserInterface {
 
     @Override
     public User createUser(User user) {
-        user.setId(0);
+//        user.setId(0);
         List<Symptom> symptomList = user.getSymptoms();
         List<Symptom> newSymptomList = new ArrayList<>();
         for(Symptom symptom : symptomList) {
@@ -85,8 +85,34 @@ public class UserDaoImpl implements UserInterface {
         if(oldUser.isPresent()) {
             User oldUserObj = oldUser.get();
             user.setId(oldUserObj.getId());
-            userRepository.save(user);
-            return user;
+//            List<Symptom> symptoms = new ArrayList<>();
+//            for(Symptom symptom: user.getSymptoms()){
+//                if(symptom.getId() == 0) {
+//                    symptomRepository.save(symptom);
+//                }
+//                symptoms.add(symptomRepository.findById(symptom.getId()).get());
+//                user.setSymptoms(symptoms);
+//            }
+//
+//            List<PatientChronicIllness> patientChronicIllnessList = new ArrayList<>();
+//            for(PatientChronicIllness patientChronicIllness : user.getPatientChronicIllness()) {
+//                patientChronicIllness.setUser(user);
+//                CompositeKeyPatientChronicIllness compositeKey;
+//                if(patientChronicIllness.getChronicIllness().getId() == 0){
+//                    ChronicIllness chronicIllness = chronicIllnessRepository.save(patientChronicIllness.getChronicIllness());
+//                    compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), chronicIllness.getId());
+//                }
+//                else{
+//                    ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
+//                    patientChronicIllness.setChronicIllness(chronicIllness);
+//                    compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
+//                }
+//                patientChronicIllness.setId(compositeKey);
+//            }
+//            userRepository.save(user);
+//            return user;
+
+            return createUser(user);
         }
         return null;
     }
