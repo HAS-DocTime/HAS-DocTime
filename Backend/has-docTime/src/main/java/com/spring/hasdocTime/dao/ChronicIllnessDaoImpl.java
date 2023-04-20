@@ -1,8 +1,11 @@
 package com.spring.hasdocTime.dao;
 
+import com.electronwill.nightconfig.core.conversion.SpecClassInArray;
 import com.spring.hasdocTime.entity.ChronicIllness;
+import com.spring.hasdocTime.entity.PatientChronicIllness;
 import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
+import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +15,18 @@ import java.util.Optional;
 @Service
 public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
 
-    @Autowired
+
     private ChronicIllnessRepository chronicIllnessRepository;
+    private PatientChronicIllnessRepository patientChronicIllnessRepository;
+
+    @Autowired
+    public ChronicIllnessDaoImpl(ChronicIllnessRepository theChronicIllnessRepository, PatientChronicIllnessRepository thePatientChronicIllnessRepository){
+        this.patientChronicIllnessRepository = thePatientChronicIllnessRepository;
+        this.chronicIllnessRepository = theChronicIllnessRepository;
+    }
 
     @Override
     public ChronicIllness createChronicIllness(ChronicIllness chronicIllness) {
-        chronicIllness.setId(0);
         return chronicIllnessRepository.save(chronicIllness);
     }
 
@@ -29,29 +38,29 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
     @Override
     public ChronicIllness getChronicIllness(int id) {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
-        ChronicIllness chronicIllness = null;
         if(optionalChronicIllness.isPresent()) {
-            chronicIllness = optionalChronicIllness.get();
+            return optionalChronicIllness.get();
         }
-        return chronicIllness;
+        return null;
     }
 
     @Override
     public ChronicIllness updateChronicIllness(int id, ChronicIllness chronicIllness) {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
-        ChronicIllness c = null;
         if(optionalChronicIllness.isPresent()){
-            c.setId(id);
-            c = chronicIllnessRepository.save(chronicIllness);
+            ChronicIllness oldChronicIllness = optionalChronicIllness.get();
+            chronicIllness.setId(oldChronicIllness.getId());
+            chronicIllnessRepository.save(chronicIllness);
+            return chronicIllness;
         }
-        return c;
+        return null;
     }
 
     @Override
     public boolean deleteChronicIllness(int id) {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
         if(optionalChronicIllness.isPresent()) {
-            chronicIllnessRepository.delete(optionalChronicIllness.get());
+            chronicIllnessRepository.deleteById(id);
             return true;
         }
         return false;

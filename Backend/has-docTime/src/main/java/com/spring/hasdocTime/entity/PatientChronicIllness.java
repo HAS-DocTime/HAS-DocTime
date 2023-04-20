@@ -27,7 +27,7 @@ public class PatientChronicIllness {
     @JoinColumn(name="patient_id", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @MapsId("chronicIllnessId")
     @JoinColumn(name="chronic_illness_id", referencedColumnName = "id")
     private ChronicIllness chronicIllness;
