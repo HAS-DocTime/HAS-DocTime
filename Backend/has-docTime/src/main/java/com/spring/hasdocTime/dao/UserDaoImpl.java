@@ -2,9 +2,9 @@ package com.spring.hasdocTime.dao;
 
 
 import com.spring.hasdocTime.entity.*;
+import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
-import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,16 +19,16 @@ public class UserDaoImpl implements UserInterface {
 
     private UserRepository userRepository;
 
-    private PatientChronicIllnessRepository patientChronicIllnessRepository;
+    private PatientChronicIllnessInterface patientChronicIllnessDao;
 
     private ChronicIllnessRepository chronicIllnessRepository;
 
     private SymptomRepository symptomRepository;
 
     @Autowired
-    public UserDaoImpl(UserRepository userRepository, PatientChronicIllnessRepository patientChronicIllnessRepository,ChronicIllnessRepository chronicIllnessRepository, SymptomRepository symptomRepository) {
+    public UserDaoImpl(UserRepository userRepository, PatientChronicIllnessInterface patientChronicIllnessDao,ChronicIllnessRepository chronicIllnessRepository, SymptomRepository symptomRepository) {
         this.userRepository = userRepository;
-        this.patientChronicIllnessRepository = patientChronicIllnessRepository;
+        this.patientChronicIllnessDao = patientChronicIllnessDao;
         this.chronicIllnessRepository = chronicIllnessRepository;
         this.symptomRepository = symptomRepository;
     }
@@ -74,7 +74,7 @@ public class UserDaoImpl implements UserInterface {
             }
             patientChronicIllness.setId(compositeKey);
         }
-
+        user.setPatientChronicIllness(patientChronicIllnessList);
         return userRepository.save(user);
     }
 
@@ -84,6 +84,9 @@ public class UserDaoImpl implements UserInterface {
         if(oldUser.isPresent()) {
             User oldUserObj = oldUser.get();
             user.setId(oldUserObj.getId());
+            for(PatientChronicIllness patientChronicIllness : oldUser.get().getPatientChronicIllness()){
+                patientChronicIllnessDao.deletePatientChronicIllness(patientChronicIllness.getId());
+            }
             return createUser(user);
         }
         return null;

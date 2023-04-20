@@ -99,34 +99,47 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         if(oldTimeSlot.isPresent()) {
             TimeSlot oldTimeSlotObj = oldTimeSlot.get();
             timeSlot.setId(id);
+            
+            
+            
+            if(timeSlot.getDepartment() != null){
+                Department department = departmentRepository.findById(timeSlot.getDepartment().getId()).get();
+                timeSlot.setDepartment(department);
+            }
 
-            Department department = departmentRepository.findById(timeSlot.getDepartment().getId()).get();
-            timeSlot.setDepartment(department);
+            if(timeSlot.getAppointment() != null){
+                Appointment appointment = appointmentRepository.findById(timeSlot.getAppointment().getId()).get();
+                timeSlot.setAppointment(appointment);
+            }
 
-            Appointment appointment = appointmentRepository.findById(timeSlot.getAppointment().getId()).get();
-            timeSlot.setAppointment(appointment);
-
-            PostAppointmentData postAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId()).get();
-            timeSlot.setAppointmentData(postAppointmentData);
+            if(timeSlot.getAppointmentData() != null){
+                PostAppointmentData postAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId()).get();
+                timeSlot.setAppointmentData(postAppointmentData);
+            }
+            
 
             List<Doctor> availableDoctors = new ArrayList<>();
-            for(Doctor d: timeSlot.getAvailableDoctors()){
-                if(d.getId() != 0){
-                    Doctor doctor = doctorRepository.findById(d.getId()).get();
-                    availableDoctors.add(doctor);
-                    timeSlot.setAvailableDoctors(availableDoctors);
+            if(timeSlot.getAvailableDoctors() != null){
+                for(Doctor d: timeSlot.getAvailableDoctors()){
+                    if(d.getId() != 0){
+                        Doctor doctor = doctorRepository.findById(d.getId()).get();
+                        availableDoctors.add(doctor);
+                        timeSlot.setAvailableDoctors(availableDoctors);
+                    }
                 }
             }
+            
 
             List<Doctor> bookedDoctors = new ArrayList<>();
-            for(Doctor d: timeSlot.getBookedDoctors()){
-                if(d.getId() != 0){
-                    Doctor doctor = doctorRepository.findById(d.getId()).get();
-                    bookedDoctors.add(doctor);
-                    timeSlot.setBookedDoctors(bookedDoctors);
+            if(timeSlot.getBookedDoctors() != null){
+                for(Doctor d: timeSlot.getBookedDoctors()){
+                    if(d.getId() != 0){
+                        Doctor doctor = doctorRepository.findById(d.getId()).get();
+                        bookedDoctors.add(doctor);
+                        timeSlot.setBookedDoctors(bookedDoctors);
+                    }
                 }
             }
-
             timeSlotRepository.save(timeSlot);
             return timeSlot;
         }

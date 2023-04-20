@@ -45,7 +45,12 @@ public class Appointment {
 //    @JsonIgnore
     private TimeSlot timeSlotForAppointment;
 
-    @ManyToMany(mappedBy = "appointments", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinTable(
+            name="appointment_symptom",
+            joinColumns = @JoinColumn(name="appointment_id"),
+            inverseJoinColumns = @JoinColumn(name="symptom_id")
+    )
     private List<Symptom> symptoms;
 
     @Override
