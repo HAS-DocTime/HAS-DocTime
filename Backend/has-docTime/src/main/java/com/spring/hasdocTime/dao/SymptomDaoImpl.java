@@ -54,32 +54,41 @@ public class SymptomDaoImpl implements SymptomInterface {
 //        symptom.setId(0);
 
         // Users
-        List<User> users = symptom.getUsers();
-        List<User> usersWithData = new ArrayList<>();
-        for(User user : users){
-            User userWithData = userDao.getUser(user.getId());
-            System.out.println(userWithData.getId());
-            usersWithData.add(userWithData);
+        if(symptom.getUsers() != null){
+            List<User> users = symptom.getUsers();
+            List<User> usersWithData = new ArrayList<>();
+            for(User user : users){
+                User userWithData = userDao.getUser(user.getId());
+                System.out.println(userWithData.getId());
+                usersWithData.add(userWithData);
+            }
+            symptom.setUsers(usersWithData);
         }
-        symptom.setUsers(usersWithData);
+        
+        
 
         // Departments
-        List<Department> departments = symptom.getDepartments();
-        List<Department> departmentsWithData = new ArrayList<>();
-        for(Department department : departments){
-            Department departmentWithData = departmentDao.getDepartment(department.getId());
-            departmentsWithData.add(departmentWithData);
+        if(symptom.getDepartments() != null){
+            List<Department> departments = symptom.getDepartments();
+            List<Department> departmentsWithData = new ArrayList<>();
+            for(Department department : departments){
+                Department departmentWithData = departmentDao.getDepartment(department.getId());
+                departmentsWithData.add(departmentWithData);
+            }
+            symptom.setDepartments(departmentsWithData);
         }
-        symptom.setDepartments(departmentsWithData);
+       
 
         // Appointment
-        List<Appointment> appointments = symptom.getAppointments();
-        List<Appointment> appointmentsWithData = new ArrayList<>();
-        for(Appointment appointment : appointments){
-            Appointment appointmentWithData = appointmentDao.getAppointmentById(appointment.getId());
-            appointmentsWithData.add(appointmentWithData);
+        if(symptom.getAppointments() != null){
+             List<Appointment> appointments = symptom.getAppointments();
+            List<Appointment> appointmentsWithData = new ArrayList<>();
+            for(Appointment appointment : appointments){
+                Appointment appointmentWithData = appointmentDao.getAppointmentById(appointment.getId());
+                appointmentsWithData.add(appointmentWithData);
+            }
+            symptom.setAppointments(appointmentsWithData);
         }
-        symptom.setAppointments(appointmentsWithData);
         return symptomRepository.save(symptom);
     }
 

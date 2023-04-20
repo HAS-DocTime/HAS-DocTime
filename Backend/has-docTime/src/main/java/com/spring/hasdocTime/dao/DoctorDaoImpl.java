@@ -4,10 +4,14 @@
  */
 package com.spring.hasdocTime.dao;
 
+import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.interfc.DoctorInterface;
 import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.Doctor;
+import com.spring.hasdocTime.entity.PostAppointmentData;
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.interfc.AppointmentInterface;
+import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import java.util.List;
@@ -16,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
-import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  *
@@ -32,11 +36,17 @@ public class DoctorDaoImpl implements DoctorInterface {
     
     private DepartmentRepository departmentRepository;
     
+    private AppointmentInterface appointmentDao;
+    
+    private PostAppointmentDataInterface postAppointmentDataDao;
+    
     @Autowired
-    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository){
+    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao){
         this.doctorRepository = doctorRepository;
         this.userRepository = userRepository;
         this.departmentRepository = departmentRepository;
+        this.appointmentDao = appointmentDao;
+        this.postAppointmentDataDao = postAppointmentDataDao;
     }
 
     @Override
@@ -49,9 +59,11 @@ public class DoctorDaoImpl implements DoctorInterface {
         else{
             doctor.getUser().setRole(Role.DOCTOR);
         }
-        if(doctor.getDepartment().getId() != 0){
-            Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
-            doctor.setDepartment(department);
+        if(doctor.getDepartment() != null){
+            if(doctor.getDepartment().getId() != 0){
+                Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
+                doctor.setDepartment(department);
+            }
         }
         return doctorRepository.save(doctor);
     }
@@ -75,6 +87,7 @@ public class DoctorDaoImpl implements DoctorInterface {
         Optional<Doctor> oldDoctor = doctorRepository.findById(id);
         if(oldDoctor.isPresent()){
             doctor.setId(id);
+            oldDoctor.get().getUser().setRole(Role.PATIENT);
             Doctor updatedDoctor = createDoctor(doctor);
             return updatedDoctor;
         }
@@ -85,6 +98,13 @@ public class DoctorDaoImpl implements DoctorInterface {
     public Doctor deleteDoctor(int id) {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
+            for (Appointment appointment : doctor.get().getAppointments()){
+                appointmentDao.deleteAppointment(appointment.getId());
+            }
+            for (PostAppointmentData postAppointmentData : doctor.get().getPostAppointmentData()){
+                postAppointmentDataDao.deletePostAppointmentData(postAppointmentData.getId());
+            }
+            doctor.get().getUser().setRole(Role.PATIENT);
             doctorRepository.deleteById(id);
             return doctor.get();
         }

@@ -78,9 +78,8 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     public Appointment updateAppointment(int id, Appointment appointment) {
         Optional<Appointment> oldAppointment = appointmentRepository.findById(id);
         if(oldAppointment.isPresent()){
-            Appointment oldAppointmentObj = oldAppointment.get();
             appointment.setId(id);
-            appointment.setUser(oldAppointmentObj.getUser());
+            appointment.setUser(userRepository.findById(appointment.getUser().getId()).get());
             Doctor doctor = doctorRepository.findById(appointment.getDoctor().getId()).get();
             appointment.setDoctor(doctor);
             TimeSlot timeSlot = timeSlotRepository.findById(appointment.getTimeSlotForAppointment().getId()).get();
@@ -98,12 +97,6 @@ public class AppointmentDaoImpl implements AppointmentInterface {
             appointmentRepository.save(appointment);
             return appointment;
         }
-//        Appointment existingAppointment = getAppointmentById(id);
-//        existingAppointment.setDescription(appointment.getDescription());
-//        existingAppointment.setUser(appointment.getUser());
-//        existingAppointment.setDoctor(appointment.getDoctor());
-//        existingAppointment.setTimeSlotForAppointment(appointment.getTimeSlotForAppointment());
-//        return appointmentRepository.save(existingAppointment);
         return null;
     }
 

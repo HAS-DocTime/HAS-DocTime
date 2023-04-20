@@ -2,7 +2,9 @@ package com.spring.hasdocTime.dao;
 
 
 import com.spring.hasdocTime.entity.ChronicIllness;
+import com.spring.hasdocTime.entity.PatientChronicIllness;
 import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
+import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,11 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
 
 
     private ChronicIllnessRepository chronicIllnessRepository;
-    private PatientChronicIllnessRepository patientChronicIllnessRepository;
+    private PatientChronicIllnessInterface patientChronicIllnessDao;
 
     @Autowired
-    public ChronicIllnessDaoImpl(ChronicIllnessRepository theChronicIllnessRepository, PatientChronicIllnessRepository thePatientChronicIllnessRepository){
-        this.patientChronicIllnessRepository = thePatientChronicIllnessRepository;
+    public ChronicIllnessDaoImpl(ChronicIllnessRepository theChronicIllnessRepository, PatientChronicIllnessInterface patientChronicIllnessDao){
+        this.patientChronicIllnessDao = patientChronicIllnessDao;
         this.chronicIllnessRepository = theChronicIllnessRepository;
     }
 
@@ -59,6 +61,10 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
     public boolean deleteChronicIllness(int id) {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
         if(optionalChronicIllness.isPresent()) {
+            for(PatientChronicIllness patientChronicIllness : optionalChronicIllness.get().getPatientChronicIllnesses()){
+                patientChronicIllnessDao.deletePatientChronicIllness(patientChronicIllness.getId());
+            }
+            
             chronicIllnessRepository.deleteById(id);
             return true;
         }

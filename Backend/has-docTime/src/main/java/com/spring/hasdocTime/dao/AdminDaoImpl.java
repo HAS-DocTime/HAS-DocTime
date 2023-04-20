@@ -44,6 +44,7 @@ public class AdminDaoImpl implements AdminInterface {
         if(optionalAdmin.isPresent()) {
             admin.setId(id); // setting admin id
             admin.getUser().setId(optionalAdmin.get().getUser().getId()); // setting user object id
+            admin.getUser().setRole(Role.ADMIN);
             userRepository.save(admin.getUser()); // call userRepository's save function
         }
         return adminRepository.findById(id).get(); // fetching Updated data
@@ -65,9 +66,9 @@ public class AdminDaoImpl implements AdminInterface {
         admin.setId(0);
         if(admin.getUser().getId() != 0){
             Optional<User> user = userRepository.findById(admin.getUser().getId());
-            admin.setUser(user.get());
-            admin.getUser().setRole(Role.ADMIN);
+            admin.setUser(user.get());     
         }
+        admin.getUser().setRole(Role.ADMIN);
         return adminRepository.save(admin);
     }
 }
