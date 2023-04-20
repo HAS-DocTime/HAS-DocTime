@@ -98,6 +98,8 @@ public class SymptomDaoImpl implements SymptomInterface {
     public boolean deleteSymptom(int id) {
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
         if(optionalSymptom.isPresent()){
+
+            //Different Approach
 //            List<Department> departments = optionalSymptom.get().getDepartments();
 //            for(Department department : departments){
 //                department.getSymptoms().remove(department);
