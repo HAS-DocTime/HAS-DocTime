@@ -1,0 +1,27 @@
+.form-check{
+  display: inline-block;
+  margin-right:3%;
+}
+
+.form-group{
+  width: 70%;
+}
+
+.registerForm{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.gender{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.doctorDetails .form-group{
+  width: 100%;
+}
