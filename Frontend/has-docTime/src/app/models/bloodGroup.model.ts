@@ -1,0 +1,11 @@
+export enum BloodGroup{
+  A_POSITIVE=0,
+  A_NEGATIVE=1,
+  B_POSITIVE=2,
+  B_NEGATIVE=3,
+  AB_POSITIVE=4,
+  AB_NEGATIVE=5,
+  O_POSITIVE=6,
+  O_NEGATIVE=7
+
+}
