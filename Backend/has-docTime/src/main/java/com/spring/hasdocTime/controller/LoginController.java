@@ -2,7 +2,6 @@ package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.LoginDetail;
 import com.spring.hasdocTime.entity.User;
-import com.spring.hasdocTime.interfc.AdminInterface;
 import com.spring.hasdocTime.interfc.LoginInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
