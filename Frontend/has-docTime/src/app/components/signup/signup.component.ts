@@ -98,7 +98,7 @@ export class SignupComponent implements OnInit{
           role : "PATIENT",
           qualification : "",
           casesSolved : 0,
-          chronicIllnesses : []
+          patientChronicIllness : []
         });
       });
     }
@@ -131,7 +131,7 @@ export class SignupComponent implements OnInit{
             role : "PATIENT",
             qualification : "",
             casesSolved : 0,
-            chronicIllnesses : []
+            patientChronicIllness : []
         });
         })
       });

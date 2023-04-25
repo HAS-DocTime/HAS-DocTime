@@ -175,38 +175,44 @@
         formArrayName="patientChronicIllness"
       >
         <div class="d-flex my-3 justify-content-between" [formGroupName]="i">
-          <input
-            type="text"
-            class="form-control me-2"
-            id="chronicIllness"
-            placeholder="Enter Chronic Illness"
-            formControlName="name"
-          />
-          <div
-            class="alert alert-danger"
-            *ngIf="
-              signupForm.get('name')?.touched && signupForm.get('name')?.invalid
-            "
-          >
-            <span *ngIf="signupForm.get('name')?.errors">Name is Required</span>
-          </div>
-          <input
-            type="text"
-            class="form-control mx-2"
-            id="yearsOfIllness"
-            placeholder="Enter Years of Illness"
-            formControlName="yearsOfIllness"
-          />
-          <div
-            class="alert alert-danger"
-            *ngIf="
-              signupForm.get('yearsOfIllness')?.touched &&
-              signupForm.get('yearsOfIllness')?.invalid
-            "
-          >
-            <span *ngIf="signupForm.get('yearsOfIllness')?.errors"
-              >Years of Illness is Required</span
+          <div>
+            <label for="chronicIllness">Name</label>
+            <input
+              type="text"
+              class="form-control me-2"
+              id="chronicIllness"
+              placeholder="Enter Chronic Illness"
+              formControlName="name"
+            />
+            <div
+              class="alert alert-danger"
+              *ngIf="
+                signupForm.get('name')?.touched && signupForm.get('name')?.invalid
+              "
             >
+              <span *ngIf="signupForm.get('name')?.errors">Name is Required</span>
+            </div>
+          </div>
+          <div>
+            <label for="yearsOfIllness">Years of Illness</label>
+            <input
+              type="text"
+              class="form-control mx-2"
+              id="yearsOfIllness"
+              placeholder="Enter Years of Illness"
+              formControlName="yearsOfIllness"
+            />
+            <div
+              class="alert alert-danger"
+              *ngIf="
+                signupForm.get('yearsOfIllness')?.touched &&
+                signupForm.get('yearsOfIllness')?.invalid
+              "
+            >
+              <span *ngIf="signupForm.get('yearsOfIllness')?.errors"
+                >Years of Illness is Required</span
+              >
+            </div>
           </div>
           <i class="bi bi-trash3-fill me-2" (click)="deleteChronicIllness(i)" style="cursor : pointer;"></i>
         </div>
