@@ -6,7 +6,7 @@
         type="text"
         class="form-control"
         id="name"
-        placeholder="Enter Name"
+        placeholder="(Eg : John)"
         formControlName="name"
       />
       <div
@@ -24,7 +24,7 @@
         type="email"
         class="form-control"
         id="email"
-        placeholder="Enter email"
+        placeholder="(Eg : johndoe@gmail.com)"
         formControlName="email"
       />
       <div
@@ -63,7 +63,7 @@
         type="date"
         class="form-control"
         id="dob"
-        placeholder="Enter Date of Birth"
+        placeholder="(Eg : 2001-01-01)"
         formControlName="dob"
       />
       <div
@@ -116,7 +116,7 @@
     </div>
     <div class="form-group mb-4">
       <label for="bloodGroup">Blood Group</label>
-      <select class="form-control" id="bloodGroup" formControlName="bloodGroup">
+      <select class="form-select" id="bloodGroup" formControlName="bloodGroup">
         <option value="A_POSITIVE">A+</option>
         <option value="A_NEGATIVE">A-</option>
         <option value="B_POSITIVE">B+</option>
@@ -133,7 +133,7 @@
         type="text"
         class="form-control"
         id="contact"
-        placeholder="Enter Contact"
+        placeholder="(Eg : 9724214413)"
         formControlName="contact"
       />
       <div
@@ -151,20 +151,20 @@
     <div class="form-group mb-4">
       <label for="height">Height</label>
       <input
-        type="text"
+        type="number"
         class="form-control"
         id="height"
-        placeholder="Enter Height"
+        placeholder="(Eg : 6.2 (inches))"
         formControlName="height"
       />
     </div>
     <div class="form-group mb-4">
       <label for="weight">Weight</label>
       <input
-        type="text"
+        type="number"
         class="form-control"
         id="weight"
-        placeholder="Enter Weight"
+        placeholder="(Eg : 78 (kilos))"
         formControlName="weight"
       />
     </div>
@@ -231,7 +231,7 @@
     </div>
     <div class="form-group mb-4">
       <label for="role">Role</label>
-      <select class="form-control" id="role" formControlName="role">
+      <select class="form-select" id="role" formControlName="role">
         <option value="PATIENT">Patient</option>
         <option value="DOCTOR">Doctor</option>
       </select>
