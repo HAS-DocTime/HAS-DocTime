@@ -6,9 +6,13 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
+
+  isLoggedIn: boolean = false;
+
   constructor(private http : HttpClient) { }
   baseUrl = "http://localhost:8080/";
   registerUser(user : User){
+    this.isLoggedIn = true;
     return this.http.post<User>(`${this.baseUrl}user`, user);
   }
 }
