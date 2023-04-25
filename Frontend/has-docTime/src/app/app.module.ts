@@ -22,7 +22,7 @@ import {HttpClientModule} from '@angular/common/http'
     BrowserAnimationsModule,
     MatCheckboxModule,
     MatButtonModule,
-    MatToolbarModule
+    MatToolbarModule,
     ReactiveFormsModule,
     HttpClientModule
   ],
