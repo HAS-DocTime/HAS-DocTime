@@ -1,0 +1,109 @@
+<div class="container mt-5">
+  <form [formGroup]="signupForm" class="registerForm" (ngSubmit)="register()">
+    <div class="form-group mb-4">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Enter Name" formControlName="name">
+      <div class="alert alert-danger" *ngIf="signupForm.get('name')?.touched && signupForm.get('name')?.invalid">
+        <span *ngIf="signupForm.get('name')?.errors">Name is Required</span>
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <label for="dob">Date of Birth</label>
+      <input type="date" class="form-control" id="dob" placeholder="Enter Date of Birth" formControlName="dob">
+      <div class="alert alert-danger" *ngIf="signupForm.get('dob')?.touched && signupForm.get('dob')?.invalid">
+        <span *ngIf="signupForm.get('dob')?.errors">Date of Birth is Required</span>
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <div class="mb-3">
+        Gender
+      </div>
+      <div>
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="radio" name="gender" id="male" value="MALE" checked formControlName="gender">
+          <label class="form-check-label" for="male">
+            Male
+          </label>
+        </div>
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="radio" name="gender" id="female" value="FEMALE" formControlName="gender">
+          <label class="form-check-label" for="female">
+            Female
+          </label>
+        </div>
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="radio" name="gender" id="other" value="OTHER" formControlName="gender">
+          <label class="form-check-label" for="other">
+            Other
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <label for="bloodGroup">Blood Group</label>
+      <select class="form-control" id="bloodGroup" formControlName="bloodGroup">
+        <option value="A_POSITIVE">A+</option>
+        <option value="A_NEGATIVE">A-</option>
+        <option value="B_POSITIVE">B+</option>
+        <option value="B_NEGATIVE">B-</option>
+        <option value="O_POSITIVE">O+</option>
+        <option value="O_NEGATIVE">O-</option>
+        <option value="AB_POSITIVE">AB+</option>
+        <option value="AB_NEGATIVE">AB-</option>
+      </select>
+    </div>
+    <div class="form-group mb-4">
+      <label for="contact">Contact</label>
+      <input type="text" class="form-control" id="contact" placeholder="Enter Contact" formControlName="contact">
+      <div class="alert alert-danger" *ngIf="signupForm.get('contact')?.touched && signupForm.get('contact')?.invalid">
+        <span *ngIf="signupForm.get('contact')?.errors">Contact is Required</span>
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <label for="height">Height</label>
+      <input type="text" class="form-control" id="height" placeholder="Enter Height" formControlName="height">
+    </div>
+    <div class="form-group mb-4">
+      <label for="weight">Weight</label>
+      <input type="text" class="form-control" id="weight" placeholder="Enter Weight" formControlName="weight">
+    </div>
+    <div class="form-group mb-4">
+      <label for="email">Email address</label>
+      <input type="email" class="form-control" id="email" placeholder="Enter email" formControlName="email">
+      <div class="alert alert-danger" *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid">
+        <span *ngIf="signupForm.get('email')?.errors">Email is Required</span>
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" placeholder="Enter Password" formControlName="password">
+      <div class="alert alert-danger" *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid">
+        <span *ngIf="signupForm.get('password')?.errors">Password is Required</span>
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <label for="role">Role</label>
+      <select class="form-control" id="role" formControlName="role" formControlName="role">
+        <option value="PATIENT">Patient</option>
+        <option value="DOCTOR">Doctor</option>
+      </select>
+    </div>
+    <div class="doctorDetails form-group mb-4" *ngIf="signupForm.value['role']==='DOCTOR'">
+      <div class="form-group doctorDetail mb-4">
+        <label for="qualification">Qualifications</label>
+        <input type="text" class="form-control" id="qualification" placeholder="Enter Qualifications" formControlName="qualification">
+        <div class="alert alert-danger" *ngIf="signupForm.get('qualification')?.touched && signupForm.get('qualification')?.invalid">
+          <span *ngIf="signupForm.get('qualification')?.errors">Qualification is Required</span>
+        </div>
+      </div>
+      <div class="form-group doctorDetail mb-4">
+        <label for="cases_solved">Cases Solved</label>
+        <input type="number" class="form-control" id="cases_solved" placeholder="Enter Number of Cases Solved" formControlName="cases_solved">
+        <div class="alert alert-danger" *ngIf="signupForm.get('cases_solved')?.touched && signupForm.get('cases_solved')?.invalid">
+          <span *ngIf="signupForm.get('cases_solved')?.errors">Cases Solved is Required</span>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!signupForm?.valid">Register</button>
+  </form>
+</div>

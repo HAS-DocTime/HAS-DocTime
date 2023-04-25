@@ -50,7 +50,8 @@ public class UserDaoImpl implements UserInterface {
     @Override
     public User createUser(User user) {
         List<Symptom> symptomList = user.getSymptoms();
-        List<Symptom> newSymptomList = new ArrayList<>();
+        if(symptomList!=null){
+            List<Symptom> newSymptomList = new ArrayList<>();
         for(Symptom symptom : symptomList) {
             if(symptom.getId() == 0) {
                 symptom = symptomRepository.save(symptom);
@@ -58,9 +59,10 @@ public class UserDaoImpl implements UserInterface {
             newSymptomList.add(symptomRepository.findById(symptom.getId()).get());
         }
         user.setSymptoms(newSymptomList);
-
+        }
         List<PatientChronicIllness> patientChronicIllnessList = user.getPatientChronicIllness();
-        for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
+        if(patientChronicIllnessList != null){
+            for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
             patientChronicIllness.setUser(user);
             CompositeKeyPatientChronicIllness compositeKey;
             if(patientChronicIllness.getChronicIllness().getId() == 0){
@@ -73,8 +75,9 @@ public class UserDaoImpl implements UserInterface {
                 compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
             }
             patientChronicIllness.setId(compositeKey);
+            user.setPatientChronicIllness(patientChronicIllnessList);
+            }
         }
-        user.setPatientChronicIllness(patientChronicIllnessList);
         return userRepository.save(user);
     }
 
