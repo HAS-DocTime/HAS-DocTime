@@ -10,3 +10,4 @@ public class HasDocTimeApplication {
 		SpringApplication.run(HasDocTimeApplication.class, args);
 	}
 }
+
