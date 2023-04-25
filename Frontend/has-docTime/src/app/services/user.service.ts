@@ -9,10 +9,6 @@ export class UserService {
   constructor(private http : HttpClient) { }
   baseUrl = "http://localhost:8080/";
   registerUser(user : User){
-    this.http.post<User>(`${this.baseUrl}user`, user).subscribe(
-      (data) => {
-        console.log(data);
-      }
-    )
+    return this.http.post<User>(`${this.baseUrl}user`, user);
   }
 }
