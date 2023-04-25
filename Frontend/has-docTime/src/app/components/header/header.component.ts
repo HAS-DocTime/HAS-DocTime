@@ -1,17 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
+
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
 
   constructor(private userService: UserService){
-    this.registered = this.userService.isLoggedIn;
   }
 
-  registered: boolean;
+  registered!: Boolean;
+  inSignupForm!: boolean;
+
+  ngOnInit(): void {
+      this.userService.isLoggedIn.subscribe( (data) => {
+        this.registered = data;
+      });
+  }
+
+  onLogout(){
+    this.userService.onLogout();
+    this.inSignupForm = false;
+  }
+
+  onRegister(){
+    this.inSignupForm = true;
+  }
 
 }

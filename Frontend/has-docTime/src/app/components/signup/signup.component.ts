@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Doctor } from 'src/app/models/doctor.model';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
@@ -13,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 
 export class SignupComponent implements OnInit{
 
-  constructor(private userService : UserService, private doctorService : DoctorService){
+  constructor(private userService : UserService, private doctorService : DoctorService, private router: Router){
 
   }
 
@@ -113,5 +114,8 @@ export class SignupComponent implements OnInit{
         })
       });
     }
+
+    this.router.navigate([""]);
+
   }
 }

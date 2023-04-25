@@ -9,9 +9,10 @@
         <p class="fontinc">Hospital Appointment System</p>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <section>
-                <div class="example-button-row" *ngIf="!registered">
-                    <button style="margin-right: 10px;" mat-raised-button color="primary" routerLink="/register" >Register</button>
-                    <button mat-raised-button color="accent" routerLink="/login">Login</button>
+                <div class="example-button-row" >
+                    <button *ngIf="!inSignupForm" style="margin-right: 10px;" mat-raised-button color="primary" routerLink="/register" (click)="onRegister()">Register</button>
+                    <button *ngIf="!registered" mat-raised-button color="accent" routerLink="/login">Login</button>
+                    <button *ngIf="registered" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
                 </div>
             </section>
         </div>
