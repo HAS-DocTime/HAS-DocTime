@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Doctor } from 'src/app/models/doctor.model';
+import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 
 export class SignupComponent implements OnInit{
 
-  constructor(private userService : UserService){
+  constructor(private userService : UserService, private doctorService : DoctorService){
 
   }
 
@@ -60,21 +62,56 @@ export class SignupComponent implements OnInit{
       }
       user.age = age;
     }
-    this.userService.registerUser(user).subscribe((data)=> {
-      this.signupForm.reset({
-        name : "",
-        dob : "2001-01-01",
-        gender : "MALE",
-        bloodGroup : "O_POSITIVE",
-        contact : "",
-        height : 0,
-        weight : 0,
-        email : "",
-        password : "",
-        role : "PATIENT",
-        qualification : "",
-        casesSolved : 0
+    if(user.role==="PATIENT"){
+      this.userService.registerUser(user).subscribe((data)=> {
+        this.signupForm.reset({
+          name : "",
+          dob : "2001-01-01",
+          gender : "MALE",
+          bloodGroup : "O_POSITIVE",
+          contact : "",
+          height : 0,
+          weight : 0,
+          email : "",
+          password : "",
+          role : "PATIENT",
+          qualification : "",
+          casesSolved : 0
+        });
       });
-    });
+    }
+    else if(user.role === "DOCTOR"){
+      let userId = 0;
+      this.userService.registerUser(user).subscribe((data)=> {
+        userId = (data.id as number);
+        let doctor : Doctor = {
+          user : {
+            id : userId
+          },
+          qualification : user.qualification,
+          casesSolved : user.casesSolved,
+          available : true,
+          department : {
+            id : 1
+          } //Hard-coded as of now
+        }
+        this.doctorService.createDoctor(doctor).subscribe(data=> {
+            this.signupForm.reset({
+            name : "",
+            dob : "2001-01-01",
+            gender : "MALE",
+            bloodGroup : "O_POSITIVE",
+            contact : "",
+            height : 0,
+            weight : 0,
+            email : "",
+            password : "",
+            role : "PATIENT",
+            qualification : "",
+            casesSolved : 0
+        });
+        })
+      });
+    }
   }
 }
