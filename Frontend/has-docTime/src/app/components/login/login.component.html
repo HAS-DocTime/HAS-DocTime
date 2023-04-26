@@ -14,7 +14,7 @@
                   formControlName="email"
                   required
                   [ngClass]="{'is-invalid': submitted && loginForm.controls['email'].invalid}">
-          <div class="invalid-feedback">
+          <div *ngIf="submitted && loginForm.controls['password'].invalid" class="invalid-feedback">
             Please enter a valid email address.
           </div>
         </div>
@@ -28,7 +28,8 @@
                   id="password"
                   placeholder="Password"
                   formControlName="password"
-                  required>
+                  required
+                  [ngClass]="{'is-invalid': submitted && loginForm.controls['password'].invalid}">
           <div *ngIf="submitted && loginForm.controls['password'].invalid" class="invalid-feedback">
             Password is required and must be at least 6 characters long.
           </div>
@@ -45,3 +46,5 @@
     </div>
   </form>
 </div>
+<!-- *ngIf="submitted && loginForm.controls['password'].invalid" -->
+<!-- *ngIf="submitted && invalidLogin" -->

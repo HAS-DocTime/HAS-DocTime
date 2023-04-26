@@ -24,11 +24,8 @@ public class LoginController {
 
     @PostMapping("")
     public ResponseEntity<User> loginRequest(@RequestBody LoginDetail loginDetail){
-        System.out.println(loginDetail.getEmail());
-        System.out.println(loginDetail.getPassword());
         User responseUser = loginService.loginRequest(loginDetail);
         if(responseUser == null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             return new ResponseEntity(responseUser, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(responseUser, HttpStatus.OK);

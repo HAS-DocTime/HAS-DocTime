@@ -13,18 +13,16 @@ export class LoginComponent implements OnInit{
 
   submitted = false;
   invalidLogin = false;
+  user = null;
 
   constructor(private loginService: LoginService, private router: Router) {
   }
 
-  ngOnInit(){
-    this.loginForm.get("email")?.addValidators([Validators.required, Validators.email]);
-    this.loginForm.get("password")?.addValidators([Validators.required, Validators.minLength(8)]);
-  }
+  ngOnInit(){}
 
   loginForm : FormGroup = new FormGroup({
-    email: new FormControl("", [Validators.required]),
-    password: new FormControl("", Validators.required)
+    email: new FormControl("", [Validators.required, Validators.email]),
+    password: new FormControl("", [Validators.required, Validators.minLength(8)])
   })
 
   onSubmit(){
@@ -36,7 +34,7 @@ export class LoginComponent implements OnInit{
     const password = this.loginForm.controls['password'].value;
 
     this.loginService.checkDetail(email, password).subscribe(data => {
-      console.log(data);
+      this.user=data;
     }, (err)=> {
       if(err){
         this.invalidLogin=true;
