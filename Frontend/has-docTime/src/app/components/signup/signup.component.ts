@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Form, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ChronicIllness } from 'src/app/models/chronicIllness.model';
+import { Router } from '@angular/router';
 import { Doctor } from 'src/app/models/doctor.model';
 import { ChronicIllnessService } from 'src/app/services/chronic-illness.service';
 import { DoctorService } from 'src/app/services/doctor.service';
@@ -15,7 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 
 export class SignupComponent implements OnInit{
 
-  constructor(private userService : UserService, private doctorService : DoctorService, private chhronicIllnessService : ChronicIllnessService){
+  constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
 
   }
 
@@ -132,6 +133,9 @@ export class SignupComponent implements OnInit{
         })
       });
     }
+
+    this.router.navigate([""]);
+
   }
 
   addChronicIllness(){
