@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("login")
+@CrossOrigin(value = "http://localhost:4200")
 public class LoginController {
 
     @Autowired
@@ -19,13 +20,15 @@ public class LoginController {
 
     private String username;
     private String password;
+
+
     @PostMapping("")
     public ResponseEntity<User> loginRequest(@RequestBody LoginDetail loginDetail){
         User responseUser = loginService.loginRequest(loginDetail);
         if(responseUser == null) {
-            return new ResponseEntity(responseUser, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(responseUser, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(responseUser, HttpStatus.ACCEPTED);
+        return new ResponseEntity(responseUser, HttpStatus.OK);
     }
 
 }
