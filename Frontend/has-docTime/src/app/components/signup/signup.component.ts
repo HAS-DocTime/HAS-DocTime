@@ -6,7 +6,7 @@ import { Doctor } from 'src/app/models/doctor.model';
 import { ChronicIllnessService } from 'src/app/services/chronic-illness.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
-ssssssssssssssssssssssssssssssssssssssssssssssss
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
