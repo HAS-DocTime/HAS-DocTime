@@ -5,13 +5,13 @@
 package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.*;
 
 import java.util.Objects;
-import java.util.Set;
 
 /**
  *
@@ -45,6 +45,7 @@ public class Department {
     private int timeDuration;
 
     @OneToMany(mappedBy = "department", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+    @JsonIgnoreProperties({"user", "department", "appointments", "postAppointmentData"})
     private List<Doctor> doctors;
 
     @ManyToMany()
@@ -52,9 +53,11 @@ public class Department {
             joinColumns = @JoinColumn(name = "department_id"),
             inverseJoinColumns = @JoinColumn(name="symptom_id")
     )
+    @JsonIgnoreProperties({"departments", "users", "appointments"})
     private List<Symptom> symptoms;
     
     @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @JsonIgnoreProperties({"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"})
     private List<TimeSlot> timeSlots;
 
 
