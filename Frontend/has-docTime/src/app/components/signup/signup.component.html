@@ -2,46 +2,121 @@
   <form [formGroup]="signupForm" class="registerForm" (ngSubmit)="register()">
     <div class="form-group mb-4">
       <label for="name">Name</label>
-      <input type="text" class="form-control" id="name" placeholder="Enter Name" formControlName="name">
-      <div class="alert alert-danger" *ngIf="signupForm.get('name')?.touched && signupForm.get('name')?.invalid">
+      <input
+        type="text"
+        class="form-control"
+        id="name"
+        placeholder="(Eg : John)"
+        formControlName="name"
+      />
+      <div
+        class="alert alert-danger"
+        *ngIf="
+          signupForm.get('name')?.touched && signupForm.get('name')?.invalid
+        "
+      >
         <span *ngIf="signupForm.get('name')?.errors">Name is Required</span>
       </div>
     </div>
     <div class="form-group mb-4">
-      <label for="dob">Date of Birth</label>
-      <input type="date" class="form-control" id="dob" placeholder="Enter Date of Birth" formControlName="dob">
-      <div class="alert alert-danger" *ngIf="signupForm.get('dob')?.touched && signupForm.get('dob')?.invalid">
-        <span *ngIf="signupForm.get('dob')?.errors">Date of Birth is Required</span>
+      <label for="email">Email address</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        placeholder="(Eg : johndoe@gmail.com)"
+        formControlName="email"
+      />
+      <div
+        class="alert alert-danger"
+        *ngIf="
+          signupForm.get('email')?.touched && signupForm.get('email')?.invalid
+        "
+      >
+        <span *ngIf="signupForm.get('email')?.errors">Email is Required</span>
       </div>
     </div>
     <div class="form-group mb-4">
-      <div class="mb-3">
-        Gender
+      <label for="password">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        placeholder="Enter Password"
+        formControlName="password"
+      />
+      <div
+        class="alert alert-danger"
+        *ngIf="
+          signupForm.get('password')?.touched &&
+          signupForm.get('password')?.invalid
+        "
+      >
+        <span *ngIf="signupForm.get('password')?.errors"
+          >Password is Required</span
+        >
       </div>
+    </div>
+    <div class="form-group mb-4">
+      <label for="dob">Date of Birth</label>
+      <input
+        type="date"
+        class="form-control"
+        id="dob"
+        placeholder="(Eg : 2001-01-01)"
+        formControlName="dob"
+      />
+      <div
+        class="alert alert-danger"
+        *ngIf="signupForm.get('dob')?.touched && signupForm.get('dob')?.invalid"
+      >
+        <span *ngIf="signupForm.get('dob')?.errors"
+          >Date of Birth is Required</span
+        >
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <div class="mb-3">Gender</div>
       <div>
         <div class="form-check mb-4">
-          <input class="form-check-input" type="radio" name="gender" id="male" value="MALE" checked formControlName="gender">
-          <label class="form-check-label" for="male">
-            Male
-          </label>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="gender"
+            id="male"
+            value="MALE"
+            checked
+            formControlName="gender"
+          />
+          <label class="form-check-label" for="male"> Male </label>
         </div>
         <div class="form-check mb-4">
-          <input class="form-check-input" type="radio" name="gender" id="female" value="FEMALE" formControlName="gender">
-          <label class="form-check-label" for="female">
-            Female
-          </label>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="gender"
+            id="female"
+            value="FEMALE"
+            formControlName="gender"
+          />
+          <label class="form-check-label" for="female"> Female </label>
         </div>
         <div class="form-check mb-4">
-          <input class="form-check-input" type="radio" name="gender" id="other" value="OTHER" formControlName="gender">
-          <label class="form-check-label" for="other">
-            Other
-          </label>
+          <input
+            class="form-check-input"
+            type="radio"
+            name="gender"
+            id="other"
+            value="OTHER"
+            formControlName="gender"
+          />
+          <label class="form-check-label" for="other"> Other </label>
         </div>
       </div>
     </div>
     <div class="form-group mb-4">
       <label for="bloodGroup">Blood Group</label>
-      <select class="form-control" id="bloodGroup" formControlName="bloodGroup">
+      <select class="form-select" id="bloodGroup" formControlName="bloodGroup">
         <option value="A_POSITIVE">A+</option>
         <option value="A_NEGATIVE">A-</option>
         <option value="B_POSITIVE">B+</option>
@@ -54,56 +129,166 @@
     </div>
     <div class="form-group mb-4">
       <label for="contact">Contact</label>
-      <input type="text" class="form-control" id="contact" placeholder="Enter Contact" formControlName="contact">
-      <div class="alert alert-danger" *ngIf="signupForm.get('contact')?.touched && signupForm.get('contact')?.invalid">
-        <span *ngIf="signupForm.get('contact')?.errors">Contact is Required</span>
+      <input
+        type="text"
+        class="form-control"
+        id="contact"
+        placeholder="(Eg : 9724214413)"
+        formControlName="contact"
+      />
+      <div
+        class="alert alert-danger"
+        *ngIf="
+          signupForm.get('contact')?.touched &&
+          signupForm.get('contact')?.invalid
+        "
+      >
+        <span *ngIf="signupForm.get('contact')?.errors"
+          >Contact is Required</span
+        >
       </div>
     </div>
     <div class="form-group mb-4">
       <label for="height">Height</label>
-      <input type="text" class="form-control" id="height" placeholder="Enter Height" formControlName="height">
+      <input
+        type="number"
+        class="form-control"
+        id="height"
+        placeholder="(Eg : 6.2 (inches))"
+        formControlName="height"
+      />
     </div>
     <div class="form-group mb-4">
       <label for="weight">Weight</label>
-      <input type="text" class="form-control" id="weight" placeholder="Enter Weight" formControlName="weight">
+      <input
+        type="number"
+        class="form-control"
+        id="weight"
+        placeholder="(Eg : 78 (kilos))"
+        formControlName="weight"
+      />
     </div>
-    <div class="form-group mb-4">
-      <label for="email">Email address</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter email" formControlName="email">
-      <div class="alert alert-danger" *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid">
-        <span *ngIf="signupForm.get('email')?.errors">Email is Required</span>
+    <div class="form-group">
+      <label>Chronic Illness</label>
+      <div
+        *ngFor="let chronicIll of chronicIllness.controls; let i=index;"
+        formArrayName="patientChronicIllness"
+      >
+        <div class="d-flex my-3 justify-content-between" [formGroupName]="i">
+          <div>
+            <label for="chronicIllness">Name</label>
+            <input
+              type="text"
+              class="form-control me-2"
+              id="chronicIllness"
+              placeholder="Enter Chronic Illness"
+              formControlName="name"
+            />
+            <div
+              class="alert alert-danger"
+              *ngIf="
+                signupForm.get('name')?.touched && signupForm.get('name')?.invalid
+              "
+            >
+              <span *ngIf="signupForm.get('name')?.errors">Name is Required</span>
+            </div>
+          </div>
+          <div>
+            <label for="yearsOfIllness">Years of Illness</label>
+            <input
+              type="text"
+              class="form-control mx-2"
+              id="yearsOfIllness"
+              placeholder="Enter Years of Illness"
+              formControlName="yearsOfIllness"
+            />
+            <div
+              class="alert alert-danger"
+              *ngIf="
+                signupForm.get('yearsOfIllness')?.touched &&
+                signupForm.get('yearsOfIllness')?.invalid
+              "
+            >
+              <span *ngIf="signupForm.get('yearsOfIllness')?.errors"
+                >Years of Illness is Required</span
+              >
+            </div>
+          </div>
+          <i class="bi bi-trash3-fill me-2" (click)="deleteChronicIllness(i)" style="cursor : pointer;"></i>
+        </div>
       </div>
-    </div>
-    <div class="form-group mb-4">
-      <label for="password">Password</label>
-      <input type="password" class="form-control" id="password" placeholder="Enter Password" formControlName="password">
-      <div class="alert alert-danger" *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid">
-        <span *ngIf="signupForm.get('password')?.errors">Password is Required</span>
+      <div
+        *ngIf="chronicIllness.length === 0"
+        class="d-flex justify-content-center"
+      >
+        <span class="no-chronic-illness px-3 rounded my-3">
+          No Chronic Illness
+        </span>
+      </div>
+      <div class="d-flex justify-content-center">
+        <i (click)="addChronicIllness()" class="bi bi-plus-circle" style="cursor : pointer;"></i>
       </div>
     </div>
     <div class="form-group mb-4">
       <label for="role">Role</label>
-      <select class="form-control" id="role" formControlName="role" formControlName="role">
+      <select class="form-select" id="role" formControlName="role">
         <option value="PATIENT">Patient</option>
         <option value="DOCTOR">Doctor</option>
       </select>
     </div>
-    <div class="doctorDetails form-group mb-4" *ngIf="signupForm.value['role']==='DOCTOR'">
+    <div
+      class="doctorDetails form-group mb-4"
+      *ngIf="signupForm.value['role'] === 'DOCTOR'"
+    >
       <div class="form-group doctorDetail mb-4">
         <label for="qualification">Qualifications</label>
-        <input type="text" class="form-control" id="qualification" placeholder="Enter Qualifications" formControlName="qualification">
-        <div class="alert alert-danger" *ngIf="signupForm.get('qualification')?.touched && signupForm.get('qualification')?.invalid">
-          <span *ngIf="signupForm.get('qualification')?.errors">Qualification is Required</span>
+        <input
+          type="text"
+          class="form-control"
+          id="qualification"
+          placeholder="Enter Qualifications"
+          formControlName="qualification"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            signupForm.get('qualification')?.touched &&
+            signupForm.get('qualification')?.invalid
+          "
+        >
+          <span *ngIf="signupForm.get('qualification')?.errors"
+            >Qualification is Required</span
+          >
         </div>
       </div>
       <div class="form-group doctorDetail mb-4">
         <label for="casesSolved">Cases Solved</label>
-        <input type="number" class="form-control" id="casesSolved" placeholder="Enter Number of Cases Solved" formControlName="casesSolved">
-        <div class="alert alert-danger" *ngIf="signupForm.get('casesSolved')?.touched && signupForm.get('casesSolved')?.invalid">
-          <span *ngIf="signupForm.get('casesSolved')?.errors">Cases Solved is Required</span>
+        <input
+          type="number"
+          class="form-control"
+          id="casesSolved"
+          placeholder="Enter Number of Cases Solved"
+          formControlName="casesSolved"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            signupForm.get('casesSolved')?.touched &&
+            signupForm.get('casesSolved')?.invalid
+          "
+        >
+          <span *ngIf="signupForm.get('casesSolved')?.errors"
+            >Cases Solved is Required</span
+          >
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" [disabled]="!signupForm?.valid">Register</button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!signupForm?.valid"
+    >
+      Register
+    </button>
   </form>
 </div>

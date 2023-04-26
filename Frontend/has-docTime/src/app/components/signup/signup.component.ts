@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Form, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ChronicIllness } from 'src/app/models/chronicIllness.model';
 import { Doctor } from 'src/app/models/doctor.model';
+import { ChronicIllnessService } from 'src/app/services/chronic-illness.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -13,9 +15,11 @@ import { UserService } from 'src/app/services/user.service';
 
 export class SignupComponent implements OnInit{
 
-  constructor(private userService : UserService, private doctorService : DoctorService){
+  constructor(private userService : UserService, private doctorService : DoctorService, private chhronicIllnessService : ChronicIllnessService){
 
   }
+
+  savedChronicIllnesses : ChronicIllness[] = [];
 
   ngOnInit(){
     this.signupForm.get("role")?.valueChanges.subscribe(value => {
@@ -30,6 +34,11 @@ export class SignupComponent implements OnInit{
       this.signupForm.controls['qualification'].updateValueAndValidity();
       this.signupForm.controls['casesSolved'].updateValueAndValidity();
     })
+
+    this.chhronicIllnessService.getAllChronicIllness().subscribe(data => {
+      console.log(data);
+      this.savedChronicIllnesses = data;
+    });
   }
 
   signupForm : FormGroup = new FormGroup({
@@ -38,13 +47,14 @@ export class SignupComponent implements OnInit{
     gender : new FormControl("MALE", [Validators.required]),
     bloodGroup : new FormControl("O_POSITIVE", [Validators.required]),
     contact : new FormControl("", [Validators.required]),
-    height : new FormControl(0.0),
-    weight : new FormControl(0.0),
+    height : new FormControl(),
+    weight : new FormControl(),
     email : new FormControl("", [Validators.required]),
     password : new FormControl("", [Validators.required]),
     role : new FormControl("PATIENT", [Validators.required]),
     qualification : new FormControl(""),
-    casesSolved : new FormControl(0)
+    casesSolved : new FormControl(0),
+    patientChronicIllness : new FormArray([])
   })
 
   register(){
@@ -62,6 +72,17 @@ export class SignupComponent implements OnInit{
       }
       user.age = age;
     }
+    let chronicIllnesses = [];
+    for(let i=0; i<user.patientChronicIllness.length; i++){
+      let chronicIllness = {
+        "chronicIllness" : {
+          "name" : user.patientChronicIllness[i].name
+        },
+        "yearsOfIllness" : user.patientChronicIllness[i].yearsOfIllness
+      }
+      chronicIllnesses.push(chronicIllness);
+    }
+    user.patientChronicIllness = chronicIllnesses;
     if(user.role==="PATIENT"){
       this.userService.registerUser(user).subscribe((data)=> {
         this.signupForm.reset({
@@ -70,13 +91,12 @@ export class SignupComponent implements OnInit{
           gender : "MALE",
           bloodGroup : "O_POSITIVE",
           contact : "",
-          height : 0,
-          weight : 0,
           email : "",
           password : "",
           role : "PATIENT",
           qualification : "",
-          casesSolved : 0
+          casesSolved : 0,
+          patientChronicIllness : []
         });
       });
     }
@@ -102,16 +122,32 @@ export class SignupComponent implements OnInit{
             gender : "MALE",
             bloodGroup : "O_POSITIVE",
             contact : "",
-            height : 0,
-            weight : 0,
             email : "",
             password : "",
             role : "PATIENT",
             qualification : "",
-            casesSolved : 0
+            casesSolved : 0,
+            patientChronicIllness : []
         });
         })
       });
     }
+  }
+
+  addChronicIllness(){
+    this.chronicIllness.push(new FormGroup(
+      {
+        name : new FormControl("", [Validators.required]),
+        yearsOfIllness : new FormControl(0, [Validators.required, Validators.min(0.00273972601)]) //0.00273972601 = 1/365
+      }
+    ))
+  }
+
+  deleteChronicIllness(index : number){
+    this.chronicIllness.removeAt(index);
+  }
+
+  get chronicIllness() : FormArray{
+    return this.signupForm.get('patientChronicIllness') as FormArray
   }
 }

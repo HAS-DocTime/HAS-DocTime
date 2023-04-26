@@ -25,3 +25,9 @@
 .doctorDetails .form-group{
   width: 100%;
 }
+.no-chronic-illness{
+  background-color: gray;
+}
+i{
+  font-size: 25px;
+}
