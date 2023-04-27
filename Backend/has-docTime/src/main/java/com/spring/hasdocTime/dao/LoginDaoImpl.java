@@ -28,7 +28,7 @@ public class LoginDaoImpl implements LoginInterface {
         List<User> allUser = userDao.getAllUser();
         User responseUser = null;
         for(User user : allUser){
-            if(user.getEmail().equals(loginDetail.getEmail()) && user.getPassword().equals(loginDetail.getPassword())) {
+            if(user.getEmail().equals(loginDetail.getUsername()) && user.getPassword().equals(loginDetail.getPassword())) {
                 responseUser = user;
                 break;
             }
