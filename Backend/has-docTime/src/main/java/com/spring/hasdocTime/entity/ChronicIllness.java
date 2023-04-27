@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.*;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "chronic_illness")
@@ -14,10 +13,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@JsonIdentityInfo(
-        scope = ChronicIllness.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(
+//        scope = ChronicIllness.class,
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class ChronicIllness {
 
     @Id
@@ -29,6 +28,7 @@ public class ChronicIllness {
     private String name;
 
     @OneToMany(mappedBy = "chronicIllness", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("chronicIllness")
     private List<PatientChronicIllness> patientChronicIllnesses;
 
     @Override

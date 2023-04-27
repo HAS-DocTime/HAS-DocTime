@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,10 +14,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@JsonIdentityInfo(
-        scope = Admin.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(
+//        scope = Admin.class,
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Admin {
 
     @Id
@@ -24,9 +25,11 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonIgnoreProperties("admin")
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

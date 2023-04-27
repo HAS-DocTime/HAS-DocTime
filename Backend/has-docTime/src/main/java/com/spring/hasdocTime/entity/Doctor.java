@@ -5,12 +5,12 @@
 package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.*;
-
-import java.util.Set;
 import java.util.Objects;
 
 
@@ -20,10 +20,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @ToString
 @Table(name = "doctor")
-@JsonIdentityInfo(
-        scope = Doctor.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(
+//        scope = Doctor.class,
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Doctor {
     
     @Id
@@ -34,6 +34,7 @@ public class Doctor {
     
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"doctor", "admin", "appointments", "appointmentData", "symptoms", "patientChronicIllness"})
     private User user;
     
     @Column(name="qualification")
@@ -41,6 +42,8 @@ public class Doctor {
    
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "department_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"doctors", "symptoms", "timeSlots"})
+//    @JsonIgnore
     private Department department;
     
     @Column(name="cases_solved")
@@ -50,15 +53,19 @@ public class Doctor {
     private boolean isAvailable;
     
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "availableDoctors")
+    @JsonIgnoreProperties({"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"})
     private List<TimeSlot> availableTimeSlots;
     
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "bookedDoctors")
+    @JsonIgnoreProperties({"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"})
     private List<TimeSlot> bookedTimeSlots;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
+    @JsonIgnoreProperties("doctor")
     private List<Appointment> appointments;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
+    @JsonIgnoreProperties("doctor")
     private List<PostAppointmentData> postAppointmentData;
 
     @Override

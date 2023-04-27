@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,10 +15,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@JsonIdentityInfo(
-        scope = Symptom.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(
+//        scope = Symptom.class,
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Symptom {
 
     @Id
@@ -33,6 +34,7 @@ public class Symptom {
             name = "patient_symptom",
             joinColumns = @JoinColumn(name = "symptom_id"),
             inverseJoinColumns = @JoinColumn(name = "patient_id"))
+    @JsonIgnoreProperties("symptoms")
     private List<User> users;
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
@@ -40,6 +42,7 @@ public class Symptom {
             name = "department_symptom",
             joinColumns = @JoinColumn(name = "symptom_id"),
             inverseJoinColumns = @JoinColumn(name = "department_id"))
+    @JsonIgnoreProperties("symptoms")
     private List<Department> departments;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -47,6 +50,7 @@ public class Symptom {
             name = "appointment_symptom",
             joinColumns = @JoinColumn(name = "symptom_id"),
             inverseJoinColumns = @JoinColumn(name = "appointment_id"))
+    @JsonIgnoreProperties("symptoms")
     private List<Appointment> appointments;
 
     @Override
