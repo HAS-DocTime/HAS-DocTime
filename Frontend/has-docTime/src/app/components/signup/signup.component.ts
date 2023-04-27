@@ -6,6 +6,7 @@ import { Doctor } from 'src/app/models/doctor.model';
 import { ChronicIllnessService } from 'src/app/services/chronic-illness.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
+import { LoginDetails } from 'src/app/models/login-details.model';
 
 @Component({
   selector: 'app-signup',
@@ -21,6 +22,7 @@ export class SignupComponent implements OnInit{
   }
 
   savedChronicIllnesses : ChronicIllness[] = [];
+  authToken: string ="";
 
   ngOnInit(){
     this.signupForm.get("role")?.valueChanges.subscribe(value => {
@@ -59,7 +61,13 @@ export class SignupComponent implements OnInit{
   })
 
   register(){
+    console.log(this.signupForm.value);
     const date = new Date();
+    
+    const email = this.signupForm.value.email;
+    const password = this.signupForm.value.password;
+    let signupDetail: LoginDetails = {"email" : email, "password" : password};
+
     const user = this.signupForm.value;
     if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){
       let age = date.getFullYear() - new Date(user.dob as Date).getFullYear() -  1;
@@ -85,7 +93,14 @@ export class SignupComponent implements OnInit{
     }
     user.patientChronicIllness = chronicIllnesses;
     if(user.role==="PATIENT"){
-      this.userService.registerUser(user).subscribe((data)=> {
+      this.userService.registerUser(signupDetail).subscribe((data) => {
+        this.authToken = data;
+        console.log(data);
+        window.sessionStorage.setItem('token',JSON.stringify(this.authToken));
+        localStorage.setItem('token', JSON.stringify(this.authToken));
+        signupDetail = {email : "", password : ""};
+      });
+      this.userService.createUser(user).subscribe((data)=> {
         this.signupForm.reset({
           name : "",
           dob : "2001-01-01",
@@ -103,7 +118,13 @@ export class SignupComponent implements OnInit{
     }
     else if(user.role === "DOCTOR"){
       let userId = 0;
-      this.userService.registerUser(user).subscribe((data)=> {
+      this.userService.registerUser(signupDetail).subscribe((data) => {
+        this.authToken = data;
+        localStorage.setItem('token', JSON.stringify(this.authToken));
+        window.sessionStorage.setItem('token',JSON.stringify(this.authToken));
+        signupDetail = {email : "", password : ""};
+    });
+      this.userService.createUser(user).subscribe((data)=> {
         userId = (data.id as number);
         let doctor : Doctor = {
           user : {
@@ -153,5 +174,13 @@ export class SignupComponent implements OnInit{
 
   get chronicIllness() : FormArray{
     return this.signupForm.get('patientChronicIllness') as FormArray
+  }
+
+  onCancel(){
+    this.userService.onCancel();
+  }
+
+  getAuthToken(){
+    return this.authToken;
   }
 }

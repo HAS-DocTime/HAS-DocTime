@@ -13,11 +13,15 @@ export class HeaderComponent implements OnInit{
   }
 
   registered!: Boolean;
-  inSignupForm!: boolean;
+  inSignupForm!: Boolean;
 
   ngOnInit(): void {
       this.userService.isLoggedIn.subscribe( (data) => {
         this.registered = data;
+      });
+
+      this.userService.inSignupForm.subscribe( (data) => {
+        this.inSignupForm = data;
       });
   }
 
