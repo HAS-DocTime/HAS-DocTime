@@ -36,7 +36,7 @@ public class PatientChronicIllness {
     private ChronicIllness chronicIllness;
 
     @Column(name="years_of_illness")
-    private int yearsOfIllness;
+    private float yearsOfIllness;
 
     @Override
     public boolean equals(Object o) {
