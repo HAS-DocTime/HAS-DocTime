@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <section>
                 <div class="example-button-row" >
-                    <button *ngIf="!inSignupForm" style="margin-right: 10px;" mat-raised-button color="primary" class="register-btn" routerLink="/register" (click)="onRegister()">Register</button>
+                    <button *ngIf="!inSignupForm" style="margin-right: 10px;" mat-raised-button color="primary" routerLink="/register" (click)="onRegister()">Register</button>
                     <button *ngIf="!registered" mat-raised-button color="accent" routerLink="/login">Login</button>
                     <button *ngIf="registered" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
                 </div>
@@ -25,7 +25,7 @@
         <div>
             <a href="#">
                 <img src="assets/logo/doctime-logo1.png" alt="doctime-logo" width="150" height="50">
-            </a>
+            </a>  
             <span style="margin-left: 30px; margin-right: 30px;">Hospital Appointment System</span>
         </div>
         <div style="text-align: right;">

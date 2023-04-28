@@ -3,17 +3,3 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
-
-.navbar{
-  border-bottom: 2px solid rgb(200, 202, 199);
-}
-
-.mat-mdc-raised-button.mat-primary{
-  background-color:#0074d9;
-  color: white;
-}
-
-.mat-mdc-raised-button.mat-accent{
-  background-color: #41831D;
-  color: white;
-}

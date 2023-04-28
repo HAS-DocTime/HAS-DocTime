@@ -59,9 +59,6 @@ export class SignupComponent implements OnInit{
   })
 
   register(){
-
-    // console.log(this.signupForm);
-
     const date = new Date();
     const user = this.signupForm.value;
     if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){
@@ -80,7 +77,7 @@ export class SignupComponent implements OnInit{
     for(let i=0; i<user.patientChronicIllness.length; i++){
       let chronicIllness = {
         "chronicIllness" : {
-          "id" : parseInt(user.patientChronicIllness[i].name)
+          "name" : user.patientChronicIllness[i].name
         },
         "yearsOfIllness" : user.patientChronicIllness[i].yearsOfIllness
       }
@@ -103,7 +100,6 @@ export class SignupComponent implements OnInit{
           patientChronicIllness : []
         });
       });
-      console.log(user);
     }
     else if(user.role === "DOCTOR"){
       let userId = 0;
