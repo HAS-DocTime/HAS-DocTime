@@ -14,10 +14,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "post_appointment_data")
-//@JsonIdentityInfo(
-//        scope = PostAppointmentData.class,
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
 public class PostAppointmentData {
 
     @Id

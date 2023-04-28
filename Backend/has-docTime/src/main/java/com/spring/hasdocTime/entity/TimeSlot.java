@@ -17,11 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "time_slot")
-//@JsonIdentityInfo(
-//        scope = TimeSlot.class,
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id"
-//)
 public class TimeSlot {
 
     @Id

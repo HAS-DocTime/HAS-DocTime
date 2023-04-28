@@ -1,8 +1,5 @@
 package com.spring.hasdocTime.entity;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,10 +11,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Table(name="patient_chronic_illness")
-//@JsonIdentityInfo(
-//        scope = PatientChronicIllness.class,
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id")
 public class PatientChronicIllness {
 
     @EmbeddedId

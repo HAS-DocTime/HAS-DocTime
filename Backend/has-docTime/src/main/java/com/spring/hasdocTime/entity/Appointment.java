@@ -13,11 +13,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Table(name = "appointment")
-//@JsonIdentityInfo(
-//        scope = Appointment.class,
-//        generator = ObjectIdGenerators.PropertyGenerator.class,
-//        property = "id"
-//)
 public class Appointment {
 
     @Id

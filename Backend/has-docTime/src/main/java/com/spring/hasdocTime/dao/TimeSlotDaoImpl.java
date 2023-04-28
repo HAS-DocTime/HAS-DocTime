@@ -90,7 +90,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             }
         }
         TimeSlot t =  timeSlotRepository.save(timeSlot);
-//        System.out.println(t);
         return t;
     }
 
