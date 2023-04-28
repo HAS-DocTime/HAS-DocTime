@@ -20,11 +20,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @ToString
 @Table(name="user")
-@JsonIdentityInfo(
-        scope = User.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 public class User {
 
     @Id

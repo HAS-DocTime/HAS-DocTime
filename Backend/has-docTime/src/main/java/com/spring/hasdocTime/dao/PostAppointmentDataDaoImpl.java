@@ -12,8 +12,6 @@ import com.spring.hasdocTime.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,7 +83,6 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
             postAppointmentData.setDoctor(doctor);
             TimeSlot timeSlot = timeSlotRepository.findById(postAppointmentData.getTimeSlotForAppointmentData().getId()).get();
             postAppointmentData.setTimeSlotForAppointmentData(timeSlot);
-
             return postAppointmentDataRepository.save(postAppointmentData);
         }
         return null;

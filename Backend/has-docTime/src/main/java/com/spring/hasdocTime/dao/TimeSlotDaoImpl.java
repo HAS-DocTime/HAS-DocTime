@@ -89,7 +89,8 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
                 }
             }
         }
-        return timeSlotRepository.save(timeSlot);
+        TimeSlot t =  timeSlotRepository.save(timeSlot);
+        return t;
     }
 
     @Override

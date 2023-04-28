@@ -56,9 +56,6 @@ public class DoctorDaoImpl implements DoctorInterface {
             doctor.setUser(user);
             user.setRole(Role.DOCTOR);
         }
-        else{
-            doctor.getUser().setRole(Role.DOCTOR);
-        }
         if(doctor.getDepartment() != null){
             if(doctor.getDepartment().getId() != 0){
                 Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
@@ -104,9 +101,9 @@ public class DoctorDaoImpl implements DoctorInterface {
             for (PostAppointmentData postAppointmentData : doctor.get().getPostAppointmentData()){
                 postAppointmentDataDao.deletePostAppointmentData(postAppointmentData.getId());
             }
-            doctor.get().getUser().setRole(Role.PATIENT);
-            doctorRepository.deleteById(id);
-            return doctor.get();
+                doctor.get().getUser().setRole(Role.PATIENT);
+                doctorRepository.deleteById(id);
+                return doctor.get();
         }
         return null;
     } 
