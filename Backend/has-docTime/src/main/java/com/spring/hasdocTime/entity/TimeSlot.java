@@ -37,7 +37,7 @@ public class TimeSlot {
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "department_id", referencedColumnName = "id")
-    @JsonIgnoreProperties("timeSlots")
+    @JsonIgnoreProperties({"timeSlots", "doctors"})
     private Department department;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -46,7 +46,7 @@ public class TimeSlot {
             joinColumns = @JoinColumn(name = "time_slot_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
-    @JsonIgnoreProperties("availableTimeSlots")
+    @JsonIgnoreProperties({"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"})
     private List<Doctor> availableDoctors;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -55,15 +55,15 @@ public class TimeSlot {
             joinColumns = @JoinColumn(name = "time_slot_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
-    @JsonIgnoreProperties("bookedTimeSlots")
+    @JsonIgnoreProperties({"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"})
     private List<Doctor> bookedDoctors;
 
     @OneToOne(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("timeSlotForAppointmentData")
+    @JsonIgnoreProperties({"timeSlotForAppointmentData", "user", "doctor"})
     private PostAppointmentData appointmentData;
 
     @OneToOne(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("timeSlotForAppointment")
+    @JsonIgnoreProperties({"timeSlotForAppointment", "symptoms", "user", "doctor"})
     private Appointment appointment;
 
     @Override

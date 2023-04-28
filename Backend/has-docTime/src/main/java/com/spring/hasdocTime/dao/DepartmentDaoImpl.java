@@ -16,7 +16,6 @@ import com.spring.hasdocTime.interfc.DepartmentInterface;
 import com.spring.hasdocTime.interfc.DoctorInterface;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
-import com.spring.hasdocTime.utills.Role;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -49,39 +48,21 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         List<Symptom> symptoms = department.getSymptoms();
         List<Symptom> symptomsWithData = new ArrayList<>();
         for(Symptom symptom : symptoms){
-            System.out.println(symptom);
             Symptom symptomWithData;
             if(symptom.getId()!=0){
-                symptomWithData = symptomRepository.findById(symptom.getId()).get();
+                Optional<Symptom> symptomObj = symptomRepository.findById(symptom.getId());
+                if(symptomObj.isPresent()){
+                    symptomWithData = symptomObj.get();
+                    symptomsWithData.add(symptomWithData);
+                }
+                else{
+                    throw new RuntimeException("Symptom with id " + symptom.getId() + " does not exists");
+                }
             }
-            else{
-                Symptom newSymptom = symptomRepository.save(symptom);
-                symptomWithData = (symptomRepository.findById(newSymptom.getId())).get();                
-            }
-            symptomsWithData.add(symptomWithData);
         }
         department.setSymptoms(symptomsWithData);
-        List<Doctor> doctors = department.getDoctors();
-        List<Doctor> doctorsWithData = new ArrayList<>();
-        department.setDoctors(doctorsWithData);
-        Department departmentWithoutDoctors = departmentRepository.save(department);
-        System.out.println("Dep saved");
-
-        for(Doctor doctor : doctors){
-            Doctor doctorWithData;
-            if(doctor.getId()!=0){
-                doctorWithData = doctorRepository.findById(doctor.getId()).get();
-            }
-            else{
-                doctor.setDepartment(departmentWithoutDoctors);
-                Doctor newDoctor = doctorDao.createDoctor(doctor);
-                doctorWithData = (doctorRepository.findById(newDoctor.getId())).get();                
-            }
-            doctorWithData.setDepartment(departmentWithoutDoctors);
-            doctorsWithData.add(doctorWithData);
-        }
-        departmentWithoutDoctors.setDoctors(doctorsWithData);
-        return departmentRepository.save(departmentWithoutDoctors);
+        return departmentRepository.save(department);
+        
     }
 
     @Override

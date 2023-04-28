@@ -59,7 +59,6 @@ public class SymptomDaoImpl implements SymptomInterface {
             List<User> usersWithData = new ArrayList<>();
             for(User user : users){
                 User userWithData = userDao.getUser(user.getId());
-                System.out.println(userWithData.getId());
                 usersWithData.add(userWithData);
             }
             symptom.setUsers(usersWithData);
