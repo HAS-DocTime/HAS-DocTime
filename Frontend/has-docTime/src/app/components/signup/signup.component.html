@@ -3,21 +3,39 @@
     <h2 class="heading text-lg-center pt-4">Registration Form</h2>
     <form [formGroup]="signupForm" class="registerForm" (ngSubmit)="register()">
       <div class="form-group my-4">
-        <label for="name">Name</label>
+        <label for="firstName">First Name</label>
         <input
           type="text"
           class="form-control"
-          id="name"
+          id="firstName"
           placeholder="(Eg : John)"
-          formControlName="name"
+          formControlName="firstName"
         />
         <div
           class="alert alert-danger"
           *ngIf="
-            signupForm.get('name')?.touched && signupForm.get('name')?.invalid
+            signupForm.get('firstName')?.touched && signupForm.get('firstName')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('name')?.errors">Name is Required</span>
+          <span *ngIf="signupForm.get('firstName')?.errors">First Name is Required</span>
+        </div>
+      </div>
+      <div class="form-group mb-4">
+        <label for="lastName">Last Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="lastName"
+          placeholder="(Eg : John)"
+          formControlName="lastName"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            signupForm.get('lastName')?.touched && signupForm.get('lastName')?.invalid
+          "
+        >
+          <span *ngIf="signupForm.get('lastName')?.errors">Last Name is Required</span>
         </div>
       </div>
       <div class="form-group mb-4">
@@ -177,6 +195,7 @@
           <option value="DOCTOR">Doctor</option>
         </select>
       </div>
+
       <div class="form-group">
         <label>Chronic Illness</label>
         <div
@@ -186,9 +205,9 @@
           <div class="d-flex my-3 justify-content-around" [formGroupName]="i">
               <div>
                 <label for="chronicIllnessName">Name</label>
-                <select class="form-select" id="chronicIllnessName" formControlName="name">
+                <select class="form-select" id="chronicIllnessName" formControlName="name" >
                   <option value="" selected disabled>Select Chronic Illness</option>
-                  <option *ngFor="let chronicIllness of savedChronicIllnesses" [value]="chronicIllness.id">{{chronicIllness.name}}</option>
+                  <option *ngFor="let chronicIllness of savedChronicIllnesses" [value]="chronicIllness.id" [disabled]="selectedIllness.includes(chronicIllness.id)">{{chronicIllness.name}}</option>
                 </select>
                 <div
                   class="alert alert-danger"
