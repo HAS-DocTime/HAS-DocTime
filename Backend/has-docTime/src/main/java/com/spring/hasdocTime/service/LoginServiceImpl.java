@@ -1,5 +1,6 @@
 package com.spring.hasdocTime.service;
 
+import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.LoginDetail;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.AdminInterface;
@@ -16,7 +17,7 @@ public class LoginServiceImpl implements LoginInterface {
     private LoginInterface loginDao;
 
     @Override
-    public User loginRequest(LoginDetail loginDetail) {
+    public AuthenticationResponse loginRequest(LoginDetail loginDetail) {
         return loginDao.loginRequest(loginDetail);
     }
 }

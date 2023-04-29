@@ -4,14 +4,24 @@ import aj.org.objectweb.asm.TypeReference;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.hasdocTime.repository.UserRepository;
+import com.spring.hasdocTime.security.jwt.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,77 +30,60 @@ import java.util.List;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig{
 
-//    @Bean
-//    protected InMemoryUserDetailsManager configureAuthentication() {
-////        http.inMemoryAuthentication().withUser("username").password("bcrypt version").roles("ADMIN")
-////                .and().withUser("usernamae1").password("bcrypt version").roles("ADMIN");
-//
-//        List<UserDetails> userDetails = new ArrayList<>();
-//        List<GrantedAuthority> userRoles = new ArrayList<>();
-//        userRoles.add(new SimpleGrantedAuthority("DOCTOR"));
-//        userDetails.add(new User("username","password", userRoles));
-//
-//        List<GrantedAuthority> doctorRoles = new ArrayList<>();
-//        doctorRoles.add(new SimpleGrantedAuthority("DOCTOR"));
-//        userDetails.add(new User("username","password", doctorRoles));
-//
-//        List<GrantedAuthority> adminRoles = new ArrayList<>();
-//        adminRoles.add(new SimpleGrantedAuthority("ADMIN"));
-//        userDetails.add(new User("username","password", adminRoles))
-//        return new InMemoryUserDetailsManager();
-////        return http.build();
-//    }
-
-    @Bean
-    protected UserDetailsService userDetailsService(){
-        return new CustomUserDetailService();
-    }
-    @Bean
-    public PasswordEncoder getPasswordEncode(){
-        return NoOpPasswordEncoder.getInstance();
-    }
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationProvider authenticationProvider;
 
 //    @Bean
-//    public PasswordEncoder getPasswordEncoder(){
-//        return BCryptPasswordEncoder(10);
+//    protected UserDetailsService userDetailsService(){
+//        return new CustomUserDetailService();
 //    }
+
+
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // example 1
 
+        // Old Deprecated code
+//         example 1
+//
 //        http.authorizeRequests()
 //                .antMatchers("1").permitAll()
 //                .antMatchers("2").hasAuthority("EMPLOYEE", "ADMIN")
 //                .antMAtchers("3").hasRole("EMPLOYEE")
 //                .and().formLogin();
-
-        // example 2
-        // done this to access all authenticated user
+//
+//         example 2
+//         done this to access all authenticated user
 //        http.authorizeRequests()
 //                .antMatchers("1","2").authenticated()
 //                .and().formLogin();
 
         // example 3
         // get list from json file
-        http.authorizeHttpRequests((authorize)-> authorize
-                .requestMatchers(getAdminServices())
+        http.csrf().disable().authorizeHttpRequests((authorize)-> authorize
+                        .requestMatchers("/login/**").permitAll()
+                .requestMatchers(getServices("/static/adminServices.json"))
                         .hasAnyAuthority("ADMIN")
-                .requestMatchers(getDoctorServices())
+                .requestMatchers(getServices("/static/doctorServices.json"))
                         .hasAnyAuthority("DOCTOR")
-                .requestMatchers(getPatientServices())
+                .requestMatchers(getServices("/static/patientServices.json"))
                         .hasAnyAuthority("PATIENT"))
-                .formLogin();
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 
-        System.out.println("Bean out");
+//        System.out.println("Bean out");
         return http.build();
     }
 
-    private String[] getAdminServices(){
-        InputStream fileStream = TypeReference.class.getResourceAsStream("/static/adminServices.json");
+    private String[] getServices(String location){
+        InputStream fileStream = TypeReference.class.getResourceAsStream(location);
         ObjectMapper mapper = new ObjectMapper();
         List<String> urlList = new ArrayList<>();
         try {
@@ -106,37 +99,5 @@ public class SecurityConfig{
         return urlList.stream().toArray(String[]::new);
     }
 
-    private String[] getDoctorServices(){
-        InputStream fileStream = TypeReference.class.getResourceAsStream("/static/doctorServices.json");
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> urlList = new ArrayList<>();
-        try {
-            urlList = mapper.readValue(fileStream, ArrayList.class);
-        } catch (StreamReadException e) {
-            throw new RuntimeException(e);
-        } catch (DatabindException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
-        return urlList.stream().toArray(String[]::new);
-    }
-
-    private String[] getPatientServices(){
-        InputStream fileStream = TypeReference.class.getResourceAsStream("/static/patientServices.json");
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> urlList = new ArrayList<>();
-        try {
-            urlList = mapper.readValue(fileStream, ArrayList.class);
-        } catch (StreamReadException e) {
-            throw new RuntimeException(e);
-        } catch (DatabindException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return urlList.stream().toArray(String[]::new);
-    }
 }
