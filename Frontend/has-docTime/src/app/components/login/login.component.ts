@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
       this.userService.inLogin.next(false)
+      this.userService.isLoggedIn.next(true)
   }
 
   onSubmit(){

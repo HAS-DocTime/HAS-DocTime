@@ -25,6 +25,7 @@ export class SignupComponent implements OnInit, OnDestroy{
   ngOnInit(){
     this.userService.inSignup.next(true)
     this.userService.inLogin.next(false)
+    this.userService.isLoggedIn.next(false)
     this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
@@ -64,9 +65,6 @@ export class SignupComponent implements OnInit, OnDestroy{
   })
 
   register(){
-
-    // console.log(this.signupForm);
-
     const date = new Date();
     const user = this.signupForm.value;
     if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){

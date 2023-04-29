@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" routerLink="/appointment">
+        <a class="navbar-brand" routerLink="/register">
             <img src="assets/logo/doctime-logo1.png" alt="doctime-logo" width="150" height="50">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,9 +21,8 @@
 
                     <button *ngIf="isLoggedIn"
                             mat-raised-button color="accent"
-                            routerLink="/appointment"
                             (click)="onLogout()"
-                            routerLink="/login">Logout</button>
+                            routerLink="/register">Logout</button>
                 </div>
             </section>
         </div>

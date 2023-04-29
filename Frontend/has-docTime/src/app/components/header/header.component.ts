@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 
@@ -30,7 +30,9 @@ export class HeaderComponent implements OnInit{
   }
 
   onLogout(){
-    this.userService.logOutUser();
+    console.log(this.isLoggedIn);
+
+    this.userService.logOutUser()
     this.router.navigate(['/login']);
   }
 
