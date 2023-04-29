@@ -103,7 +103,6 @@ export class SignupComponent implements OnInit{
           patientChronicIllness : []
         });
       });
-      console.log(user);
     }
     else if(user.role === "DOCTOR"){
       let userId = 0;
