@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-
 
 @Component({
   selector: 'app-header',
@@ -9,25 +9,29 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent implements OnInit{
 
-  constructor(private userService: UserService){
+  constructor(private userService: UserService, private router: Router, private route: ActivatedRoute){
   }
 
-  registered!: Boolean;
-  inSignupForm!: boolean;
+  isLoggedIn!: Boolean;
+  inSignupForm!: Boolean;
+  inLoginForm!: Boolean;
 
   ngOnInit(): void {
       this.userService.isLoggedIn.subscribe( (data) => {
-        this.registered = data;
+        this.isLoggedIn = data;
       });
+      this.userService.inSignup.subscribe(value => {
+        this.inSignupForm = value
+      })
+      this.userService.inLogin.subscribe(value => {
+        this.inLoginForm = value
+      })
+
   }
 
   onLogout(){
-    this.userService.onLogout();
-    this.inSignupForm = false;
-  }
-
-  onRegister(){
-    this.inSignupForm = true;
+    this.userService.logOutUser();
+    this.router.navigate(['/login']);
   }
 
 }

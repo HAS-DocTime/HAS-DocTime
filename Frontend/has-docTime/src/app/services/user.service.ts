@@ -8,17 +8,21 @@ import { Subject } from 'rxjs';
 })
 export class UserService {
 
-
   isLoggedIn: Subject<Boolean> = new Subject<Boolean>;
 
+  inSignup: Subject<Boolean> = new Subject<Boolean>;
+  inLogin: Subject<Boolean> = new Subject<Boolean>
+
   constructor(private http : HttpClient) { }
+
   baseUrl = "http://localhost:8080/";
+
   registerUser(user : User){
     this.isLoggedIn.next(true);
     return this.http.post<User>(`${this.baseUrl}user`, user);
   }
 
-  onLogout(){
+  logOutUser(){
     this.isLoggedIn.next(false);
   }
 }

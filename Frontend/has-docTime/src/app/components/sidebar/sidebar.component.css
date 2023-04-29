@@ -1,0 +1,14 @@
+
+
+.active-page {
+  background-color:rgb(231, 238, 238);
+  color: rgb(15, 89, 138);
+  border-radius: 0;
+}
+.active-page span {
+  color: rgb(15, 89, 138);
+}
+
+.active-page i {
+  color: rgb(15, 89, 138);
+}
