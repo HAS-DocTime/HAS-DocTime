@@ -12,6 +12,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http'
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
+import { AppointmentComponent } from './components/appointment/appointment.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -19,7 +22,9 @@ import { HeaderComponent } from './components/header/header.component';
     AppComponent,
     SignupComponent,
     LoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    AppointmentComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +35,8 @@ import { HeaderComponent } from './components/header/header.component';
     MatToolbarModule,
     MatIconModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

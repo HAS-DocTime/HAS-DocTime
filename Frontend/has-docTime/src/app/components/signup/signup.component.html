@@ -223,72 +223,80 @@
             <i class="bi bi-trash3-fill me-2 dlt" (click)="deleteChronicIllness(i)" style="cursor : pointer;"></i>
           </div>
         </div>
-        <div
-          *ngIf="chronicIllness.length === 0"
-          class="d-flex justify-content-center"
-        >
-          <span class="no-chronic-illness px-3 rounded my-3">
-            No Chronic Illness
-          </span>
-        </div>
-        <div class="d-flex justify-content-center">
-          <i (click)="addChronicIllness()" class="bi bi-plus-circle" style="cursor : pointer;"></i>
-        </div>
       </div>
       <div
-        class="doctorDetails form-group mb-4"
-        *ngIf="signupForm.value['role'] === 'DOCTOR'"
+        *ngIf="chronicIllness.length === 0"
+        class="d-flex justify-content-center"
       >
-        <div class="form-group doctorDetail mb-4">
-          <label for="qualification">Qualifications</label>
-          <input
-            type="text"
-            class="form-control"
-            id="qualification"
-            placeholder="Enter Qualifications"
-            formControlName="qualification"
-          />
-          <div
-            class="alert alert-danger"
-            *ngIf="
-              signupForm.get('qualification')?.touched &&
-              signupForm.get('qualification')?.invalid
-            "
+        <span class="no-chronic-illness px-3 rounded my-3">
+          No Chronic Illness
+        </span>
+      </div>
+      <div class="d-flex justify-content-center">
+        <i (click)="addChronicIllness()" class="bi bi-plus-circle" style="cursor : pointer;"></i>
+      </div>
+    <!-- </div> -->
+    <div class="form-group mb-4">
+      <label for="role">Role</label>
+      <select class="form-select" id="role" formControlName="role">
+        <option value="PATIENT">Patient</option>
+        <option value="DOCTOR">Doctor</option>
+      </select>
+    </div>
+    <div
+      class="doctorDetails form-group mb-4"
+      *ngIf="signupForm.value['role'] === 'DOCTOR'"
+    >
+      <div class="form-group doctorDetail mb-4">
+        <label for="qualification">Qualifications</label>
+        <input
+          type="text"
+          class="form-control"
+          id="qualification"
+          placeholder="Enter Qualifications"
+          formControlName="qualification"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            signupForm.get('qualification')?.touched &&
+            signupForm.get('qualification')?.invalid
+          "
+        >
+          <span *ngIf="signupForm.get('qualification')?.errors"
+            >Qualification is Required</span
           >
-            <span *ngIf="signupForm.get('qualification')?.errors"
-              >Qualification is Required</span
-            >
-          </div>
-        </div>
-        <div class="form-group doctorDetail mb-4">
-          <label for="casesSolved">Cases Solved</label>
-          <input
-            type="number"
-            class="form-control"
-            id="casesSolved"
-            placeholder="Enter Number of Cases Solved"
-            formControlName="casesSolved"
-          />
-          <div
-            class="alert alert-danger"
-            *ngIf="
-              signupForm.get('casesSolved')?.touched &&
-              signupForm.get('casesSolved')?.invalid
-            "
-          >
-            <span *ngIf="signupForm.get('casesSolved')?.errors"
-              >Cases Solved is Required</span
-            >
-          </div>
         </div>
       </div>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="!signupForm.valid"
-      >
-        Register
-      </button>
-    </form>
-  </div>
+      <div class="form-group doctorDetail mb-4">
+        <label for="casesSolved">Cases Solved</label>
+        <input
+          type="number"
+          class="form-control"
+          id="casesSolved"
+          placeholder="Enter Number of Cases Solved"
+          formControlName="casesSolved"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            signupForm.get('casesSolved')?.touched &&
+            signupForm.get('casesSolved')?.invalid
+          "
+        >
+          <span *ngIf="signupForm.get('casesSolved')?.errors"
+            >Cases Solved is Required</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex mb-4">
+      <div class="col">
+        <button type="button" class="btn btn-outline-danger" routerLink="">Cancel</button>
+      </div>
+      <div class="col">
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!signupForm.valid" >Register</button>
+      </div>
+    </div>
+  </form>
 </div>

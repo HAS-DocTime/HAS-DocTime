@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Form, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ChronicIllness } from 'src/app/models/chronicIllness.model';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 
 
-export class SignupComponent implements OnInit{
+export class SignupComponent implements OnInit, OnDestroy{
 
   constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
 
@@ -23,6 +23,9 @@ export class SignupComponent implements OnInit{
   savedChronicIllnesses : ChronicIllness[] = [];
 
   ngOnInit(){
+    this.userService.inSignup.next(true)
+    this.userService.inLogin.next(false)
+    this.userService.isLoggedIn.next(false)
     this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
@@ -37,9 +40,12 @@ export class SignupComponent implements OnInit{
     })
 
     this.chhronicIllnessService.getAllChronicIllness().subscribe(data => {
-      console.log(data);
       this.savedChronicIllnesses = data;
     });
+  }
+
+  ngOnDestroy(): void {
+      this.userService.inSignup.next(false)
   }
 
   signupForm : FormGroup = new FormGroup({
@@ -59,9 +65,6 @@ export class SignupComponent implements OnInit{
   })
 
   register(){
-
-    // console.log(this.signupForm);
-
     const date = new Date();
     const user = this.signupForm.value;
     if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){
@@ -137,7 +140,7 @@ export class SignupComponent implements OnInit{
       });
     }
 
-    this.router.navigate([""]);
+    this.router.navigate(["/appointment"]);
 
   }
 
