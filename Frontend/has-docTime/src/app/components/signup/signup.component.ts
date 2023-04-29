@@ -85,7 +85,7 @@ export class SignupComponent implements OnInit{
     for(let i=0; i<user.patientChronicIllness.length; i++){
       let chronicIllness = {
         "chronicIllness" : {
-          "name" : user.patientChronicIllness[i].name
+          "id" : parseInt(user.patientChronicIllness[i].name)
         },
         "yearsOfIllness" : user.patientChronicIllness[i].yearsOfIllness
       }

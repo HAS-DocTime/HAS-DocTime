@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,10 +14,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "post_appointment_data")
-@JsonIdentityInfo(
-        scope = PostAppointmentData.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class PostAppointmentData {
 
     @Id
@@ -32,14 +29,17 @@ public class PostAppointmentData {
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "patient_id")
+    @JsonIgnoreProperties({"appointmentData", "admin", "appointments", "doctor"})
     private User user;
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"postAppointmentData", "availableTimeSlots", "bookedTimeSlots", "appointments"})
     private Doctor doctor;
 
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "booked_time_slot_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"appointmentData", "bookedDoctors", "availableDoctors", "department", "appointment"})
     private TimeSlot timeSlotForAppointmentData;
 
     @Override

@@ -1,6 +1,8 @@
 package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.spring.hasdocTime.utills.BloodGroup;
 import com.spring.hasdocTime.utills.Gender;
@@ -18,11 +20,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @ToString
 @Table(name="user")
-@JsonIdentityInfo(
-        scope = User.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 public class User {
 
     @Id
@@ -65,19 +62,23 @@ public class User {
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
     private Doctor doctor;
 
+    @JsonIgnoreProperties("user")
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Admin admin;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
     private List<PatientChronicIllness> patientChronicIllness;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
     private List<Appointment> appointments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
     private List<PostAppointmentData> appointmentData;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -85,6 +86,7 @@ public class User {
             name = "patient_symptom",
             joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "symptom_id"))
+    @JsonIgnoreProperties({"users", "departments", "appointments"})
     private List<Symptom> symptoms;
 
     @Override
