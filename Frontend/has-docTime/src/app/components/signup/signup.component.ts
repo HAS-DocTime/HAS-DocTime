@@ -21,6 +21,8 @@ export class SignupComponent implements OnInit, OnDestroy{
   }
 
   savedChronicIllnesses : ChronicIllness[] = [];
+  selectedValue : string = "";
+  selectedIllness : number[] = [];
 
   ngOnInit(){
     this.userService.inSignup.next(true)
@@ -42,6 +44,15 @@ export class SignupComponent implements OnInit, OnDestroy{
     this.chhronicIllnessService.getAllChronicIllness().subscribe(data => {
       this.savedChronicIllnesses = data;
     });
+
+    this.signupForm.controls["patientChronicIllness"].valueChanges.subscribe((data) => {
+      this.selectedIllness = [];
+      for(let illness of data){
+        if(illness.name!==''){
+          this.selectedIllness.push(parseInt(illness.name));
+        }
+      }
+    })
   }
 
   ngOnDestroy(): void {
@@ -64,6 +75,8 @@ export class SignupComponent implements OnInit, OnDestroy{
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([])
   })
+
+
 
   register(){
     const date = new Date();

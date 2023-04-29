@@ -1,4 +1,4 @@
 export type ChronicIllness = {
-  id? : number;
+  id : number;
   name : string;
 }
