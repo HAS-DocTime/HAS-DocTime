@@ -1,19 +1,17 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
+@Injectable()
 export class AuthTokenInterceptor implements HttpInterceptor{
 
-    constructor(private excludedUrls: string[]){}
+    constructor(){}
     
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-        if (this.isExcludedUrl(req.url)) {
-            return next.handle(req);
-          }
-
         // const authToken = localStorage.getItem('token');
         const authToken = window.sessionStorage.getItem('token');
-        
+    
 
         // let authToken : String = "";  
         // if(localStorage.getItem('token') !== null){
@@ -26,15 +24,11 @@ export class AuthTokenInterceptor implements HttpInterceptor{
             req = req.clone({
                 setHeaders : {
                     Authorization : `Bearer ${authToken}`
-                }
+                }   
             });
         }
 
         return next.handle(req);
     }
-
-    private isExcludedUrl(url: string): boolean {
-        return this.excludedUrls && this.excludedUrls.includes(url);
-      }
 
 }

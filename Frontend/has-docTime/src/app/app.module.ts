@@ -36,11 +36,8 @@ import { AuthTokenInterceptor } from './interceptors/auth-token-interceptor';
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      multi: true,
-      useFactory: () => {
-        const excludedUrls = ['https://localhost/8080/auth/register', 'https://localhost/8080/auth/authenticate'];
-        return new AuthTokenInterceptor(excludedUrls);
-      }
+      useClass : AuthTokenInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

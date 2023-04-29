@@ -9,21 +9,30 @@ import { LoginDetails } from '../models/login-details.model';
 })
 export class UserService {
 
+  // private dataSubject = new Subject<any>();
   isLoggedIn: Subject<Boolean> = new Subject<Boolean>;
   inSignupForm: Subject<Boolean> = new Subject<Boolean>;
 
   constructor(private http : HttpClient) { }
   baseUrl = "http://localhost:8080/";
+  // registerUser(user : LoginDetails){
+  //   this.isLoggedIn.next(true);
+  //   return this.http.post<string>(`${this.baseUrl}auth/register`, user);
+   
+  // }
   registerUser(user : LoginDetails){
     this.isLoggedIn.next(true);
-    return this.http.post<string>(`${this.baseUrl}auth/register`, user);
+    sessionStorage.clear();
+    localStorage.clear();
+    return this.http.post<{token : string}>(`${this.baseUrl}auth/register`, user);
   }
-
   createUser(user : User){
     return this.http.post<User>(`${this.baseUrl}user`, user);
   }
 
   onLogout(){
+    localStorage.clear();
+    sessionStorage.clear();
     this.isLoggedIn.next(false);
   }
 
@@ -31,4 +40,9 @@ export class UserService {
     this.isLoggedIn.next(false);
     this.inSignupForm.next(false);
   }
+
+  // getDataSubject(): Subject<any> {
+  //   return this.dataSubject;
+  // }
 }
+

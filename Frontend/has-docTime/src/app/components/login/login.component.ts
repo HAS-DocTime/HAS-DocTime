@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit{
   submitted = false;
   invalidLogin = false;
   user = null;
+  isLoggedIn : Boolean = false;
 
   constructor(private loginService: LoginService, private router: Router) {
   }
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit{
 
   loginForm : FormGroup = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
-    password: new FormControl("", [Validators.required, Validators.minLength(8)])
+    password: new FormControl("", [Validators.required, Validators.minLength(6)])
   })
 
   onSubmit(){
@@ -34,11 +35,18 @@ export class LoginComponent implements OnInit{
     const password = this.loginForm.controls['password'].value;
 
     this.loginService.checkDetail(email, password).subscribe(data => {
-      this.user=data;
+      // this.user=data;
+      console.log(data);
+      sessionStorage.clear();
+      window.sessionStorage.setItem('token',JSON.stringify(data));
     }, (err)=> {
       if(err){
         this.invalidLogin=true;
       }
     })
+    this.loginService.isLoggedIn.subscribe((data) => {
+        this.isLoggedIn = data;
+    });
+    this.router.navigate([""]);
   }
 }

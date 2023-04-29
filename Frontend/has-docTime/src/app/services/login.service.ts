@@ -1,18 +1,21 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService{
 
-  private loginUrl = "http://localhost:8080/login";
+  isLoggedIn: Subject<Boolean> = new Subject<Boolean>;
+
+  private loginUrl = "http://localhost:8080/auth/authenticate";
 
   constructor(private http:HttpClient) {}
 
   checkDetail(email: string, password: string): Observable<any> {
-    const body = { email, password };
+    const body = { "email" : email, "password" : password };
+    this.isLoggedIn.next(true);
     return this.http.post<any>(this.loginUrl, body);
   }
 }

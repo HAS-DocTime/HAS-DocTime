@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from 'src/app/services/login.service';
 import { UserService } from 'src/app/services/user.service';
 
 
@@ -9,13 +10,17 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent implements OnInit{
 
-  constructor(private userService: UserService){
+  constructor(private userService: UserService, private loginService: LoginService){
   }
 
   registered!: Boolean;
   inSignupForm!: Boolean;
 
   ngOnInit(): void {
+      this.loginService.isLoggedIn.subscribe((data) => {
+        this.registered = data;
+      });
+
       this.userService.isLoggedIn.subscribe( (data) => {
         this.registered = data;
       });

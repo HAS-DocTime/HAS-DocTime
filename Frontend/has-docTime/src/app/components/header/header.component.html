@@ -10,9 +10,9 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <section>
                 <div class="example-button-row" >
-                    <button *ngIf="!inSignupForm && !registered" style="margin-right: 10px;" mat-raised-button color="primary" routerLink="/register" (click)="onRegister()">Register</button>
-                    <button *ngIf="!registered" mat-raised-button color="accent" routerLink="/login">Login</button>
-                    <button *ngIf="registered" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
+                    <button *ngIf="!inSignupForm && !registered" style="margin-right: 10px;" class="btn btn-outline-dark" color="primary" routerLink="/register" (click)="onRegister()">Sign Up</button>
+                    <button *ngIf="!registered" class="btn btn-dark" color="accent" routerLink="/login">Login</button>
+                    <button *ngIf="registered" class="btn btn-dark" color="accent" (click)="onLogout()">Logout</button>
                 </div>
             </section>
         </div>

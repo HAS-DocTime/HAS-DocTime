@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("user")
-@CrossOrigin(origins = "*")
+@CrossOrigin(value = "*")
 public class UserController {
 
     private UserInterface userService;
