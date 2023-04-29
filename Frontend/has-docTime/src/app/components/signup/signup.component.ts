@@ -49,7 +49,8 @@ export class SignupComponent implements OnInit, OnDestroy{
   }
 
   signupForm : FormGroup = new FormGroup({
-    name : new FormControl("", [Validators.required]),
+    firstName : new FormControl("", [Validators.required]),
+    lastName : new FormControl("", [Validators.required]),
     dob : new FormControl("2001-01-01", [Validators.required]),
     gender : new FormControl("MALE", [Validators.required]),
     bloodGroup : new FormControl("O_POSITIVE", [Validators.required]),
@@ -79,6 +80,7 @@ export class SignupComponent implements OnInit, OnDestroy{
       }
       user.age = age;
     }
+    user.name = user.firstName + " " + user.lastName;
     let chronicIllnesses = [];
     for(let i=0; i<user.patientChronicIllness.length; i++){
       let chronicIllness = {
@@ -93,7 +95,8 @@ export class SignupComponent implements OnInit, OnDestroy{
     if(user.role==="PATIENT"){
       this.userService.registerUser(user).subscribe((data)=> {
         this.signupForm.reset({
-          name : "",
+          firstName : "",
+          lastName : "",
           dob : "2001-01-01",
           gender : "MALE",
           bloodGroup : "O_POSITIVE",
@@ -124,7 +127,8 @@ export class SignupComponent implements OnInit, OnDestroy{
         }
         this.doctorService.createDoctor(doctor).subscribe(data=> {
             this.signupForm.reset({
-            name : "",
+            firstName : "",
+            lastName : "",
             dob : "2001-01-01",
             gender : "MALE",
             bloodGroup : "O_POSITIVE",
@@ -139,9 +143,7 @@ export class SignupComponent implements OnInit, OnDestroy{
         })
       });
     }
-
     this.router.navigate(["/appointment"]);
-
   }
 
   addChronicIllness(){
