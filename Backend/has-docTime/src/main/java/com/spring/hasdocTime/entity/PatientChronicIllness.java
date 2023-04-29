@@ -1,7 +1,5 @@
 package com.spring.hasdocTime.entity;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,10 +11,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Table(name="patient_chronic_illness")
-@JsonIdentityInfo(
-        scope = PatientChronicIllness.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class PatientChronicIllness {
 
     @EmbeddedId
@@ -25,15 +19,17 @@ public class PatientChronicIllness {
     @ManyToOne
     @MapsId("patientId")
     @JoinColumn(name="patient_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"patientChronicIllness", "doctor", "admin", "appointmentData", "appointments", "symptoms"})
     private User user;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @MapsId("chronicIllnessId")
     @JoinColumn(name="chronic_illness_id", referencedColumnName = "id")
+    @JsonIgnoreProperties("patientChronicIllnesses")
     private ChronicIllness chronicIllness;
 
     @Column(name="years_of_illness")
-    private int yearsOfIllness;
+    private float yearsOfIllness;
 
     @Override
     public boolean equals(Object o) {

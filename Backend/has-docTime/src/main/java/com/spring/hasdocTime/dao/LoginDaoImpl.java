@@ -18,6 +18,8 @@ public class LoginDaoImpl implements LoginInterface {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    //private LoginDetail user1 = new LoginDetail("trupti@luv2code.com", "123456");
+
     @Override
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) {
 
@@ -33,12 +35,12 @@ public class LoginDaoImpl implements LoginInterface {
 
         authenticationManager.authenticate
                 (new UsernamePasswordAuthenticationToken(
-                        loginDetail.getUsername(),
+                        loginDetail.getEmail(),
                         loginDetail.getPassword()
                 )
         );
         System.out.println("here");
-        var user = userRepository.findByEmail(loginDetail.getUsername()).orElseThrow();
+        var user = userRepository.findByEmail(loginDetail.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user.getUsername());
         System.out.println(jwtToken);
         return AuthenticationResponse.builder().token(jwtToken).build();

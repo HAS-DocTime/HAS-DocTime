@@ -6,7 +6,6 @@ import com.spring.hasdocTime.entity.PatientChronicIllness;
 import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
 import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
-import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

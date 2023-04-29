@@ -21,7 +21,7 @@ public class LoginController {
 
     private String username;
     private String password;
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<AuthenticationResponse> loginRequest(@RequestBody LoginDetail loginDetail){
         return ResponseEntity.ok(loginService.loginRequest(loginDetail));
     }

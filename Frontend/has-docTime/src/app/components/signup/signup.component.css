@@ -4,7 +4,7 @@
 }
 
 .form-group{
-  width: 70%;
+  width: 100%;
 }
 
 .registerForm{
@@ -12,6 +12,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 2%;
 }
 
 .gender{
@@ -24,4 +25,37 @@
 
 .doctorDetails .form-group{
   width: 100%;
+}
+.no-chronic-illness{
+  background-color: rgb(223, 220, 220);
+  color: rgb(0, 0, 0);
+}
+
+i{
+  font-size: 25px;
+}
+
+.outer-container{
+  padding: 3% 0;
+}
+
+.container{
+  background-color: white;
+  width: 60%;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-radius: 10px;
+
+
+}
+
+.dlt{
+  margin-top: 2.6%;
+}
+
+.dlt:hover{
+    color: brown;
+}
+
+.heading{
+  color: #0074d9;
 }
