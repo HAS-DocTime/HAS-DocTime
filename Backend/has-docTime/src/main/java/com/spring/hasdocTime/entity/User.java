@@ -2,6 +2,7 @@ package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.spring.hasdocTime.utills.BloodGroup;
 import com.spring.hasdocTime.utills.Gender;
@@ -72,7 +73,7 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Doctor doctor;
 
-    @JsonIgnore
+    @JsonIgnoreProperties("user")
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Admin admin;
 

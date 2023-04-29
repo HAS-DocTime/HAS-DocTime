@@ -8,10 +8,7 @@ import com.spring.hasdocTime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +39,7 @@ public class LoginDaoImpl implements LoginInterface {
         );
         System.out.println("here");
         var user = userRepository.findByEmail(loginDetail.getUsername()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user.getUsername());
         System.out.println(jwtToken);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
