@@ -1,11 +1,11 @@
-<div>
-  <div class="container mt-5">
+<div class="outer-container bg-body-tertiary">
+  <div class="container">
     <div class="text-center mb-2">
-      <h1>Login Form</h1>
+      <h2 class="heading text-lg-center pt-4">Login Form</h2>
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="row">
-          <div>
+      <div class="row my-4" >
+          <div class="py-1">
             <label for="email">Email address</label>
           </div>
           <div>
@@ -14,14 +14,15 @@
                     placeholder="name@example.com"
                     formControlName="email"
                     required
-                    [ngClass]="{'is-invalid': submitted && loginForm.controls['email'].invalid}">
+                    [ngClass]="{'is-invalid': submitted && loginForm.controls['email'].invalid}"
+                    class="form-control">
             <div *ngIf="submitted && loginForm.controls['password'].invalid" class="invalid-feedback">
               Please enter a valid email address.
             </div>
           </div>
       </div>
-      <div class="row">
-          <div>
+      <div class="row my-4">
+          <div class="py-1">
             <label for="password">Password</label>
           </div>
           <div>
@@ -30,13 +31,14 @@
                     placeholder="Password"
                     formControlName="password"
                     required
-                    [ngClass]="{'is-invalid': submitted && loginForm.controls['password'].invalid}">
+                    [ngClass]="{'is-invalid': submitted && loginForm.controls['password'].invalid}"
+                    class="form-control">
             <div *ngIf="submitted && loginForm.controls['password'].invalid" class="invalid-feedback">
               Password is required and must be at least 6 characters long.
             </div>
           </div>
       </div>
-      <div class="container mt-1">
+      <div class="mt-1 d-flex justify-content-center mt-3">
         <div class="d-inline-block">
           <button type="submit" class="btn btn-primary">Submit</button>
           <!-- <button type="register" class="btn btn-primary">Register</button> -->
