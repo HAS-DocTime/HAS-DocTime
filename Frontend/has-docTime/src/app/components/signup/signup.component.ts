@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Form, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ChronicIllness } from 'src/app/models/chronicIllness.model';
 import { Router } from '@angular/router';
@@ -14,15 +14,20 @@ import { UserService } from 'src/app/services/user.service';
 })
 
 
-export class SignupComponent implements OnInit{
+export class SignupComponent implements OnInit, OnDestroy{
 
   constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
 
   }
 
   savedChronicIllnesses : ChronicIllness[] = [];
+  selectedValue : string = "";
+  selectedIllness : number[] = [];
 
   ngOnInit(){
+    this.userService.inSignup.next(true)
+    this.userService.inLogin.next(false)
+    this.userService.isLoggedIn.next(false)
     this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
@@ -37,13 +42,26 @@ export class SignupComponent implements OnInit{
     })
 
     this.chhronicIllnessService.getAllChronicIllness().subscribe(data => {
-      console.log(data);
       this.savedChronicIllnesses = data;
     });
+
+    this.signupForm.controls["patientChronicIllness"].valueChanges.subscribe((data) => {
+      this.selectedIllness = [];
+      for(let illness of data){
+        if(illness.name!==''){
+          this.selectedIllness.push(parseInt(illness.name));
+        }
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+      this.userService.inSignup.next(false)
   }
 
   signupForm : FormGroup = new FormGroup({
-    name : new FormControl("", [Validators.required]),
+    firstName : new FormControl("", [Validators.required]),
+    lastName : new FormControl("", [Validators.required]),
     dob : new FormControl("2001-01-01", [Validators.required]),
     gender : new FormControl("MALE", [Validators.required]),
     bloodGroup : new FormControl("O_POSITIVE", [Validators.required]),
@@ -58,10 +76,9 @@ export class SignupComponent implements OnInit{
     patientChronicIllness : new FormArray([])
   })
 
+
+
   register(){
-
-    // console.log(this.signupForm);
-
     const date = new Date();
     const user = this.signupForm.value;
     if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){
@@ -76,6 +93,7 @@ export class SignupComponent implements OnInit{
       }
       user.age = age;
     }
+    user.name = user.firstName + " " + user.lastName;
     let chronicIllnesses = [];
     for(let i=0; i<user.patientChronicIllness.length; i++){
       let chronicIllness = {
@@ -89,8 +107,10 @@ export class SignupComponent implements OnInit{
     user.patientChronicIllness = chronicIllnesses;
     if(user.role==="PATIENT"){
       this.userService.registerUser(user).subscribe((data)=> {
+        // sessionStorage.setItem(data.token);
         this.signupForm.reset({
-          name : "",
+          firstName : "",
+          lastName : "",
           dob : "2001-01-01",
           gender : "MALE",
           bloodGroup : "O_POSITIVE",
@@ -121,7 +141,8 @@ export class SignupComponent implements OnInit{
         }
         this.doctorService.createDoctor(doctor).subscribe(data=> {
             this.signupForm.reset({
-            name : "",
+            firstName : "",
+            lastName : "",
             dob : "2001-01-01",
             gender : "MALE",
             bloodGroup : "O_POSITIVE",
@@ -136,9 +157,7 @@ export class SignupComponent implements OnInit{
         })
       });
     }
-
-    this.router.navigate([""]);
-
+    this.router.navigate(["/appointment"]);
   }
 
   addChronicIllness(){

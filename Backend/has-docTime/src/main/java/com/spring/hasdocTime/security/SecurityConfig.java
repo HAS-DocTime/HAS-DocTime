@@ -64,6 +64,7 @@ public class SecurityConfig{
         // example 3
         // get list from json file
         http.csrf().disable().authorizeHttpRequests((authorize)-> authorize
+                        .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
                 .requestMatchers(getServices("/static/adminServices.json"))
                         .hasAnyAuthority("ADMIN")

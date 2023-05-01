@@ -3,21 +3,39 @@
     <h2 class="heading text-lg-center pt-4">Registration Form</h2>
     <form [formGroup]="signupForm" class="registerForm" (ngSubmit)="register()">
       <div class="form-group my-4">
-        <label for="name">Name</label>
+        <label for="firstName">First Name</label>
         <input
           type="text"
           class="form-control"
-          id="name"
+          id="firstName"
           placeholder="(Eg : John)"
-          formControlName="name"
+          formControlName="firstName"
         />
         <div
           class="alert alert-danger"
           *ngIf="
-            signupForm.get('name')?.touched && signupForm.get('name')?.invalid
+            signupForm.get('firstName')?.touched && signupForm.get('firstName')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('name')?.errors">Name is Required</span>
+          <span *ngIf="signupForm.get('firstName')?.errors">First Name is Required</span>
+        </div>
+      </div>
+      <div class="form-group mb-4">
+        <label for="lastName">Last Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="lastName"
+          placeholder="(Eg : John)"
+          formControlName="lastName"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            signupForm.get('lastName')?.touched && signupForm.get('lastName')?.invalid
+          "
+        >
+          <span *ngIf="signupForm.get('lastName')?.errors">Last Name is Required</span>
         </div>
       </div>
       <div class="form-group mb-4">
@@ -177,6 +195,7 @@
           <option value="DOCTOR">Doctor</option>
         </select>
       </div>
+
       <div class="form-group">
         <label>Chronic Illness</label>
         <div
@@ -186,9 +205,9 @@
           <div class="d-flex my-3 justify-content-around" [formGroupName]="i">
               <div>
                 <label for="chronicIllnessName">Name</label>
-                <select class="form-select" id="chronicIllnessName" formControlName="name">
+                <select class="form-select" id="chronicIllnessName" formControlName="name" >
                   <option value="" selected disabled>Select Chronic Illness</option>
-                  <option *ngFor="let chronicIllness of savedChronicIllnesses" [value]="chronicIllness.id">{{chronicIllness.name}}</option>
+                  <option *ngFor="let chronicIllness of savedChronicIllnesses" [value]="chronicIllness.id" [disabled]="selectedIllness.includes(chronicIllness.id)">{{chronicIllness.name}}</option>
                 </select>
                 <div
                   class="alert alert-danger"
@@ -223,72 +242,80 @@
             <i class="bi bi-trash3-fill me-2 dlt" (click)="deleteChronicIllness(i)" style="cursor : pointer;"></i>
           </div>
         </div>
-        <div
-          *ngIf="chronicIllness.length === 0"
-          class="d-flex justify-content-center"
-        >
-          <span class="no-chronic-illness px-3 rounded my-3">
-            No Chronic Illness
-          </span>
-        </div>
-        <div class="d-flex justify-content-center">
-          <i (click)="addChronicIllness()" class="bi bi-plus-circle" style="cursor : pointer;"></i>
-        </div>
       </div>
       <div
-        class="doctorDetails form-group mb-4"
-        *ngIf="signupForm.value['role'] === 'DOCTOR'"
+        *ngIf="chronicIllness.length === 0"
+        class="d-flex justify-content-center"
       >
-        <div class="form-group doctorDetail mb-4">
-          <label for="qualification">Qualifications</label>
-          <input
-            type="text"
-            class="form-control"
-            id="qualification"
-            placeholder="Enter Qualifications"
-            formControlName="qualification"
-          />
-          <div
-            class="alert alert-danger"
-            *ngIf="
-              signupForm.get('qualification')?.touched &&
-              signupForm.get('qualification')?.invalid
-            "
+        <span class="no-chronic-illness px-3 rounded my-3">
+          No Chronic Illness
+        </span>
+      </div>
+      <div class="d-flex justify-content-center">
+        <i (click)="addChronicIllness()" class="bi bi-plus-circle" style="cursor : pointer;"></i>
+      </div>
+    <!-- </div> -->
+    <div class="form-group mb-4">
+      <label for="role">Role</label>
+      <select class="form-select" id="role" formControlName="role">
+        <option value="PATIENT">Patient</option>
+        <option value="DOCTOR">Doctor</option>
+      </select>
+    </div>
+    <div
+      class="doctorDetails form-group mb-4"
+      *ngIf="signupForm.value['role'] === 'DOCTOR'"
+    >
+      <div class="form-group doctorDetail mb-4">
+        <label for="qualification">Qualifications</label>
+        <input
+          type="text"
+          class="form-control"
+          id="qualification"
+          placeholder="Enter Qualifications"
+          formControlName="qualification"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            signupForm.get('qualification')?.touched &&
+            signupForm.get('qualification')?.invalid
+          "
+        >
+          <span *ngIf="signupForm.get('qualification')?.errors"
+            >Qualification is Required</span
           >
-            <span *ngIf="signupForm.get('qualification')?.errors"
-              >Qualification is Required</span
-            >
-          </div>
-        </div>
-        <div class="form-group doctorDetail mb-4">
-          <label for="casesSolved">Cases Solved</label>
-          <input
-            type="number"
-            class="form-control"
-            id="casesSolved"
-            placeholder="Enter Number of Cases Solved"
-            formControlName="casesSolved"
-          />
-          <div
-            class="alert alert-danger"
-            *ngIf="
-              signupForm.get('casesSolved')?.touched &&
-              signupForm.get('casesSolved')?.invalid
-            "
-          >
-            <span *ngIf="signupForm.get('casesSolved')?.errors"
-              >Cases Solved is Required</span
-            >
-          </div>
         </div>
       </div>
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="!signupForm.valid"
-      >
-        Register
-      </button>
-    </form>
-  </div>
+      <div class="form-group doctorDetail mb-4">
+        <label for="casesSolved">Cases Solved</label>
+        <input
+          type="number"
+          class="form-control"
+          id="casesSolved"
+          placeholder="Enter Number of Cases Solved"
+          formControlName="casesSolved"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            signupForm.get('casesSolved')?.touched &&
+            signupForm.get('casesSolved')?.invalid
+          "
+        >
+          <span *ngIf="signupForm.get('casesSolved')?.errors"
+            >Cases Solved is Required</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex mb-4">
+      <div class="col">
+        <button type="button" class="btn btn-outline-danger" routerLink="">Cancel</button>
+      </div>
+      <div class="col">
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!signupForm.valid" >Register</button>
+      </div>
+    </div>
+  </form>
 </div>

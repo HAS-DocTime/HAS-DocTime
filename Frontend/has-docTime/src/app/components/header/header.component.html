@@ -1,18 +1,29 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
         <a class="navbar-brand" routerLink="">
             <img src="assets/logo/doctime-logo1.png" alt="doctime-logo" width="150" height="50">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
         <p class="fontinc">Hospital Appointment System</p>
+
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <section>
                 <div class="example-button-row" >
-                    <button *ngIf="!inSignupForm" style="margin-right: 10px;" mat-raised-button color="primary" routerLink="/register" (click)="onRegister()">Register</button>
-                    <button *ngIf="!registered" mat-raised-button color="accent" routerLink="/login">Login</button>
-                    <button *ngIf="registered" mat-raised-button color="accent" (click)="onLogout()">Logout</button>
+                    <button *ngIf="!inSignupForm && !isLoggedIn"
+                            style="margin-right: 10px;"
+                            mat-raised-button color="primary"
+                            routerLink="/register">Register</button>
+
+                    <button *ngIf="!inLoginForm  && !isLoggedIn"
+                            mat-raised-button color="accent"
+                            routerLink="/login">Login</button>
+
+                    <button *ngIf="isLoggedIn"
+                            mat-raised-button color="accent"
+                            (click)="onLogout()"
+                            routerLink="/register">Logout</button>
                 </div>
             </section>
         </div>
