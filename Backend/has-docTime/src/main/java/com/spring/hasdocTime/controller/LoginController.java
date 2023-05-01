@@ -1,34 +1,29 @@
 package com.spring.hasdocTime.controller;
 
+import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.LoginDetail;
-import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.LoginInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("login")
+@RequestMapping("/login")
 @CrossOrigin(origins = "*")
 public class LoginController {
 
+    private final LoginInterface loginService;
+
     @Autowired
-    @Qualifier("loginServiceImpl")
-    private LoginInterface loginService;
+    public LoginController(@Qualifier("loginServiceImpl") LoginInterface loginService) {
+        this.loginService = loginService;
+    }
 
-    private String username;
-    private String password;
-
-
+    
     @PostMapping("")
-    public ResponseEntity<User> loginRequest(@RequestBody LoginDetail loginDetail){
-        User responseUser = loginService.loginRequest(loginDetail);
-        if(responseUser == null) {
-            return new ResponseEntity(responseUser, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity(responseUser, HttpStatus.OK);
+    public ResponseEntity<AuthenticationResponse> loginRequest(@RequestBody LoginDetail loginDetail){
+        return ResponseEntity.ok(loginService.loginRequest(loginDetail));
     }
 
 }

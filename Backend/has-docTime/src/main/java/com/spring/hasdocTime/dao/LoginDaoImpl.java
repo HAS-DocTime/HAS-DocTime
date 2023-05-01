@@ -1,39 +1,35 @@
 package com.spring.hasdocTime.dao;
 
+import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.LoginDetail;
-import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.LoginInterface;
-import com.spring.hasdocTime.interfc.UserInterface;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.spring.hasdocTime.repository.UserRepository;
+import com.spring.hasdocTime.security.jwt.JwtService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
+@RequiredArgsConstructor
 public class LoginDaoImpl implements LoginInterface {
 
-    private UserInterface userDao;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    public LoginDaoImpl(@Qualifier("userDaoImpl") UserInterface userDao){
-        this.userDao = userDao;
-    }
-
-    //private LoginDetail user1 = new LoginDetail("trupti@luv2code.com", "123456");
 
     @Override
-    public User loginRequest(LoginDetail loginDetail) {
+    public AuthenticationResponse loginRequest(LoginDetail loginDetail) {
 
-        List<User> allUser = userDao.getAllUser();
-        User responseUser = null;
-        for(User user : allUser){
-            if(user.getEmail().equals(loginDetail.getEmail()) && user.getPassword().equals(loginDetail.getPassword())) {
-                responseUser = user;
-                break;
-            }
-        }
-
-        return responseUser;
+        authenticationManager.authenticate
+                (new UsernamePasswordAuthenticationToken(
+                        loginDetail.getEmail(),
+                        loginDetail.getPassword()
+                )
+        );
+        var user = userRepository.findByEmail(loginDetail.getEmail()).orElseThrow();
+        var jwtToken = jwtService.generateToken(user.getUsername());
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
 }
