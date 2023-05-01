@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/symptom")
-@CrossOrigin(value = "*")
+@CrossOrigin(origins = "*")
 public class SymptomController {
 
     @Autowired

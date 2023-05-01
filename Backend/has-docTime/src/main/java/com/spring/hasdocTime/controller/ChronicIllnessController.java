@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("chronicIllness")
-@CrossOrigin(value = "*")
+@CrossOrigin(origins = "*")
 public class ChronicIllnessController {
 
     private ChronicIllnessInterface chronicIllnessService;
