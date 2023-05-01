@@ -25,6 +25,7 @@ export class SignupComponent implements OnInit, OnDestroy{
   selectedValue : string = "";
   selectedIllness : number[] = [];
 
+
   ngOnInit(){
     this.userService.inSignup.next(true)
     this.userService.inLogin.next(false)

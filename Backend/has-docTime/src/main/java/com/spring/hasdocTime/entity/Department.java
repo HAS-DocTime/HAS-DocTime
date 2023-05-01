@@ -43,7 +43,13 @@ public class Department {
     
     @Column(name="time_duration")
     private int timeDuration;
-
+    
+    @Column(name="description")
+    private String description;
+    
+    @Column(name="department_image")
+    private String departmentImage;
+          
     @OneToMany(mappedBy = "department", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
     @JsonIgnoreProperties({"user", "department", "appointments", "postAppointmentData"})
     private List<Doctor> doctors;
