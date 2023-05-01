@@ -7,14 +7,7 @@ import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import com.spring.hasdocTime.repository.UserRepository;
-import com.spring.hasdocTime.security.AuthResponse;
-import com.spring.hasdocTime.security.JwtService;
-import com.spring.hasdocTime.security.RegisterRequest;
-import com.spring.hasdocTime.security.RegisterResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,9 +22,6 @@ public class UserDaoImpl implements UserInterface {
     private final PatientChronicIllnessInterface patientChronicIllnessDao;
     private final ChronicIllnessRepository chronicIllnessRepository;
     private final SymptomRepository symptomRepository;
-    private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
 
     @Override
@@ -46,52 +36,6 @@ public class UserDaoImpl implements UserInterface {
             return user.get();
         }
         return null;
-    }
-
-    public RegisterResponse register(User request) {
-
-        var user = User.builder()
-                .email(request.getEmail())
-                .age(request.getAge())
-                .dob(request.getDob())
-                .contact(request.getContact())
-                .bloodGroup(request.getBloodGroup())
-                .height(request.getHeight())
-                .weight(request.getWeight())
-                .name(request.getName())
-                .gender(request.getGender())
-                .patientChronicIllness(request.getPatientChronicIllness())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
-                .build();
-
-
-        var savedUser = userRepository.save(user);
-        int id = userRepository.findByEmail(request.getEmail()).get().getId();
-
-        var jwtToken = jwtService.generateToken(user);
-        return RegisterResponse.builder()
-                .token(jwtToken)
-                .id(id)
-                .build();
-
-    }
-
-    public AuthResponse authenticate(RegisterRequest request) {
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .build();
-
     }
 
     @Override

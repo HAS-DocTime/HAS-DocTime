@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
-import { LoginDetails } from '../models/login-details.model';
 
 @Injectable({
   providedIn: 'root'

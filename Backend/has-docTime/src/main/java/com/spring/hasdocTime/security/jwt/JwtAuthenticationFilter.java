@@ -1,4 +1,4 @@
-package com.spring.hasdocTime.security;
+package com.spring.hasdocTime.security.jwt;
 
 import com.spring.hasdocTime.entity.User;
 import jakarta.servlet.FilterChain;

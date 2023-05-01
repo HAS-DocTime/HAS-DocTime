@@ -2,9 +2,6 @@ package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.UserInterface;
-import com.spring.hasdocTime.security.AuthResponse;
-import com.spring.hasdocTime.security.RegisterRequest;
-import com.spring.hasdocTime.security.RegisterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -23,20 +20,6 @@ public class UserController {
     @Autowired
     public UserController(@Qualifier("userServiceImpl") UserInterface theUserService) {
         this.userService = theUserService;
-    }
-
-    @PostMapping("/auth/register")
-    public ResponseEntity<RegisterResponse> register(
-            @RequestBody User request
-    ){
-        return ResponseEntity.ok(userService.register(request));
-    }
-
-    @PostMapping("/auth/authenticate")
-    public ResponseEntity<AuthResponse> authenticate(
-            @RequestBody RegisterRequest request
-    ){
-        return ResponseEntity.ok(userService.authenticate(request));
     }
 
     @GetMapping("")

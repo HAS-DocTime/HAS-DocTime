@@ -127,35 +127,6 @@ export class SignupComponent implements OnInit{
           });
         });
       },2000);
-    
-      // this.userService.registerUser(signupDetail).subscribe((data) => {
-        // this.authToken = data;
-        // sessionStorage.clear();
-        // localStorage.clear();
-        // localStorage.setItem('token', JSON.stringify(data));
-        // window.sessionStorage.setItem('token',JSON.stringify(data));
-        // signupDetail = {email : "", password : ""};
-      // });
-
-      
-      // this.registerUser(signupDetail).then((data) => {
-      //   this.userService.createUser(user).subscribe((data)=> {
-      //     this.signupForm.reset({
-      //       name : "",
-      //       dob : "2001-01-01",
-      //       gender : "MALE",
-      //       bloodGroup : "O_POSITIVE",
-      //       contact : "",
-      //       email : "",
-      //       password : "",
-      //       role : "PATIENT",
-      //       qualification : "",
-      //       casesSolved : 0,
-      //       patientChronicIllness : []
-      //     });
-      //   });
-      // });
-    
       
     }
     else if(user.role === "DOCTOR"){

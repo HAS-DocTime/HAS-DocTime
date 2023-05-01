@@ -1,4 +1,4 @@
-package com.spring.hasdocTime.security;
+package com.spring.hasdocTime.security.configuration;
 
 import com.spring.hasdocTime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
