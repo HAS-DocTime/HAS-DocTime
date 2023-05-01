@@ -6,32 +6,24 @@ import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserDaoImpl implements UserInterface {
 
-    private UserRepository userRepository;
-
-    private PatientChronicIllnessInterface patientChronicIllnessDao;
-
-    private ChronicIllnessRepository chronicIllnessRepository;
-
-    private SymptomRepository symptomRepository;
-
-    @Autowired
-    public UserDaoImpl(UserRepository userRepository, PatientChronicIllnessInterface patientChronicIllnessDao,ChronicIllnessRepository chronicIllnessRepository, SymptomRepository symptomRepository) {
-        this.userRepository = userRepository;
-        this.patientChronicIllnessDao = patientChronicIllnessDao;
-        this.chronicIllnessRepository = chronicIllnessRepository;
-        this.symptomRepository = symptomRepository;
-    }
+    private final UserRepository userRepository;
+    private final PatientChronicIllnessInterface patientChronicIllnessDao;
+    private final ChronicIllnessRepository chronicIllnessRepository;
+    private final SymptomRepository symptomRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUser() {
@@ -49,6 +41,7 @@ public class UserDaoImpl implements UserInterface {
 
     @Override
     public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         List<Symptom> symptomList = user.getSymptoms();
         if(symptomList!=null){
             List<Symptom> newSymptomList = new ArrayList<>();

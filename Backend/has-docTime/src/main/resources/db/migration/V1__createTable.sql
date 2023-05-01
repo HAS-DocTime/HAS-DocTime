@@ -9,7 +9,7 @@ CREATE TABLE user(
     height FLOAT,
     weight FLOAT,
     email VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(68) NOT NULL,
     role VARCHAR(10) NOT NULL
 );
 

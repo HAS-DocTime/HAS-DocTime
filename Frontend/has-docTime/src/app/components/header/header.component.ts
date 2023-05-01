@@ -1,3 +1,4 @@
+import { LoginService } from 'src/app/services/login.service';
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
@@ -9,7 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent implements OnInit{
 
-  constructor(private userService: UserService, private router: Router, private route: ActivatedRoute){
+  constructor(private loginService: LoginService, private userService: UserService, private router: Router, private route: ActivatedRoute){
   }
 
   isLoggedIn!: Boolean;
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit{
   inLoginForm!: Boolean;
 
   ngOnInit(): void {
+
       this.userService.isLoggedIn.subscribe( (data) => {
         this.isLoggedIn = data;
       });
@@ -30,7 +32,8 @@ export class HeaderComponent implements OnInit{
   }
 
   onLogout(){
-    this.userService.logOutUser()
+    this.userService.logOutUser();
+    sessionStorage.removeItem("token");
     this.router.navigate(['/login']);
   }
 

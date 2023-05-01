@@ -1,21 +1,15 @@
 package com.spring.hasdocTime.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class LoginDetail {
+public class AuthenticationResponse {
 
-    private String email;
-
-    private String password;
-
-
-
-
+    private String token;
 }
