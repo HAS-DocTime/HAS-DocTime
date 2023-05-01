@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("login")
-@CrossOrigin(value = "http://localhost:4200")
+@CrossOrigin(value = "*")
 public class LoginController {
 
     @Autowired

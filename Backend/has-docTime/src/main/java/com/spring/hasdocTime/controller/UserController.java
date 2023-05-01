@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("user")
-@CrossOrigin(value = "http://localhost:4200")
+@CrossOrigin(value = "*")
 public class UserController {
 
     private UserInterface userService;

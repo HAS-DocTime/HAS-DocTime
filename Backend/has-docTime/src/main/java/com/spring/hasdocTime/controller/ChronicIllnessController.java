@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("chronicIllness")
-@CrossOrigin(value = "http://localhost:4200")
+@CrossOrigin(value = "*")
 public class ChronicIllnessController {
 
     private ChronicIllnessInterface chronicIllnessService;

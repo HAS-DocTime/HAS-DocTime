@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("timeSlot")
+@CrossOrigin(value = "*")
 public class TimeSlotController {
 
     private TimeSlotInterface timeSlotService;
