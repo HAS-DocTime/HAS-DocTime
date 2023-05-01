@@ -2,8 +2,6 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.LoginDetail;
-import com.spring.hasdocTime.entity.User;
-import com.spring.hasdocTime.interfc.AdminInterface;
 import com.spring.hasdocTime.interfc.LoginInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

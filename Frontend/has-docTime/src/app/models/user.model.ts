@@ -16,5 +16,5 @@ export type User = {
   email : string;
   password : string;
   role : Role;
-  patientChronicIllness : ChronicIllness;
+  patientChronicIllness? : ChronicIllness;
 }

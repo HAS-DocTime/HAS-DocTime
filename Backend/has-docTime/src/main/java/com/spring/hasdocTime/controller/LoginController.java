@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 public class LoginController {
 
-    @Autowired
-    @Qualifier("loginServiceImpl")
-    private LoginInterface loginService;
+    private final LoginInterface loginService;
 
-    private String username;
-    private String password;
+    @Autowired
+    public LoginController(@Qualifier("loginServiceImpl") LoginInterface loginService) {
+        this.loginService = loginService;
+    }
+
+    
     @PostMapping("")
     public ResponseEntity<AuthenticationResponse> loginRequest(@RequestBody LoginDetail loginDetail){
         return ResponseEntity.ok(loginService.loginRequest(loginDetail));

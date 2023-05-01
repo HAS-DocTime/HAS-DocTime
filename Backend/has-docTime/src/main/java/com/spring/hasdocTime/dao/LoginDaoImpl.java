@@ -22,26 +22,14 @@ public class LoginDaoImpl implements LoginInterface {
     @Override
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) {
 
-//        List<User> allUser = userDao.getAllUser();
-//        User responseUser = null;
-//        for(User user : allUser){
-//            if(user.getEmail().equals(loginDetail.getUsername()) && user.getPassword().equals(loginDetail.getPassword())){
-//                responseUser = user;
-//                break;
-//            }
-//        }
-//        System.out.println("fdjkfgsad");
-
         authenticationManager.authenticate
                 (new UsernamePasswordAuthenticationToken(
                         loginDetail.getEmail(),
                         loginDetail.getPassword()
                 )
         );
-//        System.out.println("here");
         var user = userRepository.findByEmail(loginDetail.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user.getUsername());
-//        System.out.println(jwtToken);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 }

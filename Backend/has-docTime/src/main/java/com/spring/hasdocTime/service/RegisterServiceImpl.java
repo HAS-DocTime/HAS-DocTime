@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RegisterServiceImpl implements RegisterInterface {
+public class RegisterServiceImpl implements RegisterInterface{
 
     @Autowired
     @Qualifier("registerDaoImpl")

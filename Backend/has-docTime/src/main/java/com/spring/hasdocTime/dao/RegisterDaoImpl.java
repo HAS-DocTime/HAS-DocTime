@@ -18,7 +18,6 @@ public class RegisterDaoImpl implements RegisterInterface {
 
     private final UserDaoImpl userDao;
     private final DoctorDaoImpl doctorDao;
-//    private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     @Override
@@ -36,11 +35,9 @@ public class RegisterDaoImpl implements RegisterInterface {
                                 user.getPassword()
                         )
                 );
-//        System.out.println("here");
-//        var createdUser = userDao.createUser(user);
-//        var user = userRepository.findByEmail(user.getEmail()).orElseThrow();
+
         var jwtToken = jwtService.generateToken(createdUser.getUsername());
-//        System.out.println(jwtToken);
+
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
@@ -55,13 +52,7 @@ public class RegisterDaoImpl implements RegisterInterface {
                                 doctor.getUser().getPassword()
                         )
                 );
-//        System.out.println("here");
-//        var createdUser = userDao.createUser(doctor.getUser());
-//        var user = userRepository.findByEmail(user.getEmail()).orElseThrow();
-//        doctor.setUser(createdUser);
-//        var createdDoctor = doctorDao.createDoctor(doctor);
         var jwtToken = jwtService.generateToken(createdDoctor.getUser().getUsername());
-//        System.out.println(jwtToken);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 }

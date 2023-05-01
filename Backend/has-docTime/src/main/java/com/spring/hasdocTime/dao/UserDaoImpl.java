@@ -6,32 +6,23 @@ import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserDaoImpl implements UserInterface {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PatientChronicIllnessInterface patientChronicIllnessDao;
+    private final ChronicIllnessRepository chronicIllnessRepository;
+    private final SymptomRepository symptomRepository;
 
-    private PatientChronicIllnessInterface patientChronicIllnessDao;
-
-    private ChronicIllnessRepository chronicIllnessRepository;
-
-    private SymptomRepository symptomRepository;
-
-    @Autowired
-    public UserDaoImpl(UserRepository userRepository, PatientChronicIllnessInterface patientChronicIllnessDao,ChronicIllnessRepository chronicIllnessRepository, SymptomRepository symptomRepository) {
-        this.userRepository = userRepository;
-        this.patientChronicIllnessDao = patientChronicIllnessDao;
-        this.chronicIllnessRepository = chronicIllnessRepository;
-        this.symptomRepository = symptomRepository;
-    }
 
     @Override
     public List<User> getAllUser() {

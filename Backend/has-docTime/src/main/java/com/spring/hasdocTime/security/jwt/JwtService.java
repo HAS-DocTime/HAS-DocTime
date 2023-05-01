@@ -1,5 +1,6 @@
 package com.spring.hasdocTime.security.jwt;
 
+import com.spring.hasdocTime.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,8 +18,9 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "2F413F4428472B4B6250655368566D597133743677397A244226452948404D63";
-    public String extractUsername(String token){
+    private static final String SECRET_KEY = "566B597033733676397924423F4528482B4D6251655468576D5A713474377721";
+
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -54,12 +56,16 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-
-    private Claims extractAllClaims(String token){
-        return Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
+    public Claims extractAllClaims(String token){
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
-    private Key getSignInKey(){
+    private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }

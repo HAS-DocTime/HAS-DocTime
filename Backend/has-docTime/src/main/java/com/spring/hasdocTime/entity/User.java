@@ -1,9 +1,6 @@
 package com.spring.hasdocTime.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.spring.hasdocTime.utills.BloodGroup;
 import com.spring.hasdocTime.utills.Gender;
 import com.spring.hasdocTime.utills.Role;
@@ -23,6 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 @Table(name="user")
 public class User implements UserDetails {
 
@@ -62,7 +60,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name="role")
-//    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -112,6 +110,11 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String getUsername() {
+        return getEmail();
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -129,10 +132,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String getUsername() {
-        return getEmail();
     }
 }

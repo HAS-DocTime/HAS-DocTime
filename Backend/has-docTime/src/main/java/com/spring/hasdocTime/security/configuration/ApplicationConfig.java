@@ -1,4 +1,4 @@
-package com.spring.hasdocTime.security;
+package com.spring.hasdocTime.security.configuration;
 
 import com.spring.hasdocTime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,11 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final UserRepository userRepository;
+
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(){
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -43,7 +44,7 @@ public class ApplicationConfig {
     }
 
 //    @Bean
-//    public PasswordEncoder getPasswordEncoder(){
-//        return new BCryptPasswordEncoder(10);
-//    }
+//     public PasswordEncoder passwordEncoder() {
+//         return new BCryptPasswordEncoder();
+//     }
 }
