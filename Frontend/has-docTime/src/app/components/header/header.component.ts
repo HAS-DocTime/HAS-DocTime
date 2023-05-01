@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 
@@ -9,8 +9,13 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent implements OnInit{
 
-  constructor(private userService: UserService, private router: Router, private route: ActivatedRoute){
+  constructor(private userService: UserService, private router: Router, private route: ActivatedRoute, private cdr: ChangeDetectorRef){
   }
+ngAfterViewChecked(){
+   //your code to update the model
+   this.cdr.detectChanges();
+   console.log(this.cdr);
+}
 
   isLoggedIn!: Boolean;
   inSignupForm!: Boolean;
