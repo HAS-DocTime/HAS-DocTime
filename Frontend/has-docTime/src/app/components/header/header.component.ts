@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
+import { Component, OnInit} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
-
 
 @Component({
   selector: 'app-header',
@@ -10,33 +10,31 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent implements OnInit{
 
-  constructor(private userService: UserService, private loginService: LoginService){
+  constructor(private loginService: LoginService, private userService: UserService, private router: Router, private route: ActivatedRoute){
   }
 
-  registered!: Boolean;
+  isLoggedIn!: Boolean;
   inSignupForm!: Boolean;
+  inLoginForm!: Boolean;
 
   ngOnInit(): void {
-      this.loginService.isLoggedIn.subscribe((data) => {
-        this.registered = data;
-      });
 
       this.userService.isLoggedIn.subscribe( (data) => {
-        this.registered = data;
+        this.isLoggedIn = data;
       });
+      this.userService.inSignup.subscribe(value => {
+        this.inSignupForm = value
+      })
+      this.userService.inLogin.subscribe(value => {
+        this.inLoginForm = value
+      })
 
-      this.userService.inSignupForm.subscribe( (data) => {
-        this.inSignupForm = data;
-      });
   }
 
   onLogout(){
-    this.userService.onLogout();
-    this.inSignupForm = false;
-  }
-
-  onRegister(){
-    this.inSignupForm = true;
+    this.userService.logOutUser();
+    sessionStorage.removeItem("token");
+    this.router.navigate(['/login']);
   }
 
 }

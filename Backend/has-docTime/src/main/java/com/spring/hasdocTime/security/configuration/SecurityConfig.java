@@ -20,36 +20,60 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
 @EnableWebSecurity
+@Configuration
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+public class SecurityConfig{
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//    @Bean
+//    protected UserDetailsService userDetailsService(){
+//        return new CustomUserDetailService();
+//    }
 
-        http
-                .cors()
-                .and()
-                .csrf()
-                .disable()
-                .authorizeHttpRequests((authorize)-> authorize
-                        .requestMatchers("/login/**").permitAll()
+
+
+    @Bean
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        // Old Deprecated code
+//         example 1
+//
+//        http.authorizeRequests()
+//                .antMatchers("1").permitAll()
+//                .antMatchers("2").hasAuthority("EMPLOYEE", "ADMIN")
+//                .antMAtchers("3").hasRole("EMPLOYEE")
+//                .and().formLogin();
+//
+//         example 2
+//         done this to access all authenticated user
+//        http.authorizeRequests()
+//                .antMatchers("1","2").authenticated()
+//                .and().formLogin();
+
+        // example 3
+        // get list from json file
+        http.cors().and().csrf().disable()
+        .authorizeHttpRequests((authorize)-> authorize
                         .requestMatchers("/register/**").permitAll()
-                        .requestMatchers(getServices("/static/adminServices.json"))
+                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers("/chronicIllness").permitAll()
+                .requestMatchers(getServices("/static/adminServices.json"))
                         .hasAnyAuthority("ADMIN")
-                        .requestMatchers(getServices("/static/doctorServices.json"))
+                .requestMatchers(getServices("/static/doctorServices.json"))
                         .hasAnyAuthority("DOCTOR")
-                        .requestMatchers(getServices("/static/patientServices.json"))
+                .requestMatchers(getServices("/static/patientServices.json"))
                         .hasAnyAuthority("PATIENT"))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+//        System.out.println("Bean out");
         return http.build();
     }
 
@@ -69,5 +93,6 @@ public class SecurityConfiguration {
 
         return urlList.stream().toArray(String[]::new);
     }
+
 
 }

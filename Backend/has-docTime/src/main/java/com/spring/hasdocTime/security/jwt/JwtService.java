@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -28,29 +29,26 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(User user){
-        return generateToken(new HashMap<>(), user);
+    public String generateToken(String username){
+        return generateToken(new HashMap<>(), username);
     }
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            User user
-    ){
+    public String generateToken(Map<String, Object> extraClaims,String username){
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(user.getEmail())
+                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean isTokenValid(String token, User user){
+    public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
-        return (username.equals(user.getEmail())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
     }
 

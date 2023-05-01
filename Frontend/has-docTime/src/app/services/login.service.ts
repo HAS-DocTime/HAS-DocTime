@@ -9,7 +9,7 @@ export class LoginService{
 
   isLoggedIn: Subject<Boolean> = new Subject<Boolean>;
 
-  private loginUrl = "http://localhost:8080/user/auth/authenticate";
+  private loginUrl = "http://localhost:8080/login";
 
   constructor(private http:HttpClient) {}
 

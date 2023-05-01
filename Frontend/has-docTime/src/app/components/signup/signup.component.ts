@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Form, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ChronicIllness } from 'src/app/models/chronicIllness.model';
 import { Router } from '@angular/router';
@@ -15,16 +15,20 @@ import { LoginDetails } from 'src/app/models/login-details.model';
 })
 
 
-export class SignupComponent implements OnInit{
+export class SignupComponent implements OnInit, OnDestroy{
 
   constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
 
   }
   // authToken: string = "";
   savedChronicIllnesses : ChronicIllness[] = [];
-  message: string ="";
+  selectedValue : string = "";
+  selectedIllness : number[] = [];
 
   ngOnInit(){
+    this.userService.inSignup.next(true)
+    this.userService.inLogin.next(false)
+    this.userService.isLoggedIn.next(false)
     this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
@@ -38,14 +42,27 @@ export class SignupComponent implements OnInit{
       this.signupForm.controls['casesSolved'].updateValueAndValidity();
     })
 
-    // this.chhronicIllnessService.getAllChronicIllness().subscribe(data => {
-    //   console.log(data);
-    //   this.savedChronicIllnesses = data;
-    // });
+    this.chhronicIllnessService.getAllChronicIllness().subscribe(data => {
+      this.savedChronicIllnesses = data;
+    });
+
+    this.signupForm.controls["patientChronicIllness"].valueChanges.subscribe((data) => {
+      this.selectedIllness = [];
+      for(let illness of data){
+        if(illness.name!==''){
+          this.selectedIllness.push(parseInt(illness.name));
+        }
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+      this.userService.inSignup.next(false)
   }
 
   signupForm : FormGroup = new FormGroup({
-    name : new FormControl("", [Validators.required]),
+    firstName : new FormControl("", [Validators.required]),
+    lastName : new FormControl("", [Validators.required]),
     dob : new FormControl("2001-01-01", [Validators.required]),
     gender : new FormControl("MALE", [Validators.required]),
     bloodGroup : new FormControl("O_POSITIVE", [Validators.required]),
@@ -60,8 +77,9 @@ export class SignupComponent implements OnInit{
     patientChronicIllness : new FormArray([])
   })
 
+
+
   register(){
-    console.log(this.signupForm.value);
     const date = new Date();
     
     const email = this.signupForm.value.email;
@@ -81,6 +99,7 @@ export class SignupComponent implements OnInit{
       }
       user.age = age;
     }
+    user.name = user.firstName + " " + user.lastName;
     let chronicIllnesses = [];
     for(let i=0; i<user.patientChronicIllness.length; i++){
       let chronicIllness = {
@@ -92,42 +111,37 @@ export class SignupComponent implements OnInit{
       chronicIllnesses.push(chronicIllness);
     }
     user.patientChronicIllness = chronicIllnesses;
+
+    let doctor : Doctor = { 
+      "user" : user,
+      "qualification" : this.signupForm.value.qualification,
+      "casesSolved" : this.signupForm.value.casesSolved,
+      "available" : true,
+      "department" : {
+        id : 1
+      }
+    };
+
+    doctor.qualification = this.signupForm.value.qualification;
     if(user.role==="PATIENT"){
-
-      // this.userService.registerUser(signupDetail).subscribe((data) => {
-      //   const authToken = data;
-      //   console.log(authToken.token);
-      //   sessionStorage.clear();
-      //   localStorage.clear();
-      //   localStorage.setItem('token', data.token);
-      //   window.sessionStorage.setItem('token',data.token);
-      //   signupDetail = {email : "", password : ""};
-      // });
-      setTimeout(()=>{
-
-        this.userService.registerUser(user).subscribe((data)=> {
-          const authToken = data;
-          console.log(authToken.token);
-          sessionStorage.clear();
-          localStorage.clear();
-          localStorage.setItem('token', data.token);
-          window.sessionStorage.setItem('token',data.token);
-          this.signupForm.reset({
-            name : "",
-            dob : "2001-01-01",
-            gender : "MALE",
-            bloodGroup : "O_POSITIVE",
-            contact : "",
-            email : "",
-            password : "",
-            role : "PATIENT",
-            qualification : "",
-            casesSolved : 0,
-            patientChronicIllness : []
-          });
+      this.userService.registerUser(user).subscribe((data)=> {
+        sessionStorage.clear();
+        sessionStorage.setItem('token', data.token);
+        this.signupForm.reset({
+          firstName : "",
+          lastName : "",
+          dob : "2001-01-01",
+          gender : "MALE",
+          bloodGroup : "O_POSITIVE",
+          contact : "",
+          email : "",
+          password : "",
+          role : "PATIENT",
+          qualification : "",
+          casesSolved : 0,
+          patientChronicIllness : []
         });
-      },2000);
-      
+      });
     }
     else if(user.role === "DOCTOR"){
       let userId = 0;
@@ -140,28 +154,16 @@ export class SignupComponent implements OnInit{
       //   signupDetail = {email : "", password : ""};
       // });
       
-      this.userService.registerUser(user).subscribe((data)=> {
-        const authToken = data;
-        console.log(authToken.token);
+      this.userService.registerDoctor(doctor).subscribe((data)=> {
+        // const authToken = data;
+        // console.log(authToken.token);
         sessionStorage.clear();
         localStorage.clear();
         localStorage.setItem('token', data.token);
         window.sessionStorage.setItem('token',data.token);
-        userId = (data.id as number);
-        let doctor : Doctor = {
-          user : {
-            id : userId
-          },
-          qualification : user.qualification,
-          casesSolved : user.casesSolved,
-          available : true,
-          department : {
-            id : 1
-          } //Hard-coded as of now
-        }
-        this.doctorService.createDoctor(doctor).subscribe(data=> {
             this.signupForm.reset({
-            name : "",
+            firstName : "",
+            lastName : "",
             dob : "2001-01-01",
             gender : "MALE",
             bloodGroup : "O_POSITIVE",
@@ -173,12 +175,9 @@ export class SignupComponent implements OnInit{
             casesSolved : 0,
             patientChronicIllness : []
         });
-        })
       });
     }
-
-    this.router.navigate([""]);
-
+    this.router.navigate(["/appointment"]);
   }
 
 //   registerUser(signupDetail: LoginDetails){

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("chronicIllness")
-@CrossOrigin(value = "http://localhost:4200")
+@RequestMapping("/chronicIllness")
+@CrossOrigin(value = "*")
 public class ChronicIllnessController {
 
     private ChronicIllnessInterface chronicIllnessService;

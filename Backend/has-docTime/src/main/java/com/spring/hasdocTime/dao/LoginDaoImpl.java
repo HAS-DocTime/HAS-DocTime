@@ -1,10 +1,10 @@
 package com.spring.hasdocTime.dao;
 
+import com.spring.hasdocTime.entity.AuthenticationResponse;
+import com.spring.hasdocTime.entity.LoginDetail;
 import com.spring.hasdocTime.interfc.LoginInterface;
 import com.spring.hasdocTime.repository.UserRepository;
-import com.spring.hasdocTime.security.AuthResponse;
 import com.spring.hasdocTime.security.jwt.JwtService;
-import com.spring.hasdocTime.security.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,25 +14,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LoginDaoImpl implements LoginInterface {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthResponse loginRequest(RegisterRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
+    @Override
+    public AuthenticationResponse loginRequest(LoginDetail loginDetail) {
+
+        authenticationManager.authenticate
+                (new UsernamePasswordAuthenticationToken(
+                        loginDetail.getEmail(),
+                        loginDetail.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .build();
-
+        var user = userRepository.findByEmail(loginDetail.getEmail()).orElseThrow();
+        var jwtToken = jwtService.generateToken(user.getUsername());
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
-
 }

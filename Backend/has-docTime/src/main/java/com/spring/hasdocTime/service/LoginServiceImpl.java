@@ -1,8 +1,8 @@
 package com.spring.hasdocTime.service;
 
+import com.spring.hasdocTime.entity.AuthenticationResponse;
+import com.spring.hasdocTime.entity.LoginDetail;
 import com.spring.hasdocTime.interfc.LoginInterface;
-import com.spring.hasdocTime.security.AuthResponse;
-import com.spring.hasdocTime.security.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class LoginServiceImpl implements LoginInterface {
     private LoginInterface loginDao;
 
     @Override
-    public AuthResponse loginRequest(RegisterRequest request) {
-        return loginDao.loginRequest(request);
+    public AuthenticationResponse loginRequest(LoginDetail loginDetail) {
+        return loginDao.loginRequest(loginDetail);
     }
 }

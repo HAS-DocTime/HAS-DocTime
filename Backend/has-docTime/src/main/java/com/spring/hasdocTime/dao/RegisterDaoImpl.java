@@ -1,49 +1,58 @@
 package com.spring.hasdocTime.dao;
 
+import com.spring.hasdocTime.entity.Admin;
+import com.spring.hasdocTime.entity.AuthenticationResponse;
+import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.RegisterInterface;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.security.jwt.JwtService;
-import com.spring.hasdocTime.security.RegisterResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class RegisterDaoImpl implements RegisterInterface {
 
-    private final PasswordEncoder passwordEncoder;
+    private final UserDaoImpl userDao;
+    private final DoctorDaoImpl doctorDao;
     private final JwtService jwtService;
-    private final UserRepository userRepository;
-
-    public RegisterResponse register(User request) {
-
-        var user = User.builder()
-                .email(request.getEmail())
-                .age(request.getAge())
-                .dob(request.getDob())
-                .contact(request.getContact())
-                .bloodGroup(request.getBloodGroup())
-                .height(request.getHeight())
-                .weight(request.getWeight())
-                .name(request.getName())
-                .gender(request.getGender())
-                .patientChronicIllness(request.getPatientChronicIllness())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
-                .build();
-
-
-        var savedUser = userRepository.save(user);
-        int id = userRepository.findByEmail(request.getEmail()).get().getId();
-
-        var jwtToken = jwtService.generateToken(user);
-        return RegisterResponse.builder()
-                .token(jwtToken)
-                .id(id)
-                .build();
-
+    private final AuthenticationManager authenticationManager;
+    @Override
+    public AuthenticationResponse registerAdmin(Admin admin) {
+        return null;
     }
 
+    @Override
+    public AuthenticationResponse registerUser(User user) {
+        System.out.println("dao");
+        var createdUser = userDao.createUser(user);
+        authenticationManager.authenticate
+                (new UsernamePasswordAuthenticationToken(
+                                user.getEmail(),
+                                user.getPassword()
+                        )
+                );
+
+        var jwtToken = jwtService.generateToken(createdUser.getUsername());
+
+        return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    @Override
+    public AuthenticationResponse registerDoctor(Doctor doctor) {
+        var createdUser = userDao.createUser(doctor.getUser());
+        doctor.setUser(createdUser);
+        var createdDoctor = doctorDao.createDoctor(doctor);
+        authenticationManager.authenticate
+                (new UsernamePasswordAuthenticationToken(
+                                doctor.getUser().getEmail(),
+                                doctor.getUser().getPassword()
+                        )
+                );
+        var jwtToken = jwtService.generateToken(createdDoctor.getUser().getUsername());
+        return AuthenticationResponse.builder().token(jwtToken).build();
+    }
 }

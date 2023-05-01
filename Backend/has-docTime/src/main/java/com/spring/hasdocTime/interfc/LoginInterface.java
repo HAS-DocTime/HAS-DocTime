@@ -1,10 +1,9 @@
 package com.spring.hasdocTime.interfc;
 
-import com.spring.hasdocTime.security.AuthResponse;
-import com.spring.hasdocTime.security.RegisterRequest;
+import com.spring.hasdocTime.entity.AuthenticationResponse;
+import com.spring.hasdocTime.entity.LoginDetail;
 
 public interface LoginInterface {
 
-    AuthResponse loginRequest(RegisterRequest request);
-
+    public AuthenticationResponse loginRequest(LoginDetail loginDetail);
 }

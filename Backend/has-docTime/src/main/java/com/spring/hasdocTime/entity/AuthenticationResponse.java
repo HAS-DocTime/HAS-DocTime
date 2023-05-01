@@ -1,4 +1,4 @@
-package com.spring.hasdocTime.security;
+package com.spring.hasdocTime.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
+public class AuthenticationResponse {
 
     private String token;
-
 }
