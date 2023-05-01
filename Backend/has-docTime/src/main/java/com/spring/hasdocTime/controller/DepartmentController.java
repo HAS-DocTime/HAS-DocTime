@@ -36,6 +36,7 @@ public class DepartmentController {
     
     @RequestMapping(method = RequestMethod.GET, value = "")
     public ResponseEntity<List<Department>> getAllDepartments(){
+        System.out.println("I am here");
         List<Department> departments = departmentService.getAllDepartments();
         if(departments.isEmpty()){
             return new ResponseEntity(departments, HttpStatus.NO_CONTENT);
