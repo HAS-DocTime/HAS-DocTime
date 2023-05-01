@@ -20,11 +20,11 @@ export class UserService {
   //   return this.http.post<string>(`${this.baseUrl}auth/register`, user);
    
   // }
-  registerUser(user : LoginDetails){
+  registerUser(user : User){
     this.isLoggedIn.next(true);
     sessionStorage.clear();
     localStorage.clear();
-    return this.http.post<{token : string}>(`${this.baseUrl}auth/register`, user);
+    return this.http.post<{token : string, id : number}>(`${this.baseUrl}user/auth/register`, user);
   }
   createUser(user : User){
     return this.http.post<User>(`${this.baseUrl}user`, user);

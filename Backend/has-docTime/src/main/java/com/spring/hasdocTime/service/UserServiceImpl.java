@@ -2,6 +2,9 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.UserInterface;
+import com.spring.hasdocTime.security.AuthResponse;
+import com.spring.hasdocTime.security.RegisterRequest;
+import com.spring.hasdocTime.security.RegisterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -40,5 +43,15 @@ public class UserServiceImpl implements UserInterface {
     @Override
     public User deleteUser(int id) {
       return userDao.deleteUser(id);
+    }
+
+    @Override
+    public AuthResponse authenticate(RegisterRequest request) {
+        return userDao.authenticate(request);
+    }
+
+    @Override
+    public RegisterResponse register(User user) {
+        return userDao.register(user);
     }
 }

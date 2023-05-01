@@ -94,18 +94,24 @@ export class SignupComponent implements OnInit{
     user.patientChronicIllness = chronicIllnesses;
     if(user.role==="PATIENT"){
 
-      this.userService.registerUser(signupDetail).subscribe((data) => {
-        const authToken = data;
-        console.log(authToken.token);
-        sessionStorage.clear();
-        localStorage.clear();
-        localStorage.setItem('token', data.token);
-        window.sessionStorage.setItem('token',data.token);
-        signupDetail = {email : "", password : ""};
-      });
+      // this.userService.registerUser(signupDetail).subscribe((data) => {
+      //   const authToken = data;
+      //   console.log(authToken.token);
+      //   sessionStorage.clear();
+      //   localStorage.clear();
+      //   localStorage.setItem('token', data.token);
+      //   window.sessionStorage.setItem('token',data.token);
+      //   signupDetail = {email : "", password : ""};
+      // });
       setTimeout(()=>{
 
-        this.userService.createUser(user).subscribe((data)=> {
+        this.userService.registerUser(user).subscribe((data)=> {
+          const authToken = data;
+          console.log(authToken.token);
+          sessionStorage.clear();
+          localStorage.clear();
+          localStorage.setItem('token', data.token);
+          window.sessionStorage.setItem('token',data.token);
           this.signupForm.reset({
             name : "",
             dob : "2001-01-01",
@@ -162,7 +168,14 @@ export class SignupComponent implements OnInit{
       //   window.sessionStorage.setItem('token',JSON.stringify(data));
       //   signupDetail = {email : "", password : ""};
       // });
-      this.userService.createUser(user).subscribe((data)=> {
+      
+      this.userService.registerUser(user).subscribe((data)=> {
+        const authToken = data;
+        console.log(authToken.token);
+        sessionStorage.clear();
+        localStorage.clear();
+        localStorage.setItem('token', data.token);
+        window.sessionStorage.setItem('token',data.token);
         userId = (data.id as number);
         let doctor : Doctor = {
           user : {

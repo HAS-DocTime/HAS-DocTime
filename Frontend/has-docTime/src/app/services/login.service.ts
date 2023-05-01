@@ -9,13 +9,13 @@ export class LoginService{
 
   isLoggedIn: Subject<Boolean> = new Subject<Boolean>;
 
-  private loginUrl = "http://localhost:8080/auth/authenticate";
+  private loginUrl = "http://localhost:8080/user/auth/authenticate";
 
   constructor(private http:HttpClient) {}
 
-  checkDetail(email: string, password: string): Observable<any> {
+  checkDetail(email: string, password: string): Observable<{'token': string}> {
     const body = { "email" : email, "password" : password };
     this.isLoggedIn.next(true);
-    return this.http.post<any>(this.loginUrl, body);
+    return this.http.post<{token : string}>(this.loginUrl, body);
   }
 }

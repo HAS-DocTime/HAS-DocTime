@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit{
       // this.user=data;
       console.log(data);
       sessionStorage.clear();
-      window.sessionStorage.setItem('token',JSON.stringify(data));
+      window.sessionStorage.setItem('token',data.token);
     }, (err)=> {
       if(err){
         this.invalidLogin=true;
