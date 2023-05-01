@@ -27,14 +27,16 @@ public class RegisterDaoImpl implements RegisterInterface {
 
     @Override
     public AuthenticationResponse registerUser(User user) {
-        System.out.println("dao");
+//        System.out.println("dao");
         var createdUser = userDao.createUser(user);
-        authenticationManager.authenticate
-                (new UsernamePasswordAuthenticationToken(
-                                user.getEmail(),
-                                user.getPassword()
-                        )
-                );
+
+        // Only needed in Login
+//        authenticationManager.authenticate
+//                (new UsernamePasswordAuthenticationToken(
+//                                user.getEmail(),
+//                                user.getPassword()
+//                        )
+//                );
 
         var jwtToken = jwtService.generateToken(createdUser.getUsername());
 
@@ -46,12 +48,14 @@ public class RegisterDaoImpl implements RegisterInterface {
         var createdUser = userDao.createUser(doctor.getUser());
         doctor.setUser(createdUser);
         var createdDoctor = doctorDao.createDoctor(doctor);
-        authenticationManager.authenticate
-                (new UsernamePasswordAuthenticationToken(
-                                doctor.getUser().getEmail(),
-                                doctor.getUser().getPassword()
-                        )
-                );
+
+        // Only needed in Login
+//        authenticationManager.authenticate
+//                (new UsernamePasswordAuthenticationToken(
+//                                doctor.getUser().getEmail(),
+//                                doctor.getUser().getPassword()
+//                        )
+//                );
         var jwtToken = jwtService.generateToken(createdDoctor.getUser().getUsername());
         return AuthenticationResponse.builder().token(jwtToken).build();
     }

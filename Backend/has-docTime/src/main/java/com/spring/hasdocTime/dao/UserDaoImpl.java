@@ -8,6 +8,7 @@ import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class UserDaoImpl implements UserInterface {
     private final PatientChronicIllnessInterface patientChronicIllnessDao;
     private final ChronicIllnessRepository chronicIllnessRepository;
     private final SymptomRepository symptomRepository;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUser() {
@@ -40,6 +41,7 @@ public class UserDaoImpl implements UserInterface {
 
     @Override
     public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         List<Symptom> symptomList = user.getSymptoms();
         if(symptomList!=null){
             List<Symptom> newSymptomList = new ArrayList<>();
