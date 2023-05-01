@@ -6,20 +6,7 @@ import { User } from "./user.model";
 
 export type Doctor = {
   id? : number;
-  user : {
-    name : string;
-    dob : Date;
-    age? : number;
-    gender : Gender;
-    bloodGroup : BloodGroup;
-    contact : string;
-    height? : number;
-    weight? : number;
-    email : string;
-    password : string;
-    role : Role;
-    patientChronicIllness? : ChronicIllness;
-  };
+  user : User;
   qualification : string;
   casesSolved : number;
   available : boolean;
