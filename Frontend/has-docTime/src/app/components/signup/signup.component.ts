@@ -89,7 +89,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
 
   register(){
     const date = new Date();
-    
+
     const email = this.signupForm.value.email;
     const password = this.signupForm.value.password;
     let signupDetail: LoginDetails = {"email" : email, "password" : password};
@@ -120,7 +120,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     }
     user.patientChronicIllness = chronicIllnesses;
 
-    let doctor : Doctor = { 
+    let doctor : Doctor = {
       "user" : user,
       "qualification" : this.signupForm.value.qualification,
       "casesSolved" : this.signupForm.value.casesSolved,
@@ -161,10 +161,11 @@ constructor(private userService : UserService, private doctorService : DoctorSer
       //   window.sessionStorage.setItem('token',JSON.stringify(data));
       //   signupDetail = {email : "", password : ""};
       // });
-      
+      console.log(doctor);
       this.userService.registerDoctor(doctor).subscribe((data)=> {
         // const authToken = data;
         // console.log(authToken.token);
+        console.log(data);
         sessionStorage.clear();
         localStorage.clear();
         localStorage.setItem('token', data.token);
