@@ -3,6 +3,7 @@ package com.spring.hasdocTime.interfc;
 import com.spring.hasdocTime.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserInterface {
     List<User> getAllUser();
@@ -15,4 +16,5 @@ public interface UserInterface {
 
     User deleteUser(int id);
 
+    User getUserByEmail(String email);
 }

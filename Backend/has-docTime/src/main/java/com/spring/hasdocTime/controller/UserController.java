@@ -32,11 +32,24 @@ public class UserController {
         }
         return new ResponseEntity(users, HttpStatus.OK);
     }
+    
+    @GetMapping("findByEmail")
+    public ResponseEntity<User> getUserByEmail(){
+        System.out.println("Upar");
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("Reached back here");
+        User user = userService.getUserByEmail(userEmail);
+        if(user==null){
+            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
     @GetMapping("{patientId}")
     public ResponseEntity<User> getUser(@PathVariable("patientId") int id) throws AccessDeniedException {
 
         String authenticatedPatientId = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(authenticatedPatientId);
         User user = userService.getUser(id);
         if(!authenticatedPatientId.equals(user.getEmail())){
             throw new AccessDeniedException("You do not have access to this resource");
@@ -70,4 +83,6 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+    
+    
 }
