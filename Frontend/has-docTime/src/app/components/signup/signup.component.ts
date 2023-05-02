@@ -78,7 +78,7 @@ export class SignupComponent implements OnInit, OnDestroy{
     qualification : new FormControl(""),
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([])
-  }, {validators : [confirmPasswordValidator('password', 'confirmPassword')]})
+  }, {validators : confirmPasswordValidator()})
 
 
 
