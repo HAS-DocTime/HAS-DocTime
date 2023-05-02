@@ -17,21 +17,20 @@ export class HeaderComponent implements OnInit{
   inLoginForm!: Boolean;
 
   ngOnInit(): void {
-      this.userService.isLoggedIn.subscribe( (data) => {
-        this.isLoggedIn = data;
-      });
-      this.userService.inSignup.subscribe(value => {
-        this.inSignupForm = value
-      })
-      this.userService.inLogin.subscribe(value => {
-        this.inLoginForm = value
-      })
-
+    this.userService.inSignup.subscribe(value => {
+      this.inSignupForm = value;
+    })
+    this.userService.inLogin.subscribe(value => {
+      this.inLoginForm = value;
+    })
+    this.userService.isLoggedIn.subscribe( (data) => {
+      this.isLoggedIn = data;
+    });
   }
 
   onLogout(){
     this.userService.logOutUser()
-    this.router.navigate(['/login']);
+    this.router.navigate(['']);
   }
 
 }

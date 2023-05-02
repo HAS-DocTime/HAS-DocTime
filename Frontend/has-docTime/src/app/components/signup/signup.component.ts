@@ -16,18 +16,15 @@ import { UserService } from 'src/app/services/user.service';
 
 export class SignupComponent implements OnInit, OnDestroy{
 
-  constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
-
-  }
+  constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){  }
 
   savedChronicIllnesses : ChronicIllness[] = [];
   selectedValue : string = "";
   selectedIllness : number[] = [];
 
+
   ngOnInit(){
-    this.userService.inSignup.next(true)
-    this.userService.inLogin.next(false)
-    this.userService.isLoggedIn.next(false)
+
     this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
@@ -55,8 +52,16 @@ export class SignupComponent implements OnInit, OnDestroy{
     })
   }
 
+  ngDoCheck(){
+    this.userService.inSignup.next(true);
+    this.userService.inLogin.next(false);
+    this.userService.isLoggedIn.next(false);
+  }
+
   ngOnDestroy(): void {
       this.userService.inSignup.next(false)
+      this.userService.inLogin.next(false)
+      this.userService.isLoggedIn.next(true)
   }
 
   signupForm : FormGroup = new FormGroup({
