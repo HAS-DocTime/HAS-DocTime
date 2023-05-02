@@ -7,7 +7,6 @@ import { ChronicIllnessService } from 'src/app/services/chronic-illness.service'
 import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
 import { LoginDetails } from 'src/app/models/login-details.model';
-import {confirmPasswordValidator} from '../../customValidators/confirmPasswordMatch.validator'
 
 @Component({
   selector: 'app-signup',
@@ -80,18 +79,17 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     weight : new FormControl(),
     email : new FormControl("", [Validators.required]),
     password : new FormControl("", [Validators.required]),
-    confirmPassword : new FormControl("", [Validators.required]),
     role : new FormControl("PATIENT", [Validators.required]),
     qualification : new FormControl(""),
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([])
-  }, {validators : [confirmPasswordValidator('password', 'confirmPassword')]})
+  })
 
 
 
   register(){
     const date = new Date();
-
+    
     const email = this.signupForm.value.email;
     const password = this.signupForm.value.password;
     let signupDetail: LoginDetails = {"email" : email, "password" : password};
@@ -122,7 +120,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     }
     user.patientChronicIllness = chronicIllnesses;
 
-    let doctor : Doctor = {
+    let doctor : Doctor = { 
       "user" : user,
       "qualification" : this.signupForm.value.qualification,
       "casesSolved" : this.signupForm.value.casesSolved,
@@ -146,7 +144,6 @@ constructor(private userService : UserService, private doctorService : DoctorSer
           contact : "",
           email : "",
           password : "",
-          confirmPassword : "",
           role : "PATIENT",
           qualification : "",
           casesSolved : 0,
@@ -164,7 +161,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
       //   window.sessionStorage.setItem('token',JSON.stringify(data));
       //   signupDetail = {email : "", password : ""};
       // });
-
+      
       this.userService.registerDoctor(doctor).subscribe((data)=> {
         // const authToken = data;
         // console.log(authToken.token);
@@ -181,7 +178,6 @@ constructor(private userService : UserService, private doctorService : DoctorSer
             contact : "",
             email : "",
             password : "",
-            confirmPassword : "",
             role : "PATIENT",
             qualification : "",
             casesSolved : 0,
