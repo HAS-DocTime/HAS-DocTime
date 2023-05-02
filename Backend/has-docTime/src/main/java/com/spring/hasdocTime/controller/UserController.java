@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -31,12 +33,17 @@ public class UserController {
         return new ResponseEntity(users, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+    @GetMapping("{patientId}")
+    public ResponseEntity<User> getUser(@PathVariable("patientId") int id) throws AccessDeniedException {
+
+        String authenticatedPatientId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUser(id);
-        if(user==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if(!authenticatedPatientId.equals(user.getEmail())){
+            throw new AccessDeniedException("You do not have access to this resource");
         }
+//        if(user==null){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
         return new ResponseEntity(user, HttpStatus.OK);
     }
 

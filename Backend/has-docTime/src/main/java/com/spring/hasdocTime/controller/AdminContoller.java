@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -28,14 +30,18 @@ public class AdminContoller {
         return new ResponseEntity(responseAllAdmin, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Admin> getAdmin(@PathVariable int id){
-        Admin responseAdmin = adminService.getAdmin(id);
+    @GetMapping("{adminId}")
+    public ResponseEntity<Admin> getAdmin(@PathVariable("adminId") int id) throws AccessDeniedException {
+        String authenticatedAdminEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Admin admin = adminService.getAdmin(id);
 
-        if(responseAdmin == null){
-            return new ResponseEntity(responseAdmin, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity(responseAdmin, HttpStatus.OK);
+        if(!authenticatedAdminEmailId.equals(admin.getUser().getEmail())){
+            throw new AccessDeniedException("You do not have access to this resource");
+        };
+//        if(admin == null){
+//            return new ResponseEntity(admin, HttpStatus.NOT_FOUND);
+//        }
+        return new ResponseEntity(admin, HttpStatus.OK);
     }
 
     @PutMapping("{id}")
