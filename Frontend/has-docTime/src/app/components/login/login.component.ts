@@ -15,23 +15,31 @@ export class LoginComponent implements OnInit, OnDestroy{
   submitted = false;
   invalidLogin = false;
   user = null;
-  isLoggedIn : Boolean = false;
+  
+  inLogin: Boolean = true;
+  isLoggedIn = false;
+
 
   constructor(private loginService: LoginService, private router: Router, private userService: UserService) {
   }
 
   ngOnInit(){
-    this.userService.inLogin.next(true)
-    this.userService.inSignup.next(false)
+    this.inLogin = true;
   }
   loginForm:FormGroup = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
     password: new FormControl("", [Validators.required, Validators.minLength(6)])
   })
 
+  ngDoCheck(){
+    this.userService.inSignup.next(false);
+    this.userService.inLogin.next(this.inLogin);
+    this.userService.isLoggedIn.next(this.isLoggedIn);
+  }
   ngOnDestroy(): void {
-      this.userService.inLogin.next(false)
-      this.userService.isLoggedIn.next(true)
+      this.userService.inSignup.next(false);
+      this.userService.inLogin.next(false);
+      this.userService.isLoggedIn.next(this.isLoggedIn);
   }
 
   onSubmit(){
@@ -43,11 +51,17 @@ export class LoginComponent implements OnInit, OnDestroy{
     const password = this.loginForm.controls['password'].value;
 
     this.loginService.checkDetail(email, password).subscribe(data => {
+
+      this.user=data;
+      this.isLoggedIn = true;
+
       sessionStorage.clear();
       sessionStorage.setItem('token',data.token);
+
       this.router.navigate(['/appointment']);
     }, (err)=> {
       if(err){
+        this.isLoggedIn = false;
         this.invalidLogin=true;
       }
     })

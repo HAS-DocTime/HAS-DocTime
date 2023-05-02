@@ -16,8 +16,8 @@ import { AuthTokenInterceptor } from './interceptors/auth-token-interceptor';
 import { AppointmentComponent } from './components/appointment/appointment.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
-
 
 @NgModule({
   declarations: [
@@ -27,7 +27,9 @@ import { OurServicesComponent } from './components/our-services/our-services.com
     HeaderComponent,
     AppointmentComponent,
     SidebarComponent,
+    HomeComponent,
     OurServicesComponent,
+
   ],
   imports: [
     BrowserModule,
