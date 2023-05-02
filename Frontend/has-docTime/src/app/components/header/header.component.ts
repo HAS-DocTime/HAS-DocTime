@@ -36,9 +36,12 @@ ngAfterViewChecked(){
   }
 
   onLogout(){
-    this.userService.logOutUser();
-    sessionStorage.removeItem("token");
-    this.router.navigate(['']);
+    if (window.confirm('Are you sure you want to log out?')) {
+      this.userService.logOutUser();
+      sessionStorage.removeItem("token");
+      this.router.navigate(['']);
+    }else{
+      this.router.navigate([this.router.url]);
+    }
   }
-
 }

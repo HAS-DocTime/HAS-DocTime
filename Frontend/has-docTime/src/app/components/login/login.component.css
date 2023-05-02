@@ -13,7 +13,7 @@ body{
   justify-content: center;
   background-color: white;
   width: 40%;
-  height: 55%;
+  min-height: 55%;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   border-radius: 15px;
   padding-bottom: 2%;
@@ -28,7 +28,7 @@ body{
  } */
 
  .outer-container{
-  height: 88vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
