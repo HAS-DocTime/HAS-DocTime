@@ -35,9 +35,7 @@ public class UserController {
     
     @GetMapping("findByEmail")
     public ResponseEntity<User> getUserByEmail(){
-        System.out.println("Upar");
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println("Reached back here");
         User user = userService.getUserByEmail(userEmail);
         if(user==null){
             return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
