@@ -88,4 +88,15 @@ public class UserDaoImpl implements UserInterface {
         }
         return null;
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isEmpty()){
+            return null;
+        }
+        return user.get();
+    }
+    
+    
 }

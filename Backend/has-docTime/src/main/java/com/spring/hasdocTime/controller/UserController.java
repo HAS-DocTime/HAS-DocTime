@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -30,12 +32,27 @@ public class UserController {
         }
         return new ResponseEntity(users, HttpStatus.OK);
     }
-
-    @GetMapping("{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") int id) {
-        User user = userService.getUser(id);
+    
+    @GetMapping("findByEmail")
+    public ResponseEntity<User> getUserByEmail(){
+        System.out.println("Upar");
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("Reached back here");
+        User user = userService.getUserByEmail(userEmail);
         if(user==null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("{patientId}")
+    public ResponseEntity<User> getUser(@PathVariable("patientId") int id) throws AccessDeniedException {
+
+        String authenticatedPatientId = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(authenticatedPatientId);
+        User user = userService.getUser(id);
+        if(!authenticatedPatientId.equals(user.getEmail())){
+            throw new AccessDeniedException("You do not have access to this resource");
         }
         return new ResponseEntity(user, HttpStatus.OK);
     }
@@ -63,4 +80,6 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+    
+    
 }
