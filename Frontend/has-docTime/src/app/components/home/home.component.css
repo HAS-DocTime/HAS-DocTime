@@ -1,0 +1,32 @@
+
+.row{
+  margin: 0;
+  padding: 0;
+}
+
+.navbar{
+  background-color: rgba(255, 255, 255, 0.692);
+  backdrop-filter: blur(5px);
+}
+
+.nav-item {
+  padding-right: 3vw;
+}
+
+#home {
+  background: rgb(110,181,244);
+  background: linear-gradient(0deg, rgba(110,181,244,1) 45%, rgba(232,207,244,0.820979020979021) 100%);
+}
+.button{
+  width:15vh;
+  border-color: aliceblue;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  text-decoration-color: aliceblue;
+}
+
+#footer{
+  background-color: rgb(38, 137, 204, 0.692);
+  backdrop-filter: blur(5px);
+}
+
