@@ -3,6 +3,7 @@ package com.spring.hasdocTime.dao;
 import com.spring.hasdocTime.entity.Admin;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.AdminInterface;
+import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.AdminRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @Service
 public class AdminDaoImpl implements AdminInterface {
@@ -20,9 +22,11 @@ public class AdminDaoImpl implements AdminInterface {
 
     @Autowired
     private UserRepository userRepository;
-
-
-
+    
+    @Autowired
+    @Qualifier("userDaoImpl")
+    private UserInterface userDao;
+    
     @Override
     public List<Admin> getAllAdmin(){
         return adminRepository.findAll();
@@ -64,10 +68,14 @@ public class AdminDaoImpl implements AdminInterface {
     @Override
     public Admin createAdmin(Admin admin) {
         admin.setId(0);
+        User user;
         if(admin.getUser().getId() != 0){
-            Optional<User> user = userRepository.findById(admin.getUser().getId());
-            admin.setUser(user.get());     
+             user = userRepository.findById(admin.getUser().getId()).get();     
         }
+        else{
+            user = userDao.createUser(admin.getUser());
+        }
+        admin.setUser(user);
         admin.getUser().setRole(Role.ADMIN);
         return adminRepository.save(admin);
     }

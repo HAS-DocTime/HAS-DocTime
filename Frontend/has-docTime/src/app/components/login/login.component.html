@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div class="outer-container bg-body-tertiary">
   <div class="container">
     <div class="text-center mb-2">
@@ -40,7 +41,7 @@
       </div>
       <div class="mt-1 d-flex justify-content-center mt-3">
         <div class="d-inline-block">
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Submit</button>
           <!-- <button type="register" class="btn btn-primary">Register</button> -->
         </div>
       </div>
@@ -52,3 +53,4 @@
   <!-- *ngIf="submitted && loginForm.controls['password'].invalid" -->
   <!-- *ngIf="submitted && invalidLogin" -->
 </div>
+<!-- <app-our-services></app-our-services> -->

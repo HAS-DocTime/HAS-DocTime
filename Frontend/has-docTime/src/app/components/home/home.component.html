@@ -1,0 +1,162 @@
+
+<div class="container-fluid main-content m-0 p-0">
+
+  <div class="row m-0 p-0">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#homePageNavBar"
+          aria-controls="homePageNavBar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="homePageNavBar">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#home" routerLinkActive="active-section"><h5>Home</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about-us"><h5>About Us</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#our-services"><h5>Our Services</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#careers"><h5>Careers</h5></a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="#blogs">Blogs</a>
+            </li>
+             -->
+            <li class="nav-item">
+              <a class="nav-link" href="#contact-us"><h5>Contact Us</h5></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <!-- <br><br><br> -->
+  <div class="row m-0 p-0">
+    <div class="container-fluid main-content m-0 p-0 ">
+      <div class="row m-0 align-items-center vh-100" id="home">
+        <div class="row d-flex align-items-center vh-100">
+          <div class="col-12 text-center">
+            <img src="https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/doctime-low-resolution-logo-white-on-transparent-background.png?alt=media&token=c1498eda-2df1-4c1e-8702-d93fbc7f8871" class="mx-auto" style="max-height: 30vh; width: 50vh;">
+            <br><br><br>
+            <h4 class="text-white" style="font-weight: 300;" id="slogan">Your trusted hospital appointment system</h4>
+            <br>
+            <div class="mt-1 align-items-center justify content-between">
+              <button class="button me-2 text-white" routerLink="/register">Register</button>
+              <button class="button ms-2 text-white" routerLink="/login">Login</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row align-items-center" id="about-us">
+        <div class="col-12">
+            <h2 class="text-center mb-4" style="text-decoration-color: darkblue;">About Us</h2>
+            <br>
+            <div class="row align-items-center">
+              <div class="col-md-7 col-sm-12 text-center ps-5 pe-5">
+                <p>Welcome to DocTime, the premier website for booking hospital appointments with ease and convenience. We understand that seeking medical care can be a daunting task, which is why we have created a platform that makes the process simpler and more straightforward for patients and healthcare providers alike. Our mission at DocTime is to provide patients with a hassle-free and efficient way to book appointments with the best doctors and medical professionals in their area.</p>
+              </div>
+              <div class="col-md-5 col-sm-12">
+                <iframe width="100%" height="400" src="https://www.youtube.com/embed/B7uzFUpOQUg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              </div>
+            </div>
+            <br><br>
+            <div class="row align-items-center">
+              <div class="col-md-5 col-sm-12">
+                <img src="https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/AboutUsPic.jpeg?alt=media&token=cc4b7b1a-6bba-4810-a74e-2c03d41456b7" width="100%" height="400">
+              </div>
+              <div class="col-md-7 col-sm-12 text-center ps-5 pe-5">
+                <p>With our easy-to-use interface, patients can quickly and easily find a healthcare provider who meets their needs and schedule an appointment online without ever having to pick up the phone. At DocTime, we are committed to providing the highest level of service to our patients and healthcare providers. We believe that everyone deserves access to quality medical care, and we strive to make that a reality for people all over the world. Join us on our mission to make healthcare accessible and convenient for all.</p>
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="row m-auto align-items-center" id="our-services">
+        <!-- <p>Services</p> -->
+        <app-our-services></app-our-services>
+      </div>
+
+      <div class="row m-auto align-items-center" id="careers">
+        <h2 class="text-center mb-4" style="text-decoration-color: darkblue;">Careers</h2>
+        <div class="row align-items-center text-center ps-5 pe-5">
+          <p>At DocTime, we are always on the lookout for talented individuals who share our passion for making healthcare more accessible and convenient for patients. We believe that our employees are the key to our success, which is why we are committed to providing a supportive and rewarding work environment where everyone can thrive. If you are a creative problem solver who is passionate about making a difference in people's lives, we want to hear from you. We offer a wide range of career opportunities in areas such as marketing, customer service, software development, and more.</p>
+          <p>As a member of the DocTime team, you will have the opportunity to work with a talented and diverse group of individuals who are dedicated to making a positive impact on the healthcare industry. We offer competitive salaries, comprehensive benefits, and ample opportunities for growth and development. Join us and become a part of a company that is changing the way people access medical care. Together, we can make a difference in the lives of millions of people around the world.</p>
+        </div>
+      </div>
+
+      <div class="row m-auto align-items-center" id="contact-us">
+        <div class="col-12">
+          <section class="py-5">
+            <h2 class="text-center mb-4" id="contact">Contact Us</h2>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title text-center">Get in Touch</h5>
+                    <form>
+                      <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name">
+                      </div>
+                      <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email">
+                      </div>
+                      <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea class="form-control" id="message" rows="5"></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-primary mt-1">Submit</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title text-center">Contact Information</h5>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item">Address:<strong><p class="ms-5"> GMERS Hospital Ltd.</p></strong><p class="ms-5">A 66, GIDC Sector-25</p><p class="ms-5">Gandhinager - 382016</p><p class="ms-5">Gujarat, India</p></li>
+                      <li class="list-group-item">Phone: <strong>(+91) 93-456-7894</strong></li>
+                      <li class="list-group-item">Email: <strong>info@doctime.com</strong></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="row fixed-bottom"  id="footer">
+      <div class="col-12">
+        <footer class="bg-transparent text-white py-3" >
+          <div class="container">
+            <div class="row">
+              <div class="col-6">
+                <p class="mb-0">© 2023 Doctime, Inc.</p>
+              </div>
+              <div class="col-6 text-md-end">
+                <p class="mb-0"> All Rights Reserved</p>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+  </div>
+
+  </div>

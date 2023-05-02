@@ -14,7 +14,7 @@ export class OurServicesComponent implements OnInit{
 
   ngOnInit(){
     this.departmentService.getDepartments().subscribe((data)=> {
-      console.log(data);
+      // console.log(data);
       this.departments = data;
     })
   }

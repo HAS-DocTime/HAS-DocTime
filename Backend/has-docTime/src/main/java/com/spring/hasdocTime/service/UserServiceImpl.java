@@ -42,4 +42,10 @@ public class UserServiceImpl implements UserInterface {
       return userDao.deleteUser(id);
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
+    }
+
+    
 }
