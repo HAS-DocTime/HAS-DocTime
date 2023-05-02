@@ -54,9 +54,6 @@ public class UserController {
         if(!authenticatedPatientId.equals(user.getEmail())){
             throw new AccessDeniedException("You do not have access to this resource");
         }
-//        if(user==null){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
         return new ResponseEntity(user, HttpStatus.OK);
     }
 

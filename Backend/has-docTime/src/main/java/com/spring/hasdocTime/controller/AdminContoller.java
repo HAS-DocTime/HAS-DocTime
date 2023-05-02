@@ -24,9 +24,6 @@ public class AdminContoller {
     @GetMapping("")
     public ResponseEntity<List<Admin>> getAllAdmin(){
         List<Admin> responseAllAdmin = adminService.getAllAdmin();
-//        if(responseAllAdmin == null){
-//            return new ResponseEntity(responseAllAdmin, HttpStatus.NOT_FOUND);
-//        }
         return new ResponseEntity(responseAllAdmin, HttpStatus.OK);
     }
 
@@ -38,9 +35,6 @@ public class AdminContoller {
         if(!authenticatedAdminEmailId.equals(admin.getUser().getEmail())){
             throw new AccessDeniedException("You do not have access to this resource");
         };
-//        if(admin == null){
-//            return new ResponseEntity(admin, HttpStatus.NOT_FOUND);
-//        }
         return new ResponseEntity(admin, HttpStatus.OK);
     }
 

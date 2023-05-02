@@ -57,9 +57,6 @@ public class DoctorController {
         if(!authenticatedDoctorEmailId.equals(doctor.getUser().getEmail())){
             throw new AccessDeniedException("You do not have access to this resource");
         };
-//        if(doctor==null){
-//            return new ResponseEntity(doctor, HttpStatus.NOT_FOUND);
-//        }
         return new ResponseEntity(doctor, HttpStatus.OK);
     }
     
