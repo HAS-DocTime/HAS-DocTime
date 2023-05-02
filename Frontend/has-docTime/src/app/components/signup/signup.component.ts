@@ -6,6 +6,7 @@ import { Doctor } from 'src/app/models/doctor.model';
 import { ChronicIllnessService } from 'src/app/services/chronic-illness.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
+import { LoginDetails } from 'src/app/models/login-details.model';
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +17,10 @@ import { UserService } from 'src/app/services/user.service';
 
 export class SignupComponent implements OnInit, OnDestroy{
 
-  constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){  }
+constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
+
+  }
+  // authToken: string = "";
 
   savedChronicIllnesses : ChronicIllness[] = [];
   selectedValue : string = "";
@@ -85,6 +89,11 @@ export class SignupComponent implements OnInit, OnDestroy{
 
   register(){
     const date = new Date();
+    
+    const email = this.signupForm.value.email;
+    const password = this.signupForm.value.password;
+    let signupDetail: LoginDetails = {"email" : email, "password" : password};
+
     const user = this.signupForm.value;
     if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){
       let age = date.getFullYear() - new Date(user.dob as Date).getFullYear() -  1;
@@ -110,8 +119,22 @@ export class SignupComponent implements OnInit, OnDestroy{
       chronicIllnesses.push(chronicIllness);
     }
     user.patientChronicIllness = chronicIllnesses;
+
+    let doctor : Doctor = { 
+      "user" : user,
+      "qualification" : this.signupForm.value.qualification,
+      "casesSolved" : this.signupForm.value.casesSolved,
+      "available" : true,
+      "department" : {
+        id : 1
+      }
+    };
+
+    doctor.qualification = this.signupForm.value.qualification;
     if(user.role==="PATIENT"){
       this.userService.registerUser(user).subscribe((data)=> {
+        sessionStorage.clear();
+        sessionStorage.setItem('token', data.token);
         this.signupForm.reset({
           firstName : "",
           lastName : "",
@@ -130,20 +153,22 @@ export class SignupComponent implements OnInit, OnDestroy{
     }
     else if(user.role === "DOCTOR"){
       let userId = 0;
-      this.userService.registerUser(user).subscribe((data)=> {
-        userId = (data.id as number);
-        let doctor : Doctor = {
-          user : {
-            id : userId
-          },
-          qualification : user.qualification,
-          casesSolved : user.casesSolved,
-          available : true,
-          department : {
-            id : 1
-          } //Hard-coded as of now
-        }
-        this.doctorService.createDoctor(doctor).subscribe(data=> {
+      // this.userService.registerUser(signupDetail).subscribe((data) => {
+      //   this.authToken = data;
+      //   sessionStorage.clear();
+      //   localStorage.clear();
+      //   localStorage.setItem('token', JSON.stringify(data));
+      //   window.sessionStorage.setItem('token',JSON.stringify(data));
+      //   signupDetail = {email : "", password : ""};
+      // });
+      
+      this.userService.registerDoctor(doctor).subscribe((data)=> {
+        // const authToken = data;
+        // console.log(authToken.token);
+        sessionStorage.clear();
+        localStorage.clear();
+        localStorage.setItem('token', data.token);
+        window.sessionStorage.setItem('token',data.token);
             this.signupForm.reset({
             firstName : "",
             lastName : "",
@@ -158,11 +183,23 @@ export class SignupComponent implements OnInit, OnDestroy{
             casesSolved : 0,
             patientChronicIllness : []
         });
-        })
       });
     }
     this.router.navigate(["/appointment"]);
   }
+
+//   registerUser(signupDetail: LoginDetails){
+//     return new Promise((res,rej)=>{
+//       this.userService.registerUser(signupDetail).subscribe((data) => {
+//         this.authToken = data;
+//         sessionStorage.clear();
+//         localStorage.clear();
+//         localStorage.setItem('token', JSON.stringify(data));
+//         window.sessionStorage.setItem('token',JSON.stringify(data));
+//         signupDetail = {email : "", password : ""};
+//       });
+//   });
+// }
 
   addChronicIllness(){
     this.chronicIllness.push(new FormGroup(
@@ -180,4 +217,9 @@ export class SignupComponent implements OnInit, OnDestroy{
   get chronicIllness() : FormArray{
     return this.signupForm.get('patientChronicIllness') as FormArray
   }
+
+  onCancel(){
+    this.userService.onCancel();
+  }
+
 }

@@ -41,4 +41,5 @@ public class UserServiceImpl implements UserInterface {
     public User deleteUser(int id) {
       return userDao.deleteUser(id);
     }
+
 }

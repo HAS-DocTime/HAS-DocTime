@@ -1,5 +1,6 @@
-import { Component, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -9,15 +10,21 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HeaderComponent implements OnInit{
 
-  constructor(private userService: UserService, private router: Router, private route: ActivatedRoute){
+  constructor(private cdr: ChangeDetectorRef,private loginService: LoginService, private userService: UserService, private router: Router, private route: ActivatedRoute){
   }
+ngAfterViewChecked(){
+   //your code to update the model
+   this.cdr.detectChanges();
+   console.log(this.cdr);
+}
 
   isLoggedIn!: Boolean;
   inSignupForm!: Boolean;
   inLoginForm!: Boolean;
 
   ngOnInit(): void {
-    this.userService.inSignup.subscribe(value => {
+
+      this.userService.inSignup.subscribe(value => {
       this.inSignupForm = value;
     })
     this.userService.inLogin.subscribe(value => {
@@ -29,7 +36,8 @@ export class HeaderComponent implements OnInit{
   }
 
   onLogout(){
-    this.userService.logOutUser()
+    this.userService.logOutUser();
+    sessionStorage.removeItem("token");
     this.router.navigate(['']);
   }
 

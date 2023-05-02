@@ -15,8 +15,10 @@ export class LoginComponent implements OnInit, OnDestroy{
   submitted = false;
   invalidLogin = false;
   user = null;
+  
   inLogin: Boolean = true;
   isLoggedIn = false;
+
 
   constructor(private loginService: LoginService, private router: Router, private userService: UserService) {
   }
@@ -26,7 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
   loginForm:FormGroup = new FormGroup({
     email: new FormControl("", [Validators.required, Validators.email]),
-    password: new FormControl("", [Validators.required, Validators.minLength(8)])
+    password: new FormControl("", [Validators.required, Validators.minLength(6)])
   })
 
   ngDoCheck(){
@@ -49,8 +51,13 @@ export class LoginComponent implements OnInit, OnDestroy{
     const password = this.loginForm.controls['password'].value;
 
     this.loginService.checkDetail(email, password).subscribe(data => {
+
       this.user=data;
       this.isLoggedIn = true;
+
+      sessionStorage.clear();
+      sessionStorage.setItem('token',data.token);
+
       this.router.navigate(['/appointment']);
     }, (err)=> {
       if(err){
@@ -58,5 +65,9 @@ export class LoginComponent implements OnInit, OnDestroy{
         this.invalidLogin=true;
       }
     })
+    this.loginService.isLoggedIn.subscribe((data) => {
+        this.isLoggedIn = data;
+    });
+    this.router.navigate([""]);
   }
 }
