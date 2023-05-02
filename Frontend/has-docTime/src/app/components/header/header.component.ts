@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit{
 ngAfterViewChecked(){
    //your code to update the model
    this.cdr.detectChanges();
-   console.log(this.cdr);
+  //  console.log(this.cdr);
 }
 
   isLoggedIn!: Boolean;

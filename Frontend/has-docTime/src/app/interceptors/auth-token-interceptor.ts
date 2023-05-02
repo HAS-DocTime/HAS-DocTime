@@ -17,10 +17,10 @@ export class AuthTokenInterceptor implements HttpInterceptor{
         // if(localStorage.getItem('token') !== null){
         //     authToken != localStorage.getItem('token');
         // }  
-        console.log(authToken);
+        // console.log(authToken);
 
         if(authToken){
-            console.log(authToken);
+            // console.log(authToken);
             req = req.clone({
                 setHeaders : {
                     Authorization : `Bearer ${authToken}`
