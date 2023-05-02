@@ -14,10 +14,10 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   submitted = false;
   invalidLogin = false;
-  user = null;
+  user: string = "";
   
   inLogin: Boolean = true;
-  isLoggedIn = false;
+  isLoggedIn: Boolean = false;
 
 
   constructor(private loginService: LoginService, private router: Router, private userService: UserService) {
@@ -52,7 +52,8 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     this.loginService.checkDetail(email, password).subscribe(data => {
 
-      this.user=data;
+      this.user = data.token;
+      console.log(data);
       this.isLoggedIn = true;
 
       sessionStorage.clear();
