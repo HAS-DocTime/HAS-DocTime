@@ -11,7 +11,9 @@ export class AppointmentService {
 
   baseUrl = "http://localhost:8080/";
 
-  getAppointmentByUser(){
-    return this.http.get<Appointment[]>(`${this.baseUrl}appointment/user/1`);
+  getAppointmentByUser(userId : number){
+    return this.http.get<Appointment[]>(`${this.baseUrl}appointment/user/${userId}`);
   }
+
+
 }
