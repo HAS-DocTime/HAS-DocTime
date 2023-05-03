@@ -4,6 +4,7 @@ import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +66,15 @@ public class AppointmentController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<Appointment>> getAppointmentsByUser(@PathVariable int id){
+        List<Appointment> appointments = appointmentService.getAppointmentsByUser(id);
+        if(appointments==null){
+            return new ResponseEntity<>(appointments, HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
 }

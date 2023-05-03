@@ -6,6 +6,7 @@ import com.spring.hasdocTime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @Service
@@ -109,5 +110,16 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         }else{
             return "appointment with id: " + id + " doesn't exist";
         }
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByUser(int userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            return null;
+        }
+        User currentUser = user.get();
+        List<Appointment> appointments = appointmentRepository.findByUser(currentUser);
+        return appointments;
     }
 }

@@ -45,6 +45,7 @@ public class RegisterDaoImpl implements RegisterInterface {
 
     @Override
     public AuthenticationResponse registerDoctor(Doctor doctor) {
+        System.out.println(doctor);
         var createdUser = userDao.createUser(doctor.getUser());
         doctor.setUser(createdUser);
         var createdDoctor = doctorDao.createDoctor(doctor);

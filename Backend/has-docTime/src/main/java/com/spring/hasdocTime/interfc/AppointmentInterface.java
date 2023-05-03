@@ -16,4 +16,6 @@ public interface AppointmentInterface {
 
     public String deleteAppointment(int id);
 
+    public List<Appointment> getAppointmentsByUser(int userId);
+
 }
