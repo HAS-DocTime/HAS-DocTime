@@ -59,13 +59,12 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAppointment(@PathVariable int id) {
-        String result = appointmentService.deleteAppointment(id);
-        if (result.equals("appointment with id: " + id + " is deleted")) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Appointment> deleteAppointment(@PathVariable int id) {
+        Appointment appointment = appointmentService.deleteAppointment(id);
+        if(appointment==null){
+            return new ResponseEntity<>(appointment, HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")

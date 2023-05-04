@@ -102,13 +102,13 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     }
 
     @Override
-    public String deleteAppointment(int id) {
+    public Appointment deleteAppointment(int id) {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
         if(optionalAppointment.isPresent()){
             appointmentRepository.deleteById(id);
-            return "appointment with id: " + id + " is deleted";
+            return optionalAppointment.get();
         }else{
-            return "appointment with id: " + id + " doesn't exist";
+            return null;
         }
     }
 
