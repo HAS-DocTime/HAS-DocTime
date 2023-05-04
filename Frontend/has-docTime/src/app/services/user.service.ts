@@ -31,6 +31,10 @@ export class UserService {
     return this.http.post<{token : string}>(`${this.baseUrl}register/doctor`, doctor);
   }
 
+  getUser(){
+    return this.http.get<User>(`${this.baseUrl}user/findByEmail`);
+  }
+
   logOutUser(){
     localStorage.clear();
     sessionStorage.clear();
