@@ -61,6 +61,7 @@ public class SecurityConfig{
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/chronicIllness").permitAll()
                         .requestMatchers("/department").permitAll()
+                .requestMatchers("/user/findByEmail").permitAll()
                 .requestMatchers(getServices("/static/patientServices.json"))
                         .hasAnyAuthority("PATIENT")
                 .requestMatchers(getServices("/static/doctorServices.json"))

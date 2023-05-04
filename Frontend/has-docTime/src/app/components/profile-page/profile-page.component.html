@@ -15,23 +15,24 @@
                 <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
                     <div class="row mt-2 mb-3">
                         <div class="col-md-6"><label class="labels">First Name</label><input type="text"
-                                class="form-control" [disabled]="!flag" placeholder="first name" [value]="user?.name" formControlName="firstName"></div>
-                        <div class="col-md-6"><label class="labels">Last Name</label><input type="text" class="form-control"
-                                [disabled]="!flag" [value]="user?.name" placeholder="last name" formControlName="lastName"></div>
+                                class="form-control"  placeholder="first name" [value]="firstName"
+                                formControlName="firstName"></div>
+                        <div class="col-md-6"><label class="labels">Last Name</label><input type="text"
+                                class="form-control"  [value]="lastName" placeholder="last name"
+                                formControlName="lastName"></div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12 mb-3"><label class="labels">Mobile Number</label><input type="text"
-                                class="form-control" [disabled]="!flag" placeholder="enter phone number"
+                                class="form-control"  placeholder="enter phone number"
                                 [value]="user?.contact" formControlName="contact"></div>
                         <div class="col-md-12 mb-3"><label class="labels">Gender</label><input type="text"
-                                class="form-control" [disabled]="!flag" placeholder="enter address line 1"
+                                class="form-control"  placeholder="enter address line 1"
                                 [value]="user?.gender" formControlName="gender"></div>
+                                
                         <div class="form-group mb-4">
                             <label for="bloodGroup">Blood Group</label>
-                            <input *ngIf="!flag" type="text" class="form-control" [disabled]="!flag"
-                                placeholder="enter address line 2" [value]="user?.bloodGroup" >
-                            <select *ngIf="flag" class="form-select" id="bloodGroup"
-                                [value]="user?.bloodGroup" formControlName="bloodGroup">
+                            <select class="form-select" id="bloodGroup" [value]="user?.bloodGroup"
+                                formControlName="bloodGroup">
                                 <option value="A_POSITIVE">A+</option>
                                 <option value="A_NEGATIVE">A-</option>
                                 <option value="B_POSITIVE">B+</option>
@@ -43,37 +44,42 @@
                             </select>
                         </div>
                         <div class="form-group mb-4">
-    
+
                             <label for="dob">Date of Birth</label>
-                            <input *ngIf="!flag" type="text" class="form-control" [disabled]="!flag" [value]="user?.dob">
-                            <input *ngIf="flag" type="date" class="form-control" id="dob" [placeholder]="user?.dob"
+                            <p>{{this.user?.dob?.getDate?.toString}}</p>
+                            <input type="date" class="form-control" id="dob" [placeholder]="user?.dob"
                                 formControlName="dob" />
                             <div class="alert alert-danger"
                                 *ngIf="editForm.get('dob')?.touched && editForm.get('dob')?.invalid">
                                 <span *ngIf="editForm.get('dob')?.errors">Date of Birth is Required</span>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3"><label class="labels">Email</label><input *ngIf="!flag" type="text" class="form-control" [disabled]="!flag" [value]="user?.email"></div>
+                        <div class="col-md-12 mb-3"><label class="labels">Email</label><input  type="text"
+                                class="form-control"  [value]="user?.email" formControlName="email"></div>
                         <div class="col-md-12 mb-3"><label class="labels">Height</label><input type="text"
-                                class="form-control" [disabled]="!flag" placeholder="enter address line 2" [value]="user?.height" formControlName="height"></div>
+                                class="form-control"  placeholder="enter address line 2"
+                                [value]="user?.height" formControlName="height"></div>
                         <div class="col-md-12 mb-3"><label class="labels">Weight</label><input type="text"
-                                class="form-control" [disabled]="!flag" placeholder="enter email id" [value]="user?.weight" formControlName="weight"></div>
+                                class="form-control" placeholder="enter email id"
+                                [value]="user?.weight" formControlName="weight"></div>
+                                <p>{{disable}}</p>
                         <div class="col-md-12 mb-3"><label class="labels">Qualification</label><input type="text"
-                                class="form-control" [disabled]="!flag" placeholder="education" [value]="" formControlName="qualification"></div>
+                                class="form-control"  placeholder="education" [value]=""
+                                formControlName="qualification"></div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control"
-                                [disabled]="!flag" placeholder="country" value=""></div>
+                        <div class="col-md-6"><label class="labels">Country</label><input type="text"
+                                class="form-control" placeholder="country" value=""></div>
                         <div class="col-md-6"><label class="labels">State/Region</label><input type="text"
-                                class="form-control" [disabled]="!flag" value="" placeholder="state"></div>
+                                class="form-control" value="" placeholder="state"></div>
                     </div>
                 </form>
-                
+
                 <div class="row d-flex mb-4 text-center mt-5">
-                    <div *ngIf="!flag" class="col">
+                    <div *ngIf="disable" class="col">
                         <button type="button" class="btn btn-outline-danger" (click)="onEditProfile()">Edit</button>
                     </div>
-                    <div *ngIf="flag" class="col">
+                    <div *ngIf="!disable" class="col">
                         <button type="submit" class="btn btn-outline-primary"
                             (click)="onUpdateProfile()">Update</button>
                     </div>
