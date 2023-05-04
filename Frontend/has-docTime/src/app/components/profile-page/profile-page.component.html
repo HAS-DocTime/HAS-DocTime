@@ -4,10 +4,10 @@
             <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
                     width="150px"
                     src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span
-                    class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span>
+                    class="font-weight-bold">{{this.user?.name}}</span><span class="text-black-50">{{this.user?.email}}</span><span>
                 </span></div>
         </div>
-        <div class="col-md-5 border-right">
+        <div class="col-md-7 border-right">
             <div class="p-3 py-5">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="text-right">Profile Settings</h4>
@@ -15,24 +15,22 @@
                 <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
                     <div class="row mt-2 mb-3">
                         <div class="col-md-6"><label class="labels">First Name</label><input type="text"
-                                class="form-control"  placeholder="first name" [value]="firstName"
-                                formControlName="firstName"></div>
+                                class="form-control" placeholder="first name" formControlName="firstName"
+                               ></div>
                         <div class="col-md-6"><label class="labels">Last Name</label><input type="text"
-                                class="form-control"  [value]="lastName" placeholder="last name"
-                                formControlName="lastName"></div>
+                                class="form-control" placeholder="last name" formControlName="lastName"
+                               ></div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12 mb-3"><label class="labels">Mobile Number</label><input type="text"
-                                class="form-control"  placeholder="enter phone number"
-                                [value]="user?.contact" formControlName="contact"></div>
+                                class="form-control" placeholder="enter phone number" formControlName="contact"
+                               ></div>
                         <div class="col-md-12 mb-3"><label class="labels">Gender</label><input type="text"
-                                class="form-control"  placeholder="enter address line 1"
-                                [value]="user?.gender" formControlName="gender"></div>
-                                
+                                class="form-control" placeholder="enter address line 1" formControlName="gender" ></div>
+
                         <div class="form-group mb-4">
                             <label for="bloodGroup">Blood Group</label>
-                            <select class="form-select" id="bloodGroup" [value]="user?.bloodGroup"
-                                formControlName="bloodGroup">
+                            <select class="form-select" id="bloodGroup" formControlName="bloodGroup">
                                 <option value="A_POSITIVE">A+</option>
                                 <option value="A_NEGATIVE">A-</option>
                                 <option value="B_POSITIVE">B+</option>
@@ -47,46 +45,46 @@
 
                             <label for="dob">Date of Birth</label>
                             <p>{{this.user?.dob?.getDate?.toString}}</p>
+
                             <input type="date" class="form-control" id="dob" [placeholder]="user?.dob"
-                                formControlName="dob" />
+                                formControlName="dob">
                             <div class="alert alert-danger"
                                 *ngIf="editForm.get('dob')?.touched && editForm.get('dob')?.invalid">
                                 <span *ngIf="editForm.get('dob')?.errors">Date of Birth is Required</span>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3"><label class="labels">Email</label><input  type="text"
-                                class="form-control"  [value]="user?.email" formControlName="email"></div>
+                        <div class="col-md-12 mb-3"><label class="labels">Email</label><input type="text"
+                                class="form-control" formControlName="email" ></div>
                         <div class="col-md-12 mb-3"><label class="labels">Height</label><input type="text"
-                                class="form-control"  placeholder="enter address line 2"
-                                [value]="user?.height" formControlName="height"></div>
+                                class="form-control" placeholder="enter address line 2" formControlName="height"
+                                ></div>
                         <div class="col-md-12 mb-3"><label class="labels">Weight</label><input type="text"
-                                class="form-control" placeholder="enter email id"
-                                [value]="user?.weight" formControlName="weight"></div>
-                                <p>{{disable}}</p>
-                        <div class="col-md-12 mb-3"><label class="labels">Qualification</label><input type="text"
-                                class="form-control"  placeholder="education" [value]=""
-                                formControlName="qualification"></div>
+                                class="form-control" placeholder="enter email id" formControlName="weight"
+                                ></div>
+
+                        
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6"><label class="labels">Country</label><input type="text"
-                                class="form-control" placeholder="country" value=""></div>
-                        <div class="col-md-6"><label class="labels">State/Region</label><input type="text"
-                                class="form-control" value="" placeholder="state"></div>
+
+                    <div>
+                        <div class="col-md-12 mb-3"><label class="labels">Qualification</label><input type="number"
+                            class="form-control"></div>
                     </div>
+                    <div class="row d-flex mb-4 text-center mt-5">
+                        <div *ngIf="disable" class="col">
+                            <button type="button" class="btn btn-outline-danger" (click)="toggleDisable()">Edit</button>
+                        </div>
+                        <div *ngIf="!disable" class="col">
+                            <button type="submit" class="btn btn-outline-primary"
+                                >Update</button>
+                        </div>
+                    </div>
+                    
                 </form>
 
-                <div class="row d-flex mb-4 text-center mt-5">
-                    <div *ngIf="disable" class="col">
-                        <button type="button" class="btn btn-outline-danger" (click)="onEditProfile()">Edit</button>
-                    </div>
-                    <div *ngIf="!disable" class="col">
-                        <button type="submit" class="btn btn-outline-primary"
-                            (click)="onUpdateProfile()">Update</button>
-                    </div>
-                </div>
+               
             </div>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="p-3 py-5">
                 <div class="d-flex justify-content-between align-items-center experience"><span>Edit
                         Experience</span><span class="border px-3 p-1 add-experience"><i
@@ -96,6 +94,6 @@
                 <div class="col-md-12"><label class="labels">Additional Details</label><input type="text"
                         class="form-control" placeholder="additional details" value=""></div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>

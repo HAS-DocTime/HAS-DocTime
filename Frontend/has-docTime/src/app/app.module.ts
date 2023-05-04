@@ -19,6 +19,7 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -43,14 +44,16 @@ import { ProfilePageComponent } from './components/profile-page/profile-page.com
     MatIconModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    CommonModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass : AuthTokenInterceptor,
       multi: true
-    }
+    },
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

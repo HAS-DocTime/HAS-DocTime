@@ -39,30 +39,34 @@ public class UserDaoImpl implements UserInterface {
         return null;
     }
 
-    @Override
-    public User createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User updateUserWithPassword(User user){
         List<Symptom> symptomList = user.getSymptoms();
         if(symptomList!=null){
             List<Symptom> newSymptomList = new ArrayList<>();
-        for(Symptom symptom : symptomList) {
-            newSymptomList.add(symptomRepository.findById(symptom.getId()).get());
-        }
-        user.setSymptoms(newSymptomList);
+            for(Symptom symptom : symptomList) {
+                newSymptomList.add(symptomRepository.findById(symptom.getId()).get());
+            }
+            user.setSymptoms(newSymptomList);
         }
         List<PatientChronicIllness> patientChronicIllnessList = user.getPatientChronicIllness();
         if(patientChronicIllnessList != null){
             for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
-            patientChronicIllness.setUser(user);
-            CompositeKeyPatientChronicIllness compositeKey;
-            ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
-            patientChronicIllness.setChronicIllness(chronicIllness);
-            compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
-            patientChronicIllness.setId(compositeKey);
-            user.setPatientChronicIllness(patientChronicIllnessList);
+                patientChronicIllness.setUser(user);
+                CompositeKeyPatientChronicIllness compositeKey;
+                ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
+                patientChronicIllness.setChronicIllness(chronicIllness);
+                compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
+                patientChronicIllness.setId(compositeKey);
+                user.setPatientChronicIllness(patientChronicIllnessList);
             }
         }
         return userRepository.save(user);
+    }
+
+    @Override
+    public User createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return updateUserWithPassword(user);
     }
 
     @Override
@@ -74,7 +78,8 @@ public class UserDaoImpl implements UserInterface {
             for(PatientChronicIllness patientChronicIllness : oldUser.get().getPatientChronicIllness()){
                 patientChronicIllnessDao.deletePatientChronicIllness(patientChronicIllness.getId());
             }
-            return createUser(user);
+            user.setPassword(oldUserObj.getPassword());
+            return updateUserWithPassword(user);
         }
         return null;
     }

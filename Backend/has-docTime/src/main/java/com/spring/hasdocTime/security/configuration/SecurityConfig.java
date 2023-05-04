@@ -57,10 +57,12 @@ public class SecurityConfig{
         // get list from json file
         http.cors().and().csrf().disable()
         .authorizeHttpRequests((authorize)-> authorize
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/chronicIllness").permitAll()
                         .requestMatchers("/department").permitAll()
+
                 .requestMatchers("/user/findByEmail").permitAll()
                 .requestMatchers(getServices("/static/patientServices.json"))
                         .hasAnyAuthority("PATIENT")
