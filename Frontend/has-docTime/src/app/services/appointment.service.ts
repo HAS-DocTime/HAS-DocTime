@@ -15,5 +15,12 @@ export class AppointmentService {
     return this.http.get<Appointment[]>(`${this.baseUrl}appointment/user/${userId}`);
   }
 
+  getAppointment(id : number){
+    return this.http.get<Appointment>(`${this.baseUrl}appointment/${id}`);
+  }
+
+  deleteAppointment(id : number){
+    return this.http.delete(`${this.baseUrl}appointment/${id}`);
+  }
 
 }

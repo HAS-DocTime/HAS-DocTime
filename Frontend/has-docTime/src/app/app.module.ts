@@ -18,6 +18,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
+import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { OurServicesComponent } from './components/our-services/our-services.com
     SidebarComponent,
     HomeComponent,
     OurServicesComponent,
-
+    AppointmentDetailComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
