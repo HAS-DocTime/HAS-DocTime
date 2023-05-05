@@ -41,23 +41,25 @@ public class UserDaoImpl implements UserInterface {
 
     public User updateUserWithPassword(User user){
         List<Symptom> symptomList = user.getSymptoms();
+        System.out.println(symptomList);
         if(symptomList!=null){
             List<Symptom> newSymptomList = new ArrayList<>();
-            for(Symptom symptom : symptomList) {
-                newSymptomList.add(symptomRepository.findById(symptom.getId()).get());
-            }
-            user.setSymptoms(newSymptomList);
+        for(Symptom symptom : symptomList) {
+            newSymptomList.add(symptomRepository.findById(symptom.getId()).get());
+        }
+        user.setSymptoms(newSymptomList);
         }
         List<PatientChronicIllness> patientChronicIllnessList = user.getPatientChronicIllness();
+        System.out.println(patientChronicIllnessList);
         if(patientChronicIllnessList != null){
             for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
-                patientChronicIllness.setUser(user);
-                CompositeKeyPatientChronicIllness compositeKey;
-                ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
-                patientChronicIllness.setChronicIllness(chronicIllness);
-                compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
-                patientChronicIllness.setId(compositeKey);
-                user.setPatientChronicIllness(patientChronicIllnessList);
+            patientChronicIllness.setUser(user);
+            CompositeKeyPatientChronicIllness compositeKey;
+            ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
+            patientChronicIllness.setChronicIllness(chronicIllness);
+            compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
+            patientChronicIllness.setId(compositeKey);
+            user.setPatientChronicIllness(patientChronicIllnessList);
             }
         }
         return userRepository.save(user);

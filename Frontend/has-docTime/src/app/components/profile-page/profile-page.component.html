@@ -67,7 +67,9 @@
 
                     <div>
                         <div class="col-md-12 mb-3"><label class="labels">Qualification</label><input type="number"
-                            class="form-control"></div>
+                            class="form-control" formControlName="qualification"></div>
+                        <div class="col-md-12 mb-3"><label class="labels">Cases Solved</label><input type="number"
+                            class="form-control" formControlName="casesSolved"></div>
                     </div>
                     <div class="row d-flex mb-4 text-center mt-5">
                         <div *ngIf="disable" class="col">

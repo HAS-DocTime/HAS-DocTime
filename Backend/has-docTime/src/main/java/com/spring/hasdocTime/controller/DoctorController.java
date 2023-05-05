@@ -51,12 +51,12 @@ public class DoctorController {
     
     @RequestMapping(method = RequestMethod.GET, value = "{doctorId}")
     public ResponseEntity<Doctor> getDoctor(@PathVariable("doctorId") int id) throws AccessDeniedException {
-        String authenticatedDoctorEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
+//        String authenticatedDoctorEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
         Doctor doctor = doctorService.getDoctor(id);
 
-        if(!authenticatedDoctorEmailId.equals(doctor.getUser().getEmail())){
-            throw new AccessDeniedException("You do not have access to this resource");
-        };
+//        if(!authenticatedDoctorEmailId.equals(doctor.getUser().getEmail())){
+//            throw new AccessDeniedException("You do not have access to this resource");
+//        };
         return new ResponseEntity(doctor, HttpStatus.OK);
     }
     

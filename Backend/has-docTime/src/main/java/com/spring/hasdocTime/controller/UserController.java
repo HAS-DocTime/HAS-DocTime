@@ -47,10 +47,12 @@ public class UserController {
     public ResponseEntity<User> getUser(@PathVariable("patientId") int id) throws AccessDeniedException {
 
         String authenticatedPatientId = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(authenticatedPatientId);
         User user = userService.getUser(id);
         if(!authenticatedPatientId.equals(user.getEmail())){
             throw new AccessDeniedException("You do not have access to this resource");
+        }
+        if(user==null){
+            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(user, HttpStatus.OK);
     }

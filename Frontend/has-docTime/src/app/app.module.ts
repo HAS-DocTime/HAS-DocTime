@@ -20,6 +20,8 @@ import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { CommonModule, DatePipe } from '@angular/common';
+import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { CommonModule, DatePipe } from '@angular/common';
     OurServicesComponent,
     ProfilePageComponent,
 
+    AppointmentDetailComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,13 +59,21 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAppointment(@PathVariable int id) {
-        String result = appointmentService.deleteAppointment(id);
-        if (result.equals("appointment with id: " + id + " is deleted")) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Appointment> deleteAppointment(@PathVariable int id) {
+        Appointment appointment = appointmentService.deleteAppointment(id);
+        if(appointment==null){
+            return new ResponseEntity<>(appointment, HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(appointment, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<Appointment>> getAppointmentsByUser(@PathVariable int id){
+        List<Appointment> appointments = appointmentService.getAppointmentsByUser(id);
+        if(appointments==null){
+            return new ResponseEntity<>(appointments, HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
 }

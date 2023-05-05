@@ -15,4 +15,12 @@ export class DoctorService {
   createDoctor(doctor : Doctor){
     return this.http.post<Doctor>(`${this.baseUrl}doctor`, doctor);
   }
+
+  getDoctor(){
+    return this.http.get<Doctor>(`${this.baseUrl}doctor/doctorById`);
+  }
+
+  updateDoctor(doctor : Doctor, id : number){
+    return this.http.put<Doctor>(`${this.baseUrl}doctor/${id}`, doctor);
+  }
 }

@@ -186,7 +186,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
         });
       });
     }
-    this.router.navigate(["/appointment"]);
+    this.router.navigate(["/dashboard"]);
   }
 
 //   registerUser(signupDetail: LoginDetails){

@@ -14,6 +14,8 @@ public interface AppointmentInterface {
 
     public Appointment updateAppointment(int id, Appointment appointment);
 
-    public String deleteAppointment(int id);
+    public Appointment deleteAppointment(int id);
+
+    public List<Appointment> getAppointmentsByUser(int userId);
 
 }
