@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  height: 3em;
 }
 
 .card-header h5 {
@@ -60,11 +60,12 @@
 }
 
 .bg-primary {
-  background-color: #378ce6!important;
+  background-color: #134d86!important;
 }
 
 .text-white {
   color: #fff!important;
+  font-size: larger;
 }
 
 .card {
@@ -76,11 +77,12 @@
 
 .card-body p {
   margin-bottom: 0;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .card-body .fw-bold {
   font-weight: bold;
+
 }
 
 .card-body .d-flex {
