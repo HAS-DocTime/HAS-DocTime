@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class UserDetailForToken {
 
-    private Integer id;
     private String email;
+    private Integer id;
     private Role role;
 
 }
