@@ -90,9 +90,6 @@ public class SecurityConfig{
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-
-//        System.out.println("Bean out");
         return http.build();
     }
 

@@ -6,6 +6,7 @@ import com.spring.hasdocTime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.*;
 
 @Service
@@ -163,5 +164,22 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         }else{
             return "timeSlot with id: " + id + "doesn't exist";
         }
+    }
+
+    public List<TimeSlot> createTimeSlotsFromDepartment(){
+        Time hospitalStartTime = new Time(9,0,0);
+        Time hospitalEndTime = new Time(21,0,0);
+        List<Department> departments = departmentRepository.findAll();
+        Time timeSlotStartTime = hospitalStartTime;
+        Time timeSlotEndTime = hospitalStartTime;
+        for(Department department : departments){
+            int timeDuration = department.getTimeDuration();
+//            TimeSlot timeSlot = new TimeSlot();
+//            timeSlot.setStartTime(timeSlotStartTime);
+//            timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
+//            timeSlot.setEndTime(timeSlotEndTime);
+//            timeSlot.setDepartment(department);
+        }
+        return null;//To remove error
     }
 }
