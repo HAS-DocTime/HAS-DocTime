@@ -53,13 +53,13 @@ public class UserDaoImpl implements UserInterface {
         System.out.println(patientChronicIllnessList);
         if(patientChronicIllnessList != null){
             for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
-            patientChronicIllness.setUser(user);
-            CompositeKeyPatientChronicIllness compositeKey;
-            ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
-            patientChronicIllness.setChronicIllness(chronicIllness);
-            compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
-            patientChronicIllness.setId(compositeKey);
-            user.setPatientChronicIllness(patientChronicIllnessList);
+                patientChronicIllness.setUser(user);
+                CompositeKeyPatientChronicIllness compositeKey;
+                ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
+                patientChronicIllness.setChronicIllness(chronicIllness);
+                compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
+                patientChronicIllness.setId(compositeKey);
+                user.setPatientChronicIllness(patientChronicIllnessList);
             }
         }
         return userRepository.save(user);

@@ -37,7 +37,8 @@ public class JwtService {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetailForToken.getEmail())
+                .setSubject(userDetailForToken.getId().toString())
+                .claim("email", userDetailForToken.getEmail().toString())
                 .claim("role", userDetailForToken.getRole().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *60 * 24))
