@@ -33,14 +33,26 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     const token = sessionStorage.getItem('token');
     console.log(token);
     if(token){
-      let store = token?.split('.');
-      this.tokenRole = atob(store[1]).split(',')[1].split(':')[1];
+
+      // console.log();
       
-      if(this.tokenRole === `"DOCTOR"`){
-        this.doctorService.getDoctor().subscribe(data => {
+      let store = token?.split('.');
+      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+      console.log(atob(store[1]));
+      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length -1)); 
+      
+      this.tokenRole = this.tokenRole.substring(1,this.tokenRole.length - 1);
+      console.log(this.tokenRole);
+      if(this.tokenRole === "DOCTOR"){
+        // console.log("doctor called");
+        
+        this.doctorService.getDoctor(this.id).subscribe(data => {
+          
+          
           this.doctor = data;
+          console.log(this.doctor);
           this.id = data.id as number;
-          const docNameArray = this.doctor?.user.name.split("", 2);
+          const docNameArray = this.doctor?.user.name.split(" ", 2);
           this.firstName = docNameArray[0];
           this.lastName = docNameArray[1];
           this.dateFromAPI = new Date(data.user.dob);
@@ -62,7 +74,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         });
       }
       
-      if(this.tokenRole === `"PATIENT"`){
+      if(this.tokenRole === "PATIENT"){
         this.userService.getUser().subscribe(data => {
           this.user = data;
           this.id = data.id as number;
@@ -156,7 +168,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     user.patientChronicIllness = chronicIllnesses;
 
     console.log("sanket");
-    if(this.tokenRole === `"PATIENT"`){
+    if(this.tokenRole === "PATIENT"){
       console.log("mihir");
       user.role = this.user?.role;
       console.log(user);
@@ -166,7 +178,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.toggleDisable();
       });
     }
-    else if(this.tokenRole === `"DOCTOR"`){
+    else if(this.tokenRole === "DOCTOR"){
       let userId = 0;
       // this.userService.registerUser(signupDetail).subscribe((data) => {
       //   this.authToken = data;
@@ -186,6 +198,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           id : 1
         }
       };
+      console.log("=======================================");
+      
       console.log(doctor);
       this.userService.updateDoctor(doctor, this.id).subscribe((data)=> {
         // const authToken = data;
@@ -203,7 +217,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.doctorService.getDoctor().subscribe(data => {
+    this.doctorService.getDoctor(this.id).subscribe(data => {
       this.doctor = data;
     });
     

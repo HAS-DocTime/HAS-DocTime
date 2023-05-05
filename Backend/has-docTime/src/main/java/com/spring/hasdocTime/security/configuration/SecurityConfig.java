@@ -72,6 +72,7 @@ public class SecurityConfig{
 //                        .hasAnyAuthority("ADMIN"))
                 .authorizeHttpRequests((authorize) ->
                         authorize
+                                .requestMatchers("/**").permitAll()
                                 .requestMatchers("/admin", "/admin/**", "/user", "/doctor").hasAnyAuthority("ADMIN")
                                 .requestMatchers("/doctor/*").hasAnyAuthority("ADMIN", "DOCTOR")
                                 .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
