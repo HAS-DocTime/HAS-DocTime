@@ -32,11 +32,21 @@ public class PostAppointmentDataController {
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("id/{id}")
     public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) {
         try {
             PostAppointmentData postAppointmentData = postAppointmentDataService.getPostAppointmentDataById(id);
             return ResponseEntity.ok(postAppointmentData);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("email/{email}")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail(@PathVariable String email) {
+        try {
+            List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(email);
+            return ResponseEntity.ok(allPostAppointmentData);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

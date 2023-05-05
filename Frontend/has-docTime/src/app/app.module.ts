@@ -18,6 +18,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
+import { MedicalHistoryComponent } from './components/medical-history/medical-history.component';
+import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { OurServicesComponent } from './components/our-services/our-services.com
     SidebarComponent,
     HomeComponent,
     OurServicesComponent,
+    MedicalHistoryComponent,
+    DetailedHistoryComponent,
 
   ],
   imports: [
