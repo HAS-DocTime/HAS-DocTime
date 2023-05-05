@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -6,5 +6,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
+
+  isShowScrollButton = false;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (window.pageYOffset > 300) {
+      this.isShowScrollButton = true;
+    } else {
+      this.isShowScrollButton = false;
+    }
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
 }

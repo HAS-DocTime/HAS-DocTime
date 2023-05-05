@@ -7,15 +7,21 @@ import { AppointmentComponent } from './components/appointment/appointment.compo
 import { HomeComponent } from './components/home/home.component';
 import { MedicalHistoryComponent } from './components/medical-history/medical-history.component';
 import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
+import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 const routes: Routes = [
   {path: "", component : HomeComponent},
   {path : "register", component : SignupComponent},
   {path : "login", component : LoginComponent},
-  {path : "appointment", component : AppointmentComponent},
-  {path : "medicalHistory", component : MedicalHistoryComponent},
-  {path : "detailedHistory/:id", component : DetailedHistoryComponent}
+  {path : "dashboard", component : DashboardComponent, children : [
+    {path : "", redirectTo : "appointment", pathMatch : 'full'},
+    {path : "appointment", component : AppointmentComponent},
+    {path : "appointment/:id", component : AppointmentDetailComponent},
+    {path : "medicalHistory", component : MedicalHistoryComponent},
+    {path : "detailedHistory/:id", component : DetailedHistoryComponent}
+  ]}
 ];
 
 @NgModule({

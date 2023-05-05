@@ -1,0 +1,63 @@
+<div class="d-flex justify-content-around">
+  <div class="card">
+    <div class="d-flex justify-content-center">
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBZ3Dga2taMllyrlC52s9utlS9w--8lcm34w&usqp=CAU"
+        alt="image"
+        class="pt-3"
+      />
+    </div>
+    <h3>{{appointment?.doctor?.user?.name}}</h3>
+    <div class="mt-3 doctor-info">
+      <div class="info my-2">Department : {{appointment?.doctor?.department?.name}}</div>
+      <div class="info my-2">Contact : {{appointment?.doctor?.user?.contact}}</div>
+      <div class="info my-2">Qualifications : {{appointment?.doctor?.qualification}}</div>
+    </div>
+  </div>
+  <div class="d-flex flex-column justify-content-between">
+    <div class="symptom my-2">
+      <div class="card">
+        <h5 class="card-header">Symptoms</h5>
+        <div class="card-body d-flex flex-wrap justify-content-around">
+          <div
+            class="card p-0 mx-1 my-1 shadow-none border-dark"
+            *ngFor="let symptom of appointment?.symptoms"
+          >
+            <div class="card-body py-1">
+              {{ symptom.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="timeSlot">
+      <div class="card my-2">
+        <h5 class="card-header">Time Slot</h5>
+        <div class="card-body">
+          <h5>
+            <i class="bi bi-hourglass-split"></i>
+            {{ appointment?.timeSlotForAppointment?.startTime }} -
+            {{ appointment?.timeSlotForAppointment?.endTime }}
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="department">
+      <div class="card my-2">
+        <h5 class="card-header">Department</h5>
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column">
+              <span class="fw-bold fs-5">Name</span>
+              <span>{{ appointment?.doctor?.department?.name }}</span>
+            </div>
+            <div class="d-flex flex-column">
+              <span class="fw-bold fs-5">Building</span>
+              <span>{{ appointment?.doctor?.department?.building }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,3 @@
 [
-  "/user/**", "/postAppointmentData/email/**", "/postAppointmentData/id/**"
+  "/user", "/user/*"
 ]

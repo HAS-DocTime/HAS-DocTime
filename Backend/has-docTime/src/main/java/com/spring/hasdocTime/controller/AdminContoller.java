@@ -29,12 +29,12 @@ public class AdminContoller {
 
     @GetMapping("{adminId}")
     public ResponseEntity<Admin> getAdmin(@PathVariable("adminId") int id) throws AccessDeniedException {
-        String authenticatedAdminEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
+//        String authenticatedAdminEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
         Admin admin = adminService.getAdmin(id);
 
-        if(!authenticatedAdminEmailId.equals(admin.getUser().getEmail())){
-            throw new AccessDeniedException("You do not have access to this resource");
-        };
+//        if(!authenticatedAdminEmailId.equals(admin.getUser().getEmail())){
+//            throw new AccessDeniedException("You do not have access to this resource");
+//        };
         return new ResponseEntity(admin, HttpStatus.OK);
     }
 

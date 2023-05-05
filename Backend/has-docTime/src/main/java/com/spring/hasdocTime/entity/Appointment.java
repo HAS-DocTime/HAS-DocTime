@@ -30,7 +30,7 @@ public class Appointment {
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"appointments", "user", "availableTimeSlots", "bookedTimeSlots", "postAppointmentData"})
+    @JsonIgnoreProperties({"appointments", "availableTimeSlots", "bookedTimeSlots", "postAppointmentData"})
     private Doctor doctor;
 
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})

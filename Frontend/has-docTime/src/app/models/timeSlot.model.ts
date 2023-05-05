@@ -1,7 +1,8 @@
-import { Time } from "@angular/common";
+
 
 export type TimeSlot = {
-  id: number;
-  startTime: Time;
-  endTime: Time;
+  id? : number;
+  startTime? : string;
+  endTime? : string;
+  departmentId? : number;
 }

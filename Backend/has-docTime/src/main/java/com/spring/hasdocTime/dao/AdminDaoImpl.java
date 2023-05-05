@@ -77,6 +77,7 @@ public class AdminDaoImpl implements AdminInterface {
         }
         admin.setUser(user);
         admin.getUser().setRole(Role.ADMIN);
+        System.out.println(admin);
         return adminRepository.save(admin);
     }
 }
