@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   submitted = false;
   invalidLogin = false;
   user: string = "";
-  
+
   inLogin: Boolean = true;
   isLoggedIn: Boolean = false;
 
@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy{
       sessionStorage.clear();
       sessionStorage.setItem('token',data.token);
 
-      this.router.navigate(['/appointment']);
+      this.router.navigate(['/dashboard']);
     }, (err)=> {
       if(err){
         this.isLoggedIn = false;

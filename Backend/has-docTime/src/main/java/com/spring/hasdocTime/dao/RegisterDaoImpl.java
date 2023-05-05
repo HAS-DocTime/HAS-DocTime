@@ -6,6 +6,7 @@ import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.RegisterInterface;
 import com.spring.hasdocTime.repository.UserRepository;
+import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
 import com.spring.hasdocTime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,13 +39,15 @@ public class RegisterDaoImpl implements RegisterInterface {
 //                        )
 //                );
 
-        var jwtToken = jwtService.generateToken(createdUser.getUsername());
+        UserDetailForToken userDetailForToken = new UserDetailForToken(createdUser.getEmail(), createdUser.getRole());
+        var jwtToken = jwtService.generateToken(userDetailForToken);
 
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
     @Override
     public AuthenticationResponse registerDoctor(Doctor doctor) {
+        System.out.println(doctor);
         var createdUser = userDao.createUser(doctor.getUser());
         doctor.setUser(createdUser);
         var createdDoctor = doctorDao.createDoctor(doctor);
@@ -56,7 +59,8 @@ public class RegisterDaoImpl implements RegisterInterface {
 //                                doctor.getUser().getPassword()
 //                        )
 //                );
-        var jwtToken = jwtService.generateToken(createdDoctor.getUser().getUsername());
+        UserDetailForToken userDetailForToken = new UserDetailForToken(createdDoctor.getUser().getEmail(), createdDoctor.getUser().getRole());
+        var jwtToken = jwtService.generateToken(userDetailForToken);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 }

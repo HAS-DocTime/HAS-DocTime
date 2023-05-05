@@ -8,6 +8,7 @@ import com.spring.hasdocTime.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -56,17 +57,33 @@ public class SecurityConfig{
         // example 3
         // get list from json file
         http.cors().and().csrf().disable()
-        .authorizeHttpRequests((authorize)-> authorize
+//        .authorizeHttpRequests((authorize)-> authorize
+//                        .requestMatchers("/register/**").permitAll()
+//                        .requestMatchers("/login").permitAll()
+//                        .requestMatchers("/chronicIllness").permitAll()
+//                        .requestMatchers("/department").permitAll()
+//                .requestMatchers(HttpMethod.POST, "/user").hasAnyAuthority("PATIENT", "ADMIN")
+//                        .requestMatchers("/user/*").hasAnyAuthority("PATIENT", "ADMIN"))
+//                .requestMatchers(getServices("/static/patientServices.json"))
+//                        .hasAnyAuthority("PATIENT", "ADMIN")
+//                .requestMatchers(getServices("/static/doctorServices.json"))
+//                        .hasAnyAuthority("DOCTOR", "ADMIN"))
+//                .requestMatchers(getServices("/static/adminServices.json"))//  "/admin/*", "/admin", "/user/**", "/doctor/**"
+//                        .hasAnyAuthority("ADMIN"))
+                .authorizeHttpRequests((authorize)->
+                    authorize
+                        .requestMatchers("/admin", "/admin/**", "/user", "/doctor").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/doctor/*").hasAnyAuthority("ADMIN", "DOCTOR")
+                            .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
+                        .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT", "DOCTOR")
                         .requestMatchers("/register/**").permitAll()
-                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/chronicIllness").permitAll()
                         .requestMatchers("/department").permitAll()
-                .requestMatchers(getServices("/static/patientServices.json"))
-                        .hasAnyAuthority("PATIENT")
-                .requestMatchers(getServices("/static/doctorServices.json"))
-                        .hasAnyAuthority("DOCTOR")
-                .requestMatchers(getServices("/static/adminServices.json"))
-                        .hasAnyAuthority("ADMIN"))
+                        .requestMatchers("/appointment/**", "/appointment").permitAll()
+                )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
