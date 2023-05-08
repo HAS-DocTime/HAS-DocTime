@@ -83,7 +83,7 @@ public class SecurityConfig{
                         .requestMatchers("/chronicIllness").permitAll()
                         .requestMatchers("/department").permitAll()
                         .requestMatchers("/appointment/**", "/appointment").permitAll()
-                            .requestMatchers("/postAppointmentData/email/**", "/postAppointmentData/id/**").permitAll()
+                            .requestMatchers("/postAppointmentData/**").permitAll()
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
