@@ -19,3 +19,8 @@
    max-width: max-content;
     height: 100%;
 }
+
+#scrollBtn{
+  margin-left: 35%;
+  display: none;
+}

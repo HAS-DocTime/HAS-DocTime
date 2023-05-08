@@ -7,6 +7,7 @@ import { AppointmentComponent } from './components/appointment/appointment.compo
 import { HomeComponent } from './components/home/home.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
 
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path : "dashboard", component : DashboardComponent, children : [
     {path : "", redirectTo : "appointment", pathMatch : 'full'},
     {path : "appointment", component : AppointmentComponent},
+    {path : "appointment/book", component : BookAppointmentComponent},
     {path : "appointment/:id", component : AppointmentDetailComponent}
   ]}
 ];
