@@ -14,23 +14,13 @@ export class MedicalHistoryService {
 
   base_url = "http://localhost:8080/"
 
-  getUserEmail(): Observable<string> {
-    return this.userService.getUserByEmail().pipe(
-      map((user: User) => {
-        return user.email;
-      })
-    )
-  }
+
 
   getMedicalHistoryByUserEmail(): Observable<MedicalHistory[]>{
-    return this.getUserEmail().pipe(
-      switchMap((email: string) => {
-        return this.http.get<MedicalHistory[]>(`${this.base_url}postAppointmentData/email/${email}`);
-      })
-    );
+    return this.http.get<MedicalHistory[]>(`${this.base_url}postAppointmentData/findByUserEmail`);
   }
 
   getMedicalHistoryById(appointmentId:any){
-    return this.http.get<MedicalHistory>(`${this.base_url}postAppointmentData/id/${appointmentId}`);
+    return this.http.get<MedicalHistory>(`${this.base_url}postAppointmentData/${appointmentId}`);
   }
 }
