@@ -43,7 +43,7 @@
           <p class="fw-bold">Chronic Illness:</p>
           <div class="d-flex flex-wrap">
             <div class="badge bg-secondary me-2 mb-2" *ngFor="let illness of medicalHistory?.user?.patientChronicIllness">
-              {{ illness.chronicIllness.name }}
+              {{ illness?.chronicIllness?.name }}
             </div>
           </div>
         </div>
@@ -58,11 +58,11 @@
         <div class="row">
           <div class="col-md-6">
             <p class="fw-bold">Doctor Name:</p>
-            <p class="mb-4">{{ medicalHistory?.doctor?.user.name }}</p>
+            <p class="mb-4">{{ medicalHistory?.doctor?.user?.name }}</p>
           </div>
           <div class="col-md-6">
             <p class="fw-bold">Department:</p>
-            <p class="mb-4">{{ medicalHistory?.doctor?.department.name }}</p>
+            <p class="mb-4">{{ medicalHistory?.doctor?.department?.name }}</p>
           </div>
         </div>
         <div class="row">
@@ -72,7 +72,7 @@
           </div>
           <div class="col-md-6">
             <p class="fw-bold">Contact:</p>
-            <p class="mb-4">{{ medicalHistory?.doctor?.user.contact }}</p>
+            <p class="mb-4">{{ medicalHistory?.doctor?.user?.contact }}</p>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@
         </div>
         <div class="col-md-6">
           <p class="fw-bold">Appointment Time:</p>
-          <p class="mb-4">{{ medicalHistory?.timeSlotForAppointmentData.startTime }} - {{ medicalHistory?.timeSlotForAppointmentData.endTime }}</p>
+          <p class="mb-4">{{ medicalHistory?.timeSlotForAppointmentData?.startTime }} - {{ medicalHistory?.timeSlotForAppointmentData?.endTime }}</p>
         </div>
       </div>
       <div class="row">

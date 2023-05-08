@@ -1,4 +1,5 @@
 import { Component, OnInit} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
 
@@ -10,22 +11,25 @@ import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
 export class MedicalHistoryComponent implements OnInit{
 
 
-  constructor(private medicalHistoryService: MedicalHistoryService){}
+  constructor(private medicalHistoryService: MedicalHistoryService, private router : Router, private route : ActivatedRoute){}
 
-  medicalHistoryList: any[]=[];
+  medicalHistoryList: MedicalHistory[]=[];
 
   ngOnInit() {
     this.medicalHistoryService.getMedicalHistoryByUserEmail()
     .subscribe(
       (data: MedicalHistory[]) => {
-        for (let i = 0; i < data.length; ++i) {
-          this.medicalHistoryList.push(data[i]);
-        }
+        this.medicalHistoryList = data;
       },
       (error: any) => {
         console.error('Error getting medical history:', error);
       }
     );
+  }
+
+  getdetailedHistory(id : any){
+
+    this.router.navigate([id], {relativeTo : this.route});
   }
 
 }

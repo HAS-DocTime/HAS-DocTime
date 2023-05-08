@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MedicalHistory } from "../models/medicalHistory.model";
 import { UserService } from "./user.service";
-import { User } from "../models/user.model";
 import { Observable, map, switchMap } from "rxjs";
 
 @Injectable({

@@ -20,7 +20,8 @@ const routes: Routes = [
     {path : "appointment", component : AppointmentComponent},
     {path : "appointment/:id", component : AppointmentDetailComponent},
     {path : "medicalHistory", component : MedicalHistoryComponent},
-    {path : "medicalHistory/detailedHistory/:id", component : DetailedHistoryComponent}
+    {path : "medicalHistory/:id", component : DetailedHistoryComponent}
+
   ]}
 ];
 

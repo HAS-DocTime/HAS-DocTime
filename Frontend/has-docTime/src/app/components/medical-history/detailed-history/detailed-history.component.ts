@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
 
 @Component({
@@ -12,14 +13,13 @@ export class DetailedHistoryComponent {
 
   public id! : string | null;
 
-  public medicalHistory: any;
+  public medicalHistory?: any;
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.medicalHistoryService.getMedicalHistoryById(this.id)
     .subscribe((data)=> {
       this.medicalHistory = data;
-      console.log(this.medicalHistory);
     })
 
 

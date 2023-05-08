@@ -17,10 +17,10 @@
         [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
           <tr>
             <td>{{ medicalHistory.disease }}</td>
-            <td>{{ medicalHistory?.doctor?.user.name }}</td>
+            <td>{{ medicalHistory?.doctor?.user?.name }}</td>
             <td>{{ medicalHistory.timeSlotForAppointmentData.startTime }} - {{ medicalHistory.timeSlotForAppointmentData.endTime }}</td>
             <td>
-              <a class="btn" routerLink="detailedHistory/{{ medicalHistory.id }}">
+              <a class="btn" (click)="getdetailedHistory(medicalHistory.id)">
                 <i class="fa-solid fa-caret-right"></i>
               </a>
             </td>
