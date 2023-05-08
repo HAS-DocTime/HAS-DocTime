@@ -50,6 +50,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           
           
           this.doctor = data;
+          this.user = data.user;
           console.log(this.doctor);
           this.id = data.id as number;
           const docNameArray = this.doctor?.user.name.split(" ", 2);
@@ -228,11 +229,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.disable = !this.disable;
     // update the disable property of each form field
     Object.keys(this.editForm.controls).forEach(key => {
-      if (this.disable) {
-        this.editForm.controls[key].disable();
-      } else {
-        this.editForm.controls[key].enable();
-      }
+        if (this.disable) {
+            this.editForm.controls[key].disable();
+        } else {
+          if(key !== "casesSolved"){
+            this.editForm.controls[key].enable();
+          }
+          
+        }
     });
   }
 }
