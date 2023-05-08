@@ -15,13 +15,17 @@ export class MedicalHistoryComponent implements OnInit{
   medicalHistoryList: any[]=[];
 
   ngOnInit() {
-    this.medicalHistoryService.getMedicalHistory()
-      .subscribe(
-        data => {
-          for(let i = 0; i < data.length; ++i){
-            this.medicalHistoryList.push(data[i]);
-          }
-      })
+    this.medicalHistoryService.getMedicalHistoryByUserEmail()
+    .subscribe(
+      (data: MedicalHistory[]) => {
+        for (let i = 0; i < data.length; ++i) {
+          this.medicalHistoryList.push(data[i]);
+        }
+      },
+      (error: any) => {
+        console.error('Error getting medical history:', error);
+      }
+    );
   }
 
 }
