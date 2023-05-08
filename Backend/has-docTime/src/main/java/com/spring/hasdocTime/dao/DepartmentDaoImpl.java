@@ -7,9 +7,14 @@ package com.spring.hasdocTime.dao;
 import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.Symptom;
+import com.spring.hasdocTime.entity.TimeSlot;
+import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import java.util.List;
 import java.util.Optional;
+
+import com.spring.hasdocTime.repository.TimeSlotRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.interfc.DepartmentInterface;
@@ -34,16 +39,23 @@ public class DepartmentDaoImpl implements DepartmentInterface {
     private DoctorRepository doctorRepository;
     
     private DoctorInterface doctorDao;
+
+    private TimeSlotDaoImpl timeSlotDao;
+
+    private TimeSlotRepository timeSlotRepository;
     
     @Autowired
-    public DepartmentDaoImpl(DepartmentRepository departmentRepository, SymptomRepository symptomRepository, DoctorRepository doctorRepository, @Qualifier("doctorDaoImpl") DoctorInterface doctorDao){
+    public DepartmentDaoImpl(DepartmentRepository departmentRepository, SymptomRepository symptomRepository, DoctorRepository doctorRepository, @Qualifier("doctorDaoImpl") DoctorInterface doctorDao,TimeSlotDaoImpl timeSlotDao, TimeSlotRepository timeSlotRepository){
         this.departmentRepository = departmentRepository;
         this.symptomRepository = symptomRepository;
         this.doctorRepository = doctorRepository;
         this.doctorDao = doctorDao;
+        this.timeSlotDao = timeSlotDao;
+        this.timeSlotRepository = timeSlotRepository;
     }
 
     @Override
+    @Transactional
     public Department createDepartment(Department department) {
         List<Symptom> symptoms = department.getSymptoms();
         List<Symptom> symptomsWithData = new ArrayList<>();
@@ -61,8 +73,10 @@ public class DepartmentDaoImpl implements DepartmentInterface {
             }
         }
         department.setSymptoms(symptomsWithData);
+        timeSlotRepository.deleteByDepartment(department.getId());
+        List<TimeSlot> timeSlots = timeSlotDao.createTimeSlotsFromDepartment(department);
+        department.setTimeSlots(timeSlots);
         return departmentRepository.save(department);
-        
     }
 
     @Override
@@ -95,6 +109,9 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         if(department.isPresent()){
             for(Doctor doctor : department.get().getDoctors()){
                 doctorDao.deleteDoctor(doctor.getId());
+            }
+            for(TimeSlot timeSlot : department.get().getTimeSlots()){
+                timeSlotDao.deleteTimeSlot(timeSlot.getId());
             }
             departmentRepository.deleteById(id);
             return department.get();

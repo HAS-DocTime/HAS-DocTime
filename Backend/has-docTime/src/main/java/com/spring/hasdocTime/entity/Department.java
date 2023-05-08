@@ -62,7 +62,7 @@ public class Department {
     @JsonIgnoreProperties({"departments", "users", "appointments"})
     private List<Symptom> symptoms;
     
-    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"})
     private List<TimeSlot> timeSlots;
 
