@@ -22,6 +22,7 @@ import { MedicalHistoryComponent } from './components/medical-history/medical-hi
 import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     DashboardComponent,
     MedicalHistoryComponent,
     DetailedHistoryComponent
+    BookAppointmentComponent
   ],
   imports: [
     BrowserModule,

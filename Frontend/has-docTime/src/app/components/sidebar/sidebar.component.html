@@ -22,9 +22,9 @@
         </li>
       </ul>
     </div>
-    <div class="d-flex justify-content-center">
-      <button (click)="scrollToTop()" class="btn btn-light btn-lg btn-scroll-top position-absolute bottom-0 mb-4" [ngClass]="{'show': isShowScrollButton}">
-        <i class="fa fa-angle-up"></i>
+    <div id="scrollBtn">
+      <button (click)="scrollToTop()" class="btn btn-light btn-lg btn-scroll-top position-fixed bottom-0 mb-4" [ngClass]="{'show': isShowScrollButton}">
+        <i class="fa fa-angle-up" ></i>
       </button>
     </div>
 

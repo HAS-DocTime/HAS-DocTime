@@ -84,15 +84,14 @@ public class SecurityConfig{
                         .requestMatchers("/department").permitAll()
                         .requestMatchers("/appointment/**", "/appointment").permitAll()
                             .requestMatchers("/postAppointmentData/**").permitAll()
+                        .requestMatchers("/symptom/**", "/symptom").permitAll()
+
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-
-//        System.out.println("Bean out");
         return http.build();
     }
 

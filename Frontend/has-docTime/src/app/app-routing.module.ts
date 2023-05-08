@@ -9,6 +9,7 @@ import { MedicalHistoryComponent } from './components/medical-history/medical-hi
 import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
 
 
 const routes: Routes = [
@@ -19,9 +20,9 @@ const routes: Routes = [
     {path : "", redirectTo : "appointment", pathMatch : 'full'},
     {path : "appointment", component : AppointmentComponent},
     {path : "appointment/:id", component : AppointmentDetailComponent},
+    {path : "appointment/book", component : BookAppointmentComponent},
     {path : "medicalHistory", component : MedicalHistoryComponent},
     {path : "medicalHistory/:id", component : DetailedHistoryComponent}
-
   ]}
 ];
 

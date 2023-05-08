@@ -1,4 +1,4 @@
 export type Symptom = {
-  id? : number;
+  id : number;
   name? : string;
 }
