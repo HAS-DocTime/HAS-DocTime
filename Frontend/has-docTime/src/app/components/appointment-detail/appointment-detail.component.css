@@ -43,3 +43,14 @@ body {
 *{
   box-sizing: content-box;
 }
+
+.badge {
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 50px;
+}
+
+.bg-secondary {
+  background-color: #b9396a!important;
+  color: #fff!important;
+}

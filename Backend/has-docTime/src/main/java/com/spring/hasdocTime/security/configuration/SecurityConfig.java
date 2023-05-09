@@ -70,29 +70,28 @@ public class SecurityConfig{
 //                        .hasAnyAuthority("DOCTOR", "ADMIN"))
 //                .requestMatchers(getServices("/static/adminServices.json"))//  "/admin/*", "/admin", "/user/**", "/doctor/**"
 //                        .hasAnyAuthority("ADMIN"))
-                .authorizeHttpRequests((authorize) ->
-                        authorize
-                                .requestMatchers("/**").permitAll()
-                                .requestMatchers("/admin", "/admin/**", "/user", "/doctor").hasAnyAuthority("ADMIN")
-                                .requestMatchers("/doctor/*").hasAnyAuthority("ADMIN", "DOCTOR")
-                                .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
-                                .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
-                                .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT", "DOCTOR")
-                                .requestMatchers("/register/**").permitAll()
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers("/chronicIllness").permitAll()
-                                .requestMatchers("/department").permitAll()
-                                .requestMatchers("/appointment/**", "/appointment").permitAll()
+
+                .authorizeHttpRequests((authorize)->
+                    authorize
+                        .requestMatchers("/admin", "/admin/**", "/user", "/doctor").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/doctor/*").hasAnyAuthority("ADMIN", "DOCTOR")
+                            .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
+                        .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT", "DOCTOR")
+                        .requestMatchers("/register/**").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/chronicIllness").permitAll()
+                        .requestMatchers("/department").permitAll()
+                        .requestMatchers("/appointment/**", "/appointment").permitAll()
+                            .requestMatchers("/postAppointmentData/**").permitAll()
+                        .requestMatchers("/symptom/**", "/symptom").permitAll()
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-
-//        System.out.println("Bean out");
         return http.build();
     }
 

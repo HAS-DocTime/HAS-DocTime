@@ -23,4 +23,8 @@ export class AppointmentService {
     return this.http.delete(`${this.baseUrl}appointment/${id}`);
   }
 
+  createAppointment(appointment : Appointment){
+    return this.http.post<Appointment>(`${this.baseUrl}appointment`, appointment);
+  }
+
 }

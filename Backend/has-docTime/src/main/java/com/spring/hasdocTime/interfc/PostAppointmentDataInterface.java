@@ -10,6 +10,8 @@ public interface PostAppointmentDataInterface {
 
     public PostAppointmentData getPostAppointmentDataById(int id);
 
+    public List<PostAppointmentData> getPostAppointmentDataByEmail(String email);
+
     public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData);
 
     public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData);

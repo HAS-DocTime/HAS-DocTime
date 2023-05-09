@@ -27,10 +27,6 @@
   width: 100%;
 }
 
-.no-chronic-illness{
-  background-color: rgb(223, 220, 220);
-  color: rgb(0, 0, 0);
-}
 
 i{
   font-size: 25px;
@@ -42,7 +38,7 @@ i{
 
 .container{
   background-color: white;
-  width: 60%;
+  width: 70%;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   border-radius: 15px;
 }
@@ -57,4 +53,9 @@ i{
 
 .heading{
   color: #0074d9;
+}
+
+.no-symptom{
+  background-color: rgb(223, 220, 220);
+  color: rgb(0, 0, 0);
 }
