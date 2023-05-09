@@ -36,11 +36,6 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
     }
 
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataByEmail(String email) {
-        return postAppointmentDataDao.getPostAppointmentDataByEmail(email);
-    }
-
-    @Override
     public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException {
         return postAppointmentDataDao.createPostAppointmentData(postAppointmentData);
     }

@@ -37,7 +37,7 @@ public class PostAppointmentDataController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) {
+    public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) throws DoesNotExistException{
             PostAppointmentData postAppointmentData = postAppointmentDataService.getPostAppointmentDataById(id);
             if(postAppointmentData==null){
                 return new ResponseEntity<>(postAppointmentData, HttpStatus.NOT_FOUND);
