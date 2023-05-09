@@ -11,6 +11,8 @@ public interface PostAppointmentDataInterface {
 
     public PostAppointmentData getPostAppointmentDataById(int id) throws DoesNotExistException;
 
+    public List<PostAppointmentData> getPostAppointmentDataByEmail(String email);
+
     public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData);
 
     public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) throws DoesNotExistException;
