@@ -8,6 +8,7 @@ import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.Symptom;
 import com.spring.hasdocTime.entity.TimeSlot;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import java.util.List;
@@ -85,26 +86,26 @@ public class DepartmentDaoImpl implements DepartmentInterface {
     }
 
     @Override
-    public Department getDepartment(int id) {
+    public Department getDepartment(int id) throws DoesNotExistException{
         Optional<Department> department = departmentRepository.findById(id);
         if(department.isPresent()){
             return department.get();
         }
-        return null;
+        throw new DoesNotExistException("Department");
     }
 
     @Override
-    public Department updateDepartent(int id, Department department) {
+    public Department updateDepartent(int id, Department department) throws DoesNotExistException{
         Optional<Department> oldDepartment = departmentRepository.findById(id);
         if(oldDepartment.isPresent()){
             department.setId(id);
             return createDepartment(department);
         }
-        return null;
+        throw new DoesNotExistException("Department");
     }
 
     @Override
-    public Department deleteDepartment(int id) {
+    public Department deleteDepartment(int id) throws DoesNotExistException {
         Optional<Department> department = departmentRepository.findById(id);
         if(department.isPresent()){
             for(Doctor doctor : department.get().getDoctors()){
@@ -116,7 +117,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
             departmentRepository.deleteById(id);
             return department.get();
         }
-        return null;
+        throw new DoesNotExistException("Department");
     }
     
 }

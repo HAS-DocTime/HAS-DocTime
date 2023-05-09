@@ -2,6 +2,7 @@ package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.Admin;
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.AdminInterface;
 import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.AdminRepository;
@@ -33,36 +34,39 @@ public class AdminDaoImpl implements AdminInterface {
     }
 
     @Override
-    public Admin getAdmin(int id) {
+    public Admin getAdmin(int id) throws DoesNotExistException {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         Admin admin = null;
         if(optionalAdmin.isPresent()){
             admin = optionalAdmin.get();
+            return admin;
         }
-        return admin;
+        throw new DoesNotExistException("Admin");
     }
 
     @Override
-    public Admin updateAdmin(int id, Admin admin) {
+    public Admin updateAdmin(int id, Admin admin) throws DoesNotExistException{
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if(optionalAdmin.isPresent()) {
             admin.setId(id); // setting admin id
             admin.getUser().setId(optionalAdmin.get().getUser().getId()); // setting user object id
             admin.getUser().setRole(Role.ADMIN);
             userRepository.save(admin.getUser()); // call userRepository's save function
+            return adminRepository.findById(id).get(); // fetching Updated data
         }
-        return adminRepository.findById(id).get(); // fetching Updated data
+        throw new DoesNotExistException("Admin");
     }
 
     @Override
-    public boolean deleteAdmin(int id) {
+    public boolean deleteAdmin(int id) throws DoesNotExistException{
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if(optionalAdmin.isPresent()){
             Admin admin = optionalAdmin.get();
             admin.getUser().setRole(Role.PATIENT);
             adminRepository.deleteById(id);
+            return optionalAdmin.isPresent();
         }
-        return optionalAdmin.isPresent();
+        throw new DoesNotExistException("Admin");
     }
 
     @Override

@@ -5,6 +5,7 @@
 package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.Appointment;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.DoctorInterface;
 import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.Doctor;
@@ -71,16 +72,16 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
-    public Doctor getDoctor(int id) {
+    public Doctor getDoctor(int id) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
             return doctor.get();
         }
-        return null;
+        throw new DoesNotExistException("Doctor");
     }
 
     @Override
-    public Doctor updateDoctor(int id, Doctor doctor) {
+    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException{
         Optional<Doctor> oldDoctor = doctorRepository.findById(id);
         if(oldDoctor.isPresent()){
             doctor.setId(id);
@@ -88,11 +89,11 @@ public class DoctorDaoImpl implements DoctorInterface {
             Doctor updatedDoctor = createDoctor(doctor);
             return updatedDoctor;
         }
-        return null;
+        throw new DoesNotExistException("Doctor");
     }
 
     @Override
-    public Doctor deleteDoctor(int id) {
+    public Doctor deleteDoctor(int id) throws DoesNotExistException{
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
             for (Appointment appointment : doctor.get().getAppointments()){
@@ -105,6 +106,6 @@ public class DoctorDaoImpl implements DoctorInterface {
                 doctorRepository.deleteById(id);
                 return doctor.get();
         }
-        return null;
+        throw new DoesNotExistException("Doctor");
     } 
 }

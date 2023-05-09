@@ -5,6 +5,7 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.Department;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.DepartmentInterface;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,7 +45,7 @@ public class DepartmentController {
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "{departmentId}")
-    public ResponseEntity<Department> getDepartment(@PathVariable("departmentId") int id){
+    public ResponseEntity<Department> getDepartment(@PathVariable("departmentId") int id) throws DoesNotExistException{
         Department department = departmentService.getDepartment(id);
         if(department == null){
             return new ResponseEntity(department, HttpStatus.NOT_FOUND);
@@ -53,7 +54,7 @@ public class DepartmentController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "{departmentId}")
-    public ResponseEntity<Department> updateDepartment(@PathVariable("departmentId") int id, @RequestBody Department department){
+    public ResponseEntity<Department> updateDepartment(@PathVariable("departmentId") int id, @RequestBody Department department) throws DoesNotExistException{
         Department updatedDepartment = departmentService.updateDepartent(id, department);
         if(updatedDepartment == null){
             return new ResponseEntity(updatedDepartment, HttpStatus.NOT_FOUND);
@@ -62,7 +63,7 @@ public class DepartmentController {
     }
     
     @RequestMapping(method = RequestMethod.DELETE, value = "{departmentId}")
-    public ResponseEntity<Department> deleteDepartment(@PathVariable("departmentId") int id){
+    public ResponseEntity<Department> deleteDepartment(@PathVariable("departmentId") int id) throws DoesNotExistException {
         Department dep = departmentService.deleteDepartment(id);
         if(dep==null){
             return new ResponseEntity(dep, HttpStatus.NOT_FOUND);

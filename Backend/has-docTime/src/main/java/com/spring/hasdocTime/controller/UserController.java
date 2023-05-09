@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.UserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,15 +45,12 @@ public class UserController {
     }
 
     @GetMapping("{patientId}")
-    public ResponseEntity<User> getUser(@PathVariable("patientId") int id) throws AccessDeniedException {
+    public ResponseEntity<User> getUser(@PathVariable("patientId") int id) throws AccessDeniedException, DoesNotExistException {
 
         String authenticatedPatientId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUser(id);
         if(!authenticatedPatientId.equals(user.getEmail())){
             throw new AccessDeniedException("You do not have access to this resource");
-        }
-        if(user==null){
-            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(user, HttpStatus.OK);
     }
@@ -64,22 +62,13 @@ public class UserController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User theUser) {
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User theUser) throws DoesNotExistException {
         User user =  userService.updateUser(id, theUser);
-        if(user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         return new ResponseEntity(user, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable("id") int id) {
-        if(userService.getUser(id) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        userService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<User> deleteUser(@PathVariable("id") int id) throws DoesNotExistException{
+        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.NOT_FOUND);
     }
-    
-    
 }

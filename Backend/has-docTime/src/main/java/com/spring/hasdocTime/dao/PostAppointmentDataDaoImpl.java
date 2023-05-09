@@ -4,6 +4,7 @@ import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.PostAppointmentData;
 import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.PostAppointmentDataRepository;
@@ -44,14 +45,13 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     }
 
     @Override
-    public PostAppointmentData getPostAppointmentDataById(int id) {
+    public PostAppointmentData getPostAppointmentDataById(int id) throws DoesNotExistException {
         Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(id);
 
         if(optionalPostAppointmentData.isPresent()){
             return optionalPostAppointmentData.get();
-        }else{
-            throw new RuntimeException("PostAppointmentData not found for id" + id);
         }
+        throw new DoesNotExistException("Post Appointment Data");
     }
 
     @Override
@@ -72,7 +72,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     }
 
     @Override
-    public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) {
+    public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) throws DoesNotExistException{
         Optional<PostAppointmentData> oldPostAppointment = postAppointmentDataRepository.findById(id);
         if(oldPostAppointment.isPresent()){
             PostAppointmentData oldPostAppointmentDataObj = oldPostAppointment.get();
@@ -85,24 +85,16 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
             postAppointmentData.setTimeSlotForAppointmentData(timeSlot);
             return postAppointmentDataRepository.save(postAppointmentData);
         }
-        return null;
-//        PostAppointmentData existingPostAppointmentData = getPostAppointmentDataById(id);
-//        existingPostAppointmentData.setDisease(postAppointmentData.getDisease());
-//        existingPostAppointmentData.setMedicine(postAppointmentData.getMedicine());
-//        existingPostAppointmentData.setUser(postAppointmentData.getUser());
-//        existingPostAppointmentData.setDoctor(postAppointmentData.getDoctor());
-//        existingPostAppointmentData.setTimeSlotForAppointmentData(postAppointmentData.getTimeSlotForAppointmentData());
-//        return postAppointmentDataRepository.save(existingPostAppointmentData);
+        throw new DoesNotExistException("Post Appointment Data");
     }
 
     @Override
-    public String deletePostAppointmentData(int id) {
+    public String deletePostAppointmentData(int id) throws DoesNotExistException{
         Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(id);
         if(optionalPostAppointmentData.isPresent()){
             postAppointmentDataRepository.deleteById(id);
             return "postAppointmentData with id: " + id + " is deleted";
-        }else{
-            return "postAppointmentData with id: " + id + " doesn't exist";
         }
+        throw new DoesNotExistException("Post Appointment Data");
     }
 }

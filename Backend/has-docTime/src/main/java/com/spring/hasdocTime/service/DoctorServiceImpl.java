@@ -6,6 +6,8 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.Doctor;
 import java.util.List;
+
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.interfc.DoctorInterface;
@@ -32,15 +34,15 @@ public class DoctorServiceImpl implements DoctorInterface {
         return doctorDao.getAllDoctors();
     }
 
-    public Doctor getDoctor(int id) {
+    public Doctor getDoctor(int id) throws DoesNotExistException {
         return doctorDao.getDoctor(id);
     }
 
-    public Doctor updateDoctor(int id, Doctor doctor) {
+    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException{
         return doctorDao.updateDoctor(id, doctor);
     }
 
-    public Doctor deleteDoctor(int id) {
+    public Doctor deleteDoctor(int id) throws DoesNotExistException{
         return doctorDao.deleteDoctor(id);
     }
     

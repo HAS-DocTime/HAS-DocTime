@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.UserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserInterface {
     }
 
     @Override
-    public User getUser(int id) {
+    public User getUser(int id) throws DoesNotExistException{
         return userDao.getUser(id);
     }
 
@@ -33,12 +34,12 @@ public class UserServiceImpl implements UserInterface {
     }
 
     @Override
-    public User updateUser(int id, User user) {
+    public User updateUser(int id, User user) throws DoesNotExistException {
         return userDao.updateUser(id, user);
     }
 
     @Override
-    public User deleteUser(int id) {
+    public User deleteUser(int id) throws DoesNotExistException{
       return userDao.deleteUser(id);
     }
 

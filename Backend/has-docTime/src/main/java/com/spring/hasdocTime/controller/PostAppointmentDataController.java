@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.PostAppointmentData;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,7 +34,7 @@ public class PostAppointmentDataController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) {
+    public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) throws DoesNotExistException {
         try {
             PostAppointmentData postAppointmentData = postAppointmentDataService.getPostAppointmentDataById(id);
             return ResponseEntity.ok(postAppointmentData);
@@ -48,7 +49,7 @@ public class PostAppointmentDataController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostAppointmentData> updatePostAppointmentData(@PathVariable int id, @RequestBody PostAppointmentData postAppointmentData) {
+    public ResponseEntity<PostAppointmentData> updatePostAppointmentData(@PathVariable int id, @RequestBody PostAppointmentData postAppointmentData) throws DoesNotExistException {
         try {
             PostAppointmentData updatedPostAppointmentData = postAppointmentDataService.updatePostAppointmentData(id, postAppointmentData);
             return ResponseEntity.ok(updatedPostAppointmentData);
@@ -58,7 +59,7 @@ public class PostAppointmentDataController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAppointment(@PathVariable int id) {
+    public ResponseEntity<String> deleteAppointment(@PathVariable int id) throws DoesNotExistException{
         String result = postAppointmentDataService.deletePostAppointmentData(id);
         if (result.equals("postAppointmentData with id: " + id + " is deleted")) {
             return ResponseEntity.ok(result);

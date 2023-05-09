@@ -5,6 +5,8 @@
 package com.spring.hasdocTime.interfc;
 
 import com.spring.hasdocTime.entity.Doctor;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+
 import java.util.List;
 
 /**
@@ -14,7 +16,7 @@ import java.util.List;
 public interface DoctorInterface {
     public Doctor createDoctor(Doctor doctor);
     public List<Doctor> getAllDoctors();
-    public Doctor getDoctor(int id);
-    public Doctor updateDoctor(int id, Doctor doctor);
-    public Doctor deleteDoctor(int id);
+    public Doctor getDoctor(int id) throws DoesNotExistException;
+    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException;
+    public Doctor deleteDoctor(int id) throws DoesNotExistException;
 }

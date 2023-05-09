@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.ChronicIllness;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,17 +30,17 @@ public class ChronicIllnessServiceImpl implements ChronicIllnessInterface{
     }
 
     @Override
-    public ChronicIllness getChronicIllness(int id) {
+    public ChronicIllness getChronicIllness(int id) throws DoesNotExistException {
         return chronicIllnessDao.getChronicIllness(id);
     }
 
     @Override
-    public ChronicIllness updateChronicIllness(int id, ChronicIllness chronicIllness) {
+    public ChronicIllness updateChronicIllness(int id, ChronicIllness chronicIllness) throws DoesNotExistException{
         return chronicIllnessDao.updateChronicIllness(id, chronicIllness);
     }
 
     @Override
-    public boolean deleteChronicIllness(int id) {
+    public boolean deleteChronicIllness(int id) throws DoesNotExistException{
         return chronicIllnessDao.deleteChronicIllness(id);
     }
 }

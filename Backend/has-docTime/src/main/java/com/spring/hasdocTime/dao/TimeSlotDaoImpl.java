@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.*;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import com.spring.hasdocTime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +47,13 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Override
-    public TimeSlot getTimeSlotById(int id) {
+    public TimeSlot getTimeSlotById(int id) throws DoesNotExistException {
         Optional<TimeSlot> optionalTimeSlot = timeSlotRepository.findById(id);
 
         if(optionalTimeSlot.isPresent()){
             return optionalTimeSlot.get();
-        }else{
-            throw new RuntimeException("TimeSlot not found for id" + id);
         }
+        throw new DoesNotExistException("Time Slot");
     }
 
     @Override
@@ -98,7 +98,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Override
-    public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) {
+    public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException{
 
         Optional<TimeSlot> oldTimeSlot = timeSlotRepository.findById(id);
         if(oldTimeSlot.isPresent()) {
@@ -155,18 +155,17 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
 //        existingTimeSlot.setBookedDoctors(timeSlot.getBookedDoctors());
 //        existingTimeSlot.setAvailableDoctors(timeSlot.getAvailableDoctors());
 //        return timeSlotRepository.save(existingTimeSlot);
-        return null;
+        throw new DoesNotExistException("Time Slot");
     }
 
     @Override
-    public String deleteTimeSlot(int id) {
+    public String deleteTimeSlot(int id) throws DoesNotExistException{
         Optional<TimeSlot> optionalTimeSlot = timeSlotRepository.findById(id);
         if(optionalTimeSlot.isPresent()){
             timeSlotRepository.deleteById(id);
             return "timeSlot with id: " + id + " is deleted";
-        }else{
-            return "timeSlot with id: " + id + "doesn't exist";
         }
+        throw new DoesNotExistException("Time Slot");
     }
 
     public List<TimeSlot> createTimeSlotsFromDepartment(Department department){

@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.ChronicIllness;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,7 +33,7 @@ public class ChronicIllnessController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ChronicIllness> getSingleChronicIllness(@PathVariable("id") int id) {
+    public ResponseEntity<ChronicIllness> getSingleChronicIllness(@PathVariable("id") int id) throws DoesNotExistException {
         ChronicIllness chronicIllness = chronicIllnessService.getChronicIllness(id);
         if(chronicIllness == null) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -47,7 +48,7 @@ public class ChronicIllnessController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ChronicIllness> updateChronicIllness(@PathVariable("id") int id, @RequestBody ChronicIllness chronicIllness) {
+    public ResponseEntity<ChronicIllness> updateChronicIllness(@PathVariable("id") int id, @RequestBody ChronicIllness chronicIllness) throws DoesNotExistException{
         ChronicIllness theChronicIllness = chronicIllnessService.updateChronicIllness(id, chronicIllness);
         if(theChronicIllness == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -56,10 +57,7 @@ public class ChronicIllnessController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ChronicIllness> deleteChronicIllness(@PathVariable("id") int id) {
-        if(chronicIllnessService.getChronicIllness(id) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<ChronicIllness> deleteChronicIllness(@PathVariable("id") int id) throws DoesNotExistException{
         chronicIllnessService.deleteChronicIllness(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

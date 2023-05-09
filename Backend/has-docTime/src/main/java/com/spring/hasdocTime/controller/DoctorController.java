@@ -5,6 +5,7 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.Doctor;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.DoctorInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -50,7 +51,7 @@ public class DoctorController {
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "{doctorId}")
-    public ResponseEntity<Doctor> getDoctor(@PathVariable("doctorId") int id) throws AccessDeniedException {
+    public ResponseEntity<Doctor> getDoctor(@PathVariable("doctorId") int id) throws AccessDeniedException, DoesNotExistException {
 //        String authenticatedDoctorEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
         Doctor doctor = doctorService.getDoctor(id);
 
@@ -61,7 +62,7 @@ public class DoctorController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "{doctorId}")
-    public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor, @PathVariable("doctorId") int id){
+    public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor, @PathVariable("doctorId") int id) throws DoesNotExistException{
         Doctor updatedDoctor = doctorService.updateDoctor(id, doctor);
         if(updatedDoctor==null){
             return new ResponseEntity(updatedDoctor, HttpStatus.NOT_FOUND);
@@ -70,7 +71,7 @@ public class DoctorController {
     }
     
     @RequestMapping(method = RequestMethod.DELETE, value = "{doctorId}")
-    public ResponseEntity<Doctor> deleteDoctor(@PathVariable("doctorId") int id){
+    public ResponseEntity<Doctor> deleteDoctor(@PathVariable("doctorId") int id) throws DoesNotExistException{
         Doctor doctor = doctorService.deleteDoctor(id);
         if(doctor==null){
             return new ResponseEntity(doctor, HttpStatus.NOT_FOUND);

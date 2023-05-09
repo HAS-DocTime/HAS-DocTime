@@ -6,6 +6,8 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.Department;
 import java.util.List;
+
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.interfc.DepartmentInterface;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,17 +36,17 @@ public class DepartmentServiceImpl implements DepartmentInterface {
     }
 
     @Override
-    public Department getDepartment(int id) {
+    public Department getDepartment(int id) throws DoesNotExistException{
         return departmentDao.getDepartment(id);
     }
 
     @Override
-    public Department updateDepartent(int id, Department department) {
+    public Department updateDepartent(int id, Department department) throws DoesNotExistException{
         return departmentDao.updateDepartent(id, department);
     }
 
     @Override
-    public Department deleteDepartment(int id) {
+    public Department deleteDepartment(int id) throws DoesNotExistException {
         return departmentDao.deleteDepartment(id);
     }
     

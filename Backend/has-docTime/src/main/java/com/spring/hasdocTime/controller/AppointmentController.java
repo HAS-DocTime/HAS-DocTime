@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.Appointment;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,7 +35,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Appointment> getAppointmentById(@PathVariable int id) {
+    public ResponseEntity<Appointment> getAppointmentById(@PathVariable int id) throws DoesNotExistException {
         try {
             Appointment appointment = appointmentService.getAppointmentById(id);
             return ResponseEntity.ok(appointment);
@@ -49,7 +50,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Appointment> updateAppointment(@PathVariable int id, @RequestBody Appointment appointment) {
+    public ResponseEntity<Appointment> updateAppointment(@PathVariable int id, @RequestBody Appointment appointment) throws DoesNotExistException{
         try {
             Appointment updatedAppointment = appointmentService.updateAppointment(id, appointment);
             return ResponseEntity.ok(updatedAppointment);
@@ -59,7 +60,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Appointment> deleteAppointment(@PathVariable int id) {
+    public ResponseEntity<Appointment> deleteAppointment(@PathVariable int id) throws DoesNotExistException{
         Appointment appointment = appointmentService.deleteAppointment(id);
         if(appointment==null){
             return new ResponseEntity<>(appointment, HttpStatus.NOT_FOUND);
@@ -68,7 +69,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByUser(@PathVariable int id){
+    public ResponseEntity<List<Appointment>> getAppointmentsByUser(@PathVariable int id) throws DoesNotExistException{
         List<Appointment> appointments = appointmentService.getAppointmentsByUser(id);
         if(appointments==null){
             return new ResponseEntity<>(appointments, HttpStatus.UNAUTHORIZED);

@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.*;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import com.spring.hasdocTime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,13 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     }
 
     @Override
-    public Appointment getAppointmentById(int id) {
+    public Appointment getAppointmentById(int id) throws DoesNotExistException {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
 
         if(optionalAppointment.isPresent()){
             return optionalAppointment.get();
-        }else{
-            throw new RuntimeException("Appointment not found for id" + id);
         }
+        throw new DoesNotExistException("Appointment");
     }
 
     @Override
@@ -76,7 +76,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     }
 
     @Override
-    public Appointment updateAppointment(int id, Appointment appointment) {
+    public Appointment updateAppointment(int id, Appointment appointment) throws DoesNotExistException {
         Optional<Appointment> oldAppointment = appointmentRepository.findById(id);
         if(oldAppointment.isPresent()){
             appointment.setId(id);
@@ -98,25 +98,24 @@ public class AppointmentDaoImpl implements AppointmentInterface {
             appointmentRepository.save(appointment);
             return appointment;
         }
-        return null;
+        throw new DoesNotExistException("Appointment");
     }
 
     @Override
-    public Appointment deleteAppointment(int id) {
+    public Appointment deleteAppointment(int id) throws DoesNotExistException{
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
         if(optionalAppointment.isPresent()){
             appointmentRepository.deleteById(id);
             return optionalAppointment.get();
-        }else{
-            return null;
         }
+        throw new DoesNotExistException("Appointment");
     }
 
     @Override
-    public List<Appointment> getAppointmentsByUser(int userId) {
+    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
-            return null;
+            throw new DoesNotExistException("User");
         }
         User currentUser = user.get();
         List<Appointment> appointments = appointmentRepository.findByUser(currentUser);

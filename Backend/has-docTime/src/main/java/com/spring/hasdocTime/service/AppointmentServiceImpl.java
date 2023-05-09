@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.Appointment;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,7 +25,7 @@ public class AppointmentServiceImpl implements AppointmentInterface {
     }
 
     @Override
-    public Appointment getAppointmentById(int id) {
+    public Appointment getAppointmentById(int id) throws DoesNotExistException {
         return appointmentDao.getAppointmentById(id);
     }
 
@@ -34,17 +35,17 @@ public class AppointmentServiceImpl implements AppointmentInterface {
     }
 
     @Override
-    public Appointment updateAppointment(int id, Appointment appointment) {
+    public Appointment updateAppointment(int id, Appointment appointment) throws DoesNotExistException {
         return appointmentDao.updateAppointment(id, appointment);
     }
 
     @Override
-    public Appointment deleteAppointment(int id) {
+    public Appointment deleteAppointment(int id) throws DoesNotExistException{
         return appointmentDao.deleteAppointment(id);
     }
 
     @Override
-    public List<Appointment> getAppointmentsByUser(int userId) {
+    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException{
         return appointmentDao.getAppointmentsByUser(userId);
     }
 }

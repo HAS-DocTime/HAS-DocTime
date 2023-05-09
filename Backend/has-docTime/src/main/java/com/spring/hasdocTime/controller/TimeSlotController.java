@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.TimeSlot;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,7 +34,7 @@ public class TimeSlotController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TimeSlot> getTimeSlotById(@PathVariable int id) {
+    public ResponseEntity<TimeSlot> getTimeSlotById(@PathVariable int id) throws DoesNotExistException {
         try {
             TimeSlot timeSlot = timeSlotService.getTimeSlotById(id);
             return ResponseEntity.ok(timeSlot);
@@ -48,7 +49,7 @@ public class TimeSlotController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TimeSlot> updateTimeSlot(@PathVariable int id, @RequestBody TimeSlot timeSlot) {
+    public ResponseEntity<TimeSlot> updateTimeSlot(@PathVariable int id, @RequestBody TimeSlot timeSlot) throws DoesNotExistException{
         try {
             TimeSlot updatedTimeSlot = timeSlotService.updateTimeSlot(id, timeSlot);
             return ResponseEntity.ok(updatedTimeSlot);
@@ -58,7 +59,7 @@ public class TimeSlotController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTimeSlot(@PathVariable int id) {
+    public ResponseEntity<String> deleteTimeSlot(@PathVariable int id) throws DoesNotExistException{
         String result = timeSlotService.deleteTimeSlot(id);
         if (result.equals("timeSlot with id: " + id + " is deleted")) {
             return ResponseEntity.ok(result);
