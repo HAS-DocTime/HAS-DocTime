@@ -4,23 +4,21 @@
  */
 package com.spring.hasdocTime.dao;
 
-import com.spring.hasdocTime.entity.Appointment;
-import com.spring.hasdocTime.interfc.DoctorInterface;
-import com.spring.hasdocTime.entity.Department;
-import com.spring.hasdocTime.entity.Doctor;
-import com.spring.hasdocTime.entity.PostAppointmentData;
-import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
+import com.spring.hasdocTime.interfc.DoctorInterface;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
+import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import com.spring.hasdocTime.repository.DoctorRepository;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -37,16 +35,18 @@ public class DoctorDaoImpl implements DoctorInterface {
     private DepartmentRepository departmentRepository;
     
     private AppointmentInterface appointmentDao;
+    private UserInterface userDao;
     
     private PostAppointmentDataInterface postAppointmentDataDao;
     
     @Autowired
-    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao){
+    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao, @Qualifier("userDaoImpl") UserInterface userDao){
         this.doctorRepository = doctorRepository;
         this.userRepository = userRepository;
         this.departmentRepository = departmentRepository;
         this.appointmentDao = appointmentDao;
         this.postAppointmentDataDao = postAppointmentDataDao;
+        this.userDao = userDao;
     }
 
     @Override
@@ -81,15 +81,38 @@ public class DoctorDaoImpl implements DoctorInterface {
 
     @Override
     public Doctor updateDoctor(int id, Doctor doctor) {
-        Optional<Doctor> oldDoctor = doctorRepository.findById(id);
-        if(oldDoctor.isPresent()){
-            doctor.setId(id);
-            oldDoctor.get().getUser().setRole(Role.PATIENT);
-            Doctor updatedDoctor = createDoctor(doctor);
-            return updatedDoctor;
+            Optional<Doctor> oldDoctor = doctorRepository.findById(id);
+//        if(oldDoctor.isPresent()){
+//            doctor.setId(id);
+//            doctor.getUser().setId(oldDoctor.get().getUser().getId());
+////            oldDoctor.get().getUser().setRole(Role.PATIENT);
+////            Doctor updatedDoctor = createDoctor(doctor);
+//            if(doctor.getDepartment() != null){
+//                if(doctor.getDepartment().getId() != 0){
+//                    Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
+//                    doctor.setDepartment(department);
+//                }
+//            }
+            if(oldDoctor.isPresent()) {
+                Doctor oldDoctorObj = oldDoctor.get();
+                if(doctor.getUser() != null){
+                    if(doctor.getUser().getId() == 0){
+                        User updatedUser = this.userDao.updateUser(oldDoctorObj.getUser().getId(), doctor.getUser());
+                        oldDoctorObj.setUser(updatedUser);
+                    }
+                }
+                if(doctor.getDepartment() != null){
+                    Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
+//                    department.getDoctors().add(oldDoctorObj);
+                    oldDoctorObj.setDepartment(department);
+                }
+                if(doctor.getQualification() != null){
+                    oldDoctorObj.setQualification(doctor.getQualification());
+                }
+                return doctorRepository.save(oldDoctorObj);
+            }
+            return null;
         }
-        return null;
-    }
 
     @Override
     public Doctor deleteDoctor(int id) {

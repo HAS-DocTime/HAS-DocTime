@@ -18,6 +18,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MedicalHistoryComponent } from './components/medical-history/medical-history.component';
 import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
@@ -34,10 +36,12 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
     SidebarComponent,
     HomeComponent,
     OurServicesComponent,
+    ProfilePageComponent,
+
     AppointmentDetailComponent,
     DashboardComponent,
     MedicalHistoryComponent,
-    DetailedHistoryComponent
+    DetailedHistoryComponent,
     BookAppointmentComponent
   ],
   imports: [
@@ -50,14 +54,16 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
     MatIconModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    CommonModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass : AuthTokenInterceptor,
       multi: true
-    }
+    },
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
