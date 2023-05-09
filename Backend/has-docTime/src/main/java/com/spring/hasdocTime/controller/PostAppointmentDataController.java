@@ -46,12 +46,11 @@ public class PostAppointmentDataController {
     @GetMapping("findByUserEmail")
     public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail() {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        try {
-            List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail);
-            return ResponseEntity.ok(allPostAppointmentData);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail);
+        if(allPostAppointmentData == null) {
+            return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NOT_FOUND);
+            }
+        return ResponseEntity.ok(allPostAppointmentData);
     }
 
     @PostMapping
