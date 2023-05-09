@@ -18,6 +18,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
+import { MedicalHistoryComponent } from './components/medical-history/medical-history.component';
+import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
@@ -34,6 +36,8 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
     OurServicesComponent,
     AppointmentDetailComponent,
     DashboardComponent,
+    MedicalHistoryComponent,
+    DetailedHistoryComponent
     BookAppointmentComponent
   ],
   imports: [
