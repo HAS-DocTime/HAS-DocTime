@@ -2,6 +2,7 @@ package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import com.spring.hasdocTime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +58,19 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Override
-    public TimeSlot createTimeSlot(TimeSlot timeSlot) {
-
+    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException{
+        if(timeSlot.getStartTime()==null){
+            throw new MissingParameterException("Start Time");
+        }
+        if(timeSlot.getEndTime()==null){
+            throw new MissingParameterException("End Time");
+        }
+        if(timeSlot.getDepartment()==null){
+            throw new MissingParameterException("Department");
+        }
+        if(timeSlot.getDepartment().getId()==0){
+            throw new MissingParameterException("DepartmentId");
+        }
         if(timeSlot.getDepartment().getId() != 0){
             Department department = departmentRepository.findById(timeSlot.getDepartment().getId()).get();
             timeSlot.setDepartment(department);
@@ -98,8 +110,19 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Override
-    public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException{
-
+    public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException{
+        if(timeSlot.getStartTime()==null){
+            throw new MissingParameterException("Start Time");
+        }
+        if(timeSlot.getEndTime()==null){
+            throw new MissingParameterException("End Time");
+        }
+        if(timeSlot.getDepartment()==null){
+            throw new MissingParameterException("Department");
+        }
+        if(timeSlot.getDepartment().getId()==0){
+            throw new MissingParameterException("DepartmentId");
+        }
         Optional<TimeSlot> oldTimeSlot = timeSlotRepository.findById(id);
         if(oldTimeSlot.isPresent()) {
             TimeSlot oldTimeSlotObj = oldTimeSlot.get();

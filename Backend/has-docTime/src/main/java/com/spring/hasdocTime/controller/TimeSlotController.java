@@ -2,6 +2,7 @@ package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,12 +45,12 @@ public class TimeSlotController {
     }
 
     @PostMapping
-    public TimeSlot createTimeSlot(@RequestBody TimeSlot TimeSlot) {
+    public TimeSlot createTimeSlot(@RequestBody TimeSlot TimeSlot) throws MissingParameterException{
         return timeSlotService.createTimeSlot(TimeSlot);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TimeSlot> updateTimeSlot(@PathVariable int id, @RequestBody TimeSlot timeSlot) throws DoesNotExistException{
+    public ResponseEntity<TimeSlot> updateTimeSlot(@PathVariable int id, @RequestBody TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException {
         try {
             TimeSlot updatedTimeSlot = timeSlotService.updateTimeSlot(id, timeSlot);
             return ResponseEntity.ok(updatedTimeSlot);

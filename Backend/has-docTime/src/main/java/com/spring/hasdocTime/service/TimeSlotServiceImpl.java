@@ -2,6 +2,7 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,12 +31,12 @@ public class TimeSlotServiceImpl implements TimeSlotInterface {
     }
 
     @Override
-    public TimeSlot createTimeSlot(TimeSlot timeSlot) {
+    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException{
         return timeSlotDao.createTimeSlot(timeSlot);
     }
 
     @Override
-    public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException{
+    public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException {
         return timeSlotDao.updateTimeSlot(id, timeSlot);
     }
 

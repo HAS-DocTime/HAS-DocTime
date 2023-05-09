@@ -9,6 +9,7 @@ import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.Symptom;
 import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import java.util.List;
@@ -57,7 +58,19 @@ public class DepartmentDaoImpl implements DepartmentInterface {
 
     @Override
     @Transactional
-    public Department createDepartment(Department department) {
+    public Department createDepartment(Department department) throws MissingParameterException{
+        if(department.getName()==null || department.getName().equals("")){
+            throw new MissingParameterException("Name");
+        }
+        if(department.getBuilding()==null || department.getBuilding().equals("")){
+            throw new MissingParameterException("Building");
+        }
+        if(department.getTimeDuration()==0){
+            throw new MissingParameterException("Time Duration");
+        }
+        if(department.getSymptoms()==null || department.getSymptoms().size()==0){
+            throw new MissingParameterException("Symptoms");
+        }
         List<Symptom> symptoms = department.getSymptoms();
         List<Symptom> symptomsWithData = new ArrayList<>();
         for(Symptom symptom : symptoms){
@@ -95,7 +108,19 @@ public class DepartmentDaoImpl implements DepartmentInterface {
     }
 
     @Override
-    public Department updateDepartent(int id, Department department) throws DoesNotExistException{
+    public Department updateDepartent(int id, Department department) throws DoesNotExistException, MissingParameterException {
+        if(department.getName()==null || department.getName().equals("")){
+            throw new MissingParameterException("Name");
+        }
+        if(department.getBuilding()==null || department.getBuilding().equals("")){
+            throw new MissingParameterException("Building");
+        }
+        if(department.getTimeDuration()==0){
+            throw new MissingParameterException("Time Duration");
+        }
+        if(department.getSymptoms()==null || department.getSymptoms().size()==0){
+            throw new MissingParameterException("Symptoms");
+        }
         Optional<Department> oldDepartment = departmentRepository.findById(id);
         if(oldDepartment.isPresent()){
             department.setId(id);

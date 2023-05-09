@@ -8,6 +8,7 @@ import com.spring.hasdocTime.entity.Department;
 import java.util.List;
 
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.interfc.DepartmentInterface;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,7 +27,7 @@ public class DepartmentServiceImpl implements DepartmentInterface {
     }
 
     @Override
-    public Department createDepartment(Department department) {
+    public Department createDepartment(Department department) throws MissingParameterException {
         return departmentDao.createDepartment(department);
     }
 
@@ -41,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentInterface {
     }
 
     @Override
-    public Department updateDepartent(int id, Department department) throws DoesNotExistException{
+    public Department updateDepartent(int id, Department department) throws DoesNotExistException, MissingParameterException{
         return departmentDao.updateDepartent(id, department);
     }
 

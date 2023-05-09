@@ -2,6 +2,7 @@ package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,12 +46,12 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public Appointment createAppointment(@RequestBody Appointment Appointment) {
+    public Appointment createAppointment(@RequestBody Appointment Appointment) throws MissingParameterException{
         return appointmentService.createAppointment(Appointment);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Appointment> updateAppointment(@PathVariable int id, @RequestBody Appointment appointment) throws DoesNotExistException{
+    public ResponseEntity<Appointment> updateAppointment(@PathVariable int id, @RequestBody Appointment appointment) throws DoesNotExistException, MissingParameterException {
         try {
             Appointment updatedAppointment = appointmentService.updateAppointment(id, appointment);
             return ResponseEntity.ok(updatedAppointment);

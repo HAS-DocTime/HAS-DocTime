@@ -2,6 +2,7 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.ChronicIllness;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +21,7 @@ public class ChronicIllnessServiceImpl implements ChronicIllnessInterface{
     }
 
     @Override
-    public ChronicIllness createChronicIllness(ChronicIllness chronicIllness) {
+    public ChronicIllness createChronicIllness(ChronicIllness chronicIllness) throws MissingParameterException{
         return chronicIllnessDao.createChronicIllness(chronicIllness);
     }
 
@@ -35,7 +36,7 @@ public class ChronicIllnessServiceImpl implements ChronicIllnessInterface{
     }
 
     @Override
-    public ChronicIllness updateChronicIllness(int id, ChronicIllness chronicIllness) throws DoesNotExistException{
+    public ChronicIllness updateChronicIllness(int id, ChronicIllness chronicIllness) throws DoesNotExistException, MissingParameterException {
         return chronicIllnessDao.updateChronicIllness(id, chronicIllness);
     }
 

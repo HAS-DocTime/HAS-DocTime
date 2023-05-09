@@ -3,11 +3,13 @@ package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import com.spring.hasdocTime.repository.UserRepository;
+import com.spring.hasdocTime.utills.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,7 +43,34 @@ public class UserDaoImpl implements UserInterface {
     }
 
     @Override
-    public User createUser(User user) {
+    public User createUser(User user) throws MissingParameterException {
+        if(user.getName() == null || user.getName().equals("")){
+            throw new MissingParameterException("Name");
+        }
+        if(user.getDob() == null){
+            throw new MissingParameterException("Date of Birth");
+        }
+        if(user.getAge() == 0){
+            throw new MissingParameterException("Age");
+        }
+        if(user.getBloodGroup()==null){
+            throw new MissingParameterException("Blood Group");
+        }
+        if(user.getGender()==null){
+            throw new MissingParameterException("Gender");
+        }
+        if(user.getContact()==null){
+            throw new MissingParameterException("Contact");
+        }
+        if(user.getEmail()==null){
+            throw new MissingParameterException("Email");
+        }
+        if(user.getPassword()==null){
+            throw new MissingParameterException("Password");
+        }
+        if(user.getRole()==null){
+            user.setRole(Role.PATIENT);
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         List<Symptom> symptomList = user.getSymptoms();
         System.out.println(symptomList);
@@ -53,7 +82,6 @@ public class UserDaoImpl implements UserInterface {
             user.setSymptoms(newSymptomList);
         }
         List<PatientChronicIllness> patientChronicIllnessList = user.getPatientChronicIllness();
-        System.out.println(patientChronicIllnessList);
         if(patientChronicIllnessList != null){
             for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
                 patientChronicIllness.setUser(user);
@@ -69,7 +97,31 @@ public class UserDaoImpl implements UserInterface {
     }
 
     @Override
-    public User updateUser(int id, User user) throws DoesNotExistException {
+    public User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException {
+        if(user.getName() == null || user.getName().equals("")){
+            throw new MissingParameterException("Name");
+        }
+        if(user.getDob() == null){
+            throw new MissingParameterException("Date of Birth");
+        }
+        if(user.getAge() == 0){
+            throw new MissingParameterException("Age");
+        }
+        if(user.getBloodGroup()==null){
+            throw new MissingParameterException("Blood Group");
+        }
+        if(user.getGender()==null){
+            throw new MissingParameterException("Gender");
+        }
+        if(user.getContact()==null){
+            throw new MissingParameterException("Contact");
+        }
+        if(user.getEmail()==null){
+            throw new MissingParameterException("Email");
+        }
+        if(user.getPassword()==null) {
+            throw new MissingParameterException("Password");
+        }
         Optional<User> oldUser = userRepository.findById(id);
         if(oldUser.isPresent()) {
             User oldUserObj = oldUser.get();

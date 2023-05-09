@@ -8,6 +8,7 @@ import com.spring.hasdocTime.entity.Doctor;
 import java.util.List;
 
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.interfc.DoctorInterface;
@@ -26,7 +27,7 @@ public class DoctorServiceImpl implements DoctorInterface {
         this.doctorDao = doctorDao;
     }
 
-    public Doctor createDoctor(Doctor doctor) {
+    public Doctor createDoctor(Doctor doctor) throws MissingParameterException{
         return doctorDao.createDoctor(doctor);
     }
 
@@ -38,7 +39,7 @@ public class DoctorServiceImpl implements DoctorInterface {
         return doctorDao.getDoctor(id);
     }
 
-    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException{
+    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException {
         return doctorDao.updateDoctor(id, doctor);
     }
 

@@ -6,6 +6,7 @@ package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.DoctorInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,7 +37,7 @@ public class DoctorController {
     }
     
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor){
+    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) throws MissingParameterException{
         Doctor doc = doctorService.createDoctor(doctor);
         return new ResponseEntity(doc, HttpStatus.CREATED);
     }
@@ -62,7 +63,7 @@ public class DoctorController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "{doctorId}")
-    public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor, @PathVariable("doctorId") int id) throws DoesNotExistException{
+    public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor, @PathVariable("doctorId") int id) throws DoesNotExistException, MissingParameterException {
         Doctor updatedDoctor = doctorService.updateDoctor(id, doctor);
         if(updatedDoctor==null){
             return new ResponseEntity(updatedDoctor, HttpStatus.NOT_FOUND);

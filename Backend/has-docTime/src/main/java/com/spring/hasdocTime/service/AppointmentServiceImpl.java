@@ -2,6 +2,7 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,12 +31,12 @@ public class AppointmentServiceImpl implements AppointmentInterface {
     }
 
     @Override
-    public Appointment createAppointment(Appointment appointment) {
+    public Appointment createAppointment(Appointment appointment) throws MissingParameterException {
         return appointmentDao.createAppointment(appointment);
     }
 
     @Override
-    public Appointment updateAppointment(int id, Appointment appointment) throws DoesNotExistException {
+    public Appointment updateAppointment(int id, Appointment appointment) throws DoesNotExistException, MissingParameterException {
         return appointmentDao.updateAppointment(id, appointment);
     }
 

@@ -2,6 +2,7 @@ package com.spring.hasdocTime.interfc;
 
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +12,9 @@ public interface UserInterface {
 
     User getUser(int id) throws DoesNotExistException;
 
-    User createUser(User user);
+    User createUser(User user) throws MissingParameterException;
 
-    User updateUser(int id, User user) throws DoesNotExistException;
+    User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException;
 
     User deleteUser(int id) throws DoesNotExistException;
 

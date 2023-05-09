@@ -4,6 +4,7 @@ import com.spring.hasdocTime.entity.Admin;
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.RegisterInterface;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
@@ -27,8 +28,7 @@ public class RegisterDaoImpl implements RegisterInterface {
     }
 
     @Override
-    public AuthenticationResponse registerUser(User user) {
-//        System.out.println("dao");
+    public AuthenticationResponse registerUser(User user) throws MissingParameterException {
         var createdUser = userDao.createUser(user);
 
         // Only needed in Login
@@ -46,8 +46,7 @@ public class RegisterDaoImpl implements RegisterInterface {
     }
 
     @Override
-    public AuthenticationResponse registerDoctor(Doctor doctor) {
-        System.out.println(doctor);
+    public AuthenticationResponse registerDoctor(Doctor doctor) throws MissingParameterException {
         var createdUser = userDao.createUser(doctor.getUser());
         doctor.setUser(createdUser);
         var createdDoctor = doctorDao.createDoctor(doctor);

@@ -5,6 +5,7 @@ import com.spring.hasdocTime.entity.PostAppointmentData;
 import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.PostAppointmentDataRepository;
@@ -55,11 +56,27 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     }
 
     @Override
-    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) {
-        if(postAppointmentData.getUser().getId() != 0){
-            User user = userRepository.findById(postAppointmentData.getUser().getId()).get();
-            postAppointmentData.setUser(user);
+    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException{
+        if(postAppointmentData.getUser()==null){
+            throw new MissingParameterException("User");
         }
+        if(postAppointmentData.getUser().getId()==0){
+            throw new MissingParameterException("UserId");
+        }
+        if(postAppointmentData.getDoctor()==null){
+            throw new MissingParameterException("Doctor");
+        }
+        if(postAppointmentData.getDoctor().getId()==0){
+            throw new MissingParameterException("DoctorId");
+        }
+        if(postAppointmentData.getTimeSlotForAppointmentData()==null){
+            throw new MissingParameterException("Time Slot");
+        }
+        if(postAppointmentData.getTimeSlotForAppointmentData().getId()==0) {
+            throw new MissingParameterException("Time Slot Id");
+        }
+        User user = userRepository.findById(postAppointmentData.getUser().getId()).get();
+        postAppointmentData.setUser(user);
         if(postAppointmentData.getDoctor().getId() != 0){
             Doctor doctor = doctorRepository.findById(postAppointmentData.getDoctor().getId()).get();
             postAppointmentData.setDoctor(doctor);
@@ -72,7 +89,25 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     }
 
     @Override
-    public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) throws DoesNotExistException{
+    public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) throws DoesNotExistException, MissingParameterException {
+        if(postAppointmentData.getUser()==null){
+            throw new MissingParameterException("User");
+        }
+        if(postAppointmentData.getUser().getId()==0){
+            throw new MissingParameterException("UserId");
+        }
+        if(postAppointmentData.getDoctor()==null){
+            throw new MissingParameterException("Doctor");
+        }
+        if(postAppointmentData.getDoctor().getId()==0){
+            throw new MissingParameterException("DoctorId");
+        }
+        if(postAppointmentData.getTimeSlotForAppointmentData()==null){
+            throw new MissingParameterException("Time Slot");
+        }
+        if(postAppointmentData.getTimeSlotForAppointmentData().getId()==0) {
+            throw new MissingParameterException("Time Slot Id");
+        }
         Optional<PostAppointmentData> oldPostAppointment = postAppointmentDataRepository.findById(id);
         if(oldPostAppointment.isPresent()){
             PostAppointmentData oldPostAppointmentDataObj = oldPostAppointment.get();

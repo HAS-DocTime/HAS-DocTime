@@ -4,6 +4,7 @@ import com.spring.hasdocTime.entity.Admin;
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.RegisterInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,12 +23,12 @@ public class RegisterServiceImpl implements RegisterInterface{
     }
 
     @Override
-    public AuthenticationResponse registerUser(User user) {
+    public AuthenticationResponse registerUser(User user) throws MissingParameterException{
         return registerDao.registerUser(user);
     }
 
     @Override
-    public AuthenticationResponse registerDoctor(Doctor doctor) {
+    public AuthenticationResponse registerDoctor(Doctor doctor) throws MissingParameterException {
         return registerDao.registerDoctor(doctor);
     }
 }

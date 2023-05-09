@@ -2,6 +2,7 @@ package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.UserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -56,13 +57,13 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<User> createUser(@RequestBody User theUser) {
+    public ResponseEntity<User> createUser(@RequestBody User theUser) throws MissingParameterException {
         User user = userService.createUser(theUser);
         return new ResponseEntity(user, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User theUser) throws DoesNotExistException {
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User theUser) throws DoesNotExistException, MissingParameterException {
         User user =  userService.updateUser(id, theUser);
         return new ResponseEntity(user, HttpStatus.OK);
     }

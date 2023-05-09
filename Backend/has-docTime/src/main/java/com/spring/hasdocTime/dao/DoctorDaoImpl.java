@@ -6,6 +6,7 @@ package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.DoctorInterface;
 import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.Doctor;
@@ -51,7 +52,22 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
-    public Doctor createDoctor(Doctor doctor) {
+    public Doctor createDoctor(Doctor doctor) throws MissingParameterException{
+        if(doctor.getUser()==null){
+            throw new MissingParameterException("User");
+        }
+        if(doctor.getUser().getId()==0){
+            throw new MissingParameterException("User Id");
+        }
+        if(doctor.getQualification()==null){
+            throw new MissingParameterException("Qualifications");
+        }
+        if(doctor.getDepartment()==null){
+            throw new MissingParameterException("Department");
+        }
+        if(doctor.getDepartment().getId()==0){
+            throw new MissingParameterException("DepartmentId");
+        }
         if(doctor.getUser().getId()!=0){
             User user = userRepository.findById(doctor.getUser().getId()).get();
             doctor.setUser(user);
@@ -81,7 +97,22 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
-    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException{
+    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException {
+        if(doctor.getUser()==null){
+            throw new MissingParameterException("User");
+        }
+        if(doctor.getUser().getId()==0){
+            throw new MissingParameterException("User Id");
+        }
+        if(doctor.getQualification()==null){
+            throw new MissingParameterException("Qualifications");
+        }
+        if(doctor.getDepartment()==null){
+            throw new MissingParameterException("Department");
+        }
+        if(doctor.getDepartment().getId()==0){
+            throw new MissingParameterException("DepartmentId");
+        }
         Optional<Doctor> oldDoctor = doctorRepository.findById(id);
         if(oldDoctor.isPresent()){
             doctor.setId(id);
