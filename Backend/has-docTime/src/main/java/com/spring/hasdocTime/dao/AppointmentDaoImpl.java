@@ -122,4 +122,11 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         List<Appointment> appointments = appointmentRepository.findByUser(currentUser);
         return appointments;
     }
+
+    @Override
+    public List<Appointment> getAppointmentsOfDoctor(int id) {
+        Optional<Doctor> doctor = doctorRepository.findById(id);
+        List<Appointment> appointments = doctor.get().getAppointments();
+        return appointments;
+    }
 }

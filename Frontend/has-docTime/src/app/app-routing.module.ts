@@ -11,6 +11,7 @@ import { AppointmentDetailComponent } from './components/appointment-detail/appo
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
+import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedule-appointments/doctor-schedule-appointments.component';
 
 
 const routes: Routes = [
@@ -18,8 +19,8 @@ const routes: Routes = [
   {path : "register", component : SignupComponent},
   {path : "login", component : LoginComponent},
   {path : "dashboard", component : DashboardComponent, children : [
-    {path : "", redirectTo : "appointment", pathMatch : 'full'},
     {path : "appointment", component : AppointmentComponent},
+    {path : "doctorScheduleAppointments", component : DoctorScheduleAppointmentsComponent},
     {path : "profile", component : ProfilePageComponent},
     {path : "appointment/:id", component : AppointmentDetailComponent},
     {path : "appointment/book", component : BookAppointmentComponent},

@@ -2,10 +2,16 @@
   <div class="sidebar-container position-relative">
     <div class="col-md-auto min-vh-100 m-0 p-0">
       <ul class="nav nav-pills flex-column">
-        <li class="nav-item mt-4">
+        <li class="nav-item mt-4" *ngIf="tokenRole === 'PATIENT'">
           <a class="nav-link text-white text-decoration-none" routerLink="appointment" routerLinkActive="active-page">
             <i class="fas fa-calendar-check me-3"></i>
             <span>Appointments</span>
+          </a>
+        </li>
+        <li class="nav-item mt-4" *ngIf="tokenRole === 'DOCTOR'">
+          <a class="nav-link text-white text-decoration-none" routerLink="doctorScheduleAppointments" routerLinkActive="active-page">
+            <i class="fas fa-calendar-check me-3"></i>
+            <span>Schedule Appointments</span>
           </a>
         </li>
         <li class="nav-item mt-2">
@@ -14,7 +20,13 @@
             <span>Profile</span>
           </a>
         </li>
-        <li class="nav-item mt-2">
+        <li class="nav-item mt-2" *ngIf="tokenRole === 'DOCTOR'">
+          <a class="nav-link text-white text-decoration-none" routerLink="medicalHistory" routerLinkActive="active-page">
+            <i class="fa-solid fa-clock-rotate-left me-3"></i>
+            <span>Resolved Cases Archive"</span>
+          </a>
+        </li>
+        <li class="nav-item mt-2" *ngIf="tokenRole === 'PATIENT'">
           <a class="nav-link text-white text-decoration-none" routerLink="medicalHistory" routerLinkActive="active-page">
             <i class="fa-solid fa-clock-rotate-left me-3"></i>
             <span>Medical History</span>

@@ -76,4 +76,13 @@ public class AppointmentController {
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(@PathVariable int id){
+        List<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id);
+        if(appointments.isEmpty()){
+            return new ResponseEntity<>(appointments, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
+
 }

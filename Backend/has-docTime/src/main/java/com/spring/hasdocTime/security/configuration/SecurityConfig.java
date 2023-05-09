@@ -82,6 +82,7 @@ public class SecurityConfig{
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/chronicIllness").permitAll()
+                            .requestMatchers("/appointment/doctor**").permitAll()
                         .requestMatchers("/department").permitAll()
                         .requestMatchers("/appointment/**", "/appointment").permitAll()
                         .requestMatchers("/postAppointmentData/**").permitAll()

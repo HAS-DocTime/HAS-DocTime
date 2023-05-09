@@ -18,4 +18,6 @@ public interface AppointmentInterface {
 
     public List<Appointment> getAppointmentsByUser(int userId);
 
+    public List<Appointment> getAppointmentsOfDoctor(int id);
+
 }

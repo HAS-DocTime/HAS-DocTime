@@ -25,6 +25,7 @@ import { DetailedHistoryComponent } from './components/medical-history/detailed-
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
+import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedule-appointments/doctor-schedule-appointments.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
     DashboardComponent,
     MedicalHistoryComponent,
     DetailedHistoryComponent,
-    BookAppointmentComponent
+    BookAppointmentComponent,
+    DoctorScheduleAppointmentsComponent
   ],
   imports: [
     BrowserModule,

@@ -47,4 +47,9 @@ public class AppointmentServiceImpl implements AppointmentInterface {
     public List<Appointment> getAppointmentsByUser(int userId) {
         return appointmentDao.getAppointmentsByUser(userId);
     }
+
+    @Override
+    public List<Appointment> getAppointmentsOfDoctor(int id) {
+        return appointmentDao.getAppointmentsOfDoctor(id);
+    }
 }

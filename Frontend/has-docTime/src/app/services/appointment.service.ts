@@ -27,4 +27,8 @@ export class AppointmentService {
     return this.http.post<Appointment>(`${this.baseUrl}appointment`, appointment);
   }
 
+  getAppointmentsByDoctor(id : string){
+    return this.http.get<Appointment[]>(`${this.baseUrl}appointment/doctor/${id}`);
+  }
+
 }

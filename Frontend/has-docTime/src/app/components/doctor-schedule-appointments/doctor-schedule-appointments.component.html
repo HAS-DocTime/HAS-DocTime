@@ -1,0 +1,33 @@
+<div class="col m-0 p-0 mt-5">
+    <div class="container">
+      <h1 class="mb-4 text-center">Schedule</h1>
+      <hr>
+      <div class="table-responsive m-0 p-0" >
+  
+        <table class="table table-striped table-dark m-0 p-0" >
+          <thead class="text-center">
+            <tr>
+              <th>Description</th>
+              <th>Patient</th>
+              <th>Timeslot</th>
+              <th>More Information</th>
+            </tr>
+          </thead>
+          <tbody class=" text-center" *ngFor="let appointment of appointments; let i = index"
+          [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
+            <tr>
+              <td>{{ appointment.description}}</td>
+              <td>{{ appointment.user.name }}</td>
+              <td>{{ appointment.timeSlotForAppointment.startTime }} - {{ appointment.timeSlotForAppointment.endTime }}</td>
+              <td>
+                <a class="btn" >
+                  <i class="fa-solid fa-caret-right"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
