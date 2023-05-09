@@ -6,7 +6,9 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,13 +37,22 @@ public class PostAppointmentDataController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) throws DoesNotExistException {
-        try {
+    public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) {
             PostAppointmentData postAppointmentData = postAppointmentDataService.getPostAppointmentDataById(id);
+            if(postAppointmentData==null){
+                return new ResponseEntity<>(postAppointmentData, HttpStatus.NOT_FOUND);
+            }
             return ResponseEntity.ok(postAppointmentData);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    }
+
+    @GetMapping("findByUserEmail")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail() {
+        String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail);
+        if(allPostAppointmentData == null) {
+            return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NOT_FOUND);
+            }
+        return ResponseEntity.ok(allPostAppointmentData);
     }
 
     @PostMapping
