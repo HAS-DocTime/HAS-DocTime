@@ -1,5 +1,6 @@
 package com.spring.hasdocTime.interfc;
 
+import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.TimeSlot;
 
 import java.util.List;

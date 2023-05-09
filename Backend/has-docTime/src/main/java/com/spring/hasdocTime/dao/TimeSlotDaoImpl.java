@@ -12,6 +12,9 @@ import java.util.*;
 @Service
 public class TimeSlotDaoImpl implements TimeSlotInterface {
 
+    private final Time hospitalStartTime = new Time(9,0,0);
+    private final Time hospitalEndTime = new Time(21,0,0);
+
     private TimeSlotRepository timeSlotRepository;
     private DepartmentRepository departmentRepository;
     private DoctorRepository doctorRepository;
@@ -166,20 +169,25 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         }
     }
 
-    public List<TimeSlot> createTimeSlotsFromDepartment(){
-        Time hospitalStartTime = new Time(9,0,0);
-        Time hospitalEndTime = new Time(21,0,0);
-        List<Department> departments = departmentRepository.findAll();
-        Time timeSlotStartTime = hospitalStartTime;
-        Time timeSlotEndTime = hospitalStartTime;
-        for(Department department : departments){
-            int timeDuration = department.getTimeDuration();
-//            TimeSlot timeSlot = new TimeSlot();
-//            timeSlot.setStartTime(timeSlotStartTime);
-//            timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
-//            timeSlot.setEndTime(timeSlotEndTime);
-//            timeSlot.setDepartment(department);
+    public List<TimeSlot> createTimeSlotsFromDepartment(Department department){
+        // clone is required as Java takes value as pass by reference and changes the value of both the objects
+        Time timeSlotStartTime = (Time)hospitalStartTime.clone();
+        int timeDuration = department.getTimeDuration();
+        Time timeSlotEndTime = (Time)timeSlotStartTime.clone();
+        timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
+        int timeLimit = timeSlotEndTime.compareTo(hospitalEndTime);
+        List<TimeSlot> timeSlots = new ArrayList<>();
+        while(timeLimit<=0){
+            TimeSlot timeSlot = new TimeSlot();
+            timeSlot.setStartTime(timeSlotStartTime);
+            timeSlot.setEndTime(timeSlotEndTime);
+            timeSlot.setDepartment(department);
+            timeSlots.add(timeSlot);
+            timeSlotStartTime = (Time)timeSlotEndTime.clone();
+            timeSlotEndTime = (Time)timeSlotStartTime.clone();
+            timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
+            timeLimit = timeSlotEndTime.compareTo(hospitalEndTime);
         }
-        return null;//To remove error
+        return timeSlots;
     }
 }
