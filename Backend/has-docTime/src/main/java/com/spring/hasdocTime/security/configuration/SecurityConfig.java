@@ -85,7 +85,7 @@ public class SecurityConfig{
                         .requestMatchers("/appointment/**", "/appointment").permitAll()
                             .requestMatchers("/postAppointmentData/**").permitAll()
                         .requestMatchers("/symptom/**", "/symptom").permitAll()
-
+                        .requestMatchers("/department/**").permitAll() //Added temporarily to allow deleting from postman
                 )
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
