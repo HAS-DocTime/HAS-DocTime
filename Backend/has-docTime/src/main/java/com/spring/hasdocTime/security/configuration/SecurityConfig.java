@@ -75,7 +75,7 @@ public class SecurityConfig{
                     authorize
                         .requestMatchers("/admin", "/admin/**", "/user", "/doctor").hasAnyAuthority("ADMIN")
                         .requestMatchers("/doctor/*").hasAnyAuthority("ADMIN", "DOCTOR")
-                            .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
+                        .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
                         .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
                         .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT", "DOCTOR")
@@ -84,7 +84,7 @@ public class SecurityConfig{
                         .requestMatchers("/chronicIllness").permitAll()
                         .requestMatchers("/department").permitAll()
                         .requestMatchers("/appointment/**", "/appointment").permitAll()
-                            .requestMatchers("/postAppointmentData/**").permitAll()
+                        .requestMatchers("/postAppointmentData/**").permitAll()
                         .requestMatchers("/symptom/**", "/symptom").permitAll()
                         .requestMatchers("/department/**").permitAll() //Added temporarily to allow deleting from postman
                 )

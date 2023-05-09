@@ -41,7 +41,7 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
     AppointmentDetailComponent,
     DashboardComponent,
     MedicalHistoryComponent,
-    DetailedHistoryComponent
+    DetailedHistoryComponent,
     BookAppointmentComponent
   ],
   imports: [
