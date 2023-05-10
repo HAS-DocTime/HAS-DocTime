@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 public class UserDetailForToken {
 
     private String email;
+    private Integer id;
     private Role role;
 
 }

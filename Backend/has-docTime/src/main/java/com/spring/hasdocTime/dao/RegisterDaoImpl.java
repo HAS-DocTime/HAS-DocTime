@@ -40,7 +40,7 @@ public class RegisterDaoImpl implements RegisterInterface {
 //                        )
 //                );
 
-        UserDetailForToken userDetailForToken = new UserDetailForToken(createdUser.getEmail(), createdUser.getRole());
+        UserDetailForToken userDetailForToken = new UserDetailForToken(createdUser.getEmail(), createdUser.getId(), createdUser.getRole());
         var jwtToken = jwtService.generateToken(userDetailForToken);
 
         return AuthenticationResponse.builder().token(jwtToken).build();
@@ -59,7 +59,7 @@ public class RegisterDaoImpl implements RegisterInterface {
 //                                doctor.getUser().getPassword()
 //                        )
 //                );
-        UserDetailForToken userDetailForToken = new UserDetailForToken(createdDoctor.getUser().getEmail(), createdDoctor.getUser().getRole());
+        UserDetailForToken userDetailForToken = new UserDetailForToken(createdDoctor.getUser().getEmail(), createdDoctor.getId(), createdDoctor.getUser().getRole());
         var jwtToken = jwtService.generateToken(userDetailForToken);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }

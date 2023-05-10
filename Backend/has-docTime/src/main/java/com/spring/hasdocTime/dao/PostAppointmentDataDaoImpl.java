@@ -59,9 +59,6 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     @Override
     public List<PostAppointmentData> getPostAppointmentDataByEmail(String email) {
         List<PostAppointmentData> allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email);
-        if(allPostAppointmentData.isEmpty()){
-            throw new RuntimeException("PostAppointmentData not found for email" + email);
-        }
         return allPostAppointmentData;
     }
 

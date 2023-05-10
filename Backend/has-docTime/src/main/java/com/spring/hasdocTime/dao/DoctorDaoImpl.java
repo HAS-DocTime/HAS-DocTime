@@ -13,16 +13,19 @@ import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.PostAppointmentData;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
+import com.spring.hasdocTime.interfc.DoctorInterface;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
+import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import com.spring.hasdocTime.repository.DoctorRepository;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -39,16 +42,18 @@ public class DoctorDaoImpl implements DoctorInterface {
     private DepartmentRepository departmentRepository;
     
     private AppointmentInterface appointmentDao;
+    private UserInterface userDao;
     
     private PostAppointmentDataInterface postAppointmentDataDao;
     
     @Autowired
-    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao){
+    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao, @Qualifier("userDaoImpl") UserInterface userDao){
         this.doctorRepository = doctorRepository;
         this.userRepository = userRepository;
         this.departmentRepository = departmentRepository;
         this.appointmentDao = appointmentDao;
         this.postAppointmentDataDao = postAppointmentDataDao;
+        this.userDao = userDao;
     }
 
     @Override

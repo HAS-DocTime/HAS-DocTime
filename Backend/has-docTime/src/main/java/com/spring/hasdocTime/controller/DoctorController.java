@@ -8,15 +8,22 @@ import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.DoctorInterface;
+import com.spring.hasdocTime.security.jwt.JwtService;
+import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.endpoint.SecurityContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -30,7 +37,7 @@ public class DoctorController {
     
     
     private DoctorInterface doctorService;
-    
+
     @Autowired
     public DoctorController(@Qualifier("doctorServiceImpl") DoctorInterface doctorService){
         this.doctorService = doctorService;
@@ -41,7 +48,7 @@ public class DoctorController {
         Doctor doc = doctorService.createDoctor(doctor);
         return new ResponseEntity(doc, HttpStatus.CREATED);
     }
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "")
     public ResponseEntity<List<Doctor>> getAllDoctors(){
         List<Doctor> doctors = doctorService.getAllDoctors();

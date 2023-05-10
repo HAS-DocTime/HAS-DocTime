@@ -49,7 +49,8 @@ public class PostAppointmentDataController {
     public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail() {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail);
-        if(allPostAppointmentData == null) {
+//        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        if(allPostAppointmentData.isEmpty()) {
             return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NOT_FOUND);
             }
         return ResponseEntity.ok(allPostAppointmentData);

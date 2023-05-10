@@ -9,6 +9,7 @@ import { MedicalHistoryComponent } from './components/medical-history/medical-hi
 import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
 
 
@@ -19,8 +20,9 @@ const routes: Routes = [
   {path : "dashboard", component : DashboardComponent, children : [
     {path : "", redirectTo : "appointment", pathMatch : 'full'},
     {path : "appointment", component : AppointmentComponent},
-    {path : "appointment/:id", component : AppointmentDetailComponent},
+    {path : "profile", component : ProfilePageComponent},
     {path : "appointment/book", component : BookAppointmentComponent},
+    {path : "appointment/:id", component : AppointmentDetailComponent},
     {path : "medicalHistory", component : MedicalHistoryComponent},
     {path : "medicalHistory/:id", component : DetailedHistoryComponent}
   ]}

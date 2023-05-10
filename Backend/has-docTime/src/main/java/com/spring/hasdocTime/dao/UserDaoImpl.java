@@ -42,8 +42,7 @@ public class UserDaoImpl implements UserInterface {
         throw new DoesNotExistException("User");
     }
 
-    @Override
-    public User createUser(User user) throws MissingParameterException, DoesNotExistException{
+    public User updateUserWithPassword(User user) throws DoesNotExistException, MissingParameterException{
         if(user.getName() == null || user.getName().equals("")){
             throw new MissingParameterException("Name");
         }
@@ -65,13 +64,9 @@ public class UserDaoImpl implements UserInterface {
         if(user.getEmail()==null){
             throw new MissingParameterException("Email");
         }
-        if(user.getPassword()==null){
+        if(user.getPassword()==null) {
             throw new MissingParameterException("Password");
         }
-        if(user.getRole()==null){
-            user.setRole(Role.PATIENT);
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         List<Symptom> symptomList = user.getSymptoms();
         if(symptomList!=null){
             List<Symptom> newSymptomList = new ArrayList<>();
@@ -104,8 +99,10 @@ public class UserDaoImpl implements UserInterface {
         return userRepository.save(user);
     }
 
+
+
     @Override
-    public User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException {
+    public User createUser(User user) throws MissingParameterException, DoesNotExistException{
         if(user.getName() == null || user.getName().equals("")){
             throw new MissingParameterException("Name");
         }
@@ -127,9 +124,19 @@ public class UserDaoImpl implements UserInterface {
         if(user.getEmail()==null){
             throw new MissingParameterException("Email");
         }
-        if(user.getPassword()==null) {
+        if(user.getPassword()==null){
             throw new MissingParameterException("Password");
         }
+        if(user.getRole()==null){
+            user.setRole(Role.PATIENT);
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return updateUserWithPassword(user);
+    }
+
+    @Override
+    public User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException{
         Optional<User> oldUser = userRepository.findById(id);
         if(oldUser.isPresent()) {
             User oldUserObj = oldUser.get();
@@ -137,7 +144,8 @@ public class UserDaoImpl implements UserInterface {
             for(PatientChronicIllness patientChronicIllness : oldUser.get().getPatientChronicIllness()) {
                 patientChronicIllnessDao.deletePatientChronicIllness(patientChronicIllness.getId());
             }
-            return createUser(user);
+            user.setPassword(oldUserObj.getPassword());
+            return updateUserWithPassword(user);
         }
         throw new DoesNotExistException("User");
     }
