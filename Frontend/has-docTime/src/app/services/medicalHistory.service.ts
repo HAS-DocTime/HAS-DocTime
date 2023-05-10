@@ -22,4 +22,8 @@ export class MedicalHistoryService {
   getMedicalHistoryById(appointmentId:any){
     return this.http.get<MedicalHistory>(`${this.base_url}postAppointmentData/${appointmentId}`);
   }
+
+  createMedicalHistory(medicalHistory : MedicalHistory){
+    return this.http.post<MedicalHistory>(`${this.base_url}postAppointmentData`, medicalHistory);
+  }
 }

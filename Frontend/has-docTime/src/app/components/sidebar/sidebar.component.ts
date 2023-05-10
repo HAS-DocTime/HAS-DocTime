@@ -27,13 +27,11 @@ let pos = (document.documentElement.scrollTop || document.body.scrollTop) + docu
 let max = document.documentElement.scrollHeight;
 let scrollBtn = document.getElementById('scrollBtn');
 if(scrollBtn){
-  console.log("Block");
   scrollBtn.style.display = "block";
 }
 
  if(pos == max )   {
   if(scrollBtn){
-    console.log("None");
     scrollBtn.style.display = "none";
   }
  }

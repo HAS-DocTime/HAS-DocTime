@@ -14,7 +14,7 @@
   <div class="appointment-container">
     <div
       class="appointments p-3 rounded my-4"
-      *ngFor="let appointment of appointments"
+      *ngFor="let appointment of appointments; let i = index"
     >
       <div class="d-flex justify-content-between align-items-start my-3 px-4">
         <h5>Patient Name : {{ appointment.user.name }}</h5>

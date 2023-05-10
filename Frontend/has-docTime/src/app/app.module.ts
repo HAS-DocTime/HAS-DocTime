@@ -37,7 +37,6 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
     HomeComponent,
     OurServicesComponent,
     ProfilePageComponent,
-
     AppointmentDetailComponent,
     DashboardComponent,
     MedicalHistoryComponent,
