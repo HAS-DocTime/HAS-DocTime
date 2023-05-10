@@ -7,7 +7,7 @@
     <h2 class="heading text-lg-center pt-4">Registration Form</h2>
     <form [formGroup]="signupForm" class="registerForm" (ngSubmit)="register()">
       <div class="form-group my-4">
-        <label for="firstName">First Name</label>
+        <label for="firstName">First Name <span class="required-asterisk">*</span></label>
         <input
           type="text"
           class="form-control"
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="form-group mb-4">
-        <label for="lastName">Last Name</label>
+        <label for="lastName">Last Name <span class="required-asterisk">*</span></label>
         <input
           type="text"
           class="form-control"
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="form-group mb-4">
-        <label for="email">Email address</label>
+        <label for="email">Email address <span class="required-asterisk">*</span></label>
         <input
           type="email"
           class="form-control"
@@ -61,7 +61,7 @@
         </div>
       </div>
       <div class="form-group mb-4">
-        <label for="password">Password</label>
+        <label for="password">Password <span class="required-asterisk">*</span></label>
         <input
           type="password"
           class="form-control"
@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="form-group mb-4">
-        <label for="confirmPassword">Confirm Password</label>
+        <label for="confirmPassword">Confirm Password <span class="required-asterisk">*</span></label>
         <input
           type="password"
           class="form-control"
@@ -116,7 +116,7 @@
         </div>
       </div>
       <div class="form-group mb-4">
-        <label for="dob">Date of Birth</label>
+        <label for="dob">Date of Birth <span class="required-asterisk">*</span></label>
         <input
           type="date"
           class="form-control"
@@ -135,7 +135,7 @@
         </div>
       </div>
       <div class="form-group mb-4">
-        <div class="mb-3">Gender</div>
+        <div class="mb-3">Gender <span class="required-asterisk">*</span></div>
         <div>
           <div class="form-check mb-4">
             <input
@@ -174,7 +174,7 @@
         </div>
       </div>
       <div class="form-group mb-4">
-        <label for="bloodGroup">Blood Group</label>
+        <label for="bloodGroup">Blood Group <span class="required-asterisk">*</span></label>
         <select class="form-select" id="bloodGroup" formControlName="bloodGroup">
           <option value="A_POSITIVE">A+</option>
           <option value="A_NEGATIVE">A-</option>
@@ -187,7 +187,7 @@
         </select>
       </div>
       <div class="form-group mb-4">
-        <label for="contact">Contact</label>
+        <label for="contact">Contact <span class="required-asterisk">*</span></label>
         <input
           type="text"
           class="form-control"
@@ -228,7 +228,7 @@
         />
       </div>
       <div class="form-group mb-4">
-        <label for="role">Role</label>
+        <label for="role">Role <span class="required-asterisk">*</span></label>
         <select class="form-select" id="role" formControlName="role">
           <option value="PATIENT">Patient</option>
           <option value="DOCTOR">Doctor</option>
@@ -242,7 +242,7 @@
         >
           <div class="d-flex my-3 justify-content-around" [formGroupName]="i">
               <div>
-                <label for="chronicIllnessName">Name</label>
+                <label for="chronicIllnessName">Name <span class="required-asterisk">*</span></label>
                 <select class="form-select" id="chronicIllnessName" formControlName="name" >
                   <option value="" selected disabled>Select Chronic Illness</option>
                   <option *ngFor="let chronicIllness of savedChronicIllnesses" [value]="chronicIllness.id" [disabled]="selectedIllness.includes(chronicIllness.id)">{{chronicIllness.name}}</option>
@@ -257,7 +257,7 @@
                 </div>
               </div>
             <div>
-              <label for="yearsOfIllness">Years of Illness</label>
+              <label for="yearsOfIllness">Years of Illness <span class="required-asterisk">*</span></label>
               <input
                 type="text"
                 class="form-control mx-2"
@@ -297,7 +297,7 @@
       *ngIf="signupForm.value['role'] === 'DOCTOR'"
     >
       <div class="form-group doctorDetail mb-4">
-        <label for="qualification">Qualifications</label>
+        <label for="qualification">Qualifications <span class="required-asterisk">*</span></label>
         <input
           type="text"
           class="form-control"
@@ -318,7 +318,7 @@
         </div>
       </div>
       <div class="form-group doctorDetail mb-4">
-        <label for="casesSolved">Cases Solved</label>
+        <label for="casesSolved">Cases Solved <span class="required-asterisk">*</span></label>
         <input
           type="number"
           class="form-control"

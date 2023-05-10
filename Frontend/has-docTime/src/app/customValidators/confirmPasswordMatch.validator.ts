@@ -5,11 +5,11 @@ export function confirmPasswordValidator() : ValidatorFn{
     const passwordField = control.get('password');
     const confirmPasswordField = control.get('confirmPassword');
     if (passwordField?.value !== confirmPasswordField?.value) {
-      control.get('confirmPassword')?.setErrors({passwordMismatch : true})
+      control.get('confirmPassword')?.setErrors({passwordMismatch : true, required : true})
       return { 'passwordMismatch': true };
     }
     else{
-      control.get('confirmPassword')?.setErrors(null);
+      control.get('confirmPassword')?.setErrors({required : true});
       return null;
     }
   }
