@@ -51,7 +51,7 @@ public class Department {
     private String departmentImage;
           
     @OneToMany(mappedBy = "department", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
-    @JsonIgnoreProperties({"user", "department", "appointments", "postAppointmentData"})
+    @JsonIgnoreProperties(value = {"user", "department", "appointments", "postAppointmentData"}, allowSetters = true)
     private List<Doctor> doctors;
 
     @ManyToMany()
@@ -59,11 +59,11 @@ public class Department {
             joinColumns = @JoinColumn(name = "department_id"),
             inverseJoinColumns = @JoinColumn(name="symptom_id")
     )
-    @JsonIgnoreProperties({"departments", "users", "appointments"})
+    @JsonIgnoreProperties(value = {"departments", "users", "appointments"}, allowSetters = true)
     private List<Symptom> symptoms;
     
     @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
-    @JsonIgnoreProperties({"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"})
+    @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
     private List<TimeSlot> timeSlots;
 
 

@@ -21,7 +21,7 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @JsonIgnoreProperties("admin")
+    @JsonIgnoreProperties(value = "admin", allowSetters = true)
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

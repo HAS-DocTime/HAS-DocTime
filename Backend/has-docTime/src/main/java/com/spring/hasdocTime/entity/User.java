@@ -64,23 +64,23 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
     private Doctor doctor;
 
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Admin admin;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
     private List<PatientChronicIllness> patientChronicIllness;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
     private List<Appointment> appointments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
     private List<PostAppointmentData> appointmentData;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -88,7 +88,7 @@ public class User implements UserDetails {
             name = "patient_symptom",
             joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "symptom_id"))
-    @JsonIgnoreProperties({"users", "departments", "appointments"})
+    @JsonIgnoreProperties(value = {"users", "departments", "appointments"}, allowSetters = true)
     private List<Symptom> symptoms;
 
     @Override
