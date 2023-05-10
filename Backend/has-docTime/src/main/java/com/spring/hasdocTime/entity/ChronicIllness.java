@@ -24,7 +24,7 @@ public class ChronicIllness {
     private String name;
 
     @OneToMany(mappedBy = "chronicIllness", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("chronicIllness")
+    @JsonIgnoreProperties(value = "chronicIllness")
     private List<PatientChronicIllness> patientChronicIllnesses;
 
     @Override

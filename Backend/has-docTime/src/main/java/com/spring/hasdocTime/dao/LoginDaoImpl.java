@@ -2,6 +2,7 @@ package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.LoginDetail;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.LoginInterface;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
@@ -21,7 +22,14 @@ public class LoginDaoImpl implements LoginInterface {
 
 
     @Override
-    public AuthenticationResponse loginRequest(LoginDetail loginDetail) {
+    public AuthenticationResponse loginRequest(LoginDetail loginDetail) throws MissingParameterException {
+
+        if(loginDetail.getEmail()==null || loginDetail.getEmail().equals("")){
+            throw new MissingParameterException("Email");
+        }
+        if(loginDetail.getPassword()==null || loginDetail.getPassword().equals("")){
+            throw new MissingParameterException("Password");
+        }
 
         authenticationManager.authenticate
                 (new UsernamePasswordAuthenticationToken(

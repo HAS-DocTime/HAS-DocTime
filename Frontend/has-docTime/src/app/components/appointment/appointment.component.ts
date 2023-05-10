@@ -18,9 +18,6 @@ export class AppointmentComponent implements OnInit{
   constructor(private appointmentService : AppointmentService, private userService : UserService, private medicalHistoryService : MedicalHistoryService, private router : Router, private route : ActivatedRoute){}
 
   appointments : Appointment[] = [];
-  i:number = 0;
-  appointment? : Appointment;
-  //currentTime : number = new Date().getTime();
 
 
 
@@ -34,48 +31,33 @@ export class AppointmentComponent implements OnInit{
 
   }
 
-  appointmentDetails(id : number){
-    this.appointment = this.appointments[this.i];
-    //console.log("currentAppointment", this.appointment);
+  appointmentDetails(appointment : Appointment){
 
     const curr = new Date();
     // const currentTime = curr.getTime();
     const currentTime = new Date("2023-05-10T" + "23:30:00").getTime();
-    console.log(currentTime);
 
     const nowDate = curr.toISOString().split('T')[0];
-    const startTime = new Date(nowDate + 'T' + this.appointment.timeSlotForAppointment.startTime).getTime();
-    console.log(startTime);
+    const startTime = new Date(nowDate + 'T' + appointment.timeSlotForAppointment.startTime).getTime();
 
     if(currentTime > startTime) {
 
       const medicalHistory : MedicalHistory = {
-        user : {
-          id : this.appointment.user.id
-        },
-        doctor : {
-          id : this.appointment.doctor.id
-        },
-        timeSlotForAppointmentData: {
-          id : this.appointment.timeSlotForAppointment.id
-        },
-        // symptoms: this.appointment.symptoms,
+        user : { id : appointment.user.id },
+        doctor : { id : appointment.doctor.id },
+        timeSlotForAppointmentData: { id : appointment.timeSlotForAppointment.id },
         disease : '',
         medicine: ''
       };
       console.log(medicalHistory);
 
 
-      this.medicalHistoryService.createMedicalHistory(medicalHistory).pipe(
-        tap(()=> {
-          console.log(medicalHistory);
-        })
-        ).subscribe(
+      this.medicalHistoryService.createMedicalHistory(medicalHistory).subscribe(
         data => {
           console.log(medicalHistory);
           console.log('Medical history created:', data);
 
-          this.appointmentService.deleteAppointment(this.appointment?.id as number).subscribe(
+          this.appointmentService.deleteAppointment(appointment?.id as number).subscribe(
             data => {
               console.log('Appointment deleted:', data);
             }
@@ -89,7 +71,7 @@ export class AppointmentComponent implements OnInit{
 
     }
     else {
-      this.router.navigate([id], {relativeTo : this.route});
+      this.router.navigate([appointment.id], {relativeTo : this.route});
     }
 
   }

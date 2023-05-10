@@ -2,6 +2,8 @@ package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.Admin;
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.AdminInterface;
 import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.AdminRepository;
@@ -33,51 +35,120 @@ public class AdminDaoImpl implements AdminInterface {
     }
 
     @Override
-    public Admin getAdmin(int id) {
+    public Admin getAdmin(int id) throws DoesNotExistException {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         Admin admin = null;
         if(optionalAdmin.isPresent()){
             admin = optionalAdmin.get();
+            return admin;
         }
-        return admin;
+        throw new DoesNotExistException("Admin");
     }
 
     @Override
-    public Admin updateAdmin(int id, Admin admin) {
+    public Admin updateAdmin(int id, Admin admin) throws DoesNotExistException, MissingParameterException{
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if(optionalAdmin.isPresent()) {
+            if(admin.getUser()==null){
+                throw new MissingParameterException("User");
+            }
+            if(admin.getUser().getId()==0){
+                if(admin.getUser().getName() == null || admin.getUser().getName().equals("")){
+                    throw new MissingParameterException("Name");
+                }
+                if(admin.getUser().getDob() == null){
+                    throw new MissingParameterException("Date of Birth");
+                }
+                if(admin.getUser().getAge() == 0){
+                    throw new MissingParameterException("Age");
+                }
+                if(admin.getUser().getBloodGroup()==null){
+                    throw new MissingParameterException("Blood Group");
+                }
+                if(admin.getUser().getGender()==null){
+                    throw new MissingParameterException("Gender");
+                }
+                if(admin.getUser().getContact()==null){
+                    throw new MissingParameterException("Contact");
+                }
+                if(admin.getUser().getEmail()==null){
+                    throw new MissingParameterException("Email");
+                }
+                if(admin.getUser().getPassword()==null){
+                    throw new MissingParameterException("Password");
+                }
+            }
+            if(userRepository.findById(admin.getUser().getId()).isEmpty()){
+                throw new DoesNotExistException("User");
+            }
             admin.setId(id); // setting admin id
             admin.getUser().setId(optionalAdmin.get().getUser().getId()); // setting user object id
             admin.getUser().setRole(Role.ADMIN);
             userRepository.save(admin.getUser()); // call userRepository's save function
+            return optionalAdmin.get(); // fetching Updated data
         }
-        return adminRepository.findById(id).get(); // fetching Updated data
+        throw new DoesNotExistException("Admin");
     }
 
     @Override
-    public boolean deleteAdmin(int id) {
+    public boolean deleteAdmin(int id) throws DoesNotExistException{
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if(optionalAdmin.isPresent()){
             Admin admin = optionalAdmin.get();
             admin.getUser().setRole(Role.PATIENT);
             adminRepository.deleteById(id);
+            return optionalAdmin.isPresent();
         }
-        return optionalAdmin.isPresent();
+        throw new DoesNotExistException("Admin");
     }
 
     @Override
-    public Admin createAdmin(Admin admin) {
-        admin.setId(0);
-        User user;
-        if(admin.getUser().getId() != 0){
-             user = userRepository.findById(admin.getUser().getId()).get();     
+    public Admin createAdmin(Admin admin) throws MissingParameterException, DoesNotExistException {
+        if(admin.getUser()==null){
+            throw new MissingParameterException("User");
+        }
+        if(admin.getUser().getId()==0){
+            if(admin.getUser().getName() == null || admin.getUser().getName().equals("")){
+                throw new MissingParameterException("Name");
+            }
+            if(admin.getUser().getDob() == null){
+                throw new MissingParameterException("Date of Birth");
+            }
+            if(admin.getUser().getAge() == 0){
+                throw new MissingParameterException("Age");
+            }
+            if(admin.getUser().getBloodGroup()==null){
+                throw new MissingParameterException("Blood Group");
+            }
+            if(admin.getUser().getGender()==null){
+                throw new MissingParameterException("Gender");
+            }
+            if(admin.getUser().getContact()==null){
+                throw new MissingParameterException("Contact");
+            }
+            if(admin.getUser().getEmail()==null){
+                throw new MissingParameterException("Email");
+            }
+            if(admin.getUser().getPassword()==null){
+                throw new MissingParameterException("Password");
+            }
+            if(admin.getUser().getRole()==null){
+                throw new MissingParameterException("Role");
+            }
+        }
+        if(admin.getUser().getId()!=0 && userRepository.findById(admin.getUser().getId()).isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        Optional<User> user = userRepository.findById(admin.getUser().getId());
+        User newUser;
+        if(user.isPresent()){
+            newUser = user.get();
         }
         else{
-            user = userDao.createUser(admin.getUser());
+            newUser = userDao.createUser(admin.getUser());
         }
-        admin.setUser(user);
+        admin.setUser(newUser);
         admin.getUser().setRole(Role.ADMIN);
-        System.out.println(admin);
         return adminRepository.save(admin);
     }
 }

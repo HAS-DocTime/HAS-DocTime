@@ -4,6 +4,8 @@ import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.Symptom;
 import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import com.spring.hasdocTime.interfc.DepartmentInterface;
 import com.spring.hasdocTime.interfc.SymptomInterface;
@@ -35,13 +37,13 @@ public class SymptomDaoImpl implements SymptomInterface {
         this.appointmentDao = appointmentDao;
     }
     @Override
-    public Symptom getSymptom(int id) {
+    public Symptom getSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
         Symptom s = null;
         if(optionalSymptom.isPresent()){
             s = optionalSymptom.get();
         }
-        return s;
+        throw new DoesNotExistException("Symptom");
     }
 
     @Override
@@ -50,10 +52,13 @@ public class SymptomDaoImpl implements SymptomInterface {
     }
 
     @Override
-    public Symptom createSymptom(Symptom symptom) {
+    public Symptom createSymptom(Symptom symptom) throws DoesNotExistException, MissingParameterException {
 //        symptom.setId(0);
 
         // Users
+        if(symptom.getName()==null || symptom.getName().equals("")){
+            throw new MissingParameterException("Name");
+        }
         if(symptom.getUsers() != null){
             List<User> users = symptom.getUsers();
             List<User> usersWithData = new ArrayList<>();
@@ -92,41 +97,26 @@ public class SymptomDaoImpl implements SymptomInterface {
     }
 
     @Override
-    public Symptom updateSymptom(int id, Symptom symptom) {
+    public Symptom updateSymptom(int id, Symptom symptom) throws DoesNotExistException, MissingParameterException{
+        if(symptom.getName()==null || symptom.getName().equals("")){
+            throw new MissingParameterException("Name");
+        }
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
         Symptom s = null;
         if(optionalSymptom.isPresent()){
             symptom.setId(id);
             return createSymptom(symptom);
         }
-        return s;
+        throw new DoesNotExistException("Symptom");
     }
 
     @Override
-    public boolean deleteSymptom(int id) {
+    public boolean deleteSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
         if(optionalSymptom.isPresent()){
-
-            //Different Approach
-//            List<Department> departments = optionalSymptom.get().getDepartments();
-//            for(Department department : departments){
-//                department.getSymptoms().remove(department);
-//            }
-//            System.out.println("department done");
-//            List<User> users = optionalSymptom.get().getUsers();
-//            for(User user : users){
-//                user.getSymptoms().remove(user);
-//            }
-             // Put appointment link
-
-//            List<User> users = optionalSymptom.get().getUsers();
-//            for(User user : users){
-//                user.getSymptoms().remove(user);
-//            }
-
             symptomRepository.deleteById(optionalSymptom.get().getId());
             return true;
         }
-        return false;
+        throw new DoesNotExistException("Symptom");
     }
 }

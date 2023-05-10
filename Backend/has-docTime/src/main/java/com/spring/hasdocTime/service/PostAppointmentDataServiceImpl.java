@@ -1,6 +1,8 @@
 package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.PostAppointmentData;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,7 +26,7 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
     }
 
     @Override
-    public PostAppointmentData getPostAppointmentDataById(int id) {
+    public PostAppointmentData getPostAppointmentDataById(int id) throws DoesNotExistException {
         return postAppointmentDataDao.getPostAppointmentDataById(id);
     }
 
@@ -34,17 +36,17 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
     }
 
     @Override
-    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) {
+    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException {
         return postAppointmentDataDao.createPostAppointmentData(postAppointmentData);
     }
 
     @Override
-    public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) {
+    public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) throws DoesNotExistException, MissingParameterException {
         return postAppointmentDataDao.updatePostAppointmentData(id, postAppointmentData);
     }
 
     @Override
-    public String deletePostAppointmentData(int id) {
+    public String deletePostAppointmentData(int id) throws DoesNotExistException{
         return postAppointmentDataDao.deletePostAppointmentData(id);
     }
 }

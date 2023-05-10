@@ -4,7 +4,14 @@
  */
 package com.spring.hasdocTime.dao;
 
-import com.spring.hasdocTime.entity.*;
+import com.spring.hasdocTime.entity.Appointment;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdocTime.interfc.DoctorInterface;
+import com.spring.hasdocTime.entity.Department;
+import com.spring.hasdocTime.entity.Doctor;
+import com.spring.hasdocTime.entity.PostAppointmentData;
+import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import com.spring.hasdocTime.interfc.DoctorInterface;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
@@ -50,15 +57,36 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
-    public Doctor createDoctor(Doctor doctor) {
-        if(doctor.getUser().getId()!=0){
-            User user = userRepository.findById(doctor.getUser().getId()).get();
-            doctor.setUser(user);
-            user.setRole(Role.DOCTOR);
+    public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException{
+        if(doctor.getUser()==null){
+            throw new MissingParameterException("User");
         }
+        if(doctor.getUser().getId()==0){
+            throw new MissingParameterException("User Id");
+        }
+        if(doctor.getQualification()==null){
+            throw new MissingParameterException("Qualifications");
+        }
+        if(doctor.getDepartment()==null){
+            throw new MissingParameterException("Department");
+        }
+        if(doctor.getDepartment().getId()==0){
+            throw new MissingParameterException("DepartmentId");
+        }
+        Optional<User> optionalUser = userRepository.findById(doctor.getUser().getId());
+        if(optionalUser.isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        User user = optionalUser.get();
+        doctor.setUser(user);
+        user.setRole(Role.DOCTOR);
         if(doctor.getDepartment() != null){
             if(doctor.getDepartment().getId() != 0){
-                Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
+                Optional<Department> optionalDepartment = departmentRepository.findById(doctor.getDepartment().getId());
+                if(optionalDepartment.isEmpty()){
+                    throw new DoesNotExistException("Department");
+                }
+                Department department = optionalDepartment.get();
                 doctor.setDepartment(department);
             }
         }
@@ -71,51 +99,43 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
-    public Doctor getDoctor(int id) {
+    public Doctor getDoctor(int id) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
             return doctor.get();
         }
-        return null;
+        throw new DoesNotExistException("Doctor");
     }
 
     @Override
-    public Doctor updateDoctor(int id, Doctor doctor) {
-            Optional<Doctor> oldDoctor = doctorRepository.findById(id);
-//        if(oldDoctor.isPresent()){
-//            doctor.setId(id);
-//            doctor.getUser().setId(oldDoctor.get().getUser().getId());
-////            oldDoctor.get().getUser().setRole(Role.PATIENT);
-////            Doctor updatedDoctor = createDoctor(doctor);
-//            if(doctor.getDepartment() != null){
-//                if(doctor.getDepartment().getId() != 0){
-//                    Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
-//                    doctor.setDepartment(department);
-//                }
-//            }
-            if(oldDoctor.isPresent()) {
-                Doctor oldDoctorObj = oldDoctor.get();
-                if(doctor.getUser() != null){
-                    if(doctor.getUser().getId() == 0){
-                        User updatedUser = this.userDao.updateUser(oldDoctorObj.getUser().getId(), doctor.getUser());
-                        oldDoctorObj.setUser(updatedUser);
-                    }
-                }
-                if(doctor.getDepartment() != null){
-                    Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
-//                    department.getDoctors().add(oldDoctorObj);
-                    oldDoctorObj.setDepartment(department);
-                }
-                if(doctor.getQualification() != null){
-                    oldDoctorObj.setQualification(doctor.getQualification());
-                }
-                return doctorRepository.save(oldDoctorObj);
-            }
-            return null;
+    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException {
+        if(doctor.getUser()==null){
+            throw new MissingParameterException("User");
         }
+        if(doctor.getUser().getId()==0){
+            throw new MissingParameterException("User Id");
+        }
+        if(doctor.getQualification()==null){
+            throw new MissingParameterException("Qualifications");
+        }
+        if(doctor.getDepartment()==null){
+            throw new MissingParameterException("Department");
+        }
+        if(doctor.getDepartment().getId()==0){
+            throw new MissingParameterException("DepartmentId");
+        }
+        Optional<Doctor> oldDoctor = doctorRepository.findById(id);
+        if(oldDoctor.isPresent()){
+            doctor.setId(id);
+            oldDoctor.get().getUser().setRole(Role.PATIENT);
+            Doctor updatedDoctor = createDoctor(doctor);
+            return updatedDoctor;
+        }
+        throw new DoesNotExistException("Doctor");
+    }
 
     @Override
-    public Doctor deleteDoctor(int id) {
+    public Doctor deleteDoctor(int id) throws DoesNotExistException{
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
             for (Appointment appointment : doctor.get().getAppointments()){
@@ -128,6 +148,6 @@ public class DoctorDaoImpl implements DoctorInterface {
                 doctorRepository.deleteById(id);
                 return doctor.get();
         }
-        return null;
+        throw new DoesNotExistException("Doctor");
     } 
 }

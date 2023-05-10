@@ -5,6 +5,9 @@
 package com.spring.hasdocTime.interfc;
 
 import com.spring.hasdocTime.entity.Doctor;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+
 import java.util.List;
 
 /**
@@ -12,9 +15,9 @@ import java.util.List;
  * @author arpit
  */
 public interface DoctorInterface {
-    public Doctor createDoctor(Doctor doctor);
+    public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException;
     public List<Doctor> getAllDoctors();
-    public Doctor getDoctor(int id);
-    public Doctor updateDoctor(int id, Doctor doctor);
-    public Doctor deleteDoctor(int id);
+    public Doctor getDoctor(int id) throws DoesNotExistException;
+    public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException;
+    public Doctor deleteDoctor(int id) throws DoesNotExistException;
 }
