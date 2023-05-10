@@ -20,7 +20,7 @@ export class AppointmentService {
   }
 
   deleteAppointment(id : number){
-    return this.http.delete(`${this.baseUrl}appointment/${id}`);
+    return this.http.delete<Appointment>(`${this.baseUrl}appointment/${id}`);
   }
 
   createAppointment(appointment : Appointment){

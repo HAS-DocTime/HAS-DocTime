@@ -53,21 +53,21 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.user = data.user;
           console.log(this.doctor);
           this.id = data.id as number;
-          const docNameArray = this.doctor?.user.name.split(" ", 2);
+          const docNameArray = this.doctor?.user?.name?.split(" ", 2) as string[];
           this.firstName = docNameArray[0];
           this.lastName = docNameArray[1];
-          this.dateFromAPI = new Date(data.user.dob);
+          this.dateFromAPI = new Date((data.user as User).dob as Date);
           this.formattedDate = this.datePipe.transform(this.dateFromAPI, 'yyyy-MM-dd');
 
           this.editForm.patchValue({
             firstName: this.firstName,
             lastName: this.lastName,
-            email: this.doctor.user.email,
-            gender: this.doctor.user.gender,
-            bloodGroup: this.doctor.user.bloodGroup,
-            contact: this.doctor.user.contact,
-            height: this.doctor.user.height,
-            weight: this.doctor.user.weight,
+            email: this.doctor.user?.email,
+            gender: this.doctor.user?.gender,
+            bloodGroup: this.doctor.user?.bloodGroup,
+            contact: this.doctor.user?.contact,
+            height: this.doctor.user?.height,
+            weight: this.doctor.user?.weight,
             dob: this.formattedDate,
             qualification: this.doctor.qualification,
             casesSolved: this.doctor.casesSolved
@@ -80,10 +80,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.user = data;
           this.id = data.id as number;
           console.log(this.user?.dob);
-          const nameArray = this.user?.name.split(" ", 2);
+          const nameArray : string[] = (this.user?.name?.split(" ", 2) as string[]);
           this.firstName = nameArray[0];
           this.lastName = nameArray[1];
-          this.dateFromAPI = new Date(data.dob);
+          this.dateFromAPI = new Date(data.dob as Date);
           console.log("SDFGFGFDGFD", this.dateFromAPI);
 
           this.formattedDate = this.datePipe.transform(this.dateFromAPI, 'yyyy-MM-dd');
@@ -181,9 +181,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         // this.user = data;
         // location.reload();
         this.cdr.detectChanges();
-        // this.user.role = 
-        
-        
+        // this.user.role =
+
+
         this.userService.getUser().subscribe(data => {
           this.user = data;
           // this.editForm.valueChanges.subscribe(data => {
@@ -204,8 +204,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       //   window.sessionStorage.setItem('token',JSON.stringify(data));
       //   signupDetail = {email : "", password : ""};
       // });
-      user.role = this.doctor?.user.role;
-      user.email = this.doctor?.user.email;
+      user.role = this.doctor?.user?.role;
+      user.email = this.doctor?.user?.email;
       let doctor: Doctor = {
         "user": user,
         "qualification": this.editForm.value.qualification,
@@ -216,7 +216,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         }
       };
       console.log("=======================================");
-      
+
       console.log(doctor);
       this.userService.updateDoctor(doctor, this.id).subscribe((data) => {
         // const authToken = data;

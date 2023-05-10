@@ -62,6 +62,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
 
     @Override
     public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) {
+        System.out.println(postAppointmentData);
         if(postAppointmentData.getUser().getId() != 0){
             User user = userRepository.findById(postAppointmentData.getUser().getId()).get();
             postAppointmentData.setUser(user);

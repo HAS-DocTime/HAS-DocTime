@@ -55,6 +55,7 @@ public class PostAppointmentDataController {
 
     @PostMapping
     public PostAppointmentData createPostAppointmentData(@RequestBody PostAppointmentData postAppointmentData) {
+        System.out.println("===========================================================================================================");
         return postAppointmentDataService.createPostAppointmentData(postAppointmentData);
     }
 

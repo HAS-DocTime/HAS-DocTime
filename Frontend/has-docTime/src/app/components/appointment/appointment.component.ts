@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { tap } from 'rxjs';
 import { Appointment } from 'src/app/models/appointment.model';
 import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
@@ -39,7 +40,7 @@ export class AppointmentComponent implements OnInit{
 
     const curr = new Date();
     // const currentTime = curr.getTime();
-    const currentTime = new Date("2023-05-10T" + "10:30:00").getTime();
+    const currentTime = new Date("2023-05-10T" + "23:30:00").getTime();
     console.log(currentTime);
 
     const nowDate = curr.toISOString().split('T')[0];
@@ -49,9 +50,15 @@ export class AppointmentComponent implements OnInit{
     if(currentTime > startTime) {
 
       const medicalHistory : MedicalHistory = {
-        user : this.appointment.user,
-        doctor : this.appointment.doctor,
-        timeSlotForAppointmentData: this.appointment.timeSlotForAppointment,
+        user : {
+          id : this.appointment.user.id
+        },
+        doctor : {
+          id : this.appointment.doctor.id
+        },
+        timeSlotForAppointmentData: {
+          id : this.appointment.timeSlotForAppointment.id
+        },
         // symptoms: this.appointment.symptoms,
         disease : '',
         medicine: ''
@@ -59,18 +66,27 @@ export class AppointmentComponent implements OnInit{
       console.log(medicalHistory);
 
 
-      this.medicalHistoryService.createMedicalHistory(medicalHistory).subscribe(
+      this.medicalHistoryService.createMedicalHistory(medicalHistory).pipe(
+        tap(()=> {
+          console.log(medicalHistory);
+        })
+        ).subscribe(
         data => {
           console.log(medicalHistory);
           console.log('Medical history created:', data);
+
+          this.appointmentService.deleteAppointment(this.appointment?.id as number).subscribe(
+            data => {
+              console.log('Appointment deleted:', data);
+            }
+          )
+        },
+        error => {
+          console.error("error: ", error);
         }
       );
 
-      this.appointmentService.deleteAppointment(this.appointment.id).subscribe(
-        data => {
-          console.log('Appointment deleted:', data);
-        }
-      )
+
     }
     else {
       this.router.navigate([id], {relativeTo : this.route});
