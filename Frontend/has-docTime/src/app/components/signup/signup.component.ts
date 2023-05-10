@@ -20,16 +20,13 @@ export class SignupComponent implements OnInit, OnDestroy{
 constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
 
   }
-  // authToken: string = "";
 
   savedChronicIllnesses : ChronicIllness[] = [];
   selectedValue : string = "";
   selectedIllness : number[] = [];
 
-
   ngOnInit(){
-
-    this.signupForm.get("role")?.valueChanges.subscribe(value => {
+      this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
         this.signupForm.get("casesSolved")?.addValidators(Validators.required);
@@ -153,19 +150,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     }
     else if(user.role === "DOCTOR"){
       let userId = 0;
-      // this.userService.registerUser(signupDetail).subscribe((data) => {
-      //   this.authToken = data;
-      //   sessionStorage.clear();
-      //   localStorage.clear();
-      //   localStorage.setItem('token', JSON.stringify(data));
-      //   window.sessionStorage.setItem('token',JSON.stringify(data));
-      //   signupDetail = {email : "", password : ""};
-      // });
-      console.log(doctor);
       this.userService.registerDoctor(doctor).subscribe((data)=> {
-        // const authToken = data;
-        // console.log(authToken.token);
-        console.log(data);
         sessionStorage.clear();
         localStorage.clear();
         localStorage.setItem('token', data.token);
@@ -189,19 +174,6 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     this.router.navigate(["/dashboard"]);
   }
 
-//   registerUser(signupDetail: LoginDetails){
-//     return new Promise((res,rej)=>{
-//       this.userService.registerUser(signupDetail).subscribe((data) => {
-//         this.authToken = data;
-//         sessionStorage.clear();
-//         localStorage.clear();
-//         localStorage.setItem('token', JSON.stringify(data));
-//         window.sessionStorage.setItem('token',JSON.stringify(data));
-//         signupDetail = {email : "", password : ""};
-//       });
-//   });
-// }
-
   addChronicIllness(){
     this.chronicIllness.push(new FormGroup(
       {
@@ -223,4 +195,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     this.userService.onCancel();
   }
 
+  get maxDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
 }

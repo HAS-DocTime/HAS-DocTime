@@ -21,8 +21,8 @@ const routes: Routes = [
     {path : "", redirectTo : "appointment", pathMatch : 'full'},
     {path : "appointment", component : AppointmentComponent},
     {path : "profile", component : ProfilePageComponent},
-    {path : "appointment/:id", component : AppointmentDetailComponent},
     {path : "appointment/book", component : BookAppointmentComponent},
+    {path : "appointment/:id", component : AppointmentDetailComponent},
     {path : "medicalHistory", component : MedicalHistoryComponent},
     {path : "medicalHistory/:id", component : DetailedHistoryComponent}
   ]}
