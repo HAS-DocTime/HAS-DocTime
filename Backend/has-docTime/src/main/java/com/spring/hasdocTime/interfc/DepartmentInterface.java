@@ -15,7 +15,7 @@ import java.util.List;
  * @author arpit
  */
 public interface DepartmentInterface {
-    public Department createDepartment(Department department) throws MissingParameterException;
+    public Department createDepartment(Department department) throws MissingParameterException, DoesNotExistException;
     public List<Department> getAllDepartments();
     public Department getDepartment(int id) throws DoesNotExistException;
     public Department updateDepartent(int id, Department department) throws DoesNotExistException, MissingParameterException;

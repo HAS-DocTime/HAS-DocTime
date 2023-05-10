@@ -12,7 +12,7 @@ public interface PostAppointmentDataInterface {
 
     public PostAppointmentData getPostAppointmentDataById(int id) throws DoesNotExistException;
 
-    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException;
+    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException;
     public List<PostAppointmentData> getPostAppointmentDataByEmail(String email);
 
     public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) throws DoesNotExistException, MissingParameterException;

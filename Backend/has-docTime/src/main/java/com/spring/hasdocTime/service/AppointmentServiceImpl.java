@@ -31,7 +31,7 @@ public class AppointmentServiceImpl implements AppointmentInterface {
     }
 
     @Override
-    public Appointment createAppointment(Appointment appointment) throws MissingParameterException {
+    public Appointment createAppointment(Appointment appointment) throws MissingParameterException, DoesNotExistException {
         return appointmentDao.createAppointment(appointment);
     }
 

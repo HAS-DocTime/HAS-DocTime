@@ -58,7 +58,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
 
     @Override
     @Transactional
-    public Department createDepartment(Department department) throws MissingParameterException{
+    public Department createDepartment(Department department) throws MissingParameterException, DoesNotExistException{
         if(department.getName()==null || department.getName().equals("")){
             throw new MissingParameterException("Name");
         }
@@ -82,7 +82,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
                     symptomsWithData.add(symptomWithData);
                 }
                 else{
-                    throw new RuntimeException("Symptom with id " + symptom.getId() + " does not exists");
+                    throw new DoesNotExistException("Symptom");
                 }
             }
         }

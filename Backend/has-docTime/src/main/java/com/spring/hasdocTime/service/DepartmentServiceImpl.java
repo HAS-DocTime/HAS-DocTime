@@ -27,7 +27,7 @@ public class DepartmentServiceImpl implements DepartmentInterface {
     }
 
     @Override
-    public Department createDepartment(Department department) throws MissingParameterException {
+    public Department createDepartment(Department department) throws MissingParameterException, DoesNotExistException {
         return departmentDao.createDepartment(department);
     }
 

@@ -16,5 +16,5 @@ public interface AdminInterface {
 
     public boolean deleteAdmin(int id) throws DoesNotExistException;
 
-    public Admin createAdmin(Admin admin) throws MissingParameterException;
+    public Admin createAdmin(Admin admin) throws MissingParameterException, DoesNotExistException;
 }

@@ -43,7 +43,7 @@ public class UserDaoImpl implements UserInterface {
     }
 
     @Override
-    public User createUser(User user) throws MissingParameterException {
+    public User createUser(User user) throws MissingParameterException, DoesNotExistException{
         if(user.getName() == null || user.getName().equals("")){
             throw new MissingParameterException("Name");
         }
@@ -73,11 +73,15 @@ public class UserDaoImpl implements UserInterface {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         List<Symptom> symptomList = user.getSymptoms();
-        System.out.println(symptomList);
         if(symptomList!=null){
             List<Symptom> newSymptomList = new ArrayList<>();
             for(Symptom symptom : symptomList) {
-                newSymptomList.add(symptomRepository.findById(symptom.getId()).get());
+                Optional<Symptom> optionalSymptom = symptomRepository.findById(symptom.getId());
+                if(optionalSymptom.isEmpty()){
+                    throw new DoesNotExistException("Symptom");
+                }
+                Symptom symptom1 = optionalSymptom.get();
+                newSymptomList.add(symptom1);
             }
             user.setSymptoms(newSymptomList);
         }
@@ -86,7 +90,11 @@ public class UserDaoImpl implements UserInterface {
             for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
                 patientChronicIllness.setUser(user);
                 CompositeKeyPatientChronicIllness compositeKey;
-                ChronicIllness chronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId()).get();
+                Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(patientChronicIllness.getChronicIllness().getId());
+                if(optionalChronicIllness.isEmpty()){
+                    throw new DoesNotExistException("Chronic Illness");
+                }
+                ChronicIllness chronicIllness = optionalChronicIllness.get();
                 patientChronicIllness.setChronicIllness(chronicIllness);
                 compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
                 patientChronicIllness.setId(compositeKey);
@@ -145,10 +153,10 @@ public class UserDaoImpl implements UserInterface {
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws DoesNotExistException{
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isEmpty()){
-            return null;
+            throw new DoesNotExistException("User");
         }
         return user.get();
     }

@@ -27,7 +27,7 @@ public class DoctorServiceImpl implements DoctorInterface {
         this.doctorDao = doctorDao;
     }
 
-    public Doctor createDoctor(Doctor doctor) throws MissingParameterException{
+    public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException{
         return doctorDao.createDoctor(doctor);
     }
 

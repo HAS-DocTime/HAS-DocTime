@@ -58,7 +58,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Override
-    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException{
+    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException, DoesNotExistException{
         if(timeSlot.getStartTime()==null){
             throw new MissingParameterException("Start Time");
         }
@@ -71,16 +71,26 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         if(timeSlot.getDepartment().getId()==0){
             throw new MissingParameterException("DepartmentId");
         }
-        if(timeSlot.getDepartment().getId() != 0){
-            Department department = departmentRepository.findById(timeSlot.getDepartment().getId()).get();
-            timeSlot.setDepartment(department);
+        Optional<Department> optionalDepartment = departmentRepository.findById(timeSlot.getDepartment().getId());
+        if(optionalDepartment.isEmpty()){
+            throw new DoesNotExistException("Department");
         }
+        Department department = optionalDepartment.get();
+        timeSlot.setDepartment(department);
         if(timeSlot.getAppointment() != null){
-            Appointment appointment = appointmentRepository.findById(timeSlot.getAppointment().getId()).get();
+            Optional<Appointment> optionalAppointment = appointmentRepository.findById(timeSlot.getAppointment().getId());
+            if(optionalAppointment.isEmpty()){
+                throw new DoesNotExistException("Appointment");
+            }
+            Appointment appointment = optionalAppointment.get();
             timeSlot.setAppointment(appointment);
         }
         if(timeSlot.getAppointmentData() != null){
-            PostAppointmentData postAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId()).get();
+            Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId());
+            if(optionalPostAppointmentData.isEmpty()){
+                throw new DoesNotExistException("Post Appointment");
+            }
+            PostAppointmentData postAppointmentData = optionalPostAppointmentData.get();
             timeSlot.setAppointmentData(postAppointmentData);
         }
 
@@ -88,7 +98,11 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         if(timeSlot.getAvailableDoctors() != null){
             for(Doctor d: timeSlot.getAvailableDoctors()){
                 if(d.getId() != 0){
-                    Doctor doctor = doctorRepository.findById(d.getId()).get();
+                    Optional<Doctor> optionalAvailableDoctor = doctorRepository.findById(d.getId());
+                    if(optionalAvailableDoctor.isEmpty()){
+                        throw new DoesNotExistException("Doctor");
+                    }
+                    Doctor doctor = optionalAvailableDoctor.get();
                     availableDoctors.add(doctor);
                     timeSlot.setAvailableDoctors(availableDoctors);
                 }
@@ -99,14 +113,17 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         if(timeSlot.getBookedDoctors() != null){
             for(Doctor d: timeSlot.getBookedDoctors()){
                 if(d.getId() != 0){
-                    Doctor doctor = doctorRepository.findById(d.getId()).get();
+                    Optional<Doctor> optionalBookedDoctor = doctorRepository.findById(d.getId());
+                    if(optionalBookedDoctor.isEmpty()){
+                        throw new DoesNotExistException("Doctor");
+                    }
+                    Doctor doctor = optionalBookedDoctor.get();
                     bookedDoctors.add(doctor);
                     timeSlot.setBookedDoctors(bookedDoctors);
                 }
             }
         }
-        TimeSlot t =  timeSlotRepository.save(timeSlot);
-        return t;
+        return timeSlotRepository.save(timeSlot);
     }
 
     @Override
@@ -127,21 +144,30 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         if(oldTimeSlot.isPresent()) {
             TimeSlot oldTimeSlotObj = oldTimeSlot.get();
             timeSlot.setId(id);
-            
-            
-            
             if(timeSlot.getDepartment() != null){
-                Department department = departmentRepository.findById(timeSlot.getDepartment().getId()).get();
+                Optional<Department> optionalDepartment = departmentRepository.findById(timeSlot.getDepartment().getId());
+                if(optionalDepartment.isEmpty()){
+                    throw new DoesNotExistException("Department");
+                }
+                Department department = optionalDepartment.get();
                 timeSlot.setDepartment(department);
             }
 
             if(timeSlot.getAppointment() != null){
-                Appointment appointment = appointmentRepository.findById(timeSlot.getAppointment().getId()).get();
+                Optional<Appointment> optionalAppointment = appointmentRepository.findById(timeSlot.getAppointment().getId());
+                if(optionalAppointment.isEmpty()){
+                    throw new DoesNotExistException("Appointment");
+                }
+                Appointment appointment = optionalAppointment.get();
                 timeSlot.setAppointment(appointment);
             }
 
             if(timeSlot.getAppointmentData() != null){
-                PostAppointmentData postAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId()).get();
+                Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId());
+                if(optionalPostAppointmentData.isEmpty()){
+                    throw new DoesNotExistException("Post Appointment");
+                }
+                PostAppointmentData postAppointmentData = optionalPostAppointmentData.get();
                 timeSlot.setAppointmentData(postAppointmentData);
             }
             
@@ -150,7 +176,11 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             if(timeSlot.getAvailableDoctors() != null){
                 for(Doctor d: timeSlot.getAvailableDoctors()){
                     if(d.getId() != 0){
-                        Doctor doctor = doctorRepository.findById(d.getId()).get();
+                        Optional<Doctor> optionalAvailableDoctor = doctorRepository.findById(d.getId());
+                        if(optionalAvailableDoctor.isEmpty()){
+                            throw new DoesNotExistException("Doctor");
+                        }
+                        Doctor doctor = optionalAvailableDoctor.get();
                         availableDoctors.add(doctor);
                         timeSlot.setAvailableDoctors(availableDoctors);
                     }
@@ -162,7 +192,11 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             if(timeSlot.getBookedDoctors() != null){
                 for(Doctor d: timeSlot.getBookedDoctors()){
                     if(d.getId() != 0){
-                        Doctor doctor = doctorRepository.findById(d.getId()).get();
+                        Optional<Doctor> optionalBookedDoctor = doctorRepository.findById(d.getId());
+                        if(optionalBookedDoctor.isEmpty()){
+                            throw new DoesNotExistException("Doctor");
+                        }
+                        Doctor doctor = optionalBookedDoctor.get();
                         bookedDoctors.add(doctor);
                         timeSlot.setBookedDoctors(bookedDoctors);
                     }
@@ -171,13 +205,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             timeSlotRepository.save(timeSlot);
             return timeSlot;
         }
-//        TimeSlot existingTimeSlot = getTimeSlotById(id);
-//        existingTimeSlot.setStartTime(timeSlot.getStartTime());
-//        existingTimeSlot.setEndTime(timeSlot.getEndTime());
-//        existingTimeSlot.setDepartment(timeSlot.getDepartment());
-//        existingTimeSlot.setBookedDoctors(timeSlot.getBookedDoctors());
-//        existingTimeSlot.setAvailableDoctors(timeSlot.getAvailableDoctors());
-//        return timeSlotRepository.save(existingTimeSlot);
         throw new DoesNotExistException("Time Slot");
     }
 

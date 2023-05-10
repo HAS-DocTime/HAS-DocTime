@@ -37,7 +37,7 @@ public class DoctorController {
     }
     
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) throws MissingParameterException{
+    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) throws MissingParameterException, DoesNotExistException{
         Doctor doc = doctorService.createDoctor(doctor);
         return new ResponseEntity(doc, HttpStatus.CREATED);
     }

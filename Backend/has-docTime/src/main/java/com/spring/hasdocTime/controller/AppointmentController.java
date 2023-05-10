@@ -46,7 +46,7 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public Appointment createAppointment(@RequestBody Appointment Appointment) throws MissingParameterException{
+    public Appointment createAppointment(@RequestBody Appointment Appointment) throws MissingParameterException, DoesNotExistException{
         return appointmentService.createAppointment(Appointment);
     }
 
@@ -77,5 +77,4 @@ public class AppointmentController {
         }
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
-
 }

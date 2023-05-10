@@ -13,7 +13,7 @@ public interface TimeSlotInterface {
 
     public TimeSlot getTimeSlotById(int id) throws DoesNotExistException;
 
-    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException;
+    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException, DoesNotExistException;
 
     public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException;
 

@@ -12,7 +12,7 @@ public interface AppointmentInterface {
 
     public Appointment getAppointmentById(int id) throws DoesNotExistException;
 
-    public Appointment createAppointment(Appointment appointment) throws MissingParameterException;
+    public Appointment createAppointment(Appointment appointment) throws MissingParameterException, DoesNotExistException;
 
     public Appointment updateAppointment(int id, Appointment appointment) throws DoesNotExistException, MissingParameterException;
 

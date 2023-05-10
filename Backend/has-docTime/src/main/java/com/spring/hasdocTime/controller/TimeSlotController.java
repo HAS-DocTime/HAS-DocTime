@@ -45,7 +45,7 @@ public class TimeSlotController {
     }
 
     @PostMapping
-    public TimeSlot createTimeSlot(@RequestBody TimeSlot TimeSlot) throws MissingParameterException{
+    public TimeSlot createTimeSlot(@RequestBody TimeSlot TimeSlot) throws MissingParameterException, DoesNotExistException{
         return timeSlotService.createTimeSlot(TimeSlot);
     }
 

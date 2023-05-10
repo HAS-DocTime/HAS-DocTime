@@ -31,7 +31,7 @@ public class TimeSlotServiceImpl implements TimeSlotInterface {
     }
 
     @Override
-    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException{
+    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException, DoesNotExistException{
         return timeSlotDao.createTimeSlot(timeSlot);
     }
 

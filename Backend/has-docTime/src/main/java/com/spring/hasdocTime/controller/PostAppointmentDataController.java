@@ -56,7 +56,7 @@ public class PostAppointmentDataController {
     }
 
     @PostMapping
-    public PostAppointmentData createPostAppointmentData(@RequestBody PostAppointmentData postAppointmentData) throws MissingParameterException {
+    public PostAppointmentData createPostAppointmentData(@RequestBody PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException {
         return postAppointmentDataService.createPostAppointmentData(postAppointmentData);
     }
 

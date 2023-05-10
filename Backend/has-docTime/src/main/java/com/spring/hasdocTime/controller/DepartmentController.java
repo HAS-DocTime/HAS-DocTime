@@ -31,7 +31,7 @@ public class DepartmentController {
     }
     
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public ResponseEntity<Department> createDepartment(@RequestBody Department department) throws MissingParameterException {
+    public ResponseEntity<Department> createDepartment(@RequestBody Department department) throws MissingParameterException, DoesNotExistException{
         Department dep = departmentService.createDepartment(department);
         return new ResponseEntity(dep, HttpStatus.OK);
     }

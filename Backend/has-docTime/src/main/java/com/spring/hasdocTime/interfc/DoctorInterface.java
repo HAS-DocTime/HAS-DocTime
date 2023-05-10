@@ -15,7 +15,7 @@ import java.util.List;
  * @author arpit
  */
 public interface DoctorInterface {
-    public Doctor createDoctor(Doctor doctor) throws MissingParameterException;
+    public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException;
     public List<Doctor> getAllDoctors();
     public Doctor getDoctor(int id) throws DoesNotExistException;
     public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException;

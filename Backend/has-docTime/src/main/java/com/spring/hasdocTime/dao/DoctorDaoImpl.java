@@ -52,7 +52,7 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
-    public Doctor createDoctor(Doctor doctor) throws MissingParameterException{
+    public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException{
         if(doctor.getUser()==null){
             throw new MissingParameterException("User");
         }
@@ -68,14 +68,20 @@ public class DoctorDaoImpl implements DoctorInterface {
         if(doctor.getDepartment().getId()==0){
             throw new MissingParameterException("DepartmentId");
         }
-        if(doctor.getUser().getId()!=0){
-            User user = userRepository.findById(doctor.getUser().getId()).get();
-            doctor.setUser(user);
-            user.setRole(Role.DOCTOR);
+        Optional<User> optionalUser = userRepository.findById(doctor.getUser().getId());
+        if(optionalUser.isEmpty()){
+            throw new DoesNotExistException("User");
         }
+        User user = optionalUser.get();
+        doctor.setUser(user);
+        user.setRole(Role.DOCTOR);
         if(doctor.getDepartment() != null){
             if(doctor.getDepartment().getId() != 0){
-                Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
+                Optional<Department> optionalDepartment = departmentRepository.findById(doctor.getDepartment().getId());
+                if(optionalDepartment.isEmpty()){
+                    throw new DoesNotExistException("Department");
+                }
+                Department department = optionalDepartment.get();
                 doctor.setDepartment(department);
             }
         }

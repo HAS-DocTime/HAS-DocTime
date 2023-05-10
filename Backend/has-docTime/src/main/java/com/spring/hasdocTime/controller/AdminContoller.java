@@ -61,9 +61,8 @@ public class AdminContoller {
     }
 
     @PostMapping("")
-    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) throws MissingParameterException{
+    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) throws MissingParameterException, DoesNotExistException{
         Admin responseAdmin = adminService.createAdmin(admin);
-
         if(responseAdmin == null){
             return new ResponseEntity(responseAdmin, HttpStatus.BAD_REQUEST);
         }

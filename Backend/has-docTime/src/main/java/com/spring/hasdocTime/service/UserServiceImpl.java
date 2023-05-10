@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserInterface {
     }
 
     @Override
-    public User createUser(User user) throws MissingParameterException {
+    public User createUser(User user) throws MissingParameterException, DoesNotExistException{
       return userDao.createUser(user);
     }
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserInterface {
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws DoesNotExistException{
         return userDao.getUserByEmail(email);
     }
 

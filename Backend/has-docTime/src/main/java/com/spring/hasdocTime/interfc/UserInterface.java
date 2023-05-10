@@ -12,11 +12,11 @@ public interface UserInterface {
 
     User getUser(int id) throws DoesNotExistException;
 
-    User createUser(User user) throws MissingParameterException;
+    User createUser(User user) throws MissingParameterException, DoesNotExistException;
 
     User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException;
 
     User deleteUser(int id) throws DoesNotExistException;
 
-    User getUserByEmail(String email);
+    User getUserByEmail(String email) throws DoesNotExistException;
 }

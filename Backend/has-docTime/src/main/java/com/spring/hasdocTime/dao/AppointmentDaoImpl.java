@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.sql.Time;
 import java.util.*;
 
 @Service
@@ -52,7 +53,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     }
 
     @Override
-    public Appointment createAppointment(Appointment appointment) throws MissingParameterException{
+    public Appointment createAppointment(Appointment appointment) throws MissingParameterException, DoesNotExistException{
         if(appointment.getDescription()==null){
             throw new MissingParameterException("Description");
         }
@@ -77,20 +78,32 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         if(appointment.getSymptoms()==null || appointment.getSymptoms().size()==0){
             throw new MissingParameterException("Symptom");
         }
-        User user = userRepository.findById(appointment.getUser().getId()).get();
+        Optional<User> optionalUser = userRepository.findById(appointment.getUser().getId());
+        if(optionalUser.isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        User user = optionalUser.get();
         appointment.setUser(user);
-        if(appointment.getDoctor().getId() != 0){
-            Doctor doctor = doctorRepository.findById(appointment.getDoctor().getId()).get();
-            appointment.setDoctor(doctor);
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(appointment.getDoctor().getId());
+        if(optionalDoctor.isEmpty()){
+            throw new DoesNotExistException("Doctor");
         }
-        if(appointment.getTimeSlotForAppointment().getId() != 0){
-            TimeSlot timeSlot = timeSlotRepository.findById(appointment.getTimeSlotForAppointment().getId()).get();
-            appointment.setTimeSlotForAppointment(timeSlot);
+        Doctor doctor = optionalDoctor.get();
+        appointment.setDoctor(doctor);
+        Optional<TimeSlot> optionalTimeSlot = timeSlotRepository.findById(appointment.getTimeSlotForAppointment().getId());
+        if(optionalTimeSlot.isEmpty()){
+            throw new DoesNotExistException("Time Slot");
         }
+        TimeSlot timeSlot = optionalTimeSlot.get();
+        appointment.setTimeSlotForAppointment(timeSlot);
         List<Symptom> symptoms = new ArrayList<>();
         for(Symptom s: appointment.getSymptoms()){
             if(s.getId() != 0){
-                Symptom symptom = symptomRepository.findById(s.getId()).get();
+                Optional<Symptom> optionalSymptom = symptomRepository.findById(s.getId());
+                if(optionalSymptom.isEmpty()){
+                    throw new DoesNotExistException("Symptom");
+                }
+                Symptom symptom = optionalSymptom.get();
                 symptoms.add(symptom);
                 appointment.setSymptoms(symptoms);
             }
@@ -127,15 +140,32 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         Optional<Appointment> oldAppointment = appointmentRepository.findById(id);
         if(oldAppointment.isPresent()){
             appointment.setId(id);
-            appointment.setUser(userRepository.findById(appointment.getUser().getId()).get());
-            Doctor doctor = doctorRepository.findById(appointment.getDoctor().getId()).get();
+            Optional<User> optionalUser = userRepository.findById(appointment.getUser().getId());
+            if(optionalUser.isEmpty()){
+                throw new DoesNotExistException("User");
+            }
+            User user = optionalUser.get();
+            appointment.setUser(user);
+            Optional<Doctor> optionalDoctor = doctorRepository.findById(appointment.getDoctor().getId());
+            if(optionalDoctor.isEmpty()){
+                throw new DoesNotExistException("Doctor");
+            }
+            Doctor doctor = optionalDoctor.get();
             appointment.setDoctor(doctor);
-            TimeSlot timeSlot = timeSlotRepository.findById(appointment.getTimeSlotForAppointment().getId()).get();
+            Optional<TimeSlot> optionalTimeSlot =  timeSlotRepository.findById(appointment.getTimeSlotForAppointment().getId());
+            if(optionalTimeSlot.isEmpty()){
+                throw new DoesNotExistException("Time Slot");
+            }
+            TimeSlot timeSlot = optionalTimeSlot.get();
             appointment.setTimeSlotForAppointment(timeSlot);
             List<Symptom> symptoms = new ArrayList<>();
             for(Symptom s: appointment.getSymptoms()){
                 if(s.getId() != 0){
-                    Symptom symptom = symptomRepository.findById(s.getId()).get();
+                    Optional<Symptom> optionalSymptom = symptomRepository.findById(s.getId());
+                    if(optionalSymptom.isEmpty()){
+                        throw new DoesNotExistException("Symptom");
+                    }
+                    Symptom symptom = optionalSymptom.get();
                     symptoms.add(symptom);
                     appointment.setSymptoms(symptoms);
                 }

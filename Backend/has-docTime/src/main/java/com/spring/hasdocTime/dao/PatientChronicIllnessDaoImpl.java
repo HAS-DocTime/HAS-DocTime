@@ -30,8 +30,7 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
     public PatientChronicIllness getPatientChronicIllness(CompositeKeyPatientChronicIllness id) throws DoesNotExistException {
         Optional<PatientChronicIllness> patientChronicIllness = patientChronicIllnessRepository.findById(id);
         if(patientChronicIllness.isPresent()){
-            PatientChronicIllness patientChronicIllnessObj = patientChronicIllness.get();
-            return patientChronicIllnessObj;
+            return patientChronicIllness.get();
         }
         throw new DoesNotExistException("Patient Chronic Illness");
     }

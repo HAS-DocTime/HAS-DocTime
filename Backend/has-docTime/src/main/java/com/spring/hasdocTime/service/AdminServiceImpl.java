@@ -38,7 +38,7 @@ public class AdminServiceImpl implements AdminInterface{
     }
 
     @Override
-    public Admin createAdmin(Admin admin) throws MissingParameterException {
+    public Admin createAdmin(Admin admin) throws MissingParameterException, DoesNotExistException{
         return adminDao.createAdmin(admin);
     }
 }

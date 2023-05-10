@@ -36,7 +36,7 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
     }
 
     @Override
-    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException {
+    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException {
         return postAppointmentDataDao.createPostAppointmentData(postAppointmentData);
     }
 

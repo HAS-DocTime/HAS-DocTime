@@ -36,12 +36,9 @@ public class UserController {
     }
     
     @GetMapping("findByEmail")
-    public ResponseEntity<User> getUserByEmail(){
+    public ResponseEntity<User> getUserByEmail() throws DoesNotExistException{
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUserByEmail(userEmail);
-        if(user==null){
-            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -57,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<User> createUser(@RequestBody User theUser) throws MissingParameterException {
+    public ResponseEntity<User> createUser(@RequestBody User theUser) throws MissingParameterException, DoesNotExistException {
         User user = userService.createUser(theUser);
         return new ResponseEntity(user, HttpStatus.CREATED);
     }
