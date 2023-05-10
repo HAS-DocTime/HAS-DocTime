@@ -32,7 +32,7 @@ public class TimeSlot {
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "department_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"timeSlots", "doctors"})
+    @JsonIgnoreProperties(value = {"timeSlots", "doctors"}, allowSetters = true)
     private Department department;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -41,7 +41,7 @@ public class TimeSlot {
             joinColumns = @JoinColumn(name = "time_slot_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
-    @JsonIgnoreProperties({"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"})
+    @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
     private List<Doctor> availableDoctors;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -50,15 +50,15 @@ public class TimeSlot {
             joinColumns = @JoinColumn(name = "time_slot_id"),
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
-    @JsonIgnoreProperties({"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"})
+    @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
     private List<Doctor> bookedDoctors;
 
     @OneToOne(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"timeSlotForAppointmentData", "user", "doctor"})
+    @JsonIgnoreProperties(value = {"timeSlotForAppointmentData", "user", "doctor"}, allowSetters = true)
     private PostAppointmentData appointmentData;
 
     @OneToOne(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"timeSlotForAppointment", "symptoms", "user", "doctor"})
+    @JsonIgnoreProperties(value = {"timeSlotForAppointment", "symptoms", "user", "doctor"}, allowSetters = true)
     private Appointment appointment;
 
     @Override
