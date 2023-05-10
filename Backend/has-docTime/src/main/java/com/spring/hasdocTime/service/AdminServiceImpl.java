@@ -1,5 +1,7 @@
 package com.spring.hasdocTime.service;
 
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.AdminInterface;
 import com.spring.hasdocTime.entity.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,22 +23,22 @@ public class AdminServiceImpl implements AdminInterface{
     }
 
     @Override
-    public Admin getAdmin(int id) {
+    public Admin getAdmin(int id) throws DoesNotExistException {
         return adminDao.getAdmin(id);
     }
 
     @Override
-    public Admin updateAdmin(int id, Admin admin) {
+    public Admin updateAdmin(int id, Admin admin) throws DoesNotExistException, MissingParameterException{
         return adminDao.updateAdmin(id, admin);
     }
 
     @Override
-    public boolean deleteAdmin(int id) {
+    public boolean deleteAdmin(int id) throws DoesNotExistException {
         return adminDao.deleteAdmin(id);
     }
 
     @Override
-    public Admin createAdmin(Admin admin) {
+    public Admin createAdmin(Admin admin) throws MissingParameterException, DoesNotExistException{
         return adminDao.createAdmin(admin);
     }
 }
