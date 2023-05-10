@@ -7,6 +7,7 @@ import { ChronicIllnessService } from 'src/app/services/chronic-illness.service'
 import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
 import { LoginDetails } from 'src/app/models/login-details.model';
+import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswordMatch.validator';
 
 @Component({
   selector: 'app-signup',
@@ -76,11 +77,12 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     weight : new FormControl(),
     email : new FormControl("", [Validators.required]),
     password : new FormControl("", [Validators.required]),
+    confirmPassword : new FormControl("", [Validators.required]),
     role : new FormControl("PATIENT", [Validators.required]),
     qualification : new FormControl(""),
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([])
-  })
+  }, {validators : confirmPasswordValidator()})
 
 
 
