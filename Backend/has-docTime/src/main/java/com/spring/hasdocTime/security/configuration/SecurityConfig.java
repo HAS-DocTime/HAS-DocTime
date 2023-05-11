@@ -80,7 +80,7 @@ public class SecurityConfig{
                         .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
                         .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT", "DOCTOR")
                         .requestMatchers("/register/**").permitAll()
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login/**").permitAll()
                         .requestMatchers("/chronicIllness").permitAll()
                         .requestMatchers("/chronicIllness/**").permitAll() // Should only be allowed when the user/doctor tries to edit his/her own chronic Illness
                         .requestMatchers("/department").permitAll()

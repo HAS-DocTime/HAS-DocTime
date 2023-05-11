@@ -7,12 +7,10 @@ import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.RegisterInterface;
-import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
 import com.spring.hasdocTime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,9 +39,10 @@ public class RegisterDaoImpl implements RegisterInterface {
 //                );
 
         UserDetailForToken userDetailForToken = new UserDetailForToken(createdUser.getEmail(), createdUser.getId(), createdUser.getRole());
-        var jwtToken = jwtService.generateToken(userDetailForToken);
+        var jwtAccessToken = jwtService.generateToken(userDetailForToken);
+        var jwtRefreshToken = jwtService.generateRefreashToken(userDetailForToken);
 
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
     }
 
     @Override
@@ -60,7 +59,9 @@ public class RegisterDaoImpl implements RegisterInterface {
 //                        )
 //                );
         UserDetailForToken userDetailForToken = new UserDetailForToken(createdDoctor.getUser().getEmail(), createdDoctor.getId(), createdDoctor.getUser().getRole());
-        var jwtToken = jwtService.generateToken(userDetailForToken);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        var jwtAccessToken = jwtService.generateToken(userDetailForToken);
+        var jwtRefreshToken = jwtService.generateRefreashToken(userDetailForToken);
+
+        return AuthenticationResponse.builder().accessToken(jwtAccessToken).refreshToken(jwtRefreshToken).build();
     }
 }

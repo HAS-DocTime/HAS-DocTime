@@ -180,12 +180,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.toggleDisable();
         // this.user = data;
         // location.reload();
-        this.cdr.detectChanges();
+        
         // this.user.role = 
         
         
         this.userService.getUser().subscribe(data => {
           this.user = data;
+          this.cdr.detectChanges();
           // this.editForm.valueChanges.subscribe(data => {
           //   this.user = data;
           //   console.log(this.user);
