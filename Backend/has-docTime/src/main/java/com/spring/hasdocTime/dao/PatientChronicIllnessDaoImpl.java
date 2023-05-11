@@ -2,6 +2,7 @@ package com.spring.hasdocTime.dao;
 
 import com.spring.hasdocTime.entity.CompositeKeyPatientChronicIllness;
 import com.spring.hasdocTime.entity.PatientChronicIllness;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,12 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
     }
 
     @Override
-    public PatientChronicIllness getPatientChronicIllness(CompositeKeyPatientChronicIllness id) {
+    public PatientChronicIllness getPatientChronicIllness(CompositeKeyPatientChronicIllness id) throws DoesNotExistException {
         Optional<PatientChronicIllness> patientChronicIllness = patientChronicIllnessRepository.findById(id);
         if(patientChronicIllness.isPresent()){
-            PatientChronicIllness patientChronicIllnessObj = patientChronicIllness.get();
-            return patientChronicIllnessObj;
+            return patientChronicIllness.get();
         }
-        return null;
+        throw new DoesNotExistException("Patient Chronic Illness");
     }
 
     @Override
@@ -41,19 +41,24 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
     }
 
     @Override
-    public PatientChronicIllness updatePatientChronicIllness(CompositeKeyPatientChronicIllness id, PatientChronicIllness patientChronicIllness) {
+    public PatientChronicIllness updatePatientChronicIllness(CompositeKeyPatientChronicIllness id, PatientChronicIllness patientChronicIllness) throws DoesNotExistException{
+        Optional<PatientChronicIllness> oldPatientChronicIllness = patientChronicIllnessRepository.findById(id);
+        if(oldPatientChronicIllness.isEmpty()){
+            throw new DoesNotExistException("Patient Chronic Illness");
+        }
         patientChronicIllness.setId(id);
-        System.out.println(id.getPatientId());
-        System.out.println(id.getChronicIllnessId());
         return patientChronicIllnessRepository.save(patientChronicIllness);
     }
 
     @Override
-    public void deletePatientChronicIllness(CompositeKeyPatientChronicIllness id) {
+    public void deletePatientChronicIllness(CompositeKeyPatientChronicIllness id) throws DoesNotExistException{
         Optional<PatientChronicIllness> patientChronicIllness =  patientChronicIllnessRepository.findById(id);
         if(patientChronicIllness.isPresent()) {
             patientChronicIllnessRepository.deleteById(id);
             System.out.println("Deleted  this chronicIllness of id:" + id.getChronicIllnessId() + " from this patient of id: " + id.getPatientId());
+        }
+        else{
+            throw new DoesNotExistException("Patient Chronic Illness");
         }
 
     }

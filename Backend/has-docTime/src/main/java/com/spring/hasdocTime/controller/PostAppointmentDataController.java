@@ -1,6 +1,8 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.PostAppointmentData;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,7 +37,7 @@ public class PostAppointmentDataController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) {
+    public ResponseEntity<PostAppointmentData> getPostAppointmentDataById(@PathVariable int id) throws DoesNotExistException{
             PostAppointmentData postAppointmentData = postAppointmentDataService.getPostAppointmentDataById(id);
             if(postAppointmentData==null){
                 return new ResponseEntity<>(postAppointmentData, HttpStatus.NOT_FOUND);
@@ -47,7 +49,6 @@ public class PostAppointmentDataController {
     public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail() {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail);
-//        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         if(allPostAppointmentData.isEmpty()) {
             return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NOT_FOUND);
             }
@@ -55,12 +56,12 @@ public class PostAppointmentDataController {
     }
 
     @PostMapping
-    public PostAppointmentData createPostAppointmentData(@RequestBody PostAppointmentData postAppointmentData) {
+    public PostAppointmentData createPostAppointmentData(@RequestBody PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException {
         return postAppointmentDataService.createPostAppointmentData(postAppointmentData);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostAppointmentData> updatePostAppointmentData(@PathVariable int id, @RequestBody PostAppointmentData postAppointmentData) {
+    public ResponseEntity<PostAppointmentData> updatePostAppointmentData(@PathVariable int id, @RequestBody PostAppointmentData postAppointmentData) throws DoesNotExistException, MissingParameterException {
         try {
             PostAppointmentData updatedPostAppointmentData = postAppointmentDataService.updatePostAppointmentData(id, postAppointmentData);
             return ResponseEntity.ok(updatedPostAppointmentData);
@@ -70,13 +71,19 @@ public class PostAppointmentDataController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAppointment(@PathVariable int id) {
+    public ResponseEntity<String> deleteAppointment(@PathVariable int id) throws DoesNotExistException{
         String result = postAppointmentDataService.deletePostAppointmentData(id);
         if (result.equals("postAppointmentData with id: " + id + " is deleted")) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataOfDoctor(@PathVariable int id) throws DoesNotExistException{
+        List<PostAppointmentData> postAppointmentData = postAppointmentDataService.getPostAppointmentsDataOfDoctor(id);
+        return new ResponseEntity<>(postAppointmentData, HttpStatus.OK);
     }
 
 }

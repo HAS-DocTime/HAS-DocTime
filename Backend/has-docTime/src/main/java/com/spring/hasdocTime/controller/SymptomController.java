@@ -1,6 +1,8 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.Symptom;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.SymptomInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,22 +25,22 @@ public class SymptomController {
     }
 
     @GetMapping("{id}")
-    public Symptom getSymptom(@PathVariable int id){
+    public Symptom getSymptom(@PathVariable int id) throws DoesNotExistException{
         return symptomService.getSymptom(id);
     }
 
     @PutMapping("{id}")
-    public Symptom updateSymptom(@PathVariable int id, @RequestBody Symptom symptom){
+    public Symptom updateSymptom(@PathVariable int id, @RequestBody Symptom symptom) throws DoesNotExistException, MissingParameterException {
         return symptomService.updateSymptom(id, symptom);
     }
 
     @DeleteMapping("{id}")
-    public boolean deleteSymptom(@PathVariable int id){
+    public boolean deleteSymptom(@PathVariable int id) throws DoesNotExistException{
         return symptomService.deleteSymptom(id);
     }
 
     @PostMapping("")
-    public Symptom createSymptom(@RequestBody Symptom symptom){
+    public Symptom createSymptom(@RequestBody Symptom symptom) throws DoesNotExistException, MissingParameterException{
         return symptomService.createSymptom(symptom);
     }
 

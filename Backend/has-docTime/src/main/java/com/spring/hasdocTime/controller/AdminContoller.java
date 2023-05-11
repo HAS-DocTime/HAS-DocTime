@@ -1,6 +1,8 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.Admin;
+import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.AdminInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +30,7 @@ public class AdminContoller {
     }
 
     @GetMapping("{adminId}")
-    public ResponseEntity<Admin> getAdmin(@PathVariable("adminId") int id) throws AccessDeniedException {
+    public ResponseEntity<Admin> getAdmin(@PathVariable("adminId") int id) throws AccessDeniedException, DoesNotExistException {
 //        String authenticatedAdminEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
         Admin admin = adminService.getAdmin(id);
 
@@ -39,7 +41,7 @@ public class AdminContoller {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Admin> updateAdmin(@PathVariable int id, @RequestBody Admin admin){
+    public ResponseEntity<Admin> updateAdmin(@PathVariable int id, @RequestBody Admin admin) throws DoesNotExistException, MissingParameterException {
         Admin responseAdmin = adminService.updateAdmin(id, admin);
 
         if(admin == null){
@@ -49,7 +51,7 @@ public class AdminContoller {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Boolean> deleteAdmin(@PathVariable int id){
+    public ResponseEntity<Boolean> deleteAdmin(@PathVariable int id) throws DoesNotExistException {
         Boolean response = adminService.deleteAdmin(id);
 
         if(response == false){
@@ -59,9 +61,8 @@ public class AdminContoller {
     }
 
     @PostMapping("")
-    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin){
+    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) throws MissingParameterException, DoesNotExistException{
         Admin responseAdmin = adminService.createAdmin(admin);
-
         if(responseAdmin == null){
             return new ResponseEntity(responseAdmin, HttpStatus.BAD_REQUEST);
         }

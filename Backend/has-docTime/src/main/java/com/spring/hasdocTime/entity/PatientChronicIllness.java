@@ -19,13 +19,13 @@ public class PatientChronicIllness {
     @ManyToOne
     @MapsId("patientId")
     @JoinColumn(name="patient_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"patientChronicIllness", "doctor", "admin", "appointmentData", "appointments", "symptoms"})
+    @JsonIgnoreProperties(value={"patientChronicIllness", "doctor", "admin", "appointmentData", "appointments", "symptoms"}, allowSetters = true)
     private User user;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @MapsId("chronicIllnessId")
     @JoinColumn(name="chronic_illness_id", referencedColumnName = "id")
-    @JsonIgnoreProperties("patientChronicIllnesses")
+    @JsonIgnoreProperties(value = "patientChronicIllnesses", allowSetters = true)
     private ChronicIllness chronicIllness;
 
     @Column(name="years_of_illness")

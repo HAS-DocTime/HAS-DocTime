@@ -25,17 +25,17 @@ public class Appointment {
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"doctor", "admin", "appointments", "appointmentData", "symptoms"})
+    @JsonIgnoreProperties(value = {"doctor", "admin", "appointments", "appointmentData", "symptoms"}, allowSetters = true)
     private User user;
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"appointments", "availableTimeSlots", "bookedTimeSlots", "postAppointmentData"})
+    @JsonIgnoreProperties(value = {"appointments", "availableTimeSlots", "bookedTimeSlots", "postAppointmentData"}, allowSetters = true)
     private Doctor doctor;
 
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "booked_time_slot_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"appointment", "department", "availableDoctors", "bookedDoctors", "appointmentData"})
+    @JsonIgnoreProperties(value = {"appointment", "department", "availableDoctors", "bookedDoctors", "appointmentData"}, allowSetters = true)
     private TimeSlot timeSlotForAppointment;
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
@@ -44,7 +44,7 @@ public class Appointment {
             joinColumns = @JoinColumn(name="appointment_id"),
             inverseJoinColumns = @JoinColumn(name="symptom_id")
     )
-    @JsonIgnoreProperties({"appointments", "users", "departments"})
+    @JsonIgnoreProperties(value = {"appointments", "users", "departments"}, allowSetters = true)
     private List<Symptom> symptoms;
 
     @Override
