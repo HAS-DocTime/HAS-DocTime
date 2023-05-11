@@ -30,7 +30,7 @@ public class Symptom {
             name = "patient_symptom",
             joinColumns = @JoinColumn(name = "symptom_id"),
             inverseJoinColumns = @JoinColumn(name = "patient_id"))
-    @JsonIgnoreProperties("symptoms")
+    @JsonIgnoreProperties(value = "symptoms", allowSetters = true)
     private List<User> users;
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
@@ -38,7 +38,7 @@ public class Symptom {
             name = "department_symptom",
             joinColumns = @JoinColumn(name = "symptom_id"),
             inverseJoinColumns = @JoinColumn(name = "department_id"))
-    @JsonIgnoreProperties("symptoms")
+    @JsonIgnoreProperties(value = "symptoms", allowSetters = true)
     private List<Department> departments;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -46,7 +46,7 @@ public class Symptom {
             name = "appointment_symptom",
             joinColumns = @JoinColumn(name = "symptom_id"),
             inverseJoinColumns = @JoinColumn(name = "appointment_id"))
-    @JsonIgnoreProperties("symptoms")
+    @JsonIgnoreProperties(value = "symptoms", allowSetters = true)
     private List<Appointment> appointments;
 
     @Override

@@ -30,7 +30,7 @@ public class Doctor {
     
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"doctor", "admin", "appointments", "appointmentData", "symptoms", "patientChronicIllness"})
+    @JsonIgnoreProperties(value = {"doctor", "admin", "appointments", "appointmentData", "symptoms", "patientChronicIllness"}, allowSetters = true)
     private User user;
     
     @Column(name="qualification")
@@ -38,8 +38,7 @@ public class Doctor {
    
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "department_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"doctors", "symptoms", "timeSlots"})
-//    @JsonIgnore
+    @JsonIgnoreProperties(value = {"doctors", "symptoms", "timeSlots"}, allowSetters = true)
     private Department department;
     
     @Column(name="cases_solved")
@@ -49,19 +48,19 @@ public class Doctor {
     private boolean isAvailable;
     
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "availableDoctors")
-    @JsonIgnoreProperties({"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"})
+    @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
     private List<TimeSlot> availableTimeSlots;
     
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "bookedDoctors")
-    @JsonIgnoreProperties({"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"})
+    @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
     private List<TimeSlot> bookedTimeSlots;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
-    @JsonIgnoreProperties("doctor")
+    @JsonIgnoreProperties(value = "doctor", allowSetters = true)
     private List<Appointment> appointments;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
-    @JsonIgnoreProperties("doctor")
+    @JsonIgnoreProperties(value = "doctor", allowSetters = true)
     private List<PostAppointmentData> postAppointmentData;
 
     @Override

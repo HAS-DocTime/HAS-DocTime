@@ -29,17 +29,17 @@ public class PostAppointmentData {
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "patient_id")
-    @JsonIgnoreProperties({"appointmentData", "admin", "appointments", "doctor"})
+    @JsonIgnoreProperties(value={"appointmentData", "admin", "appointments", "doctor"}, allowSetters = true)
     private User user;
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"postAppointmentData", "availableTimeSlots", "bookedTimeSlots", "appointments"})
+    @JsonIgnoreProperties(value = {"postAppointmentData", "availableTimeSlots", "bookedTimeSlots", "appointments"}, allowSetters = true)
     private Doctor doctor;
 
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "booked_time_slot_id", referencedColumnName = "id")
-    @JsonIgnoreProperties({"appointmentData", "bookedDoctors", "availableDoctors", "department", "appointment"})
+    @JsonIgnoreProperties(value = {"appointmentData", "bookedDoctors", "availableDoctors", "department", "appointment"}, allowSetters = true)
     private TimeSlot timeSlotForAppointmentData;
 
     @Override
