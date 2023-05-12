@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { tap } from 'rxjs';
 import { Appointment } from 'src/app/models/appointment.model';
 import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
@@ -35,7 +34,8 @@ export class AppointmentComponent implements OnInit{
 
     const curr = new Date();
     // const currentTime = curr.getTime();
-    const currentTime = new Date("2023-05-10T" + "23:30:00").getTime();
+
+    const currentTime = new Date("2023-05-12T" + "23:30:00").getTime();
 
     const nowDate = curr.toISOString().split('T')[0];
     const startTime = new Date(nowDate + 'T' + appointment.timeSlotForAppointment.startTime).getTime();
@@ -53,20 +53,25 @@ export class AppointmentComponent implements OnInit{
 
 
       this.medicalHistoryService.createMedicalHistory(medicalHistory).subscribe(
-        data => {
+        (data:any) => {
+          medicalHistory.id = data.id;
           console.log(medicalHistory);
           console.log('Medical history created:', data);
 
           this.appointmentService.deleteAppointment(appointment?.id as number).subscribe(
             data => {
               console.log('Appointment deleted:', data);
+              this.router.navigate(['dashboard/medicalHistory', medicalHistory.id]);
+
+
             }
-          )
+          );
         },
         error => {
           console.error("error: ", error);
         }
       );
+
 
 
     }

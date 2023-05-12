@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MedicalHistory } from "../models/medicalHistory.model";
 import { UserService } from "./user.service";
-import { Observable, map, switchMap } from "rxjs";
+import { Observable, catchError, map, switchMap } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,13 @@ export class MedicalHistoryService {
     return this.http.get<MedicalHistory>(`${this.base_url}postAppointmentData/${appointmentId}`);
   }
 
-  createMedicalHistory(medicalHistory : MedicalHistory){
+  createMedicalHistory(medicalHistory : MedicalHistory): Observable<MedicalHistory> {
     return this.http.post<MedicalHistory>(`${this.base_url}postAppointmentData`, medicalHistory);
+  }
+
+  updateMedicalHistory(medicalHistory : MedicalHistory, id: number): Observable<MedicalHistory> {
+    console.log(id)
+    console.log(medicalHistory)
+    return this.http.put<MedicalHistory>(`${this.base_url}postAppointmentData/${id}`, medicalHistory);
   }
 }

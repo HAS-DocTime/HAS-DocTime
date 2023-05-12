@@ -38,10 +38,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
       let store = token?.split('.');
       this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
       console.log(atob(store[1]));
       this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
 
-      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
       console.log(this.tokenRole);
       if (this.tokenRole === "DOCTOR") {
         // console.log("doctor called");

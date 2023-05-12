@@ -51,7 +51,7 @@ export class BookAppointmentComponent implements OnInit{
     }
     //Hard-Coded as of now
     this.bookAppointment.value["doctor"] = {
-      "id": 4
+      "id": 2
     }
     //Hard-Coded as of now
     this.bookAppointment.value["timeSlotForAppointment"] = {
