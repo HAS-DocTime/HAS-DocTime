@@ -41,8 +41,10 @@ public class LoginDaoImpl implements LoginInterface {
         UserDetailForToken userDetailForToken;
         if(user.getRole().toString().equals("DOCTOR")){
             userDetailForToken = new UserDetailForToken(user.getEmail(), user.getDoctor().getId(), user.getRole());
-        }else{
+        }else if(user.getRole().toString().equals("PATIENT")){
             userDetailForToken = new UserDetailForToken(user.getEmail(), user.getId(), user.getRole());
+        }else{
+            userDetailForToken = new UserDetailForToken(user.getEmail(), user.getAdmin().getId(), user.getRole());
         }
         var jwtToken = jwtService.generateToken(userDetailForToken);
         return AuthenticationResponse.builder().token(jwtToken).build();

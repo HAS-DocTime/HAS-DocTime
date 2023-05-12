@@ -13,6 +13,7 @@ import { ProfilePageComponent } from './components/profile-page/profile-page.com
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
 import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedule-appointments/doctor-schedule-appointments.component';
 import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archive/resolved-cases-archive.component';
+import { CaseDetailComponent } from './components/case-detail/case-detail.component';
 
 
 const routes: Routes = [
@@ -27,6 +28,7 @@ const routes: Routes = [
     {path : "appointment/:id", component : AppointmentDetailComponent},
     {path : "medicalHistory", component : MedicalHistoryComponent},
     {path : "resolvedCasesArchive", component : ResolvedCasesArchiveComponent},
+    {path : "resolvedCasesArchive/caseDetail", component : CaseDetailComponent},
     {path : "medicalHistory/:id", component : DetailedHistoryComponent}
   ]}
 ];

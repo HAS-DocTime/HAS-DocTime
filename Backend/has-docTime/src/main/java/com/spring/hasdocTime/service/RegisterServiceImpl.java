@@ -19,7 +19,7 @@ public class RegisterServiceImpl implements RegisterInterface{
     private RegisterInterface registerDao;
 
     @Override
-    public AuthenticationResponse registerAdmin(Admin admin) {
+    public AuthenticationResponse registerAdmin(Admin admin) throws DoesNotExistException, MissingParameterException {
         return registerDao.registerAdmin(admin);
     }
 

@@ -26,6 +26,7 @@ import { AppointmentDetailComponent } from './components/appointment-detail/appo
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
 import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedule-appointments/doctor-schedule-appointments.component';
+import { CaseDetailComponent } from './components/case-detail/case-detail.component';
 import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archive/resolved-cases-archive.component';
 
 @NgModule({
@@ -46,7 +47,8 @@ import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archi
     DetailedHistoryComponent,
     BookAppointmentComponent,
     DoctorScheduleAppointmentsComponent,
-    ResolvedCasesArchiveComponent
+    ResolvedCasesArchiveComponent,
+    CaseDetailComponent
   ],
   imports: [
     BrowserModule,
