@@ -3,7 +3,7 @@
 </div>
 <div class="container-fluid m-0 p-0 row">
   <div class="row">
-    <app-sidebar class="fixed-start"></app-sidebar>
+    <app-sidebar class="fixed-start" [isExpanded]="sidebarExpanded" (toggleSidebar)="sidebarExpanded = !sidebarExpanded"></app-sidebar>
     <div class="col pt-3 bg-body-tertiary">
       <div class="container-fluid">
         <div class="outer-container">

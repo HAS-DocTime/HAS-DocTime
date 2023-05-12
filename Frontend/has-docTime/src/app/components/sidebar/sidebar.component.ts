@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,15 +10,10 @@ import { Component, HostListener, OnInit } from '@angular/core';
 export class SidebarComponent{
 
   isShowScrollButton = false;
+  @Input() isExpanded : boolean = false;
+  @Output() toggleSidebar : EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  // @HostListener('window:scroll', [])
-  // onWindowScroll() {
-  //   if (window.pageYOffset > 300) {
-  //     this.isShowScrollButton = true;
-  //   } else {
-  //     this.isShowScrollButton = false;
-  //   }
-  // }
+  handleSidebarToggle = () => this.toggleSidebar.emit(!this.isExpanded);
 
   @HostListener("window:scroll", ["$event"])
 onWindowScroll() {
