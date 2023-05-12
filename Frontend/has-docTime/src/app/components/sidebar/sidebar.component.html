@@ -1,4 +1,4 @@
-
+<!--
   <div class="sidebar-container position-relative">
     <div class="col-md-auto min-vh-100 m-0 p-0">
       <ul class="nav nav-pills flex-column">
@@ -47,7 +47,7 @@
         <li class="nav-item mt-2">
           <a class="nav-link text-white text-decoration-none" routerLink="medicalHistory" routerLinkActive="active-page">
             <i class="fa-solid fa-clock-rotate-left me-3"></i>
-            <span>Chronic Illnesses</span>
+            <span>Chronic Illness</span>
           </a>
         </li>
       </ul>
@@ -58,4 +58,84 @@
       </button>
     </div>
 
+  </div> -->
+
+
+  <div class="sidebar position-relative" [ngClass]="{ 'expanded': isExpanded }">
+    <div class="col-md-auto min-vh-100 m-0 p-0">
+    <div class="header">
+      <h1 class="title">
+        DocTime
+      </h1>
+      <div class="toggle pb-3" (click)="handleSidebarToggle()">
+        <span class="chevron"></span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="link">
+        <div class="content" routerLink="appointment" routerLinkActive="active-page">
+          <div class="icon"><i class="fas fa-calendar-check me-3"></i></div>
+          <div class="title">Appointments</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" routerLink="profile" routerLinkActive="active-page">
+<div class="icon">
+  <i class="fa-solid fa-user me-3"></i>
+</div>
+          <div class="title">Profile</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" routerLink="medicalHistory" routerLinkActive="active-page">
+<div class="icon">
+  <i class="fa-solid fa-clock-rotate-left me-3"></i>
+</div>
+          <div class="title">Medical History</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="asfd" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-hospital-user"></i>
+          </div>
+          <div class="title">Patients</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="sdg" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-user-doctor"></i>
+          </div>
+          <div class="title">Doctors</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="uj" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-house-medical"></i>
+          </div>
+          <div class="title">Departments</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="tyui" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-temperature-full"></i>
+          </div>
+          <div class="title">Symptoms</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="rty" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-virus-covid"></i>
+          </div>
+          <div class="title">Chronic Illness</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer"></div>
   </div>
+    </div>
+

@@ -25,6 +25,7 @@ import { DetailedHistoryComponent } from './components/medical-history/detailed-
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    CommonModule
+    CommonModule,
+    NgbModule
   ],
   providers: [
     {
