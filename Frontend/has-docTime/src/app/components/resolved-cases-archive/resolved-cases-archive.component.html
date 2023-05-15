@@ -17,8 +17,8 @@
           [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
             <tr>
               <td>{{ case.id}}</td>
-              <td>{{ case.user.name }}</td>
-              <td>{{ case.timeSlotForAppointmentData.startTime }} - {{ case.timeSlotForAppointmentData.endTime }}</td>
+              <td>{{ case.user?.name }}</td>
+              <td>{{ case.timeSlotForAppointmentData?.startTime }} - {{ case.timeSlotForAppointmentData?.endTime }}</td>
               <td>
                 <a class="btn" (click)="caseDetail(i)">
                   <i class="fa-solid fa-caret-right"></i>

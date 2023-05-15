@@ -4,6 +4,7 @@ import { Appointment } from 'src/app/models/appointment.model';
 import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-doctor-schedule-appointments',
@@ -12,7 +13,11 @@ import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
 })
 export class DoctorScheduleAppointmentsComponent {
 
-  constructor(private appointmentService: AppointmentService, private router : Router, private route : ActivatedRoute){}
+  constructor(private appointmentService: AppointmentService, 
+    private router : Router, 
+    private route : ActivatedRoute,
+    private sharedService: SharedService
+    ){}
 
   appointments: Appointment[]=[];
   id: string = "";
@@ -40,6 +45,11 @@ export class DoctorScheduleAppointmentsComponent {
   getdetailedHistory(id : any){
 
     this.router.navigate([id], {relativeTo : this.route});
+  }
+
+  appointmentDetail(id: number){
+    this.sharedService.setPatientAppointmentDetail(this.appointments[id]);
+    this.router.navigate(['patientAppointmentDetail'], {relativeTo:this.route});
   }
 
 }

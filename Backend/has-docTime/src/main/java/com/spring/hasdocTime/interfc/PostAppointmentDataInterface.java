@@ -21,4 +21,5 @@ public interface PostAppointmentDataInterface {
 
     public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException;
 
+    public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException;
 }

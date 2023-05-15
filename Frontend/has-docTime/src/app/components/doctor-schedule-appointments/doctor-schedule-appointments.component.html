@@ -22,7 +22,7 @@
               <td>{{ appointment.user.name }}</td>
               <td>{{ appointment.timeSlotForAppointment.startTime }} - {{ appointment.timeSlotForAppointment.endTime }}</td>
               <td>
-                <a class="btn" >
+                <a class="btn" (click)="appointmentDetail(i)">
                   <i class="fa-solid fa-caret-right"></i>
                 </a>
               </td>

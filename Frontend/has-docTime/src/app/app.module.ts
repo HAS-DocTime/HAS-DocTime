@@ -28,6 +28,7 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
 import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedule-appointments/doctor-schedule-appointments.component';
 import { CaseDetailComponent } from './components/case-detail/case-detail.component';
 import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archive/resolved-cases-archive.component';
+import { PatientAppointmentDetailComponent } from './components/patient-appointment-detail/patient-appointment-detail.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archi
     BookAppointmentComponent,
     DoctorScheduleAppointmentsComponent,
     ResolvedCasesArchiveComponent,
-    CaseDetailComponent
+    CaseDetailComponent,
+    PatientAppointmentDetailComponent
   ],
   imports: [
     BrowserModule,

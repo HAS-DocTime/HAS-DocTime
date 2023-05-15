@@ -112,9 +112,9 @@ public class DoctorDaoImpl implements DoctorInterface {
         if(doctor.getUser()==null){
             throw new MissingParameterException("User");
         }
-        if(doctor.getUser().getId()==0){
-            throw new MissingParameterException("User Id");
-        }
+//        if(doctor.getUser().getId()==0){
+//            throw new MissingParameterException("User Id");
+//        }
         if(doctor.getQualification()==null){
             throw new MissingParameterException("Qualifications");
         }
@@ -128,8 +128,13 @@ public class DoctorDaoImpl implements DoctorInterface {
         if(oldDoctor.isPresent()){
             doctor.setId(id);
             oldDoctor.get().getUser().setRole(Role.PATIENT);
+            User user = userDao.updateUser(oldDoctor.get().getUser().getId(), doctor.getUser());
+            oldDoctor.get().setUser(user);
+            Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
+            oldDoctor.get().setDepartment(department);
+            oldDoctor.get().setQualification(doctor.getQualification());
             Doctor updatedDoctor = createDoctor(doctor);
-            return updatedDoctor;
+            return doctorRepository.save(oldDoctor.get());
         }
         throw new DoesNotExistException("Doctor");
     }

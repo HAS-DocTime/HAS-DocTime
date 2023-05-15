@@ -26,7 +26,7 @@
                                 class="form-control" placeholder="enter phone number" formControlName="contact"
                                ></div>
                         <div class="col-md-12 mb-3"><label class="labels">Gender</label><input type="text"
-                                class="form-control" placeholder="enter address line 1" formControlName="gender" ></div>
+                                class="form-control" formControlName="gender" ></div>
 
                         <div class="form-group mb-4">
                             <label for="bloodGroup">Blood Group</label>
@@ -44,7 +44,6 @@
                         <div class="form-group mb-4">
 
                             <label for="dob">Date of Birth</label>
-                            <p>{{this.user?.dob?.getDate?.toString}}</p>
 
                             <input type="date" class="form-control" id="dob" [placeholder]="user?.dob"
                                 formControlName="dob">
@@ -56,10 +55,10 @@
                         <div class="col-md-12 mb-3"><label class="labels">Email</label><input type="text"
                                 class="form-control" formControlName="email" ></div>
                         <div class="col-md-12 mb-3"><label class="labels">Height</label><input type="text"
-                                class="form-control" placeholder="enter address line 2" formControlName="height"
+                                class="form-control" placeholder="e.g.(5.7 feet)" formControlName="height"
                                 ></div>
                         <div class="col-md-12 mb-3"><label class="labels">Weight</label><input type="text"
-                                class="form-control" placeholder="enter email id" formControlName="weight"
+                                class="form-control" placeholder="e.g.(70 kg)" formControlName="weight"
                                 ></div>
 
                         

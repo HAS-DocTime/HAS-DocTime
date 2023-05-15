@@ -6,7 +6,7 @@ export type MedicalHistory = {
   id? : number;
   disease : string;
   medicine : string;
-  user: User;
-  doctor: Doctor;
-  timeSlotForAppointmentData: TimeSlot;
+  user?: User;
+  doctor?: Doctor;
+  timeSlotForAppointmentData?: TimeSlot;
 }
