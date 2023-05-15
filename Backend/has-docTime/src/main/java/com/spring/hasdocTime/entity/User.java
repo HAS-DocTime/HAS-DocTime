@@ -1,5 +1,6 @@
 package com.spring.hasdocTime.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.spring.hasdocTime.utills.BloodGroup;
 import com.spring.hasdocTime.utills.Gender;
@@ -62,6 +63,10 @@ public class User implements UserDetails {
     @Column(name="role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Token> tokens;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "user", allowSetters = true)
