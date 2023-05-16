@@ -50,6 +50,7 @@ export class BookAppointmentComponent implements OnInit{
     for(let symptom of this.symptomList.value){
       symptom.id = parseInt(symptom.id);
     }
+    console.log(this.currentUser);
     this.bookAppointment.value["user"] = {
       "id": this.currentUser?.id
     }

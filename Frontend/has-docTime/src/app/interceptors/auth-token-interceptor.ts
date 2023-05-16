@@ -6,17 +6,17 @@ import { Observable } from "rxjs";
 export class AuthTokenInterceptor implements HttpInterceptor{
 
     constructor(){}
-    
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         // const authToken = localStorage.getItem('token');
         const authToken = window.sessionStorage.getItem('token');
-    
 
-        // let authToken : String = "";  
+
+        // let authToken : String = "";
         // if(localStorage.getItem('token') !== null){
         //     authToken != localStorage.getItem('token');
-        // }  
+        // }
         // console.log(authToken);
 
         if(authToken){
@@ -24,11 +24,9 @@ export class AuthTokenInterceptor implements HttpInterceptor{
             req = req.clone({
                 setHeaders : {
                     Authorization : `Bearer ${authToken}`
-                }   
+                }
             });
         }
-
         return next.handle(req);
     }
-
 }
