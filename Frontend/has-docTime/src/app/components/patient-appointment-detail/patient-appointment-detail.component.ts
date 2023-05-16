@@ -23,6 +23,8 @@ export class PatientAppointmentDetailComponent implements OnInit{
   ngOnInit(): void {
       this.sharedService.getPatientAppointmentDetail().subscribe(data => {
         this.appointment = data;
+        console.log(this.appointment);
+        
       });
 
       this.postAppointmentService.getPostAppointmentDataByUser(this.appointment?.user.id).subscribe(
