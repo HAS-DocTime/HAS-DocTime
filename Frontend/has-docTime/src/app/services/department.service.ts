@@ -14,4 +14,8 @@ export class DepartmentService {
   getDepartments(){
     return this.http.get<Department[]>(`${this.base_url}department`);
   }
+
+  getDepartmentById(id: number){
+    return this.http.get<Department>(`${this.base_url}department/${id}`);
+  }
 }

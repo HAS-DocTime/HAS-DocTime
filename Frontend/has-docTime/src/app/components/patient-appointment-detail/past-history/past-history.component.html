@@ -19,7 +19,7 @@
           <td>{{ appointment.doctor?.user?.name }}</td>
           <td>{{ appointment.doctor?.department?.name }} </td>
           <td>
-            <a class="btn" >
+            <a class="btn" (click)="loadPostAppointment()">
               <i class="fa-solid fa-caret-right"></i>
             </a>
           </td>

@@ -31,6 +31,7 @@ import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archi
 import { PatientAppointmentDetailComponent } from './components/patient-appointment-detail/patient-appointment-detail.component';
 import { PastHistoryComponent } from './components/patient-appointment-detail/past-history/past-history.component';
 import { AppointmentDetailFromDoctorComponent } from './components/patient-appointment-detail/appointment-detail-from-doctor/appointment-detail-from-doctor.component';
+import { SymptomComponent } from './components/symptom/symptom.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { AppointmentDetailFromDoctorComponent } from './components/patient-appoi
     CaseDetailComponent,
     PatientAppointmentDetailComponent,
     PastHistoryComponent,
-    AppointmentDetailFromDoctorComponent
+    AppointmentDetailFromDoctorComponent,
+    SymptomComponent
   ],
   imports: [
     BrowserModule,

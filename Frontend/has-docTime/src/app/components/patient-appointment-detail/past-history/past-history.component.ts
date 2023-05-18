@@ -28,4 +28,8 @@ export class PastHistoryComponent {
 
     
   }
+
+  loadPostAppointment(){
+    
+  }
 }

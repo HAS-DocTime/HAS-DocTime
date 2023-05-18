@@ -17,6 +17,8 @@ import { CaseDetailComponent } from './components/case-detail/case-detail.compon
 import { PatientAppointmentDetailComponent } from './components/patient-appointment-detail/patient-appointment-detail.component';
 import { AppointmentDetailFromDoctorComponent } from './components/patient-appointment-detail/appointment-detail-from-doctor/appointment-detail-from-doctor.component';
 import { PastHistoryComponent } from './components/patient-appointment-detail/past-history/past-history.component';
+import { SymptomComponent } from './components/symptom/symptom.component';
+import { OurServicesComponent } from './components/our-services/our-services.component';
 
 
 const routes: Routes = [
@@ -31,6 +33,8 @@ const routes: Routes = [
       {path : "pastHistory",component : PastHistoryComponent}
     ]},
     {path : "profile", component : ProfilePageComponent},
+    {path : "ourServices", component : OurServicesComponent},
+    {path : "symptom", component : SymptomComponent},
     {path : "appointment/book", component : BookAppointmentComponent},
     {path : "appointment/:id", component : AppointmentDetailComponent},
     {path : "medicalHistory", component : MedicalHistoryComponent},
