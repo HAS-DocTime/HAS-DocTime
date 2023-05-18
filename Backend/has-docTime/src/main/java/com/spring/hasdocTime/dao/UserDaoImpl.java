@@ -131,7 +131,6 @@ public class UserDaoImpl implements UserInterface {
             user.setRole(Role.PATIENT);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return updateUserWithPassword(user);
     }
 
