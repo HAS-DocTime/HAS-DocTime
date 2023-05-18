@@ -10,6 +10,7 @@ import com.spring.hasdocTime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,11 +32,11 @@ public class LoginDaoImpl implements LoginInterface {
             throw new MissingParameterException("Password");
         }
 
-        authenticationManager.authenticate
-                (new UsernamePasswordAuthenticationToken(
-                        loginDetail.getEmail(),
-                        loginDetail.getPassword()
-                )
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                loginDetail.getEmail(),
+                loginDetail.getPassword());
+        Authentication auth = authenticationManager.authenticate(
+                usernamePassword
         );
         var user = userRepository.findByEmail(loginDetail.getEmail()).orElseThrow();
         UserDetailForToken userDetailForToken;

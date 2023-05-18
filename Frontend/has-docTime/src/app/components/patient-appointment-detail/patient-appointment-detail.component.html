@@ -2,122 +2,16 @@
 
 
 <div class="container">
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="#appointmentDetails">Appointment Details</a>
+      <a class="nav-link active" routerLink="appointmentDetails" aria-current="page" routerLinkActive="active" href="#appointmentDetails">Appointment Details</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#pastHistory">Past History</a>
+      <a class="nav-link" routerLink="pastHistory" routerLinkActive="active" href="#pastHistory">Past History</a>
     </li>
   </ul>
-    <hr>
-    
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="row mb-4">
-          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Patient Name</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.user?.name }}</p>
-              </div>
-            </div>
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Description</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.description }}</p>
-              </div>
-            </div>
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Contact</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.user?.contact }}</p>
-              </div>
-            </div>
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Email</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.user?.email }}</p>
-              </div>
-            </div>
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Age</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.user?.age }} years</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Time Slot</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.timeSlotForAppointment?.startTime }} - {{ appointment?.timeSlotForAppointment?.endTime }}</p>
-              </div>
-            </div>
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Gender</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.user?.gender }}</p>
-              </div>
-            </div>
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Blood Group</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.user?.bloodGroup }}</p>
-              </div>
-            </div>
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Height</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.user?.height }} feet</p>
-              </div>
-            </div>
-            <div class="form-group row mb-2">
-              <label for="" class="col-5 col-form-label"><strong>Weight</strong></label>
-              <div class="col-7">
-                <p class="form-control-plaintext">{{ appointment?.user?.weight }} kg</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-            <label for="" class="col-form-label"><strong>Symptoms</strong></label>
-            <div class="d-flex flex-wrap justify-content-around">
-              <div
-                class=" p-0 mx-1 my-1 shadow-none border-dark badge bg-secondary"
-                *ngFor="let symptom of appointment?.symptoms"
-              >
-                <div class="py-1 text-light p-2">
-                  {{ symptom.name }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-    </div>
-    </div>
+    <router-outlet></router-outlet>
     
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title">Past Appointment History</h5>
-      </div>
-      <div class="card-body">
-        <ul class="list-group">
-          <li class="list-group-item" *ngFor="let pastAppointment of postAppointmentDataList">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <h6 class="mb-0">{{ pastAppointment?.disease }}</h6>
-                <p class="mb-1">{{ pastAppointment?.doctor?.user?.name }}</p>
-                <p class="mb-1">{{ pastAppointment?.doctor?.department?.name }}</p>
-              </div>
-              <button class="btn btn-primary">View Details</button>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
   </div>
   

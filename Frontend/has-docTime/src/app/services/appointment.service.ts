@@ -11,7 +11,7 @@ export class AppointmentService {
 
   baseUrl = "http://localhost:8080/";
 
-  getAppointmentByUser(userId : number){
+  getAppointmentByUser(userId : string | null){
     return this.http.get<Appointment[]>(`${this.baseUrl}appointment/user/${userId}`);
   }
 
@@ -19,7 +19,7 @@ export class AppointmentService {
     return this.http.get<Appointment>(`${this.baseUrl}appointment/${id}`);
   }
 
-  deleteAppointment(id : number){
+  deleteAppointment(id : number | undefined){
     return this.http.delete(`${this.baseUrl}appointment/${id}`);
   }
 

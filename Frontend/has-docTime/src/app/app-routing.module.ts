@@ -15,6 +15,8 @@ import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedul
 import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archive/resolved-cases-archive.component';
 import { CaseDetailComponent } from './components/case-detail/case-detail.component';
 import { PatientAppointmentDetailComponent } from './components/patient-appointment-detail/patient-appointment-detail.component';
+import { AppointmentDetailFromDoctorComponent } from './components/patient-appointment-detail/appointment-detail-from-doctor/appointment-detail-from-doctor.component';
+import { PastHistoryComponent } from './components/patient-appointment-detail/past-history/past-history.component';
 
 
 const routes: Routes = [
@@ -24,7 +26,10 @@ const routes: Routes = [
   {path : "dashboard", component : DashboardComponent, children : [
     {path : "appointment", component : AppointmentComponent},
     {path : "doctorScheduleAppointments", component : DoctorScheduleAppointmentsComponent},
-    {path : "doctorScheduleAppointments/patientAppointmentDetail", component : PatientAppointmentDetailComponent},
+    {path : "doctorScheduleAppointments/patientAppointmentDetail", component : PatientAppointmentDetailComponent, children: [
+      {path : "appointmentDetails", component : AppointmentDetailFromDoctorComponent},
+      {path : "pastHistory",component : PastHistoryComponent}
+    ]},
     {path : "profile", component : ProfilePageComponent},
     {path : "appointment/book", component : BookAppointmentComponent},
     {path : "appointment/:id", component : AppointmentDetailComponent},

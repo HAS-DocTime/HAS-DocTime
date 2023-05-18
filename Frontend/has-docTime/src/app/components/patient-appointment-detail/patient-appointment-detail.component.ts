@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Appointment } from 'src/app/models/appointment.model';
 import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
@@ -12,8 +13,10 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class PatientAppointmentDetailComponent implements OnInit{
 
-  appointment?: Appointment | null;
+  appointment?: Appointment;
   postAppointmentDataList?: MedicalHistory[];
+  // appointmentData: Subject<Appointment | undefined> = new Subject<Appointment | undefined>();
+  // postAppointmentDataListData: Subject<MedicalHistory[]> = new Subject<MedicalHistory[]>();
 
   constructor(
     private sharedService: SharedService,
@@ -21,17 +24,6 @@ export class PatientAppointmentDetailComponent implements OnInit{
     ){}
 
   ngOnInit(): void {
-      this.sharedService.getPatientAppointmentDetail().subscribe(data => {
-        this.appointment = data;
-        console.log(this.appointment);
-        
-      });
-
-      this.postAppointmentService.getPostAppointmentDataByUser(this.appointment?.user.id).subscribe(
-        data => {
-          this.postAppointmentDataList = data;
-        }
-      );
   }
 
 }

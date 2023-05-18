@@ -47,9 +47,15 @@ export class DoctorScheduleAppointmentsComponent {
     this.router.navigate([id], {relativeTo : this.route});
   }
 
-  appointmentDetail(id: number){
-    this.sharedService.setPatientAppointmentDetail(this.appointments[id]);
-    this.router.navigate(['patientAppointmentDetail'], {relativeTo:this.route});
+  appointmentDetail(i : number){
+    // console.log("appointment ", this.appointments[i].user.id);
+    
+    // console.log("userId", i);
+    
+    sessionStorage.setItem('userId', this.appointments[i].user.id.toString());
+    sessionStorage.setItem('appointmentId', i.toString());
+    // console.log("here");
+    this.router.navigate(['patientAppointmentDetail/appointmentDetails'], {relativeTo:this.route});
   }
 
 }

@@ -4,8 +4,8 @@ import { TimeSlot } from "./timeSlot.model";
 
 export type MedicalHistory = {
   id? : number;
-  disease : string;
-  medicine : string;
+  disease? : string;
+  medicine? : string;
   user?: User;
   doctor?: Doctor;
   timeSlotForAppointmentData?: TimeSlot;

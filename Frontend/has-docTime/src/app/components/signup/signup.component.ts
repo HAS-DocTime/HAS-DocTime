@@ -149,6 +149,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
           casesSolved : 0,
           patientChronicIllness : []
         });
+        this.router.navigate(['/dashboard/appointment']);
       });
     }
     else if(user.role === "DOCTOR"){
@@ -184,9 +185,9 @@ constructor(private userService : UserService, private doctorService : DoctorSer
             casesSolved : 0,
             patientChronicIllness : []
         });
+        this.router.navigate(['/dashboard/doctorScheduleAppointments']);
       });
     }
-    this.router.navigate(["/dashboard"]);
   }
 
 //   registerUser(signupDetail: LoginDetails){

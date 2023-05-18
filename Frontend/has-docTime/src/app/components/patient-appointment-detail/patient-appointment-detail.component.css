@@ -8,7 +8,12 @@
     border-radius: 50px;
   }
   
-  .bg-secondary {
+  /* .bg-secondary {
     background-color: #b9396a!important;
+    color: #fff!important;
+  } */
+
+  .bg-primary {
+    background-color: #214ec9!important;
     color: #fff!important;
   }

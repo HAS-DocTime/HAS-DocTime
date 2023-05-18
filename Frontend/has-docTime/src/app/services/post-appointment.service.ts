@@ -14,7 +14,7 @@ export class PostAppointmentService {
     return this.http.get<MedicalHistory[]> (`${this.base_url}postAppointmentData/doctor/${id}`);
   }
 
-  getPostAppointmentDataByUser(id: number | undefined){
+  getPostAppointmentDataByUser(id: string | undefined | null){
     return this.http.get<MedicalHistory[]>(`${this.base_url}postAppointmentData/user/${id}`);
   }
 

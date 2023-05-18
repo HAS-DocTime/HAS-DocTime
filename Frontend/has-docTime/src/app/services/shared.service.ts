@@ -8,23 +8,13 @@ import { Appointment } from '../models/appointment.model';
 })
 export class SharedService {
 
-  private resolvedCaseDetailedData = new BehaviorSubject<MedicalHistory | null | undefined>(null);
-  private patientAppointmentDetail = new BehaviorSubject<Appointment | null | undefined> (null);
-
+  private resolvedCaseDetailedData = new BehaviorSubject<MedicalHistory  | undefined>({});
   setresolvedCaseDetailedData(medicalHistory: MedicalHistory | undefined){
     this.resolvedCaseDetailedData.next(medicalHistory);
   }
 
   getresolvedCaseDetailedData(){
     return this.resolvedCaseDetailedData;
-  }
-
-  setPatientAppointmentDetail(appointment : Appointment | undefined){
-    this.patientAppointmentDetail.next(appointment);
-  }
-
-  getPatientAppointmentDetail(){
-    return this.patientAppointmentDetail;
   }
 
   constructor() { }
