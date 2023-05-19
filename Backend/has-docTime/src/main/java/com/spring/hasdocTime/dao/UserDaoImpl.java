@@ -10,13 +10,12 @@ import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -131,7 +130,6 @@ public class UserDaoImpl implements UserInterface {
             user.setRole(Role.PATIENT);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return updateUserWithPassword(user);
     }
 
@@ -151,10 +149,11 @@ public class UserDaoImpl implements UserInterface {
     }
 
     @Override
+    @Transactional
     public User deleteUser(int id) throws DoesNotExistException{
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()) {
-            userRepository.delete(optionalUser.get());
+            userRepository.deleteById(optionalUser.get().getId());
             return optionalUser.get();
         }
         throw new DoesNotExistException("User");
@@ -168,6 +167,35 @@ public class UserDaoImpl implements UserInterface {
         }
         return user.get();
     }
-    
-    
+
+    @Override
+    public List<User> getPatients(){
+        return userRepository.getPatients();
+    }
+
+
+
+    @Override
+    public Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException{
+        Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
+        if(optionalChronicIllness.isEmpty()){
+            throw new DoesNotExistException("Chronic Illness");
+        }
+        else{
+            Set<User> users = new HashSet<>();
+            for(int i=0; i<optionalChronicIllness.get().getPatientChronicIllnesses().toArray().length; i++){
+                Integer tempUserId = (optionalChronicIllness.get().getPatientChronicIllnesses().get(i).getId().getPatientId());
+                Optional<User> tempUser = userRepository.findById(tempUserId);
+                if(tempUser.isPresent()){
+                    users.add(tempUser.get());
+                }
+                else{
+                    return null;
+                }
+            }
+            return users;
+        }
+
+    }
+
 }

@@ -27,22 +27,32 @@ public class DoctorServiceImpl implements DoctorInterface {
         this.doctorDao = doctorDao;
     }
 
+    @Override
     public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException{
         return doctorDao.createDoctor(doctor);
     }
 
+    @Override
     public List<Doctor> getAllDoctors() {
         return doctorDao.getAllDoctors();
     }
 
+    @Override
+    public List<Doctor> getDoctorsByDepartmentId(int id) {
+        return doctorDao.getDoctorsByDepartmentId(id);
+    }
+
+    @Override
     public Doctor getDoctor(int id) throws DoesNotExistException {
         return doctorDao.getDoctor(id);
     }
 
+    @Override
     public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException {
         return doctorDao.updateDoctor(id, doctor);
     }
 
+    @Override
     public Doctor deleteDoctor(int id) throws DoesNotExistException{
         return doctorDao.deleteDoctor(id);
     }

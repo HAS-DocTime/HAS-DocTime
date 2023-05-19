@@ -26,6 +26,13 @@ import { AppointmentDetailComponent } from './components/appointment-detail/appo
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UserDoctorListComponent } from './components/user-doctor-list/user-doctor-list.component';
+import { DepartmentComponent } from './components/department/department.component';
+import { DeptDetailComponent } from './components/department/dept-detail/dept-detail.component';
+import { SymptomComponent } from './components/symptom/symptom.component';
+import { ChronicIllnessComponent } from './components/chronic-illness/chronic-illness.component';
+import { ChronicIllnessDetailComponent } from './components/chronic-illness/chronic-illness-detail/chronic-illness-detail.component';
+import { SymptomDetailComponent } from './components/symptom/symptom-detail/symptom-detail.component';
 
 @NgModule({
   declarations: [
@@ -38,12 +45,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HomeComponent,
     OurServicesComponent,
     ProfilePageComponent,
-
     AppointmentDetailComponent,
     DashboardComponent,
     MedicalHistoryComponent,
     DetailedHistoryComponent,
-    BookAppointmentComponent
+    BookAppointmentComponent,
+    UserDoctorListComponent,
+    DepartmentComponent,
+    DeptDetailComponent,
+    SymptomComponent,
+    ChronicIllnessComponent,
+    ChronicIllnessDetailComponent,
+    SymptomDetailComponent
   ],
   imports: [
     BrowserModule,

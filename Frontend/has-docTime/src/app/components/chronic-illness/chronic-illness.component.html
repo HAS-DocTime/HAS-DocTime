@@ -1,0 +1,33 @@
+<div class="col m-0 p-0 mt-5">
+  <div class="container">
+    <h1 class="mb-4 text-center">Chronic Illness</h1>
+
+    <hr>
+    <div class="table-responsive m-0 p-0" >
+
+      <table class="table table-striped table-dark mb-5 p-0" >
+        <thead class="text-center">
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Total Patients</th>
+            <th> </th>
+          </tr>
+        </thead>
+        <tbody class=" text-center" *ngFor="let chronicIllness of chronicIllnessList; let i = index" [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
+          <tr>
+            <td>{{ chronicIllness?.id }}</td>
+            <td>{{ chronicIllness?.name }}</td>
+            <td>{{ chronicIllness?.patientChronicIllnesses?.length }}</td>
+            <td>
+              <a class="btn btn-sm btn-dark " [routerLink]="[(chronicIllness?.id)]">
+                More Details
+              </a>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>

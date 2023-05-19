@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
 import { Doctor } from '../models/doctor.model';
+import { Admin } from '../models/admin.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,8 +40,13 @@ export class UserService {
     return this.http.put<Doctor>(`${this.baseUrl}doctor/${id}`, doctor);
   }
 
-  getUser(){
-    return this.http.get<User>(`${this.baseUrl}user/findByEmail`);
+  updateAdmin( admin: Admin, id : number ){
+    console.log(admin);
+    return this.http.put<Admin>(`${this.baseUrl}admin/${id}`, admin);
+  }
+
+  getUser(id : number){
+    return this.http.get<User>(`${this.baseUrl}user/${id}`);
   }
 
   logOutUser(){

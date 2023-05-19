@@ -95,7 +95,7 @@
         </div>
       </div>
       <div class="link">
-        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="asfd" routerLinkActive="active-page">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="users" routerLinkActive="active-page">
           <div class="icon">
             <i class="fa-solid fa-hospital-user"></i>
           </div>
@@ -103,7 +103,7 @@
         </div>
       </div>
       <div class="link">
-        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="sdg" routerLinkActive="active-page">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="doctors" routerLinkActive="active-page">
           <div class="icon">
             <i class="fa-solid fa-user-doctor"></i>
           </div>
@@ -111,7 +111,7 @@
         </div>
       </div>
       <div class="link">
-        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="uj" routerLinkActive="active-page">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="departments" routerLinkActive="active-page">
           <div class="icon">
             <i class="fa-solid fa-house-medical"></i>
           </div>
@@ -119,7 +119,7 @@
         </div>
       </div>
       <div class="link">
-        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="tyui" routerLinkActive="active-page">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="symptoms" routerLinkActive="active-page">
           <div class="icon">
             <i class="fa-solid fa-temperature-full"></i>
           </div>
@@ -127,7 +127,7 @@
         </div>
       </div>
       <div class="link">
-        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="rty" routerLinkActive="active-page">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="chronicIllness" routerLinkActive="active-page">
           <div class="icon">
             <i class="fa-solid fa-virus-covid"></i>
           </div>
@@ -135,7 +135,11 @@
         </div>
       </div>
     </div>
-    <div class="footer"></div>
+    <div id="scrollBtn">
+      <button (click)="scrollToTop()" class="btn btn-light btn-lg btn-scroll-top position-fixed bottom-0 mb-4" [ngClass]="{'show': isShowScrollButton}">
+        <i class="fa fa-angle-up" ></i>
+      </button>
+    </div>
   </div>
     </div>
 

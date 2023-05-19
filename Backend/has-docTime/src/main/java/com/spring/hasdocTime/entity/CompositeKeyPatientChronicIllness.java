@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Embeddable
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CompositeKeyPatientChronicIllness implements Serializable {
@@ -21,4 +20,22 @@ public class CompositeKeyPatientChronicIllness implements Serializable {
 
     @Column(name = "chronic_illness_id")
     private int chronicIllnessId;
+
+
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
+    }
+
+    public int getChronicIllnessId() {
+        return chronicIllnessId;
+    }
+
+    public void setChronicIllnessId(int chronicIllnessId) {
+        this.chronicIllnessId = chronicIllnessId;
+    }
 }

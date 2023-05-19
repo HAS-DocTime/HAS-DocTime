@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.print.Doc;
 import java.sql.Time;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -159,5 +160,10 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
             return "postAppointmentData with id: " + id + " is deleted";
         }
         throw new DoesNotExistException("Post Appointment Data");
+    }
+
+    @Override
+    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom);
     }
 }

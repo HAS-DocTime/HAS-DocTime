@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterface {
@@ -48,5 +49,10 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
     @Override
     public String deletePostAppointmentData(int id) throws DoesNotExistException{
         return postAppointmentDataDao.deletePostAppointmentData(id);
+    }
+
+    @Override
+    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataDao.getDiseasesGroupedBySymptom(symptom);
     }
 }

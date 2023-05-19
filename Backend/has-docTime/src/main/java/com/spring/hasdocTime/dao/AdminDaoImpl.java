@@ -24,11 +24,11 @@ public class AdminDaoImpl implements AdminInterface {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     @Qualifier("userDaoImpl")
     private UserInterface userDao;
-    
+
     @Override
     public List<Admin> getAllAdmin(){
         return adminRepository.findAll();
@@ -49,6 +49,10 @@ public class AdminDaoImpl implements AdminInterface {
     public Admin updateAdmin(int id, Admin admin) throws DoesNotExistException, MissingParameterException{
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
         if(optionalAdmin.isPresent()) {
+            Admin oldAdmin = optionalAdmin.get();
+            if(admin.getUser().getPassword()==null){
+                admin.getUser().setPassword(oldAdmin.getUser().getPassword());
+            }
             if(admin.getUser()==null){
                 throw new MissingParameterException("User");
             }
@@ -78,14 +82,14 @@ public class AdminDaoImpl implements AdminInterface {
                     throw new MissingParameterException("Password");
                 }
             }
-            if(userRepository.findById(admin.getUser().getId()).isEmpty()){
-                throw new DoesNotExistException("User");
-            }
             admin.setId(id); // setting admin id
             admin.getUser().setId(optionalAdmin.get().getUser().getId()); // setting user object id
             admin.getUser().setRole(Role.ADMIN);
+            if(userRepository.findById(admin.getUser().getId()).isEmpty()){
+                throw new DoesNotExistException("User");
+            }
             userRepository.save(admin.getUser()); // call userRepository's save function
-            return optionalAdmin.get(); // fetching Updated data
+            return oldAdmin; // fetching Updated data
         }
         throw new DoesNotExistException("Admin");
     }

@@ -5,6 +5,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostAppointmentDataInterface {
 
@@ -18,5 +19,7 @@ public interface PostAppointmentDataInterface {
     public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) throws DoesNotExistException, MissingParameterException;
 
     public String deletePostAppointmentData(int id) throws DoesNotExistException;
+
+    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException;
 
 }

@@ -57,6 +57,15 @@ public class DoctorController {
         }
         return new ResponseEntity(doctors, HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "department/{departmentId}")
+    public ResponseEntity<List<Doctor>> getDoctorsByDepartmentId(@PathVariable("departmentId") int id){
+        List<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id);
+        if(doctors.isEmpty()){
+            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(doctors, HttpStatus.OK);
+    }
     
     @RequestMapping(method = RequestMethod.GET, value = "{doctorId}")
     public ResponseEntity<Doctor> getDoctor(@PathVariable("doctorId") int id) throws AccessDeniedException, DoesNotExistException {

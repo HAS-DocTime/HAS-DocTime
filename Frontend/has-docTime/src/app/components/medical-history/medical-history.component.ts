@@ -27,7 +27,7 @@ export class MedicalHistoryComponent implements OnInit{
     );
   }
 
-  getdetailedHistory(id : any){
+  getdetailedHistory(id : number | undefined){
 
     this.router.navigate([id], {relativeTo : this.route});
   }

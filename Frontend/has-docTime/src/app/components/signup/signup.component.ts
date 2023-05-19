@@ -103,6 +103,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
       else if(date.getMonth() === (new Date(user.dob as Date).getMonth())){
         if(date.getDate() >= new Date(user.dob as Date).getDate()){
           age++;
+          
         }
       }
       user.age = age;

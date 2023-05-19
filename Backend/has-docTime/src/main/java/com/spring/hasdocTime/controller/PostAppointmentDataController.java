@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("postAppointmentData")
@@ -27,12 +28,8 @@ public class PostAppointmentDataController {
 
     @GetMapping
     public ResponseEntity<List<PostAppointmentData>> getAllPostAppointmentData() {
-        try {
             List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getAllPostAppointmentData();
             return ResponseEntity.ok(allPostAppointmentData);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
 
     }
 
@@ -49,10 +46,6 @@ public class PostAppointmentDataController {
     public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail() {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail);
-//        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        if(allPostAppointmentData.isEmpty()) {
-            return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NOT_FOUND);
-            }
         return ResponseEntity.ok(allPostAppointmentData);
     }
 
@@ -81,4 +74,12 @@ public class PostAppointmentDataController {
         }
     }
 
+    @GetMapping("/disease/{symptom}")
+    public ResponseEntity<List<Map<String, Integer>>> getDiseasesBySymptom(@PathVariable String symptom) throws DoesNotExistException{
+        List<Map<String, Integer>> diseaseData = postAppointmentDataService.getDiseasesGroupedBySymptom(symptom);
+        if(diseaseData.isEmpty()){
+            return new ResponseEntity<>(diseaseData, HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(diseaseData);
+    }
 }

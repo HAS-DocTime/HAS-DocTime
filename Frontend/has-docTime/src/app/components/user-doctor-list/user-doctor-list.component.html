@@ -1,0 +1,51 @@
+<div class="col m-0 p-0 mt-5">
+  <div class="container">
+    <h1 class="mb-4 text-center" *ngIf="urlPath==='users'">Users</h1>
+    <h1 class="mb-4 text-center" *ngIf="urlPath==='doctors' || urlPath==='departments'">Doctors</h1>
+
+    <hr>
+    <div class="table-responsive m-0 p-0" >
+
+      <table class="table table-striped table-dark mb-5 p-0" >
+        <thead class="text-center">
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Gender</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class=" text-center" *ngFor="let user of users; let i = index" [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
+          <tr>
+            <td>{{ user?.id }}</td>
+            <td>{{ user?.name }}</td>
+            <td>{{ user?.email }} </td>
+            <td>{{ user?.contact }} </td>
+            <td>{{ user?.gender }} </td>
+            <td>
+              <a class="btn" (click)="getSingleUser(user?.id)">
+                <i class="fa-solid fa-caret-right"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class=" text-center" *ngFor="let doctor of doctors; let i = index" [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
+          <tr>
+            <td>{{ doctor?.id }}</td>
+            <td>{{ doctor?.user?.name }}</td>
+            <td>{{ doctor?.user?.email }} </td>
+            <td>{{ doctor?.user?.contact }} </td>
+            <td>{{ doctor?.user?.gender }} </td>
+            <td>
+              <a class="btn" (click)="getSingleUser(doctor?.id)">
+                <i class="fa-solid fa-caret-right"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

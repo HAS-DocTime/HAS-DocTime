@@ -14,4 +14,8 @@ export class SymptomService {
   getSymptoms(){
     return this.http.get<Symptom[]>(`${this.baseUrl}symptom`);
   }
+
+  getDiseaseWithCaseCountFromSymptom(symptom : string){
+    return this.http.get<Object[]>(`${this.baseUrl}postAppointmentData/disease/${symptom}`);
+  }
 }
