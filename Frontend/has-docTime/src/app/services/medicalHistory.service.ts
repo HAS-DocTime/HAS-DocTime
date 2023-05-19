@@ -9,7 +9,7 @@ import { Observable, map, switchMap } from "rxjs";
 })
 export class MedicalHistoryService {
 
-  constructor(private http : HttpClient, private userService : UserService) { }
+  constructor(private http : HttpClient) { }
 
   base_url = "http://localhost:8080/"
 
@@ -21,5 +21,9 @@ export class MedicalHistoryService {
 
   getMedicalHistoryById(appointmentId:any){
     return this.http.get<MedicalHistory>(`${this.base_url}postAppointmentData/${appointmentId}`);
+  }
+
+  getMedicalHistory(){
+    return this.http.get<MedicalHistory[]>(`${this.base_url}postAppointmentData`);
   }
 }

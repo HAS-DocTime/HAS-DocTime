@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.repository;
 
 import com.spring.hasdocTime.entity.Appointment;
+import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,4 +18,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     void deleteById(@Param("id") int id);
 
     List<Appointment> findByUser(User user);
+
+    List<Appointment> findByDoctor(Doctor doctor);
 }

@@ -13,13 +13,28 @@ import { SymptomService } from 'src/app/services/symptom.service';
 export class SymptomComponent implements OnInit{
   constructor(private symptomService : SymptomService, private route: ActivatedRoute, private departmentService : DepartmentService){}
   symptoms! : Symptom[];
+  symptom:  string = "";
+  medicalHistoryLength: number = 0;
+  medicalHistoryLengths: number[] = [];
 
   ngOnInit(){
+
+
+
     this.symptomService.getSymptoms().subscribe((data)=>{
-      console.log(data);
 
       for(let i=0; i<data.length; i++){
         let departmentArray : Department[] = [];
+        this.symptom = data[i].name as string;
+        this.symptomService.getDiseaseWithCaseCountFromSymptom(this.symptom).subscribe((data)=>{
+          this.medicalHistoryLength=0;
+            if(data!==null){
+              for(let diseaseCaseCount of data){
+                this.medicalHistoryLength+=diseaseCaseCount.caseCount;
+              }
+            }
+            this.medicalHistoryLengths.push(this.medicalHistoryLength);
+          })
         const departmentLength : number | undefined = data[i].departments?.length;
         for(let j=0; j<(departmentLength as number); j++){
           let departmentObj : Department | undefined = data[i].departments?.[j];
@@ -42,7 +57,7 @@ export class SymptomComponent implements OnInit{
     })
   }
 
-  getAppointmentsFromSymptoms(id: number | undefined) {
+  getCaseCount(symptom : string | undefined){
 
   }
 }

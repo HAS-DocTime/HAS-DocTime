@@ -22,4 +22,6 @@ public interface PostAppointmentDataInterface {
 
     public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException;
 
+    public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException;
+
 }

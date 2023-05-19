@@ -22,9 +22,10 @@ export class SidebarComponent implements OnInit{
   let max = document.documentElement.scrollHeight;
   let scrollBtn = document.getElementById('scrollBtn');
   if(scrollBtn){
+
     scrollBtn.style.display = "block";
   }
-  if(pos == max)   {
+  if(pos == max || pos==max+1)   {
     if(scrollBtn){
       scrollBtn.style.display = "none";
     }

@@ -39,11 +39,10 @@ public class SymptomDaoImpl implements SymptomInterface {
     @Override
     public Symptom getSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
-        Symptom s = null;
-        if(optionalSymptom.isPresent()){
-            s = optionalSymptom.get();
+        if(optionalSymptom.isEmpty()){
+            throw new DoesNotExistException("Symptom");
         }
-        throw new DoesNotExistException("Symptom");
+        return optionalSymptom.get();
     }
 
     @Override

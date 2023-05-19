@@ -1,6 +1,16 @@
 <!--
-
 <div class="card flex justify-content-center">
     <p-chart type="pie" [data]="data" [options]="options"></p-chart>
 </div>
  -->
+ <div *ngIf = "noDataFound" class="noData">
+  <img [src]="noDataFoundImg" alt="No Data Found">
+  <p>No Data Found!!</p>
+</div>
+ <div class="pieChart" *ngIf="!noDataFound">
+   <div  class="chartContainer">
+    <apx-chart [series]="chartSeries" [chart]="chartDetails" [labels]="chartLabels" [title]="chartTitle" [dataLabels]="chartDataLabels" [plotOptions]="plotOptions"></apx-chart>
+   </div>
+ </div>
+
+ <app-medical-history *ngIf="!noDataFound"></app-medical-history>

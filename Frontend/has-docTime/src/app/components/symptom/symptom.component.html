@@ -19,7 +19,7 @@
             <td>{{ symptom?.id }}</td>
             <td>{{ symptom?.name }}</td>
             <td>
-                {{ symptom?.appointments?.length }}
+                {{ medicalHistoryLengths[i] }}
                 <a class="btn btn-sm btn-dark " [routerLink]="[symptom?.id]">
                   More Details
                 </a>

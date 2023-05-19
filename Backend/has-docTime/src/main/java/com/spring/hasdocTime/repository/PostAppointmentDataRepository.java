@@ -23,4 +23,7 @@ public interface PostAppointmentDataRepository extends JpaRepository<PostAppoint
 
     @Query("SELECT p.disease AS disease, COUNT(p) AS caseCount FROM PostAppointmentData p WHERE LOWER(p.symptoms) LIKE %:symptom% GROUP BY p.disease")
     List<Map<String, Integer>> findDiseasesGroupedBySymptom(@Param("symptom") String symptom);
+
+    @Query("SELECT p from PostAppointmentData p where LOWER(p.symptoms) LIKE %:symptom%")
+    List<PostAppointmentData> findPostAppointmentDataGroupedBySymptom(@Param("symptom") String symptom);
 }

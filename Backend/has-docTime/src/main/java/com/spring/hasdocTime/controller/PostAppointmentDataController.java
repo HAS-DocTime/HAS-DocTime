@@ -29,6 +29,9 @@ public class PostAppointmentDataController {
     @GetMapping
     public ResponseEntity<List<PostAppointmentData>> getAllPostAppointmentData() {
             List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getAllPostAppointmentData();
+            if(allPostAppointmentData.isEmpty()){
+                return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NO_CONTENT);
+            }
             return ResponseEntity.ok(allPostAppointmentData);
 
     }
@@ -74,12 +77,21 @@ public class PostAppointmentDataController {
         }
     }
 
-    @GetMapping("/disease/{symptom}")
+    @GetMapping("disease/{symptom}")
     public ResponseEntity<List<Map<String, Integer>>> getDiseasesBySymptom(@PathVariable String symptom) throws DoesNotExistException{
         List<Map<String, Integer>> diseaseData = postAppointmentDataService.getDiseasesGroupedBySymptom(symptom);
         if(diseaseData.isEmpty()){
-            return new ResponseEntity<>(diseaseData, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(diseaseData, HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(diseaseData);
+    }
+
+    @GetMapping("data/{symptom}")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataBySymptom(@PathVariable String symptom) throws DoesNotExistException {
+        List<PostAppointmentData> appointmentData = postAppointmentDataService.getPostAppointmentDataBySymptom(symptom);
+        if(appointmentData.isEmpty()){
+            return new ResponseEntity<>(appointmentData, HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(appointmentData);
     }
 }

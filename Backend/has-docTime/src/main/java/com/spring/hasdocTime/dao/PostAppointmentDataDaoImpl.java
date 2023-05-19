@@ -41,6 +41,8 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         this.timeSlotRepository = timeSlotRepository;
     }
 
+
+
     @Override
     public List<PostAppointmentData> getAllPostAppointmentData() {
         return postAppointmentDataRepository.findAll();
@@ -165,5 +167,10 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     @Override
     public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
         return postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom);
+    }
+
+    @Override
+    public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom);
     }
 }

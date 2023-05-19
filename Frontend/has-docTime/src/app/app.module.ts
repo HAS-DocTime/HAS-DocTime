@@ -32,8 +32,8 @@ import { DeptDetailComponent } from './components/department/dept-detail/dept-de
 import { SymptomComponent } from './components/symptom/symptom.component';
 import { ChronicIllnessComponent } from './components/chronic-illness/chronic-illness.component';
 import { ChronicIllnessDetailComponent } from './components/chronic-illness/chronic-illness-detail/chronic-illness-detail.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 import { SymptomDetailComponent } from './components/symptom/symptom-detail/symptom-detail.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,7 +70,8 @@ import { SymptomDetailComponent } from './components/symptom/symptom-detail/symp
     HttpClientModule,
     RouterModule,
     CommonModule,
-    NgbModule
+    NgbModule,
+    NgApexchartsModule
   ],
   providers: [
     {

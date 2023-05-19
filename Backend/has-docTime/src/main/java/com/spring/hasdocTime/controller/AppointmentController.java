@@ -73,7 +73,15 @@ public class AppointmentController {
     public ResponseEntity<List<Appointment>> getAppointmentsByUser(@PathVariable int id) throws DoesNotExistException{
         List<Appointment> appointments = appointmentService.getAppointmentsByUser(id);
         if(appointments==null){
-            return new ResponseEntity<>(appointments, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<List<Appointment>> getAppointmentsByDoctor(@PathVariable int id) throws DoesNotExistException{
+        List<Appointment> appointments = appointmentService.getAppointmentsByDoctor(id);
+        if(appointments==null){
+            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }

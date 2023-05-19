@@ -196,4 +196,14 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         List<Appointment> appointments = appointmentRepository.findByUser(currentUser);
         return appointments;
     }
+    @Override
+    public List<Appointment> getAppointmentsByDoctor(int userId) throws DoesNotExistException{
+        Optional<Doctor> doctor = doctorRepository.findById(userId);
+        if(doctor.isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        Doctor currentDoctor = doctor.get();
+        List<Appointment> appointments = appointmentRepository.findByDoctor(currentDoctor);
+        return appointments;
+    }
 }

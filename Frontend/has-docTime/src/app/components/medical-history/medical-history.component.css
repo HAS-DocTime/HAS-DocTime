@@ -16,22 +16,8 @@ app-sidebar{
   margin: 0;
 }
 
-
-
-thead {
-  line-height: 4em;
-  font-size: larger;
-  text-align: center;
-}
-
 th {
-  background-color: #134d86;
   color: #ffffff;
-}
-
-tbody {
-  line-height: 4em;
-  font-size: large;
 }
 
 tr {
@@ -46,4 +32,16 @@ tr {
 
  i.fa-caret-right {
   font-size: 1.4em;
+}
+
+.noData{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.noData p{
+  margin-top: 2.5%;
+  font-size: 2rem;
 }
