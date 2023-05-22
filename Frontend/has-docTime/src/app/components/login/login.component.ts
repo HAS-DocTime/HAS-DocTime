@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   submitted = false;
   invalidLogin = false;
   user: string = "";
+  tokenRole: string = "";
 
   inLogin: Boolean = true;
   isLoggedIn: Boolean = false;
@@ -54,13 +55,23 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loginService.checkDetail(email, password).subscribe(data => {
 
       this.user = data.token;
-      // console.log(data);
       this.isLoggedIn = true;
 
       sessionStorage.clear();
       sessionStorage.setItem('token',data.token);
 
-      this.router.navigate(['/dashboard']);
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        let store = token?.split('.');
+        this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+        this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length-1);
+      }
+      if(this.tokenRole === "PATIENT"){
+        this.router.navigate(['/dashboard/appointment']);
+      }else{
+        this.router.navigate(['/dashboard/doctorScheduleAppointments']);
+      }
+    
     }, (err)=> {
       if(err){
         this.isLoggedIn = false;

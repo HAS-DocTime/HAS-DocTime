@@ -148,7 +148,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
           casesSolved : 0,
           patientChronicIllness : []
         });
-        this.router.navigate(["/dashboard"]);
+        this.router.navigate(["/dashboard/appointment"]);
       }, (err)=> {
         console.log(err);
       });
@@ -174,7 +174,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
             casesSolved : 0,
             patientChronicIllness : []
         });
-        this.router.navigate(["/dashboard"]);
+        this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
       }, (err)=> {
         console.log(err);
       });

@@ -49,4 +49,14 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
     public String deletePostAppointmentData(int id) throws DoesNotExistException{
         return postAppointmentDataDao.deletePostAppointmentData(id);
     }
+
+    @Override
+    public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException{
+        return postAppointmentDataDao.getPostAppointmentsDataOfDoctor(id);
+    }
+
+    @Override
+    public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException {
+        return postAppointmentDataDao.getPostAppointmentDataByUserId(id);
+    }
 }

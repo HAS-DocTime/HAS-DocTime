@@ -11,7 +11,7 @@ import javax.print.Doc;
 
 public interface RegisterInterface {
 
-    public AuthenticationResponse registerAdmin(Admin admin);
+    public AuthenticationResponse registerAdmin(Admin admin) throws DoesNotExistException, MissingParameterException;
 
     public AuthenticationResponse registerUser(User user) throws MissingParameterException, DoesNotExistException;
 

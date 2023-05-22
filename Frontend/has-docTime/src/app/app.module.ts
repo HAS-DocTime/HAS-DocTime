@@ -25,6 +25,14 @@ import { DetailedHistoryComponent } from './components/medical-history/detailed-
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
+import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedule-appointments/doctor-schedule-appointments.component';
+import { CaseDetailComponent } from './components/case-detail/case-detail.component';
+import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archive/resolved-cases-archive.component';
+import { PatientAppointmentDetailComponent } from './components/patient-appointment-detail/patient-appointment-detail.component';
+import { PastHistoryComponent } from './components/patient-appointment-detail/past-history/past-history.component';
+import { AppointmentDetailFromDoctorComponent } from './components/patient-appointment-detail/appointment-detail-from-doctor/appointment-detail-from-doctor.component';
+import { SymptomComponent } from './components/symptom/symptom.component';
+import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +49,15 @@ import { BookAppointmentComponent } from './components/book-appointment/book-app
     DashboardComponent,
     MedicalHistoryComponent,
     DetailedHistoryComponent,
-    BookAppointmentComponent
+    BookAppointmentComponent,
+    DoctorScheduleAppointmentsComponent,
+    ResolvedCasesArchiveComponent,
+    CaseDetailComponent,
+    PatientAppointmentDetailComponent,
+    PastHistoryComponent,
+    AppointmentDetailFromDoctorComponent,
+    SymptomComponent,
+    PatientPastAppointmentByIdComponent
   ],
   imports: [
     BrowserModule,

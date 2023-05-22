@@ -80,4 +80,16 @@ public class PostAppointmentDataController {
         }
     }
 
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataOfDoctor(@PathVariable int id) throws DoesNotExistException{
+        List<PostAppointmentData> postAppointmentData = postAppointmentDataService.getPostAppointmentsDataOfDoctor(id);
+        return new ResponseEntity<>(postAppointmentData, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByUserId(@PathVariable int id) throws DoesNotExistException {
+        List<PostAppointmentData> postAppointmentDataList = postAppointmentDataService.getPostAppointmentDataByUserId(id);
+        return new ResponseEntity<>(postAppointmentDataList, HttpStatus.OK);
+    }
+
 }
