@@ -19,6 +19,9 @@ export class LoginComponent implements OnInit, OnDestroy{
   inLogin: Boolean = true;
   isLoggedIn: Boolean = false;
 
+  showPassword : boolean = false;
+  passwordType : string = "password";
+
 
   constructor(private loginService: LoginService, private router: Router, private userService: UserService) {
   }
@@ -41,6 +44,11 @@ export class LoginComponent implements OnInit, OnDestroy{
       this.userService.inSignup.next(false);
       this.userService.inLogin.next(false);
       this.userService.isLoggedIn.next(this.isLoggedIn);
+  }
+
+  toggleShowPassword(){
+    this.showPassword = !this.showPassword;
+    this.passwordType = this.showPassword ? "text" : "password";
   }
 
   onSubmit(){

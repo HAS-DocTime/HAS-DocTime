@@ -25,6 +25,8 @@ constructor(private userService : UserService, private doctorService : DoctorSer
   savedChronicIllnesses : ChronicIllness[] = [];
   selectedValue : string = "";
   selectedIllness : number[] = [];
+  showPassword : boolean = false;
+  passwordType : string = "password";
 
 
   ngOnInit(){
@@ -84,6 +86,11 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([])
   })
+
+  toggleShowPassword(){
+    this.showPassword = !this.showPassword;
+    this.passwordType = this.showPassword ? "text" : "password";
+  }
 
 
 
