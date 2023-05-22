@@ -91,8 +91,8 @@ public class UserDaoImpl implements UserInterface {
                 }
                 ChronicIllness chronicIllness = optionalChronicIllness.get();
                 patientChronicIllness.setChronicIllness(chronicIllness);
-//                compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
-//                patientChronicIllness.setId(compositeKey);
+                compositeKey = new CompositeKeyPatientChronicIllness(user.getId(), patientChronicIllness.getChronicIllness().getId());
+                patientChronicIllness.setId(compositeKey);
                 user.setPatientChronicIllness(patientChronicIllnessList);
             }
         }
