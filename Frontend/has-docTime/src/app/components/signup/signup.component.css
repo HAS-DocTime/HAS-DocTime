@@ -68,3 +68,6 @@ i{
   right: 0.01%;
   bottom: -10%;
 }
+.required-asterisk{
+  color : red;
+}

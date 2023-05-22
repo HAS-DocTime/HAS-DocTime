@@ -14,22 +14,27 @@
                 </div>
                 <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
                     <div class="row mt-2 mb-3">
-                        <div class="col-md-6"><label class="labels">First Name</label><input type="text"
+                        <div class="col-md-6"><label class="labels">First Name <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
                                 class="form-control" placeholder="first name" formControlName="firstName"
                                ></div>
-                        <div class="col-md-6"><label class="labels">Last Name</label><input type="text"
+                        <div class="col-md-6"><label class="labels">Last Name <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
                                 class="form-control" placeholder="last name" formControlName="lastName"
                                ></div>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-md-12 mb-3"><label class="labels">Mobile Number</label><input type="text"
+                        <div class="col-md-12 mb-3"><label class="labels">Mobile Number <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
                                 class="form-control" placeholder="enter phone number" formControlName="contact"
                                ></div>
-                        <div class="col-md-12 mb-3"><label class="labels">Gender</label><input type="text"
-                                class="form-control" placeholder="enter address line 1" formControlName="gender" ></div>
-
+                                <div class="form-group mb-4">
+                                  <label for="gender">Gender<span *ngIf="!disable" class="required-asterisk">*</span></label>
+                                  <select class="form-select" id="gender" formControlName="gender">
+                                      <option value="MALE">MALE</option>
+                                      <option value="FEMALE">FEMALE</option>
+                                      <option value="OTHER">OTHER</option>
+                                  </select>
+                              </div>
                         <div class="form-group mb-4">
-                            <label for="bloodGroup">Blood Group</label>
+                            <label for="bloodGroup">Blood Group <span *ngIf="!disable" class="required-asterisk">*</span></label>
                             <select class="form-select" id="bloodGroup" formControlName="bloodGroup">
                                 <option value="A_POSITIVE">A+</option>
                                 <option value="A_NEGATIVE">A-</option>
@@ -43,7 +48,7 @@
                         </div>
                         <div class="form-group mb-4">
 
-                            <label for="dob">Date of Birth</label>
+                            <label for="dob">Date of Birth <span *ngIf="!disable" class="required-asterisk">*</span></label>
                             <p>{{this.user?.dob?.getDate?.toString}}</p>
 
                             <input type="date" class="form-control" id="dob" [placeholder]="user?.dob"
@@ -53,7 +58,7 @@
                                 <span *ngIf="editForm.get('dob')?.errors">Date of Birth is Required</span>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-3"><label class="labels">Email</label><input type="text"
+                        <div class="col-md-12 mb-3"><label class="labels">Email <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
                                 class="form-control" formControlName="email" ></div>
                         <div class="col-md-12 mb-3"><label class="labels">Height</label><input type="text"
                                 class="form-control" placeholder="enter address line 2" formControlName="height"
@@ -62,11 +67,11 @@
                                 class="form-control" placeholder="enter email id" formControlName="weight"
                                 ></div>
 
-                        
+
                     </div>
 
                     <div *ngIf="this.tokenRole === 'DOCTOR'">
-                        <div class="col-md-12 mb-3"><label class="labels">Qualification</label><input type="text"
+                        <div class="col-md-12 mb-3"><label class="labels">Qualification <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
                             class="form-control" formControlName="qualification"></div>
                         <div class="col-md-12 mb-3"><label class="labels">Cases Solved</label><input type="number"
                             class="form-control" formControlName="casesSolved"></div>
@@ -80,10 +85,10 @@
                                 >Update</button>
                         </div>
                     </div>
-                    
+
                 </form>
 
-               
+
             </div>
         </div>
         <!-- <div class="col-md-4">
