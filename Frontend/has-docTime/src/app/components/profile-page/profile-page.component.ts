@@ -31,7 +31,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     const token = sessionStorage.getItem('token');
-    console.log(token);
     if (token) {
 
       // console.log();
@@ -51,7 +50,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
           this.doctor = data;
           this.user = data.user;
-          console.log(this.doctor);
           this.id = data.id as number;
           const docNameArray = this.doctor?.user.name.split(" ", 2);
           this.firstName = docNameArray[0];
@@ -79,17 +77,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.userService.getUser().subscribe(data => {
           this.user = data;
           this.id = data.id as number;
-          console.log(this.user?.dob);
           const nameArray = this.user?.name.split(" ", 2);
           this.firstName = nameArray[0];
           this.lastName = nameArray[1];
           this.dateFromAPI = new Date(data.dob);
-          console.log("SDFGFGFDGFD", this.dateFromAPI);
 
           this.formattedDate = this.datePipe.transform(this.dateFromAPI, 'yyyy-MM-dd');
-          console.log("formated ", this.formattedDate);
-          console.log("user", this.user);
-          console.log(this.user?.bloodGroup);
 
           this.editForm.patchValue({
             firstName: this.firstName,
@@ -135,11 +128,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
-    console.log("sanket");
     const date = new Date();
 
     const user = this.editForm.value;
-    console.log(user);
 
     if (date.getFullYear() > new Date(user.dob as Date).getFullYear()) {
       let age = date.getFullYear() - new Date(user.dob as Date).getFullYear() - 1;
@@ -152,7 +143,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         }
       }
       user.age = age;
-      console.log(user);
 
     }
     user.name = user.firstName + " " + user.lastName;
@@ -167,23 +157,18 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       chronicIllnesses.push(chronicIllness);
     }
     user.patientChronicIllness = chronicIllnesses;
-
-    console.log("sanket");
     if (this.tokenRole === "PATIENT") {
-      console.log("mihir");
       user.role = this.user?.role;
       user.email = this.user?.email;
-      console.log(user);
 
       this.userService.updateUser(user, this.id).subscribe((data) => {
-        console.log("updateUser DATA", data);
         this.toggleDisable();
         // this.user = data;
         // location.reload();
         this.cdr.detectChanges();
-        // this.user.role = 
-        
-        
+        // this.user.role =
+
+
         this.userService.getUser().subscribe(data => {
           this.user = data;
           // this.editForm.valueChanges.subscribe(data => {
@@ -215,13 +200,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           id: 1
         }
       };
-      console.log("=======================================");
-      
-      console.log(doctor);
       this.userService.updateDoctor(doctor, this.id).subscribe((data) => {
         // const authToken = data;
         // console.log(authToken.token);
-        console.log(data);
         this.doctorService.getDoctor(this.id).subscribe(data => {
           this.doctor = data;
           this.user = data.user;

@@ -11,7 +11,7 @@
           >
             <div class="d-flex my-3 justify-content-around" [formGroupName]="i">
                 <div>
-                  <label for="symptomName">Name</label>
+                  <label for="symptomName">Name <span class="required-asterisk">*</span></label>
                   <select class="form-select" id="symptomName" formControlName="id" >
                     <option value="" selected disabled>Select Symptom</option>
                     <option *ngFor="let symptom of symptoms" [value]="symptom.id" [disabled]="selectedSymptom.includes(symptom.id)"
@@ -27,7 +27,7 @@
                     <span *ngIf="bookAppointment.get('symptoms.'+i+'.name')?.errors">Name is Required</span>
                   </div>
                 </div>
-              <i class="bi bi-trash3-fill me-2 dlt" (click)="deleteSymptom(i)" style="cursor : pointer;"></i>
+              <i *ngIf="symptomList.length>1" class="bi bi-trash3-fill me-2 dlt" (click)="deleteSymptom(i)" style="cursor : pointer;"></i>
             </div>
           </div>
           <div
@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-center pb-4">
-          <button class="btn btn-success" type="submit">Book Appointment</button>
+          <button class="btn btn-success" type="submit" [disabled]="bookAppointment.invalid">Book Appointment</button>
         </div>
       </form>
     </div>

@@ -45,7 +45,6 @@ import { PatientPastAppointmentByIdComponent } from './components/patient-appoin
     HomeComponent,
     OurServicesComponent,
     ProfilePageComponent,
-
     AppointmentDetailComponent,
     DashboardComponent,
     MedicalHistoryComponent,
