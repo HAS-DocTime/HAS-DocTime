@@ -30,7 +30,7 @@
           <div class="password d-flex">
             <input [type]="passwordType" id="password" placeholder="Password" formControlName="password" required
               [ngClass]="{'is-invalid': submitted && loginForm.controls['password'].invalid}" class="form-control">
-              <button mat-icon-button (click)="toggleShowPassword()" type="button">
+              <button mat-icon-button (click)="toggleShowPassword()" type="button" class="showPasswordIconButton">
                 <mat-icon>{{ showPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
               </button>
           </div>
