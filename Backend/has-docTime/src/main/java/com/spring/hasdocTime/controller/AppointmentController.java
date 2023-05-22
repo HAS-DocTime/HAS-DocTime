@@ -79,7 +79,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/doctor/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(@PathVariable int id){
+    public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(@PathVariable int id) throws DoesNotExistException {
         List<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id);
         if(appointments.isEmpty()){
             return new ResponseEntity<>(appointments, HttpStatus.NOT_FOUND);

@@ -15,7 +15,6 @@ export class SymptomComponent {
   symptoms! : Symptom[];
   ngOnInit(){
     this.symptomService.getSymptoms().subscribe((data)=>{
-      console.log(data);
       for(let i=0; i<data.length; i++){
         let departmentArray : Department[] = [];
         const departmentLength : number | undefined = data[i].departments?.length;

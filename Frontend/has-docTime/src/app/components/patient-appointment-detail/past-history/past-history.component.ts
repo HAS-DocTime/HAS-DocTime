@@ -22,8 +22,6 @@ export class PastHistoryComponent {
     this.postAppointmentService.getPostAppointmentDataByUser(this.userId).subscribe(
       data => {
         this.postAppointmentDataList = data;
-        // this.postAppointmentDataListData.next(this.postAppointmentDataList);
-        console.log("data", data);
         
       }
     );
@@ -32,9 +30,6 @@ export class PastHistoryComponent {
   }
 
   loadPostAppointment(i: number){
-    // console.log("print wanted", this.postAppointmentDataList?.[0].id);
-
-    
     this.postAppointmentId = this.postAppointmentDataList?.[i].id;
     this.router.navigate([this.postAppointmentId], {relativeTo: this.route});
   }

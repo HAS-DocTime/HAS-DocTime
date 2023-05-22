@@ -16,9 +16,6 @@ export class CaseDetailComponent implements OnInit{
   ngOnInit(): void {
       this.sharedService.getresolvedCaseDetailedData().subscribe((data) => {
         this.caseDetailedData = data;
-        console.log(data);
-        
-        console.log(this.caseDetailedData);
         
       });
   }

@@ -13,14 +13,15 @@ export class AppointmentDetailFromDoctorComponent implements OnInit{
 
   appointment! : Appointment;
   appointmentId?: string | null;
-  
 
   constructor(private appointmentService: AppointmentService){}
 
   ngOnInit(){
-    this.appointmentId = sessionStorage.getItem('userId');
-    this.appointmentService.getAppointmentByUser(this.appointmentId).subscribe(data => {
-      this.appointment = data[0];
+    this.appointmentId = sessionStorage.getItem('appointmentId');
+    this.appointmentService.getAppointment(parseInt(this.appointmentId as string)).subscribe(data => {
+      
+      this.appointment = data;
+      console.log(this.appointment);
     });
     
   }

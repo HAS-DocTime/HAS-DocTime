@@ -24,7 +24,6 @@ export class DoctorScheduleAppointmentsComponent {
 
   ngOnInit() {
     const token = sessionStorage.getItem('token');
-      console.log(token);
       if (token) {
         let store = token?.split('.');
         this.id = atob(store[1]).split(',')[1].split(':')[1];
@@ -33,7 +32,6 @@ export class DoctorScheduleAppointmentsComponent {
     this.appointmentService.getAppointmentsByDoctor(this.id)
     .subscribe(
       (data) => {
-        console.log(data);
         this.appointments = data;
       },
       (error: any) => {
@@ -48,13 +46,10 @@ export class DoctorScheduleAppointmentsComponent {
   }
 
   appointmentDetail(i : number){
-    // console.log("appointment ", this.appointments[i].user.id);
-    
-    // console.log("userId", i);
+    console.log(this.appointments[i]);
     
     sessionStorage.setItem('userId', this.appointments[i].user.id.toString());
-    sessionStorage.setItem('appointmentId', i.toString());
-    // console.log("here");
+    sessionStorage.setItem('appointmentId', this.appointments[i].id.toString());
     this.router.navigate(['patientAppointmentDetail/appointmentDetails'], {relativeTo:this.route});
   }
 

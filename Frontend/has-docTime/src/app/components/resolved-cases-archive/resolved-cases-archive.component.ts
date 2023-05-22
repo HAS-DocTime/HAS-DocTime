@@ -19,7 +19,6 @@ export class ResolvedCasesArchiveComponent implements OnInit{
 
   ngOnInit(): void {
     const token = sessionStorage.getItem('token');
-      console.log(token);
       if (token) {
         let store = token?.split('.');
         this.id = atob(store[1]).split(',')[1].split(':')[1];
@@ -32,7 +31,6 @@ export class ResolvedCasesArchiveComponent implements OnInit{
   }
 
   caseDetail(id: number){
-    console.log("======================================");
     
     this.sharedService.setresolvedCaseDetailedData(this.resolvedCases?.[id]);
     this.router.navigate(['caseDetail'], {relativeTo : this.route});

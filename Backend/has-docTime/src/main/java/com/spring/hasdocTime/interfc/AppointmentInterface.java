@@ -20,6 +20,6 @@ public interface AppointmentInterface {
 
     public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException;
 
-    public List<Appointment> getAppointmentsOfDoctor(int id);
+    public List<Appointment> getAppointmentsOfDoctor(int id) throws DoesNotExistException;
 
 }

@@ -13,14 +13,9 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class PatientAppointmentDetailComponent implements OnInit{
 
-  appointment?: Appointment;
-  postAppointmentDataList?: MedicalHistory[];
-  // appointmentData: Subject<Appointment | undefined> = new Subject<Appointment | undefined>();
-  // postAppointmentDataListData: Subject<MedicalHistory[]> = new Subject<MedicalHistory[]>();
-
+  
   constructor(
-    private sharedService: SharedService,
-    private postAppointmentService: PostAppointmentService
+    
     ){}
 
   ngOnInit(): void {

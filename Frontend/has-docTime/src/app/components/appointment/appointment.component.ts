@@ -20,7 +20,6 @@ export class AppointmentComponent implements OnInit{
 
     this.userService.getUserByEmail().subscribe((data)=>{
         this.appointmentService.getAppointmentByUser((data.id.toString())).subscribe((data)=> {
-          console.log(data);
           this.appointments = data;
         });
     })

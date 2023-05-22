@@ -55,14 +55,12 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loginService.checkDetail(email, password).subscribe(data => {
 
       this.user = data.token;
-      // console.log(data);
       this.isLoggedIn = true;
 
       sessionStorage.clear();
       sessionStorage.setItem('token',data.token);
 
       const token = sessionStorage.getItem('token');
-      console.log(token);
       if (token) {
         let store = token?.split('.');
         this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
