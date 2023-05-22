@@ -25,6 +25,10 @@ constructor(private userService : UserService, private doctorService : DoctorSer
   savedChronicIllnesses : ChronicIllness[] = [];
   selectedValue : string = "";
   selectedIllness : number[] = [];
+  showPassword : boolean = false;
+  showConfirmPassword : boolean = false;
+  passwordType : string = "password";
+  confirmPasswordType : string = "password";
 
   ngOnInit(){
       this.signupForm.get("role")?.valueChanges.subscribe(value => {
@@ -84,6 +88,15 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     patientChronicIllness : new FormArray([])
   }, {validators : confirmPasswordValidator()})
 
+  toggleShowPassword(){
+    this.showPassword = !this.showPassword;
+    this.passwordType = this.showPassword ? "text" : "password";
+  }
+
+  toggleShowConfirmPassword(){
+    this.showConfirmPassword = !this.showConfirmPassword;
+    this.confirmPasswordType = this.showConfirmPassword ? "text" : "password";
+  }
 
 
   register(){

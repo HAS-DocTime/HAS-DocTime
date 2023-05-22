@@ -59,6 +59,15 @@ i{
   color: #0074d9;
 }
 
+.password {
+  position: relative;
+}
+
+.showPasswordIconButton{
+  position: absolute;
+  right: 0.01%;
+  bottom: -10%;
+}
 .required-asterisk{
   color : red;
 }

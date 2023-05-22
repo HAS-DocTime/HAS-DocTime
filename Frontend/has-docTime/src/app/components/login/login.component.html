@@ -27,11 +27,13 @@
           <label for="password">Password <span class="required-asterisk">*</span></label>
         </div>
         <div>
-          <input type="password" id="password" placeholder="Password" formControlName="password" required
-            [ngClass]="{'is-invalid': submitted && loginForm.controls['password'].invalid}" class="form-control">
-          <!-- <div *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].invalid" class="alert alert-danger mt-3">
-              Password is required and must be at least 6 characters long.
-            </div> -->
+          <div class="password d-flex">
+            <input [type]="passwordType" id="password" placeholder="Password" formControlName="password" required
+              [ngClass]="{'is-invalid': submitted && loginForm.controls['password'].invalid}" class="form-control">
+              <button mat-icon-button (click)="toggleShowPassword()" type="button" class="showPasswordIconButton">
+                <mat-icon>{{ showPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+              </button>
+          </div>
           <div *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors" class="alert alert-danger mt-3 py-1">
             <span *ngIf="loginForm.controls['password'].invalid && loginForm.get('password')?.value.length">
               Password must be at least 6 characters long.
