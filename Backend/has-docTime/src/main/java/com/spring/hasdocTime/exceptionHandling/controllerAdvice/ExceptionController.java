@@ -3,9 +3,7 @@ package com.spring.hasdocTime.exceptionHandling.controllerAdvice;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.utills.ErrorResponseBody;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,6 +26,6 @@ public class ExceptionController {
     @ExceptionHandler(value = SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<ErrorResponseBody> handleException(SQLIntegrityConstraintViolationException exception){
         ErrorResponseBody responseBody = new ErrorResponseBody(exception.getMessage());
-        return new ResponseEntity<>(responseBody ,HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(responseBody ,HttpStatus.BAD_REQUEST);
     }
 }

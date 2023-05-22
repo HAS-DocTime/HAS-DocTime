@@ -37,3 +37,7 @@ body{
  .heading{
   color : #0074d9;
  }
+
+.required-asterisk{
+  color : red;
+}
