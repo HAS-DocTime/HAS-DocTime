@@ -4,28 +4,21 @@
  */
 package com.spring.hasdocTime.dao;
 
-import com.spring.hasdocTime.entity.Appointment;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdocTime.interfc.*;
 import com.spring.hasdocTime.interfc.DoctorInterface;
-import com.spring.hasdocTime.entity.Department;
-import com.spring.hasdocTime.entity.Doctor;
-import com.spring.hasdocTime.entity.PostAppointmentData;
-import com.spring.hasdocTime.entity.User;
-import com.spring.hasdocTime.interfc.AppointmentInterface;
-import com.spring.hasdocTime.interfc.DoctorInterface;
-import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
-import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import com.spring.hasdocTime.repository.DoctorRepository;
+import com.spring.hasdocTime.repository.SymptomRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  *
@@ -34,6 +27,8 @@ import java.util.Optional;
 
 @Service
 public class DoctorDaoImpl implements DoctorInterface {
+
+    private SymptomRepository symptomRepository;
     
     private DoctorRepository doctorRepository;
     
@@ -47,13 +42,14 @@ public class DoctorDaoImpl implements DoctorInterface {
     private PostAppointmentDataInterface postAppointmentDataDao;
     
     @Autowired
-    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao, @Qualifier("userDaoImpl") UserInterface userDao){
+    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao, @Qualifier("userDaoImpl") UserInterface userDao, SymptomRepository symptomRepository){
         this.doctorRepository = doctorRepository;
         this.userRepository = userRepository;
         this.departmentRepository = departmentRepository;
         this.appointmentDao = appointmentDao;
         this.postAppointmentDataDao = postAppointmentDataDao;
         this.userDao = userDao;
+        this.symptomRepository = symptomRepository;
     }
 
     @Override
@@ -150,5 +146,32 @@ public class DoctorDaoImpl implements DoctorInterface {
                 return doctor.get();
         }
         throw new DoesNotExistException("Doctor");
-    } 
+    }
+
+    @Override
+    public Set<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody) throws  DoesNotExistException{
+        List<Symptom> givenSymptoms = filteredDoctorBody.getSymptoms();
+        List<Symptom> symptoms = new ArrayList<>();
+        for(Symptom symptom : givenSymptoms){
+            Optional<Symptom> optionalSymptom = symptomRepository.findById(symptom.getId());
+            if(optionalSymptom.isEmpty()){
+                throw new DoesNotExistException("Symptom");
+            }
+            symptom = optionalSymptom.get();
+            symptoms.add(symptom);
+        }
+        Set<Doctor> doctors = new HashSet<>();
+        for(Symptom symptom: symptoms){
+            for(Department department: symptom.getDepartments()) {
+                for (Doctor doctor : department.getDoctors()) {
+                    for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
+                        if(((timeSlot.getStartTime().after(filteredDoctorBody.getTimeSlotStartTime()) || timeSlot.getStartTime().equals(filteredDoctorBody.getTimeSlotStartTime()))  && (timeSlot.getStartTime() .before(filteredDoctorBody.getTimeSlotEndTime()))) && doctor.isAvailable()){
+                            doctors.add(doctor);
+                        }
+                    }
+                }
+            }
+        }
+        return doctors;
+    }
 }

@@ -5,10 +5,12 @@
 package com.spring.hasdocTime.interfc;
 
 import com.spring.hasdocTime.entity.Doctor;
+import com.spring.hasdocTime.entity.FilteredDoctorBody;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -20,4 +22,5 @@ public interface DoctorInterface {
     public Doctor getDoctor(int id) throws DoesNotExistException;
     public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException;
     public Doctor deleteDoctor(int id) throws DoesNotExistException;
+    public Set<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody) throws  DoesNotExistException;
 }

@@ -6,7 +6,9 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.Doctor;
 import java.util.List;
+import java.util.Set;
 
+import com.spring.hasdocTime.entity.FilteredDoctorBody;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +48,9 @@ public class DoctorServiceImpl implements DoctorInterface {
     public Doctor deleteDoctor(int id) throws DoesNotExistException{
         return doctorDao.deleteDoctor(id);
     }
-    
+
+    @Override
+    public Set<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody) throws DoesNotExistException {
+        return doctorDao.getDoctorsBySymptomsAndTimeSlot(filteredDoctorBody);
+    }
 }

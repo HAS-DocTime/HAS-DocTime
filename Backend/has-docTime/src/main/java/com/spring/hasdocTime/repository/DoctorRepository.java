@@ -22,5 +22,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer>{
     @Modifying
     @Query("DELETE FROM Doctor d where d.id = :id")
     void deleteById(@Param("id") int id);
+
+
     
 }

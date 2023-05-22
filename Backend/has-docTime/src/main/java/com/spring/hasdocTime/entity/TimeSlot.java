@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -25,10 +26,10 @@ public class TimeSlot {
     private int id;
 
     @Column(name = "start_time")
-    private Time startTime;
+    private Timestamp startTime;
 
     @Column(name = "end_Time")
-    private Time endTime;
+    private Timestamp endTime;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "department_id", referencedColumnName = "id")

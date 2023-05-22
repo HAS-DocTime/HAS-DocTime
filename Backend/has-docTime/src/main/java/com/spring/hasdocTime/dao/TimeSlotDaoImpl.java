@@ -9,13 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
 public class TimeSlotDaoImpl implements TimeSlotInterface {
 
-    private final Time hospitalStartTime = new Time(9,0,0);
-    private final Time hospitalEndTime = new Time(21,0,0);
+    private final Timestamp hospitalStartTime = new Timestamp(1970, 1, 1, 9,0,0,0);
+    private final Timestamp hospitalEndTime = new Timestamp(2050, 12,31,21,0,0,0);
 
     private TimeSlotRepository timeSlotRepository;
     private DepartmentRepository departmentRepository;
@@ -219,10 +220,15 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     public List<TimeSlot> createTimeSlotsFromDepartment(Department department){
+
         // clone is required as Java takes value as pass by reference and changes the value of both the objects
-        Time timeSlotStartTime = (Time)hospitalStartTime.clone();
+        Timestamp timeSlotStartTime = (Timestamp) hospitalStartTime.clone();
+        Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
+        timeSlotStartTime.setYear(currentTimeStamp.getYear());
+        timeSlotStartTime.setMonth(currentTimeStamp.getMonth());
+        timeSlotStartTime.setDate(currentTimeStamp.getDate());
         int timeDuration = department.getTimeDuration();
-        Time timeSlotEndTime = (Time)timeSlotStartTime.clone();
+        Timestamp timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
         timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
         int timeLimit = timeSlotEndTime.compareTo(hospitalEndTime);
         List<TimeSlot> timeSlots = new ArrayList<>();
@@ -232,8 +238,8 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             timeSlot.setEndTime(timeSlotEndTime);
             timeSlot.setDepartment(department);
             timeSlots.add(timeSlot);
-            timeSlotStartTime = (Time)timeSlotEndTime.clone();
-            timeSlotEndTime = (Time)timeSlotStartTime.clone();
+            timeSlotStartTime = (Timestamp) timeSlotEndTime.clone();
+            timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
             timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
             timeLimit = timeSlotEndTime.compareTo(hospitalEndTime);
         }
