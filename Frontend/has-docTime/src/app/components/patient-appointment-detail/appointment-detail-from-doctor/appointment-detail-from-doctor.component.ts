@@ -13,6 +13,7 @@ export class AppointmentDetailFromDoctorComponent implements OnInit{
 
   appointment! : Appointment;
   appointmentId?: string | null;
+  
 
   constructor(private appointmentService: AppointmentService){}
 

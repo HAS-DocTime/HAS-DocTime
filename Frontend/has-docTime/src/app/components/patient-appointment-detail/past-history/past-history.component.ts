@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { PostAppointmentService } from 'src/app/services/post-appointment.service';
 
@@ -10,8 +11,9 @@ import { PostAppointmentService } from 'src/app/services/post-appointment.servic
 export class PastHistoryComponent {
   postAppointmentDataList?: MedicalHistory[];
   userId?: string | null;
+  postAppointmentId!: number | undefined;
 
-  constructor(private postAppointmentService: PostAppointmentService){
+  constructor(private postAppointmentService: PostAppointmentService, private router: Router, private route: ActivatedRoute){
   }
 
   ngOnInit(){
@@ -29,7 +31,11 @@ export class PastHistoryComponent {
     
   }
 
-  loadPostAppointment(){
+  loadPostAppointment(i: number){
+    // console.log("print wanted", this.postAppointmentDataList?.[0].id);
+
     
+    this.postAppointmentId = this.postAppointmentDataList?.[i].id;
+    this.router.navigate([this.postAppointmentId], {relativeTo: this.route});
   }
 }

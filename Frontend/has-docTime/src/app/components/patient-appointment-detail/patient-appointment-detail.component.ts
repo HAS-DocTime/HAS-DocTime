@@ -24,6 +24,7 @@ export class PatientAppointmentDetailComponent implements OnInit{
     ){}
 
   ngOnInit(): void {
+    
   }
 
 }
