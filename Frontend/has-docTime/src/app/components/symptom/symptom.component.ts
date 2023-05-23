@@ -22,18 +22,26 @@ export class SymptomComponent implements OnInit{
 
 
     this.symptomService.getSymptoms().subscribe((data)=>{
-
+      console.log("symptom data", data);
       for(let i=0; i<data.length; i++){
         let departmentArray : Department[] = [];
         this.symptom = data[i].name as string;
+        console.log("symptoms   ", data[i].name)
+
         this.symptomService.getDiseaseWithCaseCountFromSymptom(this.symptom).subscribe((data)=>{
+          console.log(this.symptom);
+          console.log(data);
           this.medicalHistoryLength=0;
             if(data!==null){
               for(let diseaseCaseCount of data){
-                this.medicalHistoryLength+=diseaseCaseCount.caseCount;
+                this.medicalHistoryLength += diseaseCaseCount.caseCount;
+                console.log(this.medicalHistoryLength);
+
               }
             }
             this.medicalHistoryLengths.push(this.medicalHistoryLength);
+            console.log("medicalHistoryLengths ", this.medicalHistoryLengths);
+
           })
         const departmentLength : number | undefined = data[i].departments?.length;
         for(let j=0; j<(departmentLength as number); j++){
