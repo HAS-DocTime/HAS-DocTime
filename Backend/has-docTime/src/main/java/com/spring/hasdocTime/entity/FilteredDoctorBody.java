@@ -15,4 +15,5 @@ public class FilteredDoctorBody {
     private List<Symptom> symptoms;
     private Timestamp timeSlotStartTime;
     private Timestamp timeSlotEndTime;
+    private String description;
 }

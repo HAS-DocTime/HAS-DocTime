@@ -14,7 +14,6 @@ export class AppointmentDetailComponent implements OnInit{
     this.route.params.subscribe((params : Params)=> {
       this.id = params["id"]
       this.appointmentService.getAppointment(this.id).subscribe((data)=> {
-        console.log(data);
         this.appointment = data;
       })
     });

@@ -165,7 +165,13 @@ public class DoctorDaoImpl implements DoctorInterface {
             for(Department department: symptom.getDepartments()) {
                 for (Doctor doctor : department.getDoctors()) {
                     for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
-                        if(((timeSlot.getStartTime().after(filteredDoctorBody.getTimeSlotStartTime()) || timeSlot.getStartTime().equals(filteredDoctorBody.getTimeSlotStartTime()))  && (timeSlot.getStartTime() .before(filteredDoctorBody.getTimeSlotEndTime()))) && doctor.isAvailable()){
+                        System.out.println(timeSlot.getStartTime());
+                        System.out.println(timeSlot.getEndTime());
+                        System.out.println(timeSlot.getStartTime().after(filteredDoctorBody.getTimeSlotStartTime()));
+                        System.out.println(timeSlot.getStartTime().equals(filteredDoctorBody.getTimeSlotStartTime()));
+                        System.out.println(timeSlot.getStartTime().before(filteredDoctorBody.getTimeSlotEndTime()));
+                        System.out.println(filteredDoctorBody.getTimeSlotEndTime());
+                        if(((timeSlot.getStartTime().after(filteredDoctorBody.getTimeSlotStartTime()) || timeSlot.getStartTime().equals(filteredDoctorBody.getTimeSlotStartTime()))  && (timeSlot.getStartTime().before(filteredDoctorBody.getTimeSlotEndTime()))) && doctor.isAvailable()){
                             doctors.add(doctor);
                         }
                     }

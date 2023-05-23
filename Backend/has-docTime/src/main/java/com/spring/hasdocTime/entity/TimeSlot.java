@@ -31,7 +31,7 @@ public class TimeSlot {
     @Column(name = "end_Time")
     private Timestamp endTime;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"timeSlots", "doctors"}, allowSetters = true)
     private Department department;

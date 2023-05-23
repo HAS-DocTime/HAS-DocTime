@@ -89,8 +89,9 @@ public class DoctorController {
         return new ResponseEntity(doctor, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "bookAppointment")
+    @RequestMapping(method = RequestMethod.POST, value = "bookAppointment")
     public ResponseEntity<Set<Doctor>> getDoctorsBySymptomsAndTimeSlot(@RequestBody FilteredDoctorBody filteredDoctorBody) throws DoesNotExistException {
+        System.out.println("Hello---------------------------------------------------------------------");
         Set<Doctor> doctors = doctorService.getDoctorsBySymptomsAndTimeSlot(filteredDoctorBody);
         return new ResponseEntity<>(doctors, HttpStatus.OK);//As of now
     }

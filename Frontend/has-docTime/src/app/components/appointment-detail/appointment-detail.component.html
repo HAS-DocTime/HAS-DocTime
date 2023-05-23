@@ -36,8 +36,9 @@
         <div class="card-body">
           <h5>
             <i class="bi bi-hourglass-split"></i>
-            {{ appointment?.timeSlotForAppointment?.startTime }} -
-            {{ appointment?.timeSlotForAppointment?.endTime }}
+            {{ appointment?.timeSlotForAppointment?.startTime | date : 'mediumDate' }}
+            <span class="timeShow">{{ appointment?.timeSlotForAppointment?.startTime | date : 'mediumTime' }} -</span>
+            <span class="timeShow">{{ appointment?.timeSlotForAppointment?.endTime | date : 'mediumTime' }}</span>
           </h5>
         </div>
       </div>
@@ -48,12 +49,12 @@
         <div class="card-body">
           <div class="d-flex justify-content-between">
             <div class="d-flex flex-column">
-              <span class="fw-bold fs-5">Name</span>
-              <span>{{ appointment?.doctor?.department?.name }}</span>
+              <span class="fw-bold fs-7">Name</span>
+              <span class="fw-bold fs-5">{{ appointment?.doctor?.department?.name }}</span>
             </div>
             <div class="d-flex flex-column">
-              <span class="fw-bold fs-5">Building</span>
-              <span>{{ appointment?.doctor?.department?.building }}</span>
+              <span class="fw-bold fs-7">Building</span>
+              <span class="fw-bold fs-5">{{ appointment?.doctor?.department?.building }}</span>
             </div>
           </div>
         </div>
