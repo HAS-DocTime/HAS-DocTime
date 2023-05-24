@@ -11,7 +11,7 @@ export class AppointmentService {
 
   baseUrl = `http://192.1.200.29:8080/`;
 
-  getAppointmentByUser(userId : number){
+  getAppointmentByUser(userId : string | undefined){
     return this.http.get<Appointment[]>(`${this.baseUrl}appointment/user/${userId}`);
   }
 
@@ -27,12 +27,16 @@ export class AppointmentService {
     return this.http.get<Appointment[]>(`${this.baseUrl}appointment`);
   }
 
-  deleteAppointment(id : number){
+  deleteAppointment(id : number | undefined){
     return this.http.delete(`${this.baseUrl}appointment/${id}`);
   }
 
   createAppointment(appointment : Appointment){
     return this.http.post<Appointment>(`${this.baseUrl}appointment`, appointment);
+  }
+
+  getAppointmentsByDoctor(id : string){
+    return this.http.get<Appointment[]>(`${this.baseUrl}appointment/doctor/${id}`);
   }
 
 }

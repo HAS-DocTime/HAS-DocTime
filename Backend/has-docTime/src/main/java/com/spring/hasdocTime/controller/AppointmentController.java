@@ -77,12 +77,14 @@ public class AppointmentController {
         }
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
+
     @GetMapping("/doctor/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByDoctor(@PathVariable int id) throws DoesNotExistException{
-        List<Appointment> appointments = appointmentService.getAppointmentsByDoctor(id);
-        if(appointments==null){
-            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
+    public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(@PathVariable int id) throws DoesNotExistException {
+        List<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id);
+        if(appointments.isEmpty()){
+            return new ResponseEntity<>(appointments, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
+
 }

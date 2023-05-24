@@ -62,8 +62,6 @@ export class UserService {
     return this.http.get<User>(`${this.baseUrl}user/findByEmail`);
   }
 
-  // getDataSubject(): Subject<any> {
-  //   return this.dataSubject;
-  // }
+
 }
 

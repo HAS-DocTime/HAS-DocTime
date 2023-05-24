@@ -22,7 +22,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private doctorService: DoctorService,
     private adminService: AdminService,
     private route: ActivatedRoute,
-    private router : Router
+    private router: Router
   ) {}
 
   user?: User;
@@ -35,160 +35,93 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   tokenRole: string = '';
   dateFromAPI = new Date('2022-05-12T00:00:00');
   formattedDate = this.datePipe.transform(this.dateFromAPI, 'yyyy-MM-dd');
-  urlPath! : string;
-  doctors! : Doctor[];
+  urlPath!: string;
+  doctors!: Doctor[];
 
   ngOnInit(): void {
     this.route.url.subscribe((data) => {
       this.urlPath = data[0].path;
       const token = sessionStorage.getItem('token');
-        if (token) {
-          let store = token?.split('.');
-          this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-          this.id = parseInt(
-            atob(store[1])
-              .split(',')[1]
-              .split(':')[1]
-              .substring(1, this.tokenRole.length - 1)
-          );
+      if (token) {
+        let store = token?.split('.');
+        this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+        this.id = parseInt(
+          atob(store[1])
+            .split(',')[1]
+            .split(':')[1]
+            .substring(1, this.tokenRole.length - 1)
+        );
 
-          this.tokenRole = this.tokenRole.substring(
-            1,
-            this.tokenRole.length - 1
-          );
-      if (data[0].path === 'users') {
-        this.route.params.subscribe((data) => {
-          this.id = parseInt(data['id']);
-          this.adminService.getSingleUser(this.id).subscribe((data) => {
-            this.user = data;
-            this.id = data.id as number;
-            const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
-            this.firstName = nameArray[0];
-            this.lastName = nameArray[1];
-            if (data.dob) {
-              this.dateFromAPI = new Date(data?.dob);
-            }
+        this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
 
-            this.formattedDate = this.datePipe.transform(
-              this.dateFromAPI,
-              'yyyy-MM-dd'
-            );
+        if (this.tokenRole === 'ADMIN') {
+          if (data[0].path === 'users') {
+            this.route.params.subscribe((data) => {
+              this.id = parseInt(data['id']);
+              this.adminService.getSingleUser(this.id).subscribe((data) => {
+                this.user = data;
+                this.id = data.id as number;
+                const nameArray: string[] =
+                  this.user?.name?.split(' ', 2) ?? [];
+                this.firstName = nameArray[0];
+                this.lastName = nameArray[1];
+                if (data.dob) {
+                  this.dateFromAPI = new Date(data?.dob);
+                }
 
-            this.editForm.patchValue({
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.user.email,
-              gender: this.user.gender,
-              bloodGroup: this.user.bloodGroup,
-              contact: this.user.contact,
-              height: this.user.height,
-              weight: this.user.weight,
-              dob: this.formattedDate,
-            });
-          });
-        });
+                this.formattedDate = this.datePipe.transform(
+                  this.dateFromAPI,
+                  'yyyy-MM-dd'
+                );
 
-      }
-      else if (data[0].path === 'doctors') {
-        this.route.params.subscribe(data=> {
-          this.id = parseInt(data['id'])
-          this.doctorService.getDoctor(this.id).subscribe((data) => {
-            this.doctor = data;
-            this.user = data.user;
-            this.id = data.id as number;
-            const docNameArray: string[] =
-              this.doctor?.user?.name?.split(' ', 2) ?? [];
-            this.firstName = docNameArray[0];
-            this.lastName = docNameArray[1];
-            if (data.user.dob) {
-              this.dateFromAPI = new Date(data.user.dob);
-            }
-            this.formattedDate = this.datePipe.transform(
-              this.dateFromAPI,
-              'yyyy-MM-dd'
-            );
-
-            this.editForm.patchValue({
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.doctor.user.email,
-              gender: this.doctor.user.gender,
-              bloodGroup: this.doctor.user.bloodGroup,
-              contact: this.doctor.user.contact,
-              height: this.doctor.user.height,
-              weight: this.doctor.user.weight,
-              dob: this.formattedDate,
-              qualification: this.doctor.qualification,
-              casesSolved: this.doctor.casesSolved,
-            });
-          });
-        })
-
-      }
-      else {
-          if (this.tokenRole === 'DOCTOR') {
-            this.doctorService.getDoctor(this.id).subscribe((data) => {
-              this.doctor = data;
-              this.user = data.user;
-              this.id = data.id as number;
-              const docNameArray: string[] =
-                this.doctor?.user?.name?.split(' ', 2) ?? [];
-              this.firstName = docNameArray[0];
-              this.lastName = docNameArray[1];
-              if (data.user.dob) {
-                this.dateFromAPI = new Date(data.user.dob);
-              }
-              this.formattedDate = this.datePipe.transform(
-                this.dateFromAPI,
-                'yyyy-MM-dd'
-              );
-
-              this.editForm.patchValue({
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.doctor.user.email,
-                gender: this.doctor.user.gender,
-                bloodGroup: this.doctor.user.bloodGroup,
-                contact: this.doctor.user.contact,
-                height: this.doctor.user.height,
-                weight: this.doctor.user.weight,
-                dob: this.formattedDate,
-                qualification: this.doctor.qualification,
-                casesSolved: this.doctor.casesSolved,
+                this.editForm.patchValue({
+                  firstName: this.firstName,
+                  lastName: this.lastName,
+                  email: this.user.email,
+                  gender: this.user.gender,
+                  bloodGroup: this.user.bloodGroup,
+                  contact: this.user.contact,
+                  height: this.user.height,
+                  weight: this.user.weight,
+                  dob: this.formattedDate,
+                });
               });
             });
-          }
-          if (this.tokenRole === 'PATIENT') {
-            this.userService.getUser(this.id).subscribe((data) => {
-              this.user = data;
-              this.id = data.id as number;
-              const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
-              this.firstName = nameArray[0];
-              this.lastName = nameArray[1];
-              if (data.dob) {
-                this.dateFromAPI = new Date(data?.dob);
-              }
+          } else if (data[0].path === 'doctors') {
+            this.route.params.subscribe((data) => {
+              this.id = parseInt(data['id']);
+              this.doctorService.getDoctor(this.id).subscribe((data) => {
+                this.doctor = data;
+                this.user = data.user;
+                this.id = data.id as number;
+                const docNameArray: string[] =
+                  this.doctor?.user?.name?.split(' ', 2) ?? [];
+                this.firstName = docNameArray[0];
+                this.lastName = docNameArray[1];
+                if (data.user.dob) {
+                  this.dateFromAPI = new Date(data.user.dob);
+                }
+                this.formattedDate = this.datePipe.transform(
+                  this.dateFromAPI,
+                  'yyyy-MM-dd'
+                );
 
-              this.formattedDate = this.datePipe.transform(
-                this.dateFromAPI,
-                'yyyy-MM-dd'
-              );
-
-              this.editForm.patchValue({
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.user.email,
-                gender: this.user.gender,
-                bloodGroup: this.user.bloodGroup,
-                contact: this.user.contact,
-                height: this.user.height,
-                weight: this.user.weight,
-                dob: this.formattedDate,
+                this.editForm.patchValue({
+                  firstName: this.firstName,
+                  lastName: this.lastName,
+                  email: this.doctor.user.email,
+                  gender: this.doctor.user.gender,
+                  bloodGroup: this.doctor.user.bloodGroup,
+                  contact: this.doctor.user.contact,
+                  height: this.doctor.user.height,
+                  weight: this.doctor.user.weight,
+                  dob: this.formattedDate,
+                  qualification: this.doctor.qualification,
+                  casesSolved: this.doctor.casesSolved,
+                });
               });
             });
-          }
-
-          if (this.tokenRole === 'ADMIN') {
+          } else {
             this.adminService.getAdmin(this.id).subscribe((data) => {
               this.admin = data;
               this.user = data.user;
@@ -219,6 +152,65 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
               });
             });
           }
+        } else if (this.tokenRole === 'DOCTOR') {
+          this.doctorService.getDoctor(this.id).subscribe((data) => {
+            this.doctor = data;
+            this.user = data.user;
+            this.id = data.id as number;
+            const docNameArray: string[] =
+              this.doctor?.user?.name?.split(' ', 2) ?? [];
+            this.firstName = docNameArray[0];
+            this.lastName = docNameArray[1];
+            if (data.user.dob) {
+              this.dateFromAPI = new Date(data.user.dob);
+            }
+            this.formattedDate = this.datePipe.transform(
+              this.dateFromAPI,
+              'yyyy-MM-dd'
+            );
+
+            this.editForm.patchValue({
+              firstName: this.firstName,
+              lastName: this.lastName,
+              email: this.doctor.user.email,
+              gender: this.doctor.user.gender,
+              bloodGroup: this.doctor.user.bloodGroup,
+              contact: this.doctor.user.contact,
+              height: this.doctor.user.height,
+              weight: this.doctor.user.weight,
+              dob: this.formattedDate,
+              qualification: this.doctor.qualification,
+              casesSolved: this.doctor.casesSolved,
+            });
+          });
+        } else {
+          this.userService.getUserByEmail().subscribe((data) => {
+            this.user = data;
+            this.id = data.id as number;
+            const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
+            this.firstName = nameArray[0];
+            this.lastName = nameArray[1];
+            if (data.dob) {
+              this.dateFromAPI = new Date(data?.dob);
+            }
+
+            this.formattedDate = this.datePipe.transform(
+              this.dateFromAPI,
+              'yyyy-MM-dd'
+            );
+
+            this.editForm.patchValue({
+              firstName: this.firstName,
+              lastName: this.lastName,
+              email: this.user.email,
+              gender: this.user.gender,
+              bloodGroup: this.user.bloodGroup,
+              contact: this.user.contact,
+              height: this.user.height,
+              weight: this.user.weight,
+              dob: this.formattedDate,
+            });
+          });
         }
       }
     });
@@ -284,7 +276,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     }
     user.patientChronicIllness = chronicIllnesses;
 
-    if (this.tokenRole === 'PATIENT' || this.urlPath==="users") {
+    if (this.tokenRole === 'PATIENT' || this.urlPath === 'users') {
       user.role = this.user?.role;
       user.email = this.user?.email;
 
@@ -292,11 +284,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.toggleDisable();
         this.cdr.detectChanges();
 
-        this.userService.getUser(this.id).subscribe((data) => {
+        this.userService.getUserByEmail().subscribe((data) => {
           this.user = data;
         });
       });
-    } else if (this.tokenRole === 'DOCTOR' || this.urlPath === "doctors") {
+    } else if (this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors') {
       user.id = this.doctor?.user?.id;
       user.role = this.doctor?.user.role;
       user.email = this.doctor?.user.email;
@@ -318,7 +310,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         });
         this.toggleDisable();
       });
-    } else if (this.tokenRole === 'ADMIN' && this.urlPath!=="users" && this.urlPath!=="doctors") {
+    } else if (
+      this.tokenRole === 'ADMIN' &&
+      this.urlPath !== 'users' &&
+      this.urlPath !== 'doctors'
+    ) {
       let userId = 0;
       user.role = this.admin?.user?.role;
       user.email = this.admin?.user?.email;
@@ -349,10 +345,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       }
     });
   }
-  delete(){
-    if(this.urlPath==='users'){
-      this.adminService.deleteUser(this.id).subscribe(data=> {
-        this.router.navigate(["../"], {relativeTo : this.route})
+  delete() {
+    if (this.urlPath === 'users') {
+      this.adminService.deleteUser(this.id).subscribe((data) => {
+        this.router.navigate(['../'], { relativeTo: this.route });
       });
     }
   }

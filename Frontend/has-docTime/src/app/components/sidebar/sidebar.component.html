@@ -17,17 +17,17 @@
       </div>
       <div class="link">
         <div class="content" routerLink="profile" routerLinkActive="active-page">
-<div class="icon">
-  <i class="fa-solid fa-user me-3"></i>
-</div>
+          <div class="icon">
+            <i class="fa-solid fa-user me-3"></i>
+          </div>
           <div class="title">Profile</div>
         </div>
       </div>
       <div class="link">
         <div class="content" routerLink="medicalHistory" routerLinkActive="active-page">
-<div class="icon">
-  <i class="fa-solid fa-clock-rotate-left me-3"></i>
-</div>
+          <div class="icon">
+            <i class="fa-solid fa-clock-rotate-left me-3"></i>
+          </div>
           <div class="title">Medical History</div>
         </div>
       </div>
@@ -71,7 +71,45 @@
           <div class="title">Chronic Illness</div>
         </div>
       </div>
+
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='DOCTOR'" routerLink="doctorScheduleAppointments" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fas fa-calendar-check me-3"></i>
+          </div>
+          <div class="title">Schedule Appointments</div>
+        </div>
+      </div>
+
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='DOCTOR'" routerLink="resolvedCasesArchive" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-clock-rotate-left me-3"></i>
+          </div>
+          <div class="title">Resolved Cases Archive</div>
+        </div>
+      </div>
+
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='DOCTOR'" routerLink="resolvedCasesArchive" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-clock-rotate-left me-3"></i>
+          </div>
+          <div class="title">Resolved Cases Archive</div>
+        </div>
+      </div>
+
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='DOCTOR'" routerLink="ourServices" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-building"></i>
+          </div>
+          <div class="title">Departments</div>
+        </div>
+      </div>
+
     </div>
+
     <div id="scrollBtn">
       <button (click)="scrollToTop()" class="btn btn-light btn-lg btn-scroll-top position-fixed bottom-0 mb-4" [ngClass]="{'show': isShowScrollButton}">
         <i class="fa fa-angle-up" ></i>

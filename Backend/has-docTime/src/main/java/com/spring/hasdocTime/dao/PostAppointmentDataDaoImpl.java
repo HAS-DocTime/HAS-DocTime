@@ -7,11 +7,13 @@ import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
+import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.PostAppointmentDataRepository;
 import com.spring.hasdocTime.repository.TimeSlotRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
@@ -27,18 +29,21 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     private UserRepository userRepository;
     private DoctorRepository doctorRepository;
     private TimeSlotRepository timeSlotRepository;
+    private UserInterface userDao;
 
     @Autowired
     public PostAppointmentDataDaoImpl(
             PostAppointmentDataRepository postAppointmentDataRepository,
             UserRepository userRepository,
             DoctorRepository doctorRepository,
-            TimeSlotRepository timeSlotRepository
+            TimeSlotRepository timeSlotRepository,
+            @Qualifier("userDaoImpl") UserInterface userInterface
     ){
         this.postAppointmentDataRepository = postAppointmentDataRepository;
         this.userRepository = userRepository;
         this.doctorRepository = doctorRepository;
         this.timeSlotRepository = timeSlotRepository;
+        this.userDao = userInterface;
     }
 
 
@@ -172,5 +177,21 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     @Override
     public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException {
         return postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom);
+    }
+    
+    public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException{
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        if(optionalDoctor.isEmpty()){
+            throw new DoesNotExistException("Doctor");
+        }
+        Doctor doctor = optionalDoctor.get();
+        return doctor.getPostAppointmentData();
+    }
+
+    @Override
+    public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException {
+        User user = userDao.getUser(id);
+        List<PostAppointmentData> postAppointmentDataList = user.getAppointmentData();
+        return postAppointmentDataList;
     }
 }

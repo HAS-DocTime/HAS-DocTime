@@ -40,7 +40,7 @@ export class AppointmentComponent implements OnInit{
         })
       }
       else {
-        this.appointmentService.getAppointmentByUser((data.id as number)).subscribe((data)=> {
+        this.appointmentService.getAppointmentByUser((data.id?.toString())).subscribe((data)=> {
           this.appointments = data;
         });
       }
@@ -49,14 +49,14 @@ export class AppointmentComponent implements OnInit{
 
   }
 
-  appointmentDetails(id : number){
+  appointmentDetails(id : number | undefined){
     this.router.navigate([id], {relativeTo : this.route})
   }
 
-  deleteAppointment(id : number){
+  deleteAppointment(id : number | undefined){
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
       this.userService.getUserByEmail().subscribe((data)=>{
-        this.appointmentService.getAppointmentByUser((data.id as number)).subscribe((data)=> {
+        this.appointmentService.getAppointmentByUser((data.id?.toString())).subscribe((data)=> {
           this.appointments = data;
         });
     })

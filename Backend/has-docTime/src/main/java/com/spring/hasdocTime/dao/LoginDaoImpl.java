@@ -10,6 +10,7 @@ import com.spring.hasdocTime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,20 +32,20 @@ public class LoginDaoImpl implements LoginInterface {
             throw new MissingParameterException("Password");
         }
 
-        authenticationManager.authenticate
-                (new UsernamePasswordAuthenticationToken(
-                        loginDetail.getEmail(),
-                        loginDetail.getPassword()
-                )
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                loginDetail.getEmail(),
+                loginDetail.getPassword());
+        Authentication auth = authenticationManager.authenticate(
+                usernamePassword
         );
         var user = userRepository.findByEmail(loginDetail.getEmail()).orElseThrow();
         UserDetailForToken userDetailForToken;
         if(user.getRole().toString().equals("DOCTOR")){
             userDetailForToken = new UserDetailForToken(user.getEmail(), user.getDoctor().getId(), user.getRole());
-        } else if (user.getRole().toString().equals("ADMIN")) {
-            userDetailForToken = new UserDetailForToken(user.getEmail(), user.getAdmin().getId(), user.getRole());
-        } else{
+        }else if(user.getRole().toString().equals("PATIENT")){
             userDetailForToken = new UserDetailForToken(user.getEmail(), user.getId(), user.getRole());
+        }else{
+            userDetailForToken = new UserDetailForToken(user.getEmail(), user.getAdmin().getId(), user.getRole());
         }
         var jwtToken = jwtService.generateToken(userDetailForToken);
         return AuthenticationResponse.builder().token(jwtToken).build();

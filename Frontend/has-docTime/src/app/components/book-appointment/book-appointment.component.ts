@@ -38,7 +38,11 @@ export class BookAppointmentComponent implements OnInit{
   }
 
   bookAppointment : FormGroup = new FormGroup({
-    symptoms : new FormArray([]),
+    symptoms : new FormArray([
+      new FormGroup({
+          id : new FormControl('', Validators.required)
+      })
+    ]),
     description : new FormControl("")
   })
 

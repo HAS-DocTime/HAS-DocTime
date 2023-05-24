@@ -6,9 +6,9 @@
           class="rounded-circle mt-5"
           width="150px"
           src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
-        /><span class="font-weight-bold">{{ this.user?.name }}</span
-        ><span class="text-black-50">{{ this.user?.email }}</span
-        ><span> </span>
+        />
+        <span class="font-weight-bold">{{ this.user?.name }}</span>
+        <span class="text-black-50">{{ this.user?.email }}</span>
       </div>
     </div>
     <div class="col-md-7 border-right">
@@ -19,8 +19,8 @@
         <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
           <div class="row mt-2 mb-3">
             <div class="col-md-6">
-              <label class="labels">First Name</label
-              ><input
+              <label class="labels">First Name <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input
                 type="text"
                 class="form-control"
                 placeholder="first name"
@@ -28,8 +28,8 @@
               />
             </div>
             <div class="col-md-6">
-              <label class="labels">Last Name</label
-              ><input
+              <label class="labels">Last Name <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input
                 type="text"
                 class="form-control"
                 placeholder="last name"
@@ -39,8 +39,8 @@
           </div>
           <div class="row mt-3">
             <div class="col-md-12 mb-3">
-              <label class="labels">Mobile Number</label
-              ><input
+              <label class="labels">Mobile Number <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input
                 type="text"
                 class="form-control"
                 placeholder="enter phone number"
@@ -48,17 +48,16 @@
               />
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels">Gender</label
-              ><input
-                type="text"
-                class="form-control"
-                placeholder="enter address line 1"
-                formControlName="gender"
-              />
+              <label class="labels">Gender <span *ngIf="!disable" class="required-asterisk">*</span></label>
+            <select class="form-select" id="gender" formControlName="gender">
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
+                <option value="OTHER">OTHER</option>
+            </select>
             </div>
 
             <div class="form-group mb-4">
-              <label for="bloodGroup">Blood Group</label>
+              <label for="bloodGroup">Blood Group <span *ngIf="!disable" class="required-asterisk">*</span></label>
               <select
                 class="form-select"
                 id="bloodGroup"
@@ -75,7 +74,7 @@
               </select>
             </div>
             <div class="form-group mb-4">
-              <label for="dob">Date of Birth</label>
+              <label for="dob">Date of Birth <span *ngIf="!disable" class="required-asterisk">*</span></label>
               <p>{{ this.user?.dob?.getDate?.toString }}</p>
 
               <input
@@ -97,7 +96,7 @@
               </div>
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels">Email</label
+              <label class="labels">Email <span *ngIf="!disable" class="required-asterisk">*</span></label
               ><input
                 type="text"
                 class="form-control"
@@ -126,7 +125,7 @@
 
           <div *ngIf="this.tokenRole === 'DOCTOR' || this.urlPath==='doctors'">
             <div class="col-md-12 mb-3">
-              <label class="labels">Qualification</label
+              <label class="labels">Qualification <span *ngIf="!disable" class="required-asterisk">*</span></label
               ><input
                 type="text"
                 class="form-control"
@@ -134,7 +133,7 @@
               />
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels">Cases Solved</label
+              <label class="labels">Cases Solved </label
               ><input
                 type="number"
                 class="form-control"

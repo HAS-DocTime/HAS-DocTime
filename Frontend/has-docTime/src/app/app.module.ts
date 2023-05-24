@@ -34,6 +34,14 @@ import { ChronicIllnessComponent } from './components/chronic-illness/chronic-il
 import { ChronicIllnessDetailComponent } from './components/chronic-illness/chronic-illness-detail/chronic-illness-detail.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { SymptomDetailComponent } from './components/symptom/symptom-detail/symptom-detail.component';
+import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedule-appointments/doctor-schedule-appointments.component';
+import { CaseDetailComponent } from './components/case-detail/case-detail.component';
+import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archive/resolved-cases-archive.component';
+import { PatientAppointmentDetailComponent } from './components/patient-appointment-detail/patient-appointment-detail.component';
+import { PastHistoryComponent } from './components/patient-appointment-detail/past-history/past-history.component';
+import { AppointmentDetailFromDoctorComponent } from './components/patient-appointment-detail/appointment-detail-from-doctor/appointment-detail-from-doctor.component';
+import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +64,14 @@ import { SymptomDetailComponent } from './components/symptom/symptom-detail/symp
     SymptomComponent,
     ChronicIllnessComponent,
     ChronicIllnessDetailComponent,
-    SymptomDetailComponent
+    SymptomDetailComponent,
+    DoctorScheduleAppointmentsComponent,
+    ResolvedCasesArchiveComponent,
+    CaseDetailComponent,
+    PatientAppointmentDetailComponent,
+    PastHistoryComponent,
+    AppointmentDetailFromDoctorComponent,
+    PatientPastAppointmentByIdComponent
   ],
   imports: [
     BrowserModule,

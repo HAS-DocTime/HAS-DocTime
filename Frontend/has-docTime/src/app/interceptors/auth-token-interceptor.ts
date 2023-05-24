@@ -18,8 +18,6 @@ export class AuthTokenInterceptor implements HttpInterceptor{
                 }
             });
         }
-
         return next.handle(req);
     }
-
 }

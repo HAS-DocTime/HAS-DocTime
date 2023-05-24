@@ -1,8 +1,3 @@
-<!--
-<div class="card flex justify-content-center">
-    <p-chart type="pie" [data]="data" [options]="options"></p-chart>
-</div>
- -->
  <div *ngIf = "noDataFound" class="noData">
   <img [src]="noDataFoundImg" alt="No Data Found">
   <p>No Data Found!!</p>
@@ -13,4 +8,4 @@
    </div>
  </div>
 
- <app-medical-history *ngIf="!noDataFound"></app-medical-history>
+ <app-medical-history *ngIf="!noDataFound && tokenRole==='ADMIN'"></app-medical-history>

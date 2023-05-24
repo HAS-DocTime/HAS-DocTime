@@ -7,6 +7,7 @@ import { ChronicIllnessService } from 'src/app/services/chronic-illness.service'
 import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
 import { LoginDetails } from 'src/app/models/login-details.model';
+import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswordMatch.validator';
 
 @Component({
   selector: 'app-signup',
@@ -20,16 +21,17 @@ export class SignupComponent implements OnInit, OnDestroy{
 constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
 
   }
-  // authToken: string = "";
 
   savedChronicIllnesses : ChronicIllness[] = [];
   selectedValue : string = "";
   selectedIllness : number[] = [];
-
+  showPassword : boolean = false;
+  showConfirmPassword : boolean = false;
+  passwordType : string = "password";
+  confirmPasswordType : string = "password";
 
   ngOnInit(){
-
-    this.signupForm.get("role")?.valueChanges.subscribe(value => {
+      this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
         this.signupForm.get("casesSolved")?.addValidators(Validators.required);
@@ -79,12 +81,22 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     weight : new FormControl(),
     email : new FormControl("", [Validators.required]),
     password : new FormControl("", [Validators.required]),
+    confirmPassword : new FormControl("", [Validators.required]),
     role : new FormControl("PATIENT", [Validators.required]),
     qualification : new FormControl(""),
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([])
-  })
+  }, {validators : confirmPasswordValidator()})
 
+  toggleShowPassword(){
+    this.showPassword = !this.showPassword;
+    this.passwordType = this.showPassword ? "text" : "password";
+  }
+
+  toggleShowConfirmPassword(){
+    this.showConfirmPassword = !this.showConfirmPassword;
+    this.confirmPasswordType = this.showConfirmPassword ? "text" : "password";
+  }
 
 
   register(){
@@ -150,6 +162,9 @@ constructor(private userService : UserService, private doctorService : DoctorSer
           casesSolved : 0,
           patientChronicIllness : []
         });
+        this.router.navigate(["/dashboard/appointment"]);
+      }, (err)=> {
+        console.log(err);
       });
     }
     else if(user.role === "DOCTOR"){
@@ -173,23 +188,13 @@ constructor(private userService : UserService, private doctorService : DoctorSer
             casesSolved : 0,
             patientChronicIllness : []
         });
+        this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
+      }, (err)=> {
+        console.log(err);
       });
     }
-    this.router.navigate(["/dashboard"]);
-  }
 
-//   registerUser(signupDetail: LoginDetails){
-//     return new Promise((res,rej)=>{
-//       this.userService.registerUser(signupDetail).subscribe((data) => {
-//         this.authToken = data;
-//         sessionStorage.clear();
-//         localStorage.clear();
-//         localStorage.setItem('token', JSON.stringify(data));
-//         window.sessionStorage.setItem('token',JSON.stringify(data));
-//         signupDetail = {email : "", password : ""};
-//       });
-//   });
-// }
+  }
 
   addChronicIllness(){
     this.chronicIllness.push(new FormGroup(
@@ -212,4 +217,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     this.userService.onCancel();
   }
 
+  get maxDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
 }

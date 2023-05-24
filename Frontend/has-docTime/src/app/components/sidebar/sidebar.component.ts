@@ -9,7 +9,6 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@a
 
 export class SidebarComponent implements OnInit{
 
-
   isShowScrollButton = false;
   @Input() isExpanded : boolean = false;
   @Output() toggleSidebar : EventEmitter<boolean> = new EventEmitter<boolean>();

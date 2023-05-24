@@ -21,11 +21,19 @@ public class RegisterDaoImpl implements RegisterInterface {
 
     private final UserDaoImpl userDao;
     private final DoctorDaoImpl doctorDao;
+    private final AdminDaoImpl adminDao;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     @Override
-    public AuthenticationResponse registerAdmin(Admin admin) {
-        return null;
+    public AuthenticationResponse registerAdmin(Admin admin) throws DoesNotExistException, MissingParameterException {
+        var createdUser = userDao.createUser(admin.getUser());
+        admin.setUser(createdUser);
+        var createdAdmin = adminDao.createAdmin(admin);
+
+        UserDetailForToken userDetailForToken = new UserDetailForToken(createdAdmin.getUser().getEmail(), createdAdmin.getId(), createdAdmin.getUser().getRole());
+        var jwtToken = jwtService.generateToken(userDetailForToken);
+
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
     @Override

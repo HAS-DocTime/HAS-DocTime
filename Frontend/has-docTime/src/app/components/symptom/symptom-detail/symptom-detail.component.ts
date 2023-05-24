@@ -11,6 +11,9 @@ import { ActivatedRoute } from '@angular/router'
 })
 export class SymptomDetailComponent implements OnInit{
 
+  tokenRole?: String;
+  id?: number;
+
   symptom : string = "";
   constructor(private symptomService: SymptomService, private route : ActivatedRoute) { }
 
@@ -44,6 +47,22 @@ export class SymptomDetailComponent implements OnInit{
   };
 
   ngOnInit() {
+
+
+
+    const token = sessionStorage.getItem('token');
+      if (token) {
+        let store = token?.split('.');
+        this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+        this.id = parseInt(
+          atob(store[1])
+            .split(',')[1]
+            .split(':')[1]
+            .substring(1, this.tokenRole.length - 1)
+        );
+
+        this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
+
     this.route.url.subscribe((data)=> {
       this.symptomService.getSymptomById(parseInt(data[1].path)).subscribe((data)=> {
 
@@ -72,4 +91,5 @@ export class SymptomDetailComponent implements OnInit{
   }
 
 
+  }
 }

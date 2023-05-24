@@ -22,7 +22,7 @@ public class RegisterController {
 
 
     @PostMapping("/admin")
-    public ResponseEntity<AuthenticationResponse> registerRequest(@RequestBody Admin admin) {
+    public ResponseEntity<AuthenticationResponse> registerRequest(@RequestBody Admin admin) throws DoesNotExistException, MissingParameterException {
         return ResponseEntity.ok(registerService.registerAdmin(admin));
 
     }

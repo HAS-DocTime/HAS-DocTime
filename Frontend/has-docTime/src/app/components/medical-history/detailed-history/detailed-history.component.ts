@@ -14,14 +14,14 @@ export class DetailedHistoryComponent {
   public id! : string | null;
 
   public medicalHistory?: any;
-  symptoms: string[] = [];
+  symptoms: string[] | undefined = [];
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.medicalHistoryService.getMedicalHistoryById(this.id)
     .subscribe((data)=> {
       this.medicalHistory = data;
-      this.symptoms = data.symptoms.split("; ");
+      this.symptoms = data.symptoms?.split("; ");
     })
   }
 }

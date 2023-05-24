@@ -61,4 +61,12 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
         return postAppointmentDataDao.getPostAppointmentDataBySymptom(symptom
         );
     }
+    public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException{
+        return postAppointmentDataDao.getPostAppointmentsDataOfDoctor(id);
+    }
+
+    @Override
+    public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException {
+        return postAppointmentDataDao.getPostAppointmentDataByUserId(id);
+    }
 }

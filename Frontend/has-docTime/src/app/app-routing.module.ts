@@ -17,6 +17,14 @@ import { SymptomComponent } from './components/symptom/symptom.component';
 import { ChronicIllnessComponent } from './components/chronic-illness/chronic-illness.component';
 import { ChronicIllnessDetailComponent } from './components/chronic-illness/chronic-illness-detail/chronic-illness-detail.component';
 import { SymptomDetailComponent } from './components/symptom/symptom-detail/symptom-detail.component';
+import { DoctorScheduleAppointmentsComponent } from './components/doctor-schedule-appointments/doctor-schedule-appointments.component';
+import { ResolvedCasesArchiveComponent } from './components/resolved-cases-archive/resolved-cases-archive.component';
+import { CaseDetailComponent } from './components/case-detail/case-detail.component';
+import { PatientAppointmentDetailComponent } from './components/patient-appointment-detail/patient-appointment-detail.component';
+import { AppointmentDetailFromDoctorComponent } from './components/patient-appointment-detail/appointment-detail-from-doctor/appointment-detail-from-doctor.component';
+import { PastHistoryComponent } from './components/patient-appointment-detail/past-history/past-history.component';
+import { OurServicesComponent } from './components/our-services/our-services.component';
+import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
 
 
 const routes: Routes = [
@@ -24,9 +32,18 @@ const routes: Routes = [
   {path : "register", component : SignupComponent},
   {path : "login", component : LoginComponent},
   {path : "dashboard", component : DashboardComponent, children : [
-    {path : "", redirectTo : "appointment", pathMatch : 'full'},
     {path : "appointment", component : AppointmentComponent},
+    {path : "doctorScheduleAppointments", component : DoctorScheduleAppointmentsComponent},
+    {path : "doctorScheduleAppointments/patientAppointmentDetail", component : PatientAppointmentDetailComponent, children: [
+      {path : "appointmentDetails", component : AppointmentDetailFromDoctorComponent},
+      {path : "pastHistory", children : [
+        {path : "", component : PastHistoryComponent},
+        {path : ":id", component : PatientPastAppointmentByIdComponent}
+      ]}
+    ]},
     {path : "profile", component : ProfilePageComponent},
+    {path : "ourServices", component : OurServicesComponent},
+    {path : "symptom", component : SymptomComponent},
     {path : "appointment/book", component : BookAppointmentComponent},
     {path : "appointment/:id", component : AppointmentDetailComponent},
     {path : "medicalHistory", component : MedicalHistoryComponent},
@@ -40,7 +57,10 @@ const routes: Routes = [
     {path : "symptoms", component : SymptomComponent},
     {path : "symptoms/:id", component : SymptomDetailComponent},
     {path : "chronicIllness", component : ChronicIllnessComponent},
-    {path : "chronicIllness/:id", component : ChronicIllnessDetailComponent}
+    {path : "chronicIllness/:id", component : ChronicIllnessDetailComponent},
+    {path : "resolvedCasesArchive", component : ResolvedCasesArchiveComponent},
+    {path : "resolvedCasesArchive/caseDetail", component : CaseDetailComponent},
+    {path : "medicalHistory/:id", component : DetailedHistoryComponent}
   ]}
 ];
 

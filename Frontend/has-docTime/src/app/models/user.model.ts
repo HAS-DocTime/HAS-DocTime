@@ -1,6 +1,7 @@
 import { BloodGroup } from "./bloodGroup.model";
 import { ChronicIllness } from "./chronicIllness.model";
 import { Gender } from "./gender.model";
+import { PatientChronicIllness } from "./patientChronicIllness.model";
 import { Role } from "./role.model";
 
 export type User = {
@@ -16,5 +17,5 @@ export type User = {
   email? : string;
   password? : string;
   role? : Role;
-  patientChronicIllness? : ChronicIllness[];
+  patientChronicIllness? : PatientChronicIllness[];
 }

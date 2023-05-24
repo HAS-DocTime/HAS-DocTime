@@ -57,7 +57,4 @@ export class SymptomComponent implements OnInit{
     })
   }
 
-  getCaseCount(symptom : string | undefined){
-
-  }
 }

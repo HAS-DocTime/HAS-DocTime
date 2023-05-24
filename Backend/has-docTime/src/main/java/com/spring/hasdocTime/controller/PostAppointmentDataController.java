@@ -49,6 +49,9 @@ public class PostAppointmentDataController {
     public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail() {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
         List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail);
+        if(allPostAppointmentData.isEmpty()) {
+            return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NO_CONTENT);
+            }
         return ResponseEntity.ok(allPostAppointmentData);
     }
 
@@ -94,4 +97,16 @@ public class PostAppointmentDataController {
         }
         return ResponseEntity.ok(appointmentData);
     }
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataOfDoctor(@PathVariable int id) throws DoesNotExistException{
+        List<PostAppointmentData> postAppointmentData = postAppointmentDataService.getPostAppointmentsDataOfDoctor(id);
+        return new ResponseEntity<>(postAppointmentData, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByUserId(@PathVariable int id) throws DoesNotExistException {
+        List<PostAppointmentData> postAppointmentDataList = postAppointmentDataService.getPostAppointmentDataByUserId(id);
+        return new ResponseEntity<>(postAppointmentDataList, HttpStatus.OK);
+    }
+
 }
