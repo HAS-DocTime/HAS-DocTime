@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("user")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://192.1.200.29:4200")
 public class UserController {
 
     private UserInterface userService;
@@ -47,9 +48,9 @@ public class UserController {
 
         String authenticatedPatientId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUser(id);
-        if(!authenticatedPatientId.equals(user.getEmail())){
-            throw new AccessDeniedException("You do not have access to this resource");
-        }
+//        if(!authenticatedPatientId.equals(user.getEmail())){
+//            throw new AccessDeniedException("You do not have access to this resource");
+//        }
         return new ResponseEntity(user, HttpStatus.OK);
     }
 
@@ -67,6 +68,24 @@ public class UserController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<User> deleteUser(@PathVariable("id") int id) throws DoesNotExistException{
-        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+    }
+
+    @GetMapping("patient")
+    public ResponseEntity<List<User>> getPatients(){
+        List<User> users = userService.getPatients();
+        if(users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return new ResponseEntity(users, HttpStatus.OK);
+    }
+
+    @GetMapping("patient/chronicIllness/{id}")
+    public ResponseEntity<Set<User>> getPatientsByChronicIllnessId(@PathVariable("id") int id) throws DoesNotExistException{
+        Set<User> users = userService.getPatientsByChronicIllnessId(id);
+        if(users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 }

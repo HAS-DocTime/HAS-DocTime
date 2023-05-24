@@ -95,10 +95,13 @@
       </div>
       <div class="row">
         <div class="col-md-6">
+          <p class="fw-bold">Symptoms:</p>
+          <span class="badge bg-secondary me-2 mb-2" *ngFor="let symptom of symptoms">{{ symptom }}</span>
+        </div>
+        <div class="col-md-6">
           <p class="fw-bold">Medication:</p>
           <p class="mb-4">{{ medicalHistory?.medicine }}</p>
         </div>
-
       </div>
     </div>
   </div>

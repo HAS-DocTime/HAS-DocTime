@@ -99,6 +99,11 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
+    public List<Doctor> getDoctorsByDepartmentId(int id) {
+        return doctorRepository.findDoctorsByDepartmentId(id);
+    }
+
+    @Override
     public Doctor getDoctor(int id) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
@@ -119,7 +124,7 @@ public class DoctorDaoImpl implements DoctorInterface {
             throw new MissingParameterException("Department");
         }
         if(doctor.getDepartment().getId()==0){
-            throw new MissingParameterException("DepartmentId");
+            throw new MissingParameterException("Department Id");
         }
         Optional<Doctor> oldDoctor = doctorRepository.findById(id);
         if(oldDoctor.isPresent()){

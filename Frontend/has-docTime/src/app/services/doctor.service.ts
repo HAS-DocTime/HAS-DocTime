@@ -9,7 +9,7 @@ export class DoctorService {
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = "http://localhost:8080/";
+  baseUrl = `http://192.1.200.29:8080/`;
 
   createDoctor(doctor : Doctor){
     return this.http.post<Doctor>(`${this.baseUrl}doctor`, doctor);

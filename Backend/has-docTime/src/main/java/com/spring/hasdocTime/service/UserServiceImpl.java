@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserInterface {
@@ -49,5 +50,13 @@ public class UserServiceImpl implements UserInterface {
         return userDao.getUserByEmail(email);
     }
 
-    
+    @Override
+    public List<User> getPatients() {
+        return userDao.getPatients();
+    }
+
+    @Override
+    public Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException {
+        return userDao.getPatientsByChronicIllnessId(id);
+    }
 }

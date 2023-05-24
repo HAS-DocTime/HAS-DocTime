@@ -5,17 +5,17 @@ import { PatientChronicIllness } from "./patientChronicIllness.model";
 import { Role } from "./role.model";
 
 export type User = {
-  id : number;
-  name : string;
-  dob : Date;
+  id? : number;
+  name? : string;
+  dob? : Date;
   age? : number;
-  gender : Gender;
-  bloodGroup : BloodGroup;
-  contact : string;
+  gender? : Gender;
+  bloodGroup? : BloodGroup;
+  contact?: string;
   height? : number;
   weight? : number;
-  email : string;
-  password : string;
-  role : Role;
+  email? : string;
+  password? : string;
+  role? : Role;
   patientChronicIllness? : PatientChronicIllness[];
 }

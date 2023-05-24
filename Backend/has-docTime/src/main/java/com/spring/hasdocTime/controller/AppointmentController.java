@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("appointment")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://192.1.200.29:4200")
 public class AppointmentController {
 
     private AppointmentInterface appointmentService;
@@ -73,7 +73,7 @@ public class AppointmentController {
     public ResponseEntity<List<Appointment>> getAppointmentsByUser(@PathVariable int id) throws DoesNotExistException{
         List<Appointment> appointments = appointmentService.getAppointmentsByUser(id);
         if(appointments==null){
-            return new ResponseEntity<>(appointments, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }

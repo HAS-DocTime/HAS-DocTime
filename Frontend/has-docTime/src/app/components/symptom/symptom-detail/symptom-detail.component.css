@@ -1,0 +1,23 @@
+.chartContainer {
+  width: 50%;
+  height: 50%;
+
+}
+
+.noData{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.noData p{
+  margin-top: 2.5%;
+  font-size: 2rem;
+}
+
+.pieChart{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

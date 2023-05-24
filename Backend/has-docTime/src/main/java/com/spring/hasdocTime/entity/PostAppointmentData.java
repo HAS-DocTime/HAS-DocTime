@@ -27,6 +27,9 @@ public class PostAppointmentData {
     @Column(name = "medicine")
     private String medicine;
 
+    @Column(name="symptoms")
+    private String symptoms;
+
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn(name = "patient_id")
     @JsonIgnoreProperties(value={"appointmentData", "admin", "appointments", "doctor"}, allowSetters = true)
@@ -41,6 +44,7 @@ public class PostAppointmentData {
     @JoinColumn(name = "booked_time_slot_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"appointmentData", "bookedDoctors", "availableDoctors", "department", "appointment"}, allowSetters = true)
     private TimeSlot timeSlotForAppointmentData;
+
 
     @Override
     public boolean equals(Object o) {

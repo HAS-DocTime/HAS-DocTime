@@ -1,93 +1,111 @@
+  <div class="sidebar position-relative" [ngClass]="{ 'expanded': isExpanded }">
+    <div class="col-md-auto min-vh-100 m-0 p-0">
+    <div class="header">
+      <h1 class="title">
+        DocTime
+      </h1>
+      <div class="toggle pb-3" (click)="handleSidebarToggle()">
+        <span class="chevron"></span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="link">
+        <div class="content" routerLink="appointment" routerLinkActive="active-page">
+          <div class="icon"><i class="fas fa-calendar-check me-3"></i></div>
+          <div class="title">Appointments</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" routerLink="profile" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-user me-3"></i>
+          </div>
+          <div class="title">Profile</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" routerLink="medicalHistory" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-clock-rotate-left me-3"></i>
+          </div>
+          <div class="title">Medical History</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="users" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-hospital-user"></i>
+          </div>
+          <div class="title">Patients</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="doctors" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-user-doctor"></i>
+          </div>
+          <div class="title">Doctors</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="departments" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-house-medical"></i>
+          </div>
+          <div class="title">Departments</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN' || tokenRole==='DOCTOR'" routerLink="symptoms" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-temperature-full"></i>
+          </div>
+          <div class="title">Symptoms</div>
+        </div>
+      </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='ADMIN'" routerLink="chronicIllness" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-virus-covid"></i>
+          </div>
+          <div class="title">Chronic Illness</div>
+        </div>
+      </div>
 
-<div class="sidebar-container position-relative">
-  <div class="col-md-auto min-vh-100 m-0 p-0">
-    <ul class="nav nav-pills flex-column">
-      <li class="nav-item mt-4" *ngIf="tokenRole === 'PATIENT'">
-        <a class="nav-link text-white text-decoration-none" routerLink="appointment" routerLinkActive="active-page">
-          <i class="fas fa-calendar-check me-3"></i>
-          <span>Appointments</span>
-        </a>
-      </li>
-      <li class="nav-item mt-2">
-        <a class="nav-link text-white text-decoration-none" routerLink="profile" routerLinkActive="active-page">
-          <div class="row">
-            <div class="col-2">
-              <i class="fa-solid fa-user me-3"></i>
-            </div>
-            <div class="col-10">
-              <span>Profile</span>
-            </div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='DOCTOR'" routerLink="doctorScheduleAppointments" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fas fa-calendar-check me-3"></i>
           </div>
-        </a>
-      </li>
-      <li class="nav-item mt-2" *ngIf="tokenRole === 'DOCTOR'">
-        <a class="nav-link text-white text-decoration-none" routerLink="doctorScheduleAppointments" routerLinkActive="active-page">
-          <div class="row">
-            <div class="col-2">
-              <i class="fas fa-calendar-check me-3"></i>
-            </div>
-            <div class="col-10">
-              <span>Schedule Appointments</span>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="nav-item mt-2" *ngIf="tokenRole === 'PATIENT'">
-        <a class="nav-link text-white text-decoration-none" routerLink="medicalHistory" routerLinkActive="active-page">
-          <div class="row">
-            <div class="col-2">
-              <i class="fa-solid fa-clock-rotate-left me-3"></i>
-            </div>
-            <div class="col-10">
-              <span>Medical History</span>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="nav-item mt-2" *ngIf="tokenRole === 'DOCTOR'">
-        <a class="nav-link text-white text-decoration-none" routerLink="resolvedCasesArchive" routerLinkActive="active-page">
-          <div class="row">
-            <div class="col-2">
-              <i class="fa-solid fa-clock-rotate-left me-3"></i>
-            </div>
-            <div class="col-10">
-              <span>Resolved Cases Archive</span>
-            </div>
-          </div>
-        </a>
-      </li>
-      
-      <li class="nav-item mt-2" *ngIf="tokenRole === 'DOCTOR'">
-        <a class="nav-link text-white text-decoration-none" routerLink="symptom" routerLinkActive="active-page">
-          <div class="row">
-            <div class="col-2">
-              <i class="fa-solid fa-temperature-full me-3"></i>
-            </div>
-            <div class="col-10">
-              <span>Symptoms</span>
-            </div>
-          </div>
-        </a>
-      </li>
-      <li class="nav-item mt-2" *ngIf="tokenRole === 'DOCTOR'">
-        <a class="nav-link text-white text-decoration-none" routerLink="ourServices" routerLinkActive="active-page">
-          <div class="row">
-            <div class="col-2">
-              <i class="fa-solid fa-building"></i>
-            </div>
-            <div class="col-10">
-              <span>Departments</span>
-            </div>
-          </div>
-          
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="scrollBtn">
-    <button (click)="scrollToTop()" class="btn btn-light btn-lg btn-scroll-top position-fixed bottom-0 mb-4" [ngClass]="{'show': isShowScrollButton}">
-      <i class="fa fa-angle-up" ></i>
-    </button>
-  </div>
+          <div class="title">Schedule Appointments</div>
+        </div>
+      </div>
 
-</div>
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='DOCTOR'" routerLink="resolvedCasesArchive" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-clock-rotate-left me-3"></i>
+          </div>
+          <div class="title">Resolved Cases Archive</div>
+        </div>
+      </div>
+
+      <div class="link">
+        <div class="content" *ngIf="tokenRole==='DOCTOR'" routerLink="ourServices" routerLinkActive="active-page">
+          <div class="icon">
+            <i class="fa-solid fa-building"></i>
+          </div>
+          <div class="title">Departments</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="scrollBtn">
+      <button (click)="scrollToTop()" class="btn btn-light btn-lg btn-scroll-top position-fixed bottom-0 mb-4" [ngClass]="{'show': isShowScrollButton}">
+        <i class="fa fa-angle-up" ></i>
+      </button>
+    </div>
+  </div>
+    </div>
+

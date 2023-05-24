@@ -6,4 +6,5 @@ export type Symptom = {
   name? : string;
   departments? : Department[];
   appointments? : Appointment[];
+  caseCount? : number;
 }

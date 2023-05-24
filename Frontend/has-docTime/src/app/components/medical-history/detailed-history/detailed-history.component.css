@@ -49,11 +49,7 @@
   margin-bottom: 1.5rem!important;
 }
 
-.badge {
-  font-size: 14px;
-  padding: 8px 10px;
-  border-radius: 50px;
-}
+
 
 .badge:not(:last-child) {
   margin-right: 10px;
@@ -95,6 +91,12 @@
 
 .card-body .mb-2 {
   margin-bottom: 5px!important;
+}
+
+.badge {
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 50px;
 }
 
 .bg-secondary {

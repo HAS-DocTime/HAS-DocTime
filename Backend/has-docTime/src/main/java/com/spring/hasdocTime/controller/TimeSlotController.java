@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("timeSlot")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://192.1.200.29:4200")
 public class TimeSlotController {
 
     private TimeSlotInterface timeSlotService;

@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserInterface {
     List<User> getAllUser();
@@ -19,4 +20,8 @@ public interface UserInterface {
     User deleteUser(int id) throws DoesNotExistException;
 
     User getUserByEmail(String email) throws DoesNotExistException;
+
+    List<User> getPatients();
+
+    Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException;
 }

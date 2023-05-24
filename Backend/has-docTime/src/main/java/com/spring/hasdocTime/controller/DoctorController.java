@@ -32,7 +32,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("doctor")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://192.1.200.29:4200")
 public class DoctorController {
     
     
@@ -52,6 +52,15 @@ public class DoctorController {
     @RequestMapping(method = RequestMethod.GET, value = "")
     public ResponseEntity<List<Doctor>> getAllDoctors(){
         List<Doctor> doctors = doctorService.getAllDoctors();
+        if(doctors.isEmpty()){
+            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(doctors, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "department/{departmentId}")
+    public ResponseEntity<List<Doctor>> getDoctorsByDepartmentId(@PathVariable("departmentId") int id){
+        List<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id);
         if(doctors.isEmpty()){
             return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
         }

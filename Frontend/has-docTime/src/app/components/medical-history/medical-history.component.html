@@ -1,4 +1,8 @@
-<div class="col m-0 p-0 mt-5">
+<div *ngIf = "noDataFound" class="noData">
+  <img [src]="noDataFoundImg" alt="No Data Found">
+  <p>No Data Found!!</p>
+</div>
+<div class="col m-0 p-0 mt-5" *ngIf="!noDataFound">
   <div class="container">
     <h1 class="mb-4 text-center">Medical History</h1>
     <hr>
@@ -8,6 +12,7 @@
         <thead class="text-center">
           <tr>
             <th>Disease</th>
+            <th *ngIf="tokenRole==='ADMIN'">Patient</th>
             <th>Doctor</th>
             <th>Timeslot</th>
             <th>Action</th>
@@ -17,6 +22,7 @@
         [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
           <tr>
             <td>{{ medicalHistory.disease }}</td>
+            <td *ngIf="tokenRole==='ADMIN'">{{ medicalHistory.user?.name }}</td>
             <td>{{ medicalHistory?.doctor?.user?.name }}</td>
             <td>{{ medicalHistory.timeSlotForAppointmentData?.startTime }} - {{ medicalHistory.timeSlotForAppointmentData?.endTime }}</td>
             <td>

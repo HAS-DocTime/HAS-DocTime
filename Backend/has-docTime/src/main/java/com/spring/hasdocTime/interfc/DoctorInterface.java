@@ -18,6 +18,7 @@ public interface DoctorInterface {
     public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException;
     public List<Doctor> getAllDoctors();
     public Doctor getDoctor(int id) throws DoesNotExistException;
+    public List<Doctor> getDoctorsByDepartmentId(int id);
     public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException;
     public Doctor deleteDoctor(int id) throws DoesNotExistException;
 }

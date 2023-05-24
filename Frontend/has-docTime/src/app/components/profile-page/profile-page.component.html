@@ -1,106 +1,169 @@
 <div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-                    width="150px"
-                    src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span
-                    class="font-weight-bold">{{this.user?.name}}</span><span class="text-black-50">{{this.user?.email}}</span><span>
-                </span></div>
-        </div>
-        <div class="col-md-7 border-right">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Profile Settings</h4>
-                </div>
-                <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
-                    <div class="row mt-2 mb-3">
-                        <div class="col-md-6"><label class="labels">First Name <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
-                                class="form-control" placeholder="first name" formControlName="firstName"
-                               ></div>
-                        <div class="col-md-6"><label class="labels">Last Name <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
-                                class="form-control" placeholder="last name" formControlName="lastName"
-                               ></div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12 mb-3"><label class="labels">Mobile Number <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
-                                class="form-control" placeholder="enter phone number" formControlName="contact"
-                               ></div>
-                                <div class="form-group mb-4">
-                                  <label for="gender">Gender<span *ngIf="!disable" class="required-asterisk">*</span></label>
-                                  <select class="form-select" id="gender" formControlName="gender">
-                                      <option value="MALE">MALE</option>
-                                      <option value="FEMALE">FEMALE</option>
-                                      <option value="OTHER">OTHER</option>
-                                  </select>
-                              </div>
-                        <div class="form-group mb-4">
-                            <label for="bloodGroup">Blood Group <span *ngIf="!disable" class="required-asterisk">*</span></label>
-                            <select class="form-select" id="bloodGroup" formControlName="bloodGroup">
-                                <option value="A_POSITIVE">A+</option>
-                                <option value="A_NEGATIVE">A-</option>
-                                <option value="B_POSITIVE">B+</option>
-                                <option value="B_NEGATIVE">B-</option>
-                                <option value="O_POSITIVE">O+</option>
-                                <option value="O_NEGATIVE">O-</option>
-                                <option value="AB_POSITIVE">AB+</option>
-                                <option value="AB_NEGATIVE">AB-</option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-4">
-
-                            <label for="dob">Date of Birth <span *ngIf="!disable" class="required-asterisk">*</span></label>
-                            <p>{{this.user?.dob?.getDate?.toString}}</p>
-
-                            <input type="date" class="form-control" id="dob" [placeholder]="user?.dob"
-                                formControlName="dob">
-                            <div class="alert alert-danger"
-                                *ngIf="editForm.get('dob')?.touched && editForm.get('dob')?.invalid">
-                                <span *ngIf="editForm.get('dob')?.errors">Date of Birth is Required</span>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3"><label class="labels">Email <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
-                                class="form-control" formControlName="email" ></div>
-                        <div class="col-md-12 mb-3"><label class="labels">Height</label><input type="text"
-                                class="form-control" placeholder="e.g.(5.7 feet)" formControlName="height"
-                                ></div>
-                        <div class="col-md-12 mb-3"><label class="labels">Weight</label><input type="text"
-                                class="form-control" placeholder="e.g.(70 kg)" formControlName="weight"
-                                ></div>
-
-
-                    </div>
-
-                    <div *ngIf="this.tokenRole === 'DOCTOR'">
-                        <div class="col-md-12 mb-3"><label class="labels">Qualification <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text"
-                            class="form-control" formControlName="qualification"></div>
-                        <div class="col-md-12 mb-3"><label class="labels">Cases Solved</label><input type="number"
-                            class="form-control" formControlName="casesSolved"></div>
-                    </div>
-                    <div class="row d-flex mb-4 text-center mt-5">
-                        <div *ngIf="disable" class="col">
-                            <button type="button" class="btn btn-outline-danger" (click)="toggleDisable()">Edit</button>
-                        </div>
-                        <div *ngIf="!disable" class="col">
-                            <button type="submit" class="btn btn-outline-primary"
-                                >Update</button>
-                        </div>
-                    </div>
-
-                </form>
-
-
-            </div>
-        </div>
-        <!-- <div class="col-md-4">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center experience"><span>Edit
-                        Experience</span><span class="border px-3 p-1 add-experience"><i
-                            class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
-                <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text"
-                        class="form-control" placeholder="experience" value=""></div> <br>
-                <div class="col-md-12"><label class="labels">Additional Details</label><input type="text"
-                        class="form-control" placeholder="additional details" value=""></div>
-            </div>
-        </div> -->
+  <div class="row">
+    <div class="col-md-3 border-right">
+      <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+        <img
+          class="rounded-circle mt-5"
+          width="150px"
+          src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+        />
+        <span class="font-weight-bold">{{ this.user?.name }}</span>
+        <span class="text-black-50">{{ this.user?.email }}</span>
+      </div>
     </div>
+    <div class="col-md-7 border-right">
+      <div class="p-3 py-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="text-right">Profile Settings</h4>
+        </div>
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+          <div class="row mt-2 mb-3">
+            <div class="col-md-6">
+              <label class="labels">First Name <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="first name"
+                formControlName="firstName"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="labels">Last Name <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="last name"
+                formControlName="lastName"
+              />
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-12 mb-3">
+              <label class="labels">Mobile Number <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="enter phone number"
+                formControlName="contact"
+              />
+            </div>
+            <div class="col-md-12 mb-3">
+              <label class="labels">Gender <span *ngIf="!disable" class="required-asterisk">*</span></label>
+            <select class="form-select" id="gender" formControlName="gender">
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
+                <option value="OTHER">OTHER</option>
+            </select>
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="bloodGroup">Blood Group <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <select
+                class="form-select"
+                id="bloodGroup"
+                formControlName="bloodGroup"
+              >
+                <option value="A_POSITIVE">A+</option>
+                <option value="A_NEGATIVE">A-</option>
+                <option value="B_POSITIVE">B+</option>
+                <option value="B_NEGATIVE">B-</option>
+                <option value="O_POSITIVE">O+</option>
+                <option value="O_NEGATIVE">O-</option>
+                <option value="AB_POSITIVE">AB+</option>
+                <option value="AB_NEGATIVE">AB-</option>
+              </select>
+            </div>
+            <div class="form-group mb-4">
+              <label for="dob">Date of Birth <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <p>{{ this.user?.dob?.getDate?.toString }}</p>
+
+              <input
+                type="date"
+                class="form-control"
+                id="dob"
+                [placeholder]="user?.dob"
+                formControlName="dob"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="
+                  editForm.get('dob')?.touched && editForm.get('dob')?.invalid
+                "
+              >
+                <span *ngIf="editForm.get('dob')?.errors"
+                  >Date of Birth is Required</span
+                >
+              </div>
+            </div>
+            <div class="col-md-12 mb-3">
+              <label class="labels">Email <span *ngIf="!disable" class="required-asterisk">*</span></label
+              ><input
+                type="text"
+                class="form-control"
+                formControlName="email"
+              />
+            </div>
+            <div class="col-md-12 mb-3">
+              <label class="labels">Height</label
+              ><input
+                type="text"
+                class="form-control"
+                placeholder="enter address line 2"
+                formControlName="height"
+              />
+            </div>
+            <div class="col-md-12 mb-3">
+              <label class="labels">Weight</label
+              ><input
+                type="text"
+                class="form-control"
+                placeholder="enter email id"
+                formControlName="weight"
+              />
+            </div>
+          </div>
+
+          <div *ngIf="this.tokenRole === 'DOCTOR' || this.urlPath==='doctors'">
+            <div class="col-md-12 mb-3">
+              <label class="labels">Qualification <span *ngIf="!disable" class="required-asterisk">*</span></label
+              ><input
+                type="text"
+                class="form-control"
+                formControlName="qualification"
+              />
+            </div>
+            <div class="col-md-12 mb-3">
+              <label class="labels">Cases Solved </label
+              ><input
+                type="number"
+                class="form-control"
+                formControlName="casesSolved"
+              />
+            </div>
+          </div>
+          <div class="row d-flex mb-4 text-center mt-5">
+            <div *ngIf="disable" class="col">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                (click)="toggleDisable()"
+              >
+                Edit
+              </button>
+            </div>
+            <div *ngIf="!disable" class="col">
+              <button type="submit" class="btn btn-outline-primary">
+                Update
+              </button>
+            </div>
+            <div *ngIf="urlPath==='users' || urlPath==='doctors'" class="col">
+              <button type="button" class="btn btn-outline-danger" (click)="delete()">
+                Delete
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

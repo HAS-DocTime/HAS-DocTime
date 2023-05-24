@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.print.Doc;
 import java.sql.Time;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -44,6 +45,8 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         this.timeSlotRepository = timeSlotRepository;
         this.userDao = userInterface;
     }
+
+
 
     @Override
     public List<PostAppointmentData> getAllPostAppointmentData() {
@@ -167,6 +170,15 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     }
 
     @Override
+    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom);
+    }
+
+    @Override
+    public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom);
+    }
+    
     public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException{
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         if(optionalDoctor.isEmpty()){

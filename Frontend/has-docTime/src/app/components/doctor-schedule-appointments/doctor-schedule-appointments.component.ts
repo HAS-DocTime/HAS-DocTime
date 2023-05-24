@@ -13,8 +13,8 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class DoctorScheduleAppointmentsComponent {
 
-  constructor(private appointmentService: AppointmentService, 
-    private router : Router, 
+  constructor(private appointmentService: AppointmentService,
+    private router : Router,
     private route : ActivatedRoute,
     private sharedService: SharedService
     ){}
@@ -47,8 +47,8 @@ export class DoctorScheduleAppointmentsComponent {
 
   appointmentDetail(i : number){
     console.log(this.appointments[i]);
-    
-    sessionStorage.setItem('userId', this.appointments[i].user.id.toString());
+
+    sessionStorage.setItem('userId', this.appointments[i].user.id?.toString() as string);
     sessionStorage.setItem('appointmentId', this.appointments[i].id.toString());
     this.router.navigate(['patientAppointmentDetail/appointmentDetails'], {relativeTo:this.route});
   }

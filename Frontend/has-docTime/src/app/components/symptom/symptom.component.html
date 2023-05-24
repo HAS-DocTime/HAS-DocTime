@@ -1,43 +1,41 @@
 <div class="col m-0 p-0 mt-5">
-    <div class="container">
-      <h1 class="mb-4 text-center">Symptoms</h1>
-      <hr>
-      <div class="table-responsive m-0 p-0" >
-        <table class="table table-striped table-dark mb-5 p-0" >
-          <thead class="text-center">
-            <tr>
-              <th>Sr. No.</th>
-              <th>Name</th>
-              <th>Total Appointments</th>
-              <th>Departments</th>
-            </tr>
-          </thead>
-          <tbody class=" text-center" *ngFor="let symptom of symptoms; let i = index" [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
-            <tr>
-              <td>{{ i + 1 }}</td>
-              <td>{{ symptom?.name }}</td>
-              <td class="d-flex justify-content-center">
-                  <!-- <div class="dar">
-                      {{ symptom?.appointments?.length }}
-                  </div> -->
-                  <div class="p-0 mx-1 my-1 shadow-none border-dark bg-dark d-flex justify-content-center align-items-center" style="width: 40px;">
-                    <div class="py-1 text-light p-2 d-flex justify-content-center align-items-center" style="width: 100%;">
-                        {{ symptom?.appointments?.length }}
-                    </div>
+  <div class="container">
+    <h1 class="mb-4 text-center">Symptoms</h1>
+
+    <hr>
+    <div class="table-responsive m-0 p-0" >
+
+      <table class="table table-striped table-dark mb-5 p-0" >
+        <thead class="text-center">
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Total Appointments</th>
+            <th>Departments</th>
+          </tr>
+        </thead>
+        <tbody class=" text-center" *ngFor="let symptom of symptoms; let i = index" [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
+          <tr>
+            <td>{{ symptom?.id }}</td>
+            <td>{{ symptom?.name }}</td>
+            <td>
+                {{ symptom?.caseCount }}
+                <a class="btn btn-sm btn-dark " [routerLink]="[symptom?.id]">
+                  More Details
+                </a>
+
+            </td>
+            <td>
+              <div class="card p-0 mx-1 my-1 shadow-none border-dark badge bg-secondary" *ngFor="let department of symptom?.departments">
+                <div class="card-body py-0 text-light" >
+                  {{ department.name }}
                 </div>
-                
-                
-              </td>
-              <td>
-                <div class="card p-1 mx-1 my-1 shadow-none border-dark badge bg-info" *ngFor="let department of symptom?.departments">
-                  <div class="card-body py-0 text-light" >
-                    {{ department.name }}
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
     </div>
   </div>
+</div>

@@ -9,4 +9,5 @@ export type MedicalHistory = {
   user?: User;
   doctor?: Doctor;
   timeSlotForAppointmentData?: TimeSlot;
+  symptoms?: string;
 }

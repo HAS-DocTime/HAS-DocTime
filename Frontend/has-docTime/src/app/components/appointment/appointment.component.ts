@@ -16,12 +16,35 @@ export class AppointmentComponent implements OnInit{
 
   appointments : Appointment[] = [];
 
+  id : number = 0;
+  tokenRole : string = "";
+
   ngOnInit(){
 
+    const token = sessionStorage.getItem('token');
+    if (token) {
+
+      let store = token?.split('.');
+      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+
+      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
+
+      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
+    }
+
     this.userService.getUserByEmail().subscribe((data)=>{
-        this.appointmentService.getAppointmentByUser((data.id.toString())).subscribe((data)=> {
+
+      if(this.tokenRole==='ADMIN'){
+        this.appointmentService.getAppointments().subscribe((data)=>{
+          this.appointments = data;
+        })
+      }
+      else {
+        this.appointmentService.getAppointmentByUser((data.id?.toString())).subscribe((data)=> {
           this.appointments = data;
         });
+      }
+
     })
 
   }
@@ -33,7 +56,7 @@ export class AppointmentComponent implements OnInit{
   deleteAppointment(id : number | undefined){
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
       this.userService.getUserByEmail().subscribe((data)=>{
-        this.appointmentService.getAppointmentByUser((data.id.toString())).subscribe((data)=> {
+        this.appointmentService.getAppointmentByUser((data.id?.toString())).subscribe((data)=> {
           this.appointments = data;
         });
     })

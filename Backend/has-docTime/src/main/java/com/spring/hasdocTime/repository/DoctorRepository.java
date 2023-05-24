@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  * @author arpit
@@ -22,5 +24,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer>{
     @Modifying
     @Query("DELETE FROM Doctor d where d.id = :id")
     void deleteById(@Param("id") int id);
-    
+
+
+    @Query("FROM Doctor d where d.department.id =:id")
+    List<Doctor> findDoctorsByDepartmentId(@Param("id") int id);
 }

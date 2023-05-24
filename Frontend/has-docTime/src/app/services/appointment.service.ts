@@ -9,14 +9,22 @@ export class AppointmentService {
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = "http://localhost:8080/";
+  baseUrl = `http://192.1.200.29:8080/`;
 
-  getAppointmentByUser(userId : string | null){
+  getAppointmentByUser(userId : string | undefined){
     return this.http.get<Appointment[]>(`${this.baseUrl}appointment/user/${userId}`);
+  }
+
+  getAppointmentByDoctor(doctorId : number){
+    return this.http.get<Appointment[]>(`${this.baseUrl}appointment/doctor/${doctorId}`);
   }
 
   getAppointment(id : number){
     return this.http.get<Appointment>(`${this.baseUrl}appointment/${id}`);
+  }
+
+  getAppointments(){
+    return this.http.get<Appointment[]>(`${this.baseUrl}appointment`);
   }
 
   deleteAppointment(id : number | undefined){

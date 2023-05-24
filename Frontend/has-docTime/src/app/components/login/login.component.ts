@@ -89,6 +89,5 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loginService.isLoggedIn.subscribe((data) => {
         this.isLoggedIn = data;
     });
-    // this.router.navigate([""]);
   }
 }

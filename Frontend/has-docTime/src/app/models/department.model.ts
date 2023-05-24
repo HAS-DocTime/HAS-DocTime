@@ -1,3 +1,5 @@
+import { Symptom } from "./symptom.model";
+
 export type Department = {
   id? : number;
   name? : string;
@@ -5,4 +7,5 @@ export type Department = {
   timeDuration? : string;
   description? : string;
   departmentImage? : string;
+  symptoms? : Symptom[];
 }

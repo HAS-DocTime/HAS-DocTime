@@ -75,10 +75,13 @@ public class SecurityConfig{
                     authorize
                         .requestMatchers("/admin", "/admin/**", "/user", "/doctor").hasAnyAuthority("ADMIN")
                         .requestMatchers("/doctor/*").hasAnyAuthority("ADMIN", "DOCTOR")
+                            .requestMatchers("/doctor/department/*").hasAnyAuthority("ADMIN")
                         .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
                         .requestMatchers(HttpMethod.DELETE, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT")
                         .requestMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority("ADMIN", "PATIENT", "DOCTOR")
+                            .requestMatchers(HttpMethod.GET, "/user/patient").hasAnyAuthority("ADMIN")
+                            .requestMatchers(HttpMethod.GET, "/user/patient/chronicIllness/*").hasAnyAuthority("ADMIN")
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/chronicIllness").permitAll()
@@ -86,7 +89,7 @@ public class SecurityConfig{
                         .requestMatchers("/chronicIllness/**").permitAll() // Should only be allowed when the user/doctor tries to edit his/her own chronic Illness
                         .requestMatchers("/department").permitAll()
                         .requestMatchers("/appointment/**", "/appointment").permitAll()
-                        .requestMatchers("/postAppointmentData/**").permitAll()
+                        .requestMatchers( "/postAppointmentData/**", "/postAppointmentData/{id}").permitAll()
                         .requestMatchers("/symptom/**", "/symptom").permitAll()
                         .requestMatchers("/department/**").permitAll() //Added temporarily to allow deleting from postman
                         .requestMatchers("/postAppointmentData", "/postAppointmentData/**").hasAnyAuthority("ADMIN", "PATIENT", "DOCTOR")

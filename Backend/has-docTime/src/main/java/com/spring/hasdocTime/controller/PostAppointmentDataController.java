@@ -12,10 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("postAppointmentData")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://192.1.200.29:4200")
 public class PostAppointmentDataController {
 
     private PostAppointmentDataInterface postAppointmentDataService;
@@ -27,12 +28,11 @@ public class PostAppointmentDataController {
 
     @GetMapping
     public ResponseEntity<List<PostAppointmentData>> getAllPostAppointmentData() {
-        try {
             List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getAllPostAppointmentData();
+            if(allPostAppointmentData.isEmpty()){
+                return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NO_CONTENT);
+            }
             return ResponseEntity.ok(allPostAppointmentData);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
 
     }
 
@@ -80,6 +80,23 @@ public class PostAppointmentDataController {
         }
     }
 
+    @GetMapping("disease/{symptom}")
+    public ResponseEntity<List<Map<String, Integer>>> getDiseasesBySymptom(@PathVariable String symptom) throws DoesNotExistException{
+        List<Map<String, Integer>> diseaseData = postAppointmentDataService.getDiseasesGroupedBySymptom(symptom);
+        if(diseaseData.isEmpty()){
+            return new ResponseEntity<>(diseaseData, HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(diseaseData);
+    }
+
+    @GetMapping("data/{symptom}")
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataBySymptom(@PathVariable String symptom) throws DoesNotExistException {
+        List<PostAppointmentData> appointmentData = postAppointmentDataService.getPostAppointmentDataBySymptom(symptom);
+        if(appointmentData.isEmpty()){
+            return new ResponseEntity<>(appointmentData, HttpStatus.NO_CONTENT);
+        }
+        return ResponseEntity.ok(appointmentData);
+    }
     @GetMapping("/doctor/{id}")
     public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataOfDoctor(@PathVariable int id) throws DoesNotExistException{
         List<PostAppointmentData> postAppointmentData = postAppointmentDataService.getPostAppointmentsDataOfDoctor(id);
