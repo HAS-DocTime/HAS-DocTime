@@ -55,7 +55,6 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
         Optional<PatientChronicIllness> patientChronicIllness =  patientChronicIllnessRepository.findById(id);
         if(patientChronicIllness.isPresent()) {
             patientChronicIllnessRepository.deleteById(id);
-            System.out.println("Deleted  this chronicIllness of id:" + id.getChronicIllnessId() + " from this patient of id: " + id.getPatientId());
         }
         else{
             throw new DoesNotExistException("Patient Chronic Illness");

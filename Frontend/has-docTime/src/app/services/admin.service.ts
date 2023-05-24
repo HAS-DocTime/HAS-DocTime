@@ -11,7 +11,7 @@ export class AdminService{
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = "http://localhost:8080/";
+  baseUrl = `http://192.1.200.29:8080/`;
 
   getAdmin(id : number){
     return this.http.get<Admin>(`${this.baseUrl}admin/${id}`);

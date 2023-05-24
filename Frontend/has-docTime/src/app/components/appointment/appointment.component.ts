@@ -39,12 +39,6 @@ export class AppointmentComponent implements OnInit{
           this.appointments = data;
         })
       }
-      // else if(this.tokenRole === "DOCTOR"){
-      //   console.log("DOCTOR")
-      //   this.appointmentService.getAppointmentByDoctor(data.id as number).subscribe((data)=> {
-      //     this.appointments = data;
-      //   })
-      // }
       else {
         this.appointmentService.getAppointmentByUser((data.id as number)).subscribe((data)=> {
           this.appointments = data;

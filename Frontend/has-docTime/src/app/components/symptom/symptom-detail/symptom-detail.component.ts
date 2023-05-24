@@ -45,18 +45,15 @@ export class SymptomDetailComponent implements OnInit{
 
   ngOnInit() {
     this.route.url.subscribe((data)=> {
-      // console.log(data)
       this.symptomService.getSymptomById(parseInt(data[1].path)).subscribe((data)=> {
 
         this.symptom = data.name as string;
-        console.log(this.symptom)
         this.symptomService.getDiseaseWithCaseCountFromSymptom(this.symptom).subscribe(
           data => {
             if(data===null){
               this.noDataFound = true;
               return;
             }
-            console.log(data);
             this.chartTitle = {
               text: 'Disease Analysis Based on '+ this.symptom,
               align: 'center'

@@ -9,7 +9,7 @@ export class DepartmentService {
 
   constructor(private http : HttpClient) { }
 
-  base_url = "http://localhost:8080/"
+  base_url = `http://192.1.200.29:8080/`
 
   getDepartments(){
     return this.http.get<Department[]>(`${this.base_url}department`);

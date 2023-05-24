@@ -9,13 +9,14 @@ export class LoginService{
 
   isLoggedIn: Subject<Boolean> = new Subject<Boolean>;
 
-  private loginUrl = "http://localhost:8080/login";
+  private loginUrl = `http://192.1.200.29:8080/login`;
 
   constructor(private http:HttpClient) {}
 
   checkDetail(email: string, password: string): Observable<{'token': string}> {
     const body = { "email" : email, "password" : password };
     this.isLoggedIn.next(true);
+
     return this.http.post<{token : string}>(this.loginUrl, body);
   }
 }

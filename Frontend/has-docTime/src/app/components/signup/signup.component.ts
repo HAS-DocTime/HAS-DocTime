@@ -103,7 +103,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
       else if(date.getMonth() === (new Date(user.dob as Date).getMonth())){
         if(date.getDate() >= new Date(user.dob as Date).getDate()){
           age++;
-          
+
         }
       }
       user.age = age;
@@ -154,19 +154,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     }
     else if(user.role === "DOCTOR"){
       let userId = 0;
-      // this.userService.registerUser(signupDetail).subscribe((data) => {
-      //   this.authToken = data;
-      //   sessionStorage.clear();
-      //   localStorage.clear();
-      //   localStorage.setItem('token', JSON.stringify(data));
-      //   window.sessionStorage.setItem('token',JSON.stringify(data));
-      //   signupDetail = {email : "", password : ""};
-      // });
-      console.log(doctor);
       this.userService.registerDoctor(doctor).subscribe((data)=> {
-        // const authToken = data;
-        // console.log(authToken.token);
-        console.log(data);
         sessionStorage.clear();
         localStorage.clear();
         localStorage.setItem('token', data.token);

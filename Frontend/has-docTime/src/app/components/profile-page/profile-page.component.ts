@@ -93,7 +93,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.route.params.subscribe(data=> {
           this.id = parseInt(data['id'])
           this.doctorService.getDoctor(this.id).subscribe((data) => {
-            console.log(data)
             this.doctor = data;
             this.user = data.user;
             this.id = data.id as number;
@@ -310,9 +309,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           id: 1,
         },
       };
-      console.log(doctor);
+
       this.userService.updateDoctor(doctor, this.id).subscribe((data) => {
-        console.log(data)
         this.doctorService.getDoctor(this.id).subscribe((data) => {
           this.doctor = data;
           this.user = data.user;

@@ -54,7 +54,6 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loginService.checkDetail(email, password).subscribe(data => {
 
       this.user = data.token;
-      // console.log(data);
       this.isLoggedIn = true;
 
       sessionStorage.clear();
@@ -70,6 +69,5 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loginService.isLoggedIn.subscribe((data) => {
         this.isLoggedIn = data;
     });
-    // this.router.navigate([""]);
   }
 }

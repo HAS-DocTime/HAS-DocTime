@@ -17,7 +17,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("user")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://192.1.200.29:4200")
 public class UserController {
 
     private UserInterface userService;
@@ -48,8 +48,6 @@ public class UserController {
 
         String authenticatedPatientId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUser(id);
-        System.out.println(authenticatedPatientId);
-        System.out.println(user.getEmail());
 //        if(!authenticatedPatientId.equals(user.getEmail())){
 //            throw new AccessDeniedException("You do not have access to this resource");
 //        }

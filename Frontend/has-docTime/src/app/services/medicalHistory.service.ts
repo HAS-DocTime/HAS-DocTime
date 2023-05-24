@@ -11,7 +11,7 @@ export class MedicalHistoryService {
 
   constructor(private http : HttpClient) { }
 
-  base_url = "http://localhost:8080/"
+  base_url =  `http://192.1.200.29:8080/`
 
 
 
