@@ -11,14 +11,17 @@
           id="firstName"
           placeholder="(Eg : John)"
           formControlName="firstName"
+          pattern="[A-z]+"
+          [ngClass]="signupForm.get('firstName')?.errors && signupForm.get('firstName')?.touched && signupForm.get('firstName')?.invalid ? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('firstName')?.touched && signupForm.get('firstName')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('firstName')?.errors">First Name is Required</span>
+          <span *ngIf="signupForm.get('firstName')?.errors?.['required']">First Name is Required</span>
+          <span *ngIf="signupForm.get('firstName')?.errors?.['pattern']">Only Alphabets are allowed</span>
         </div>
       </div>
       <div class="form-group mb-4">
@@ -29,14 +32,17 @@
           id="lastName"
           placeholder="(Eg : John)"
           formControlName="lastName"
+          pattern="[A-z]+"
+          [ngClass]="signupForm.get('lastName')?.errors && signupForm.get('lastName')?.touched && signupForm.get('lastName')?.invalid ? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('lastName')?.touched && signupForm.get('lastName')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('lastName')?.errors">Last Name is Required</span>
+          <span *ngIf="signupForm.get('lastName')?.errors?.['required']">Last Name is Required</span>
+          <span *ngIf="signupForm.get('lastName')?.errors?.['pattern']">Only Alphabets are allowed</span>
         </div>
       </div>
       <div class="form-group mb-4">
@@ -47,14 +53,16 @@
           id="email"
           placeholder="(Eg : johndoe@gmail.com)"
           formControlName="email"
+          [ngClass]="signupForm.get('email')?.errors && signupForm.get('email')?.touched && signupForm.get('email')?.invalid ? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('email')?.touched && signupForm.get('email')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('email')?.errors">Email is Required</span>
+          <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is Required</span>
+          <span *ngIf="signupForm.get('email')?.errors?.['email']">Enter Valid Email</span>
         </div>
       </div>
       <div class="form-group mb-4">

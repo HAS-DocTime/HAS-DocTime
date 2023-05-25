@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/symptom")
-@CrossOrigin(origins = "http://192.1.200.29:4200")
+@CrossOrigin(origins = "http://192.1.200.177:4200")
 public class SymptomController {
 
     @Autowired

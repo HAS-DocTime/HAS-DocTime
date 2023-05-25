@@ -79,7 +79,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     contact : new FormControl("", [Validators.required]),
     height : new FormControl(),
     weight : new FormControl(),
-    email : new FormControl("", [Validators.required]),
+    email : new FormControl("", [Validators.required, Validators.email]),
     password : new FormControl("", [Validators.required]),
     confirmPassword : new FormControl("", [Validators.required]),
     role : new FormControl("PATIENT", [Validators.required]),
