@@ -292,8 +292,8 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         return timeSlots;
     }
 
-    @Scheduled(cron = "00 26 16 ? * *", zone = "Asia/Kolkata") // For Testing
-//    @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
+//    @Scheduled(cron = "00 26 16 ? * *", zone = "Asia/Kolkata") // For Testing
+    @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
     public void refreshTimeSlots(){
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
         List<TimeSlot> timeSlots = timeSlotRepository.findAll();
