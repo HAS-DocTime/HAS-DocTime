@@ -1,6 +1,7 @@
 package com.spring.hasdocTime.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.Objects;
@@ -29,6 +30,9 @@ public class PatientChronicIllness {
     private ChronicIllness chronicIllness;
 
     @Column(name="years_of_illness")
+    @NotBlank(message = "Please enter years of Illness")
+    @DecimalMin(value = "0.0", inclusive = true, message = "Years of Illness should at least be 0")
+    @DecimalMax(value = "150.0", inclusive = true, message = "Years of Illness should not exceed 150")
     private float yearsOfIllness;
 
     @Override

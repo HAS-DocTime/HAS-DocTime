@@ -74,12 +74,12 @@ export class LoginComponent implements OnInit, OnDestroy{
         this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
         this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length-1);
       }
-      if(this.tokenRole === "PATIENT"){
+      if(this.tokenRole === "PATIENT" || this.tokenRole === "ADMIN"){
         this.router.navigate(['/dashboard/appointment']);
-      }else{
+      }else {
         this.router.navigate(['/dashboard/doctorScheduleAppointments']);
       }
-    
+
     }, (err)=> {
       if(err){
         this.isLoggedIn = false;

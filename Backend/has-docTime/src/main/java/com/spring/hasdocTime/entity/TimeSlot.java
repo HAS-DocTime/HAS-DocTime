@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import lombok.*;
 
 import java.sql.Time;
@@ -25,9 +26,11 @@ public class TimeSlot {
     private int id;
 
     @Column(name = "start_time")
+    @Future(message = "Timestamp must be in the future")
     private Time startTime;
 
     @Column(name = "end_Time")
+    @Future(message = "Timestamp must be in the future")
     private Time endTime;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

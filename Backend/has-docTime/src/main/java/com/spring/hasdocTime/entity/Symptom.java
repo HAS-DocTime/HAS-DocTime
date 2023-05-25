@@ -4,6 +4,7 @@ package com.spring.hasdocTime.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class Symptom {
     private int id;
 
     @Column(name = "name")
+    @Pattern(regexp = "[a-zA-Z.-]+( [a-zA-Z.-]+)*", message = "Invalid input. Please enter a valid string with alphabetic characters, commas, periods, and dashes allowing spaces in between.")
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)

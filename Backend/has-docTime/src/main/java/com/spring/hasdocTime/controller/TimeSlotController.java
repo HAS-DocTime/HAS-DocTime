@@ -4,6 +4,7 @@ import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -45,12 +46,12 @@ public class TimeSlotController {
     }
 
     @PostMapping
-    public TimeSlot createTimeSlot(@RequestBody TimeSlot TimeSlot) throws MissingParameterException, DoesNotExistException{
+    public TimeSlot createTimeSlot(@Valid @RequestBody TimeSlot TimeSlot) throws MissingParameterException, DoesNotExistException{
         return timeSlotService.createTimeSlot(TimeSlot);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TimeSlot> updateTimeSlot(@PathVariable int id, @RequestBody TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException {
+    public ResponseEntity<TimeSlot> updateTimeSlot(@PathVariable int id, @Valid @RequestBody TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException {
         try {
             TimeSlot updatedTimeSlot = timeSlotService.updateTimeSlot(id, timeSlot);
             return ResponseEntity.ok(updatedTimeSlot);
