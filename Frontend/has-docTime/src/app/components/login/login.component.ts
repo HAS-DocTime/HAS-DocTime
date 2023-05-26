@@ -30,10 +30,9 @@ export class LoginComponent implements OnInit, OnDestroy{
   ngOnInit(){
     this.inLogin = true;
   }
-  emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   loginForm:FormGroup = new FormGroup({
-    email: new FormControl("", [Validators.required, Validators.pattern(this.emailPattern)]),
-    password: new FormControl("", [Validators.required, Validators.minLength(6)])
+    email: new FormControl("", [Validators.required, Validators.email]),
+    password: new FormControl("", [Validators.required])
   })
 
   ngDoCheck(){

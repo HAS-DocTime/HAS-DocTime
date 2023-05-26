@@ -72,7 +72,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name="password")
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@#$%^&+=_\\-\\*/])(?=\\S+$).{8,}$",
             message = "Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, one special character, and no whitespace.")
     private String password;
 
