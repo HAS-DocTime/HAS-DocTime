@@ -10,6 +10,7 @@ import java.util.List;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.interfc.DoctorInterface;
 
@@ -33,13 +34,13 @@ public class DoctorServiceImpl implements DoctorInterface {
     }
 
     @Override
-    public List<Doctor> getAllDoctors() {
-        return doctorDao.getAllDoctors();
+    public Page<Doctor> getAllDoctors(int page, int size, String sortBy, String search) {
+        return doctorDao.getAllDoctors(page, size, sortBy, search);
     }
 
     @Override
-    public List<Doctor> getDoctorsByDepartmentId(int id) {
-        return doctorDao.getDoctorsByDepartmentId(id);
+    public Page<Doctor> getDoctorsByDepartmentId(int id, int page, int size, String sortBy, String search) {
+        return doctorDao.getDoctorsByDepartmentId(id, page, size, sortBy, search);
     }
 
     @Override

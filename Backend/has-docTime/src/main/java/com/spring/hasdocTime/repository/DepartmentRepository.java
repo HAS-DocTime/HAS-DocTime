@@ -5,6 +5,8 @@
 package com.spring.hasdocTime.repository;
 
 import com.spring.hasdocTime.entity.Department;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +26,6 @@ public interface DepartmentRepository extends JpaRepository<Department, Integer>
     @Query("DELETE FROM Department d where d.id= :id")
     void deleteById(@Param("id") int id);
 
+    @Query("SELECT d FROM Department d WHERE LOWER(d.name) LIKE %:search%")
+    Page<Department> findAllAndNameContainsIgnoreCase(@Param("search")String search, Pageable pageable);
 }

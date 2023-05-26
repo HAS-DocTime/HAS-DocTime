@@ -3,6 +3,7 @@ package com.spring.hasdocTime.interfc;
 import com.spring.hasdocTime.entity.Symptom;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface SymptomInterface {
 
     public Symptom getSymptom(int id) throws DoesNotExistException;
 
-    public List<Symptom> getAllSymptom();
+    public Page<Symptom> getAllSymptom(int page, int size, String sortBy, String search);
 
     public Symptom createSymptom(Symptom symptom) throws DoesNotExistException, MissingParameterException;
 

@@ -6,6 +6,10 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import com.spring.hasdocTime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
@@ -37,8 +41,19 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     }
 
     @Override
-    public List<Appointment> getAllAppointments() {
-        List<Appointment> allAppointments= appointmentRepository.findAll();
+    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Appointment> allAppointments;
+        if(search != null && !search.isEmpty()){
+            //search Appointments based on userName only.
+            allAppointments = appointmentRepository.findAllAndUserNameContainsIgnoreCase(search, pageable);
+            System.out.println("-------------------------------------------------------------DAO--------------------------------------------------------------------------------------");
+        }
+        else{
+
+            allAppointments = appointmentRepository.findAll(pageable);
+            System.out.println("-------------------------------------------------------------DAO--------------------------------------------------------------------------------------");
+        }
         return allAppointments;
     }
 
@@ -186,24 +201,66 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         throw new DoesNotExistException("Appointment");
     }
 
+//    @Override
+//    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException{
+//        Optional<User> user = userRepository.findById(userId);
+//        if(user.isEmpty()){
+//            throw new DoesNotExistException("User");
+//        }
+//        User currentUser = user.get();
+//        List<Appointment> appointments = appointmentRepository.findByUser(currentUser);
+//        return appointments;
+//    }
+
+
     @Override
-    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException{
+    public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
             throw new DoesNotExistException("User");
         }
         User currentUser = user.get();
-        List<Appointment> appointments = appointmentRepository.findByUser(currentUser);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Appointment> appointments;
+        if(search != null && !search.isEmpty()){
+            appointments = appointmentRepository.findByUserAndDoctorNameContainsIgnoreCase(currentUser.getId(), search, pageable);
+        }else{
+            appointments = appointmentRepository.findByUser(currentUser.getId(),pageable);
+        }
+
         return appointments;
     }
 
+
+//    @Override
+//    public List<Appointment> getAppointmentsOfDoctor(int id) throws DoesNotExistException {
+//        Optional<Doctor> doctor = doctorRepository.findById(id);
+//        if(doctor.isEmpty()){
+//            throw new DoesNotExistException("Doctor");
+//        }
+////        List<Appointment> appointments = doctor.get().getAppointments();
+//        Doctor currentDoctor = doctor.get();
+//        List<Appointment> appointments = appointmentRepository.findByDoctor(currentDoctor);
+//        return appointments;
+//
+//    }
+
+
     @Override
-    public List<Appointment> getAppointmentsOfDoctor(int id) throws DoesNotExistException {
+    public Page<Appointment> getAppointmentsOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isEmpty()){
             throw new DoesNotExistException("Doctor");
         }
-        List<Appointment> appointments = doctor.get().getAppointments();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Appointment> appointments;
+        Doctor currentDoctor = doctor.get();
+        if(search != null && !search.isEmpty()){
+            appointments = appointmentRepository.findByDoctorAndUserNameContainsIgnoreCase(currentDoctor.getId(), search, pageable);
+        }else {
+            appointments = appointmentRepository.findByDoctor(currentDoctor.getId(), pageable);
+        }
         return appointments;
+
     }
 }

@@ -1,6 +1,10 @@
 package com.spring.hasdocTime.repository;
 
+import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.PostAppointmentData;
+import com.spring.hasdocTime.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,11 +23,32 @@ public interface PostAppointmentDataRepository extends JpaRepository<PostAppoint
     void deleteById(int id);
 
     @Query("select p from PostAppointmentData p WHERE p.user.email = :userEmail")
-    List<PostAppointmentData> findByUserEmail(@Param("userEmail") String email);
+    Page<PostAppointmentData> findByUserEmail(@Param("userEmail") String email, Pageable pageable);
 
     @Query("SELECT p.disease AS disease, COUNT(p) AS caseCount FROM PostAppointmentData p WHERE LOWER(p.symptoms) LIKE %:symptom% GROUP BY p.disease")
-    List<Map<String, Integer>> findDiseasesGroupedBySymptom(@Param("symptom") String symptom);
+    Page<Map<String, Integer>> findDiseasesGroupedBySymptom(@Param("symptom") String symptom, Pageable pageable);
+
+    @Query("SELECT p.disease AS disease, COUNT(p) AS caseCount FROM PostAppointmentData p WHERE LOWER(p.symptoms) LIKE %:symptom% AND LOWER(p.disease) LIKE %:search% GROUP BY p.disease")
+    Page<Map<String, Integer>> findDiseasesGroupedBySymptomAndDiseaseContainsIgnoreCase(@Param("symptom") String symptom, @Param("search") String search, Pageable pageable);
 
     @Query("SELECT p from PostAppointmentData p where LOWER(p.symptoms) LIKE %:symptom%")
-    List<PostAppointmentData> findPostAppointmentDataGroupedBySymptom(@Param("symptom") String symptom);
+    Page<PostAppointmentData> findPostAppointmentDataGroupedBySymptom(@Param("symptom") String symptom, Pageable pageable);
+
+    @Query("SELECT p from PostAppointmentData p where LOWER(p.symptoms) LIKE %:symptom% AND LOWER(p.user.name) LIKE %:search%")
+    Page<PostAppointmentData> findPostAppointmentDataGroupedBySymptomAndUserNameContainsIgnoreCase(@Param("symptom")String symptom,@Param("search") String search, Pageable pageable);
+
+    @Query("SELECT p from PostAppointmentData p where LOWER(p.user.name) LIKE %:search%")
+    Page<PostAppointmentData> findAllAndUserNameContainsIgnoreCase(@Param("search")String search, Pageable pageable);
+
+    @Query("SELECT p from PostAppointmentData p WHERE p.doctor.id = :doctorId AND LOWER(p.user.name) LIKE %:search%")
+    Page<PostAppointmentData> findByDoctorAndUserNameContainsIgnoreCase(@Param("doctorId") int doctorId, @Param("search")String search, Pageable pageable);
+
+    @Query("SELECT p from PostAppointmentData p WHERE p.doctor.id = :doctorId")
+    Page<PostAppointmentData> findByDoctor(@Param("doctorId") int doctorId, Pageable pageable);
+
+    @Query("SELECT p from PostAppointmentData p JOIN p.user u WHERE u.id = :userId AND LOWER(p.doctor.user.name) LIKE %:search%")
+    Page<PostAppointmentData> findByUserAndDoctorNameContainsIgnoreCase(@Param("userId") int userId, @Param("search")String search, Pageable pageable);
+
+    @Query("SELECT p from PostAppointmentData p WHERE p.user.id = :userId")
+    Page<PostAppointmentData> findByUser(@Param("userId") int userId, Pageable pageable);
 }

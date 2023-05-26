@@ -12,10 +12,13 @@ import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +30,24 @@ public class UserDaoImpl implements UserInterface {
     private final SymptomRepository symptomRepository;
     private final PasswordEncoder passwordEncoder;
 
+//    @Override
+//    public Page<User> getAllUser(int page, int size, String sortBy, String search) {
+//        List<User> userList =  userRepository.findAll();
+//        List<User> userListPage  = sortAndSearch(userList, page, size, sortBy, search);
+//        Pageable pageable = PageRequest.of(page, size);
+//        return new PageImpl<>(userListPage, pageable, userList.size());
+//    }
+
     @Override
-    public List<User> getAllUser() {
-        return userRepository.findAll();
+    public Page<User> getAllUser(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<User> userList;
+        if(search != null && !search.isEmpty()){
+            userList = userRepository.findAllAndNameContainsIgnoreCase(search, pageable);
+        } else {
+            userList =  userRepository.findAll(pageable);
+        }
+        return userList;
     }
 
     @Override
@@ -169,33 +187,95 @@ public class UserDaoImpl implements UserInterface {
     }
 
     @Override
-    public List<User> getPatients(){
-        return userRepository.getPatients();
+    public Page<User> getPatients(int page, int size, String sortBy, String search) {
+        Page<User> userList;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        if (search != null && !search.isEmpty()){
+            userList = userRepository.getPatientsAndNameContainsIgnoreCase(search, pageable);
+        }else{
+            userList = userRepository.getPatients(pageable);
+        }
+        return userList;
     }
 
+//    @Override
+//    public Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
+//        Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
+//        if (optionalChronicIllness.isEmpty()) {
+//            throw new DoesNotExistException("Chronic Illness");
+//        } else {
+//            Set<User> users = new HashSet<>();
+//            for (int i = 0; i < optionalChronicIllness.get().getPatientChronicIllnesses().toArray().length; i++) {
+//                Integer tempUserId = (optionalChronicIllness.get().getPatientChronicIllnesses().get(i).getId().getPatientId());
+//                Optional<User> tempUser = userRepository.findById(tempUserId);
+//                if (tempUser.isPresent()) {
+//                    users.add(tempUser.get());
+//                } else {
+//                    return null;
+//                }
+//            }
+//            List<User> userList = new ArrayList<>(users);
+//            List<User> userListPage  = sortAndSearch(userList, page, size, sortBy, search);
+//            Pageable pageable = PageRequest.of(page, size);
+//            return new PageImpl<>(userListPage, pageable, userList.size());
+//        }
+//    }
 
 
     @Override
-    public Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException{
+    public Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
-        if(optionalChronicIllness.isEmpty()){
+        if (optionalChronicIllness.isEmpty()) {
             throw new DoesNotExistException("Chronic Illness");
         }
-        else{
-            Set<User> users = new HashSet<>();
-            for(int i=0; i<optionalChronicIllness.get().getPatientChronicIllnesses().toArray().length; i++){
-                Integer tempUserId = (optionalChronicIllness.get().getPatientChronicIllnesses().get(i).getId().getPatientId());
-                Optional<User> tempUser = userRepository.findById(tempUserId);
-                if(tempUser.isPresent()){
-                    users.add(tempUser.get());
-                }
-                else{
-                    return null;
-                }
-            }
-            return users;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+
+        // Use the appropriate query method in your userRepository to fetch the users with pagination, sorting, and searching
+        Page<User> userPage;
+        if (search != null && !search.isEmpty()) {
+            //To search based on user's name only
+            userPage = userRepository.findByChronicIllnessIdAndNameContainsIgnoreCase(id, search, pageable);
+        } else {
+            userPage = userRepository.findByChronicIllnessId(id, pageable);
         }
 
+        return userPage;
     }
+
+
+//    private Object getField(User user, String fieldName) {
+//        try {
+//            Field field = User.class.getDeclaredField(fieldName);
+//            field.setAccessible(true);
+//            return field.get(user);
+//        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            // Handle exceptions accordingly
+//            throw new IllegalArgumentException("Invalid field name: " + fieldName);
+//        }
+//    }
+//
+//    private List<User> sortAndSearch(List<User> users, int page, int size, String sortBy, String search){
+//
+//        // Apply sorting
+//        Comparator<User> comparator = Comparator.comparing(user -> (Comparable) getField(user, sortBy));
+//        users.sort(comparator);
+//
+//        // Apply searching
+//        if (search != null && !search.isEmpty()) {
+//            users = users.stream()
+//                    .filter(user -> user.getName().contains(search))
+//                    .collect(Collectors.toList());
+//        }
+//
+//        // Create pageable object
+//        int startIndex = page * size;
+//        int endIndex = Math.min(startIndex + size, users.size());
+//
+//        // Create a sublist based on the page and size
+//        List<User> userListPage = users.subList(startIndex, endIndex);
+//
+//        return userListPage;
+//    }
 
 }

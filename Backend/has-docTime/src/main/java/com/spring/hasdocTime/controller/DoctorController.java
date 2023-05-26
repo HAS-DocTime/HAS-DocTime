@@ -13,6 +13,7 @@ import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.endpoint.SecurityContext;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -50,21 +51,32 @@ public class DoctorController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public ResponseEntity<List<Doctor>> getAllDoctors(){
-        List<Doctor> doctors = doctorService.getAllDoctors();
+    public ResponseEntity<List<Doctor>> getAllDoctors(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ){
+        Page<Doctor> doctors = doctorService.getAllDoctors(page, size, sortBy, search);
         if(doctors.isEmpty()){
-            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
+            return new ResponseEntity(doctors.getContent(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(doctors, HttpStatus.OK);
+        return new ResponseEntity(doctors.getContent(), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "department/{departmentId}")
-    public ResponseEntity<List<Doctor>> getDoctorsByDepartmentId(@PathVariable("departmentId") int id){
-        List<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id);
+    public ResponseEntity<List<Doctor>> getDoctorsByDepartmentId(
+            @PathVariable("departmentId") int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ){
+        Page<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id, page, size, sortBy, search);
         if(doctors.isEmpty()){
-            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
+            return new ResponseEntity(doctors.getContent(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(doctors, HttpStatus.OK);
+        return new ResponseEntity(doctors.getContent(), HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "{doctorId}")

@@ -14,6 +14,10 @@ import com.spring.hasdocTime.repository.TimeSlotRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
@@ -49,9 +53,17 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
 
 
     @Override
-    public List<PostAppointmentData> getAllPostAppointmentData() {
-        return postAppointmentDataRepository.findAll();
-
+    public Page<PostAppointmentData> getAllPostAppointmentData(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> postAppointmentData;
+        if(search != null && !search.isEmpty()){
+            //search Appointments based on userName only.
+            postAppointmentData = postAppointmentDataRepository.findAllAndUserNameContainsIgnoreCase(search, pageable);
+        }
+        else{
+            postAppointmentData = postAppointmentDataRepository.findAll(pageable);
+        }
+        return postAppointmentData;
     }
 
     @Override
@@ -65,8 +77,10 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     }
 
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataByEmail(String email) {
-        List<PostAppointmentData> allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email);
+    public Page<PostAppointmentData> getPostAppointmentDataByEmail(String email,int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> allPostAppointmentData;
+        allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email, pageable);
         return allPostAppointmentData;
     }
 
@@ -169,29 +183,90 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         throw new DoesNotExistException("Post Appointment Data");
     }
 
-    @Override
-    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
-        return postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom);
-    }
+//    @Override
+//    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
+//        return postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom);
+//    }
 
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException {
-        return postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom);
+    public Page<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Map<String, Integer>> diseaseList;
+        if(search !=null && !search.isEmpty()){
+            diseaseList = postAppointmentDataRepository.findDiseasesGroupedBySymptomAndDiseaseContainsIgnoreCase(symptom, search, pageable);
+        } else {
+            diseaseList = postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom, pageable);
+        }
+        return diseaseList;
     }
-    
-    public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException{
+
+//    @Override
+//    public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException {
+//        return postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom);
+//    }
+
+    @Override
+    public Page<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> postAppointmentData;
+        if(search != null && !search.isEmpty()){
+            //search Appointments based on userName only.
+            postAppointmentData = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptomAndUserNameContainsIgnoreCase(symptom, search, pageable);
+        }
+        else{
+            postAppointmentData = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom, pageable);
+        }
+        return postAppointmentData;
+    }
+
+//    @Override
+//    public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException{
+//        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+//        if(optionalDoctor.isEmpty()){
+//            throw new DoesNotExistException("Doctor");
+//        }
+//        Doctor doctor = optionalDoctor.get();
+//        return doctor.getPostAppointmentData();
+//    }
+
+    @Override
+    public Page<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException{
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         if(optionalDoctor.isEmpty()){
             throw new DoesNotExistException("Doctor");
         }
         Doctor doctor = optionalDoctor.get();
-        return doctor.getPostAppointmentData();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> postAppointmentData;
+        if(search != null && !search.isEmpty()){
+            postAppointmentData = postAppointmentDataRepository.findByDoctorAndUserNameContainsIgnoreCase(doctor.getId(), search, pageable);
+        }else {
+            postAppointmentData = postAppointmentDataRepository.findByDoctor(doctor.getId(), pageable);
+        }
+        return postAppointmentData;
     }
 
+//    @Override
+//    public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException {
+//        User user = userDao.getUser(id);
+//        List<PostAppointmentData> postAppointmentDataList = user.getAppointmentData();
+//        return postAppointmentDataList;
+//    }
+
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException {
-        User user = userDao.getUser(id);
-        List<PostAppointmentData> postAppointmentDataList = user.getAppointmentData();
-        return postAppointmentDataList;
+    public Page<PostAppointmentData> getPostAppointmentDataByUserId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        User currentUser = user.get();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> postAppointmentData;
+        if(search != null && !search.isEmpty()){
+            postAppointmentData = postAppointmentDataRepository.findByUserAndDoctorNameContainsIgnoreCase(currentUser.getId(), search, pageable);
+        }else {
+            postAppointmentData = postAppointmentDataRepository.findByUser(currentUser.getId(), pageable);
+        }
+        return postAppointmentData;
     }
 }

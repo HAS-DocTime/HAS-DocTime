@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.interfc.DepartmentInterface;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,8 +33,8 @@ public class DepartmentServiceImpl implements DepartmentInterface {
     }
 
     @Override
-    public List<Department> getAllDepartments() {
-        return departmentDao.getAllDepartments();
+    public Page<Department> getAllDepartments(int page, int size, String sortBy, String search) {
+        return departmentDao.getAllDepartments(page, size, sortBy, search);
     }
 
     @Override

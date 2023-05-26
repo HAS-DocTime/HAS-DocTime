@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class ChronicIllnessServiceImpl implements ChronicIllnessInterface{
     }
 
     @Override
-    public List<ChronicIllness> getAllChronicIllness() {
-        return chronicIllnessDao.getAllChronicIllness();
+    public Page<ChronicIllness> getAllChronicIllness(int page, int size, String sortBy, String search) {
+        return chronicIllnessDao.getAllChronicIllness(page, size, sortBy, search);
     }
 
     @Override

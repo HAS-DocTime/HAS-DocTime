@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,18 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Appointment>> getAllAppointments() {
+    @GetMapping("")
+    public ResponseEntity<List<Appointment>> getAllAppointments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) {
         try {
-            List<Appointment> allAppointments = appointmentService.getAllAppointments();
-            return ResponseEntity.ok(allAppointments);
+            System.out.println("------------------------------------------------------------------------------------------Controller--------------------------------------------------");
+            Page<Appointment> allAppointments = appointmentService.getAllAppointments(page, size, sortBy, search);
+            System.out.println("------------------------------------------------------------------------------------------Controller--------------------------------------------------");
+            return ResponseEntity.ok(allAppointments.getContent());
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -70,21 +78,33 @@ public class AppointmentController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByUser(@PathVariable int id) throws DoesNotExistException{
-        List<Appointment> appointments = appointmentService.getAppointmentsByUser(id);
+    public ResponseEntity<List<Appointment>> getAppointmentsByUser(
+            @PathVariable int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) throws DoesNotExistException{
+        Page<Appointment> appointments = appointmentService.getAppointmentsByUser(id, page, size, sortBy, search);
         if(appointments==null){
-            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(appointments.getContent(), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(appointments, HttpStatus.OK);
+        return new ResponseEntity<>(appointments.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/doctor/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(@PathVariable int id) throws DoesNotExistException {
-        List<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id);
+    public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(
+            @PathVariable int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) throws DoesNotExistException {
+        Page<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id, page, size, sortBy, search);
         if(appointments.isEmpty()){
-            return new ResponseEntity<>(appointments, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(appointments.getContent(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(appointments, HttpStatus.OK);
+        return new ResponseEntity<>(appointments.getContent(), HttpStatus.OK);
     }
 
 }

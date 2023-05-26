@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfc.SymptomInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,14 @@ public class SymptomController {
     private SymptomInterface symptomService;
 
     @GetMapping("")
-    public List<Symptom> getAllSymptom(){
-        return symptomService.getAllSymptom();
+    public List<Symptom> getAllSymptom(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ){
+        Page<Symptom> symptoms = symptomService.getAllSymptom(page, size, sortBy, search);
+        return symptoms.getContent();
     }
 
     @GetMapping("{id}")

@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfc.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class AppointmentServiceImpl implements AppointmentInterface {
     }
 
     @Override
-    public List<Appointment> getAllAppointments() {
-        return appointmentDao.getAllAppointments();
+    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
+        return appointmentDao.getAllAppointments(page, size, sortBy, search);
     }
 
     @Override
@@ -46,12 +47,12 @@ public class AppointmentServiceImpl implements AppointmentInterface {
     }
 
     @Override
-    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException{
-        return appointmentDao.getAppointmentsByUser(userId);
+    public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException{
+        return appointmentDao.getAppointmentsByUser(userId, page, size, sortBy, search);
     }
 
     @Override
-    public List<Appointment> getAppointmentsOfDoctor(int id) throws DoesNotExistException {
-        return appointmentDao.getAppointmentsOfDoctor(id);
+    public Page<Appointment> getAppointmentsOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        return appointmentDao.getAppointmentsOfDoctor(id, page, size, sortBy, search);
     }
 }

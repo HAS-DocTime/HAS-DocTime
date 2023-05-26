@@ -7,6 +7,7 @@ package com.spring.hasdocTime.interfc;
 import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,9 +17,9 @@ import java.util.List;
  */
 public interface DoctorInterface {
     public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException;
-    public List<Doctor> getAllDoctors();
+    public Page<Doctor> getAllDoctors(int page, int size, String sortBy, String search);
     public Doctor getDoctor(int id) throws DoesNotExistException;
-    public List<Doctor> getDoctorsByDepartmentId(int id);
+    public Page<Doctor> getDoctorsByDepartmentId(int id, int page, int size, String sortBy, String search);
     public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException;
     public Doctor deleteDoctor(int id) throws DoesNotExistException;
 }

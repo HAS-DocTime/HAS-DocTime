@@ -9,6 +9,10 @@ import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
 import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,8 +40,15 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
     }
 
     @Override
-    public List<ChronicIllness> getAllChronicIllness() {
-        return chronicIllnessRepository.findAll();
+    public Page<ChronicIllness> getAllChronicIllness(int page, int size, String sortBy, String search){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<ChronicIllness> chronicIllnessPage;
+        if(search != null && !search.isEmpty()){
+            chronicIllnessPage = chronicIllnessRepository.findAllAndNameContainsIgnoreCase(search, pageable);
+        } else {
+            chronicIllnessPage = chronicIllnessRepository.findAll(pageable);
+        }
+        return chronicIllnessPage;
     }
 
     @Override

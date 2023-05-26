@@ -15,10 +15,6 @@ export class AppointmentService {
     return this.http.get<Appointment[]>(`${this.baseUrl}appointment/user/${userId}`);
   }
 
-  getAppointmentByDoctor(doctorId : number){
-    return this.http.get<Appointment[]>(`${this.baseUrl}appointment/doctor/${doctorId}`);
-  }
-
   getAppointment(id : number){
     return this.http.get<Appointment>(`${this.baseUrl}appointment/${id}`);
   }

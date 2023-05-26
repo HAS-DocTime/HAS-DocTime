@@ -22,6 +22,10 @@ import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -94,13 +98,31 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
-    public List<Doctor> getAllDoctors() {
-        return doctorRepository.findAll();
+    public Page<Doctor> getAllDoctors(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Doctor> doctors;
+        if(search != null && !search.isEmpty()){
+            //search Appointments based on userName only.
+            doctors = doctorRepository.findAllAndDoctorNameContainsIgnoreCase(search, pageable);
+        }
+        else{
+            doctors = doctorRepository.findAll(pageable);
+        }
+        return  doctors;
     }
 
     @Override
-    public List<Doctor> getDoctorsByDepartmentId(int id) {
-        return doctorRepository.findDoctorsByDepartmentId(id);
+    public Page<Doctor> getDoctorsByDepartmentId( int id, int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Doctor> doctors;
+        if(search != null && !search.isEmpty()){
+            //search Doctors based on their name only. Not on the name of patients.
+            doctors = doctorRepository.findDoctorsByDepartmentIdAndDoctorNameContainsIgnoreCase(search, pageable);
+        }
+        else{
+            doctors = doctorRepository.findDoctorsByDepartmentId(id, pageable);
+        }
+        return doctors;
     }
 
     @Override

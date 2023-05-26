@@ -13,6 +13,10 @@ import com.spring.hasdocTime.interfc.UserInterface;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -46,8 +50,15 @@ public class SymptomDaoImpl implements SymptomInterface {
     }
 
     @Override
-    public List<Symptom> getAllSymptom() {
-        return symptomRepository.findAll();
+    public Page<Symptom> getAllSymptom(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Symptom> symptoms;
+        if(search != null && !search.isEmpty()){
+            symptoms = symptomRepository.findAllAndNameContainsIgnoreCase(search, pageable);
+        } else {
+            symptoms = symptomRepository.findAll(pageable);
+        }
+        return symptoms;
     }
 
     @Override

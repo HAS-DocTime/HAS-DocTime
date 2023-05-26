@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,12 +28,17 @@ public class PostAppointmentDataController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostAppointmentData>> getAllPostAppointmentData() {
-            List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getAllPostAppointmentData();
+    public ResponseEntity<List<PostAppointmentData>> getAllPostAppointmentData(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) {
+            Page<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getAllPostAppointmentData(page, size, sortBy, search);
             if(allPostAppointmentData.isEmpty()){
-                return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NO_CONTENT);
+                return new ResponseEntity<>(allPostAppointmentData.getContent(), HttpStatus.NO_CONTENT);
             }
-            return ResponseEntity.ok(allPostAppointmentData);
+            return ResponseEntity.ok(allPostAppointmentData.getContent());
 
     }
 
@@ -46,13 +52,18 @@ public class PostAppointmentDataController {
     }
 
     @GetMapping("findByUserEmail")
-    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail() {
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail);
+        Page<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getPostAppointmentDataByEmail(userEmail, page, size, sortBy, search);
         if(allPostAppointmentData.isEmpty()) {
-            return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(allPostAppointmentData.getContent(), HttpStatus.NO_CONTENT);
             }
-        return ResponseEntity.ok(allPostAppointmentData);
+        return ResponseEntity.ok(allPostAppointmentData.getContent());
     }
 
     @PostMapping
@@ -81,32 +92,56 @@ public class PostAppointmentDataController {
     }
 
     @GetMapping("disease/{symptom}")
-    public ResponseEntity<List<Map<String, Integer>>> getDiseasesBySymptom(@PathVariable String symptom) throws DoesNotExistException{
-        List<Map<String, Integer>> diseaseData = postAppointmentDataService.getDiseasesGroupedBySymptom(symptom);
+    public ResponseEntity<List<Map<String, Integer>>> getDiseasesBySymptom(
+            @PathVariable String symptom,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) throws DoesNotExistException{
+        Page<Map<String, Integer>> diseaseData = postAppointmentDataService.getDiseasesGroupedBySymptom(symptom, page, size, sortBy, search);
         if(diseaseData.isEmpty()){
-            return new ResponseEntity<>(diseaseData, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(diseaseData.getContent(), HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(diseaseData);
+        return ResponseEntity.ok(diseaseData.getContent());
     }
 
     @GetMapping("data/{symptom}")
-    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataBySymptom(@PathVariable String symptom) throws DoesNotExistException {
-        List<PostAppointmentData> appointmentData = postAppointmentDataService.getPostAppointmentDataBySymptom(symptom);
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataBySymptom(
+            @PathVariable String symptom,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) throws DoesNotExistException {
+        Page<PostAppointmentData> appointmentData = postAppointmentDataService.getPostAppointmentDataBySymptom(symptom, page, size, sortBy, search);
         if(appointmentData.isEmpty()){
-            return new ResponseEntity<>(appointmentData, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(appointmentData.getContent(), HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(appointmentData);
+        return ResponseEntity.ok(appointmentData.getContent());
     }
     @GetMapping("/doctor/{id}")
-    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataOfDoctor(@PathVariable int id) throws DoesNotExistException{
-        List<PostAppointmentData> postAppointmentData = postAppointmentDataService.getPostAppointmentsDataOfDoctor(id);
-        return new ResponseEntity<>(postAppointmentData, HttpStatus.OK);
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataOfDoctor(
+            @PathVariable int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) throws DoesNotExistException{
+        Page<PostAppointmentData> postAppointmentData = postAppointmentDataService.getPostAppointmentsDataOfDoctor(id, page, size, sortBy, search);
+        return new ResponseEntity<>(postAppointmentData.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByUserId(@PathVariable int id) throws DoesNotExistException {
-        List<PostAppointmentData> postAppointmentDataList = postAppointmentDataService.getPostAppointmentDataByUserId(id);
-        return new ResponseEntity<>(postAppointmentDataList, HttpStatus.OK);
+    public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByUserId(
+            @PathVariable int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) throws DoesNotExistException {
+        Page<PostAppointmentData> postAppointmentDataList = postAppointmentDataService.getPostAppointmentDataByUserId(id, page, size, sortBy, search);
+        return new ResponseEntity<>(postAppointmentDataList.getContent(), HttpStatus.OK);
     }
 
 }

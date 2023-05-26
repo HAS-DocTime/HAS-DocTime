@@ -3,13 +3,14 @@ package com.spring.hasdocTime.interfc;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 public interface UserInterface {
-    List<User> getAllUser();
+    Page<User> getAllUser(int page, int size, String sortBy, String search);
 
     User getUser(int id) throws DoesNotExistException;
 
@@ -21,7 +22,7 @@ public interface UserInterface {
 
     User getUserByEmail(String email) throws DoesNotExistException;
 
-    List<User> getPatients();
+    Page<User> getPatients(int page, int size, String sortBy, String search);
 
-    Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException;
+    Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException;
 }
