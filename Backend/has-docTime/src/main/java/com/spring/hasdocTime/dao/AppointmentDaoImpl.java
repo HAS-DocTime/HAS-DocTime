@@ -47,12 +47,10 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         if(search != null && !search.isEmpty()){
             //search Appointments based on userName only.
             allAppointments = appointmentRepository.findAllAndUserNameContainsIgnoreCase(search, pageable);
-            System.out.println("-------------------------------------------------------------DAO--------------------------------------------------------------------------------------");
         }
         else{
-
             allAppointments = appointmentRepository.findAll(pageable);
-            System.out.println("-------------------------------------------------------------DAO--------------------------------------------------------------------------------------");
+
         }
         return allAppointments;
     }

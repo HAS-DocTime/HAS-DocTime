@@ -35,7 +35,7 @@ public class DepartmentController {
     @RequestMapping(method = RequestMethod.GET, value = "")
     public ResponseEntity<List<Department>> getAllDepartments(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "3") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(required = false) String search
     ){

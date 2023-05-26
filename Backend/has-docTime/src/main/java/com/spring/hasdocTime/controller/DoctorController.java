@@ -54,7 +54,7 @@ public class DoctorController {
     public ResponseEntity<List<Doctor>> getAllDoctors(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,
             @RequestParam(required = false) String search
     ){
         Page<Doctor> doctors = doctorService.getAllDoctors(page, size, sortBy, search);
@@ -69,7 +69,7 @@ public class DoctorController {
             @PathVariable("departmentId") int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,
             @RequestParam(required = false) String search
     ){
         Page<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id, page, size, sortBy, search);

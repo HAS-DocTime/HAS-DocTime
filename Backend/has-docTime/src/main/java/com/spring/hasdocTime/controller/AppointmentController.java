@@ -29,13 +29,11 @@ public class AppointmentController {
     public ResponseEntity<List<Appointment>> getAllAppointments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(required = false) String search
     ) {
         try {
-            System.out.println("------------------------------------------------------------------------------------------Controller--------------------------------------------------");
             Page<Appointment> allAppointments = appointmentService.getAllAppointments(page, size, sortBy, search);
-            System.out.println("------------------------------------------------------------------------------------------Controller--------------------------------------------------");
             return ResponseEntity.ok(allAppointments.getContent());
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -82,7 +80,7 @@ public class AppointmentController {
             @PathVariable int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "doctor.user.name") String sortBy,
             @RequestParam(required = false) String search
     ) throws DoesNotExistException{
         Page<Appointment> appointments = appointmentService.getAppointmentsByUser(id, page, size, sortBy, search);
@@ -97,7 +95,7 @@ public class AppointmentController {
             @PathVariable int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "doctor.user.name") String sortBy,
             @RequestParam(required = false) String search
     ) throws DoesNotExistException {
         Page<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id, page, size, sortBy, search);

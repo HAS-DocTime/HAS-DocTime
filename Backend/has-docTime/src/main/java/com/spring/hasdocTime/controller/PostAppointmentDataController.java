@@ -31,7 +31,7 @@ public class PostAppointmentDataController {
     public ResponseEntity<List<PostAppointmentData>> getAllPostAppointmentData(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,
             @RequestParam(required = false) String search
     ) {
             Page<PostAppointmentData> allPostAppointmentData = postAppointmentDataService.getAllPostAppointmentData(page, size, sortBy, search);
@@ -55,7 +55,7 @@ public class PostAppointmentDataController {
     public ResponseEntity<List<PostAppointmentData>> getPostAppointmentDataByEmail(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,
             @RequestParam(required = false) String search
     ) {
         String userEmail = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -96,7 +96,7 @@ public class PostAppointmentDataController {
             @PathVariable String symptom,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "disease") String sortBy,
             @RequestParam(required = false) String search
     ) throws DoesNotExistException{
         Page<Map<String, Integer>> diseaseData = postAppointmentDataService.getDiseasesGroupedBySymptom(symptom, page, size, sortBy, search);
@@ -111,7 +111,7 @@ public class PostAppointmentDataController {
             @PathVariable String symptom,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,
             @RequestParam(required = false) String search
     ) throws DoesNotExistException {
         Page<PostAppointmentData> appointmentData = postAppointmentDataService.getPostAppointmentDataBySymptom(symptom, page, size, sortBy, search);
@@ -125,7 +125,7 @@ public class PostAppointmentDataController {
             @PathVariable int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,
             @RequestParam(required = false) String search
     ) throws DoesNotExistException{
         Page<PostAppointmentData> postAppointmentData = postAppointmentDataService.getPostAppointmentsDataOfDoctor(id, page, size, sortBy, search);
@@ -137,7 +137,7 @@ public class PostAppointmentDataController {
             @PathVariable int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "doctor.user.name") String sortBy,
             @RequestParam(required = false) String search
     ) throws DoesNotExistException {
         Page<PostAppointmentData> postAppointmentDataList = postAppointmentDataService.getPostAppointmentDataByUserId(id, page, size, sortBy, search);
