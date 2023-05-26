@@ -7,7 +7,7 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.DepartmentInterface;
+import com.spring.hasdocTime.interfaces.DepartmentInterface;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("department")
-@CrossOrigin(origins="http://192.1.200.29:4200")
+@CrossOrigin(origins="http://192.1.200.177:4200")
 public class DepartmentController {
     
     private DepartmentInterface departmentService;

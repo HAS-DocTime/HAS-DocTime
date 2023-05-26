@@ -11,7 +11,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spring.hasdocTime.interfc.DoctorInterface;
+import com.spring.hasdocTime.interfaces.DoctorInterface;
 
 /**
  *

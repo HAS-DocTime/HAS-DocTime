@@ -1,4 +1,4 @@
-package com.spring.hasdocTime.interfc;
+package com.spring.hasdocTime.interfaces;
 
 import com.spring.hasdocTime.entity.CompositeKeyPatientChronicIllness;
 import com.spring.hasdocTime.entity.PatientChronicIllness;

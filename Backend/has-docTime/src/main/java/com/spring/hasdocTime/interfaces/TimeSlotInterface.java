@@ -1,6 +1,5 @@
-package com.spring.hasdocTime.interfc;
+package com.spring.hasdocTime.interfaces;
 
-import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;

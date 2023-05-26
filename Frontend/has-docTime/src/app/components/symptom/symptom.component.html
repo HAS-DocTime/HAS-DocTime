@@ -16,7 +16,7 @@
         </thead>
         <tbody class=" text-center" *ngFor="let symptom of symptoms; let i = index" [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
           <tr>
-            <td>{{ symptom?.id }}</td>
+            <td>{{ i+1 }}</td>
             <td>{{ symptom?.name }}</td>
             <td>
                 {{ symptom?.caseCount }}

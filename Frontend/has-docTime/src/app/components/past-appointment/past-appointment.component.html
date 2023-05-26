@@ -4,7 +4,7 @@
 </div>
 <div class="col m-0 p-0 mt-5" *ngIf="!noDataFound">
   <div class="container">
-    <h1 class="mb-4 text-center">Medical History</h1>
+    <h1 class="mb-4 text-center">Past Appointment</h1>
     <hr>
     <div class="table-responsive m-0 p-0" >
 
@@ -18,15 +18,15 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody class=" text-center" *ngFor="let medicalHistory of medicalHistoryList; let i = index"
+        <tbody class=" text-center" *ngFor="let pastAppointment of pastAppointmentList; let i = index"
         [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
           <tr>
-            <td>{{ medicalHistory.disease }}</td>
-            <td *ngIf="tokenRole==='ADMIN'">{{ medicalHistory.user?.name }}</td>
-            <td>{{ medicalHistory?.doctor?.user?.name }}</td>
-            <td>{{ medicalHistory.timeSlotForAppointmentData?.startTime }} - {{ medicalHistory.timeSlotForAppointmentData?.endTime }}</td>
+            <td>{{ pastAppointment.disease }}</td>
+            <td *ngIf="tokenRole==='ADMIN'">{{ pastAppointment.user?.name }}</td>
+            <td>{{ pastAppointment?.doctor?.user?.name }}</td>
+            <td>{{ pastAppointment.timeSlotForAppointmentData?.startTime }} - {{ pastAppointment.timeSlotForAppointmentData?.endTime }}</td>
             <td>
-              <a class="btn" (click)="getdetailedHistory(medicalHistory.id)">
+              <a class="btn" (click)="getdetailedHistory(pastAppointment.id)">
                 <i class="fa-solid fa-caret-right"></i>
               </a>
             </td>

@@ -9,7 +9,7 @@ export class ChronicIllnessService {
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = `http://192.1.200.29:8080/`;
+  baseUrl = `http://192.1.200.177:8080/`;
 
   getAllChronicIllness(){
     return this.http.get<ChronicIllness[]>(`${this.baseUrl}chronicIllness`);
