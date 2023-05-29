@@ -1,12 +1,12 @@
 package com.spring.hasdocTime.security.jwt;
 
-import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +14,17 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
+    @Value("${jwt.secret.key}")
+    final String SECRET_KEY = null;
 
-    private static final String SECRET_KEY = "566B597033733676397924423F4528482B4D6251655468576D5A713474377721";
+    @Value("${jwt.expiration.time.in.millis}")
+    final Optional<Integer> EXPIRATION_TIME = Optional.empty();
+
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -41,7 +46,7 @@ public class JwtService {
                 .claim("id", userDetailForToken.getId().toString())
                 .claim("role", userDetailForToken.getRole().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME.get()))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

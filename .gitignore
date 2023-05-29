@@ -48,3 +48,6 @@ Thumbs.db
 *.mov
 *.wmv
 
+### Ignoring Environment.Properties File ###
+Backend/has-docTime/src/main/resources/environment.properties
+

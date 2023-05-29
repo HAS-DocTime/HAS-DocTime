@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("department")
-@CrossOrigin(origins="http://192.1.200.177:4200")
+@CrossOrigin(origins="${port.address}")
 public class DepartmentController {
     
     private DepartmentInterface departmentService;
