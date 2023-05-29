@@ -4,6 +4,7 @@ import com.spring.hasdocTime.entity.Symptom;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.SymptomInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/symptom")
-@CrossOrigin(origins = "http://192.1.200.29:4200")
+@CrossOrigin(origins = "http://192.1.200.177:4200")
 public class SymptomController {
 
     @Autowired
@@ -30,7 +31,7 @@ public class SymptomController {
     }
 
     @PutMapping("{id}")
-    public Symptom updateSymptom(@PathVariable int id, @RequestBody Symptom symptom) throws DoesNotExistException, MissingParameterException {
+    public Symptom updateSymptom(@PathVariable int id, @Valid @RequestBody Symptom symptom) throws DoesNotExistException, MissingParameterException {
         return symptomService.updateSymptom(id, symptom);
     }
 
@@ -40,7 +41,7 @@ public class SymptomController {
     }
 
     @PostMapping("")
-    public Symptom createSymptom(@RequestBody Symptom symptom) throws DoesNotExistException, MissingParameterException{
+    public Symptom createSymptom(@Valid @RequestBody Symptom symptom) throws DoesNotExistException, MissingParameterException{
         return symptomService.createSymptom(symptom);
     }
 

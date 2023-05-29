@@ -17,7 +17,7 @@ export class UserService {
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = `http://192.1.200.29:8080/`;
+  baseUrl = `http://192.1.200.177:8080/`;
   registerUser(user : User){
     this.isLoggedIn.next(true);
     sessionStorage.clear();
