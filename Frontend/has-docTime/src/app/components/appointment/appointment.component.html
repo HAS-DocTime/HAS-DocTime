@@ -14,8 +14,7 @@
   <div class="appointment-container">
     <div
       class="appointments p-3 rounded my-4"
-      *ngFor="let appointment of appointments"
-    >
+      *ngFor="let appointment of appointments">
       <div class="d-flex justify-content-between align-items-start my-3 px-4">
         <h5>Patient Name : {{ appointment.user.name }}</h5>
         <h5>Time : {{ appointment.timeSlotForAppointment?.startTime }}</h5>
@@ -40,6 +39,23 @@
       </div>
     </div>
   </div>
+  <nav aria-label="...">
+    <ul class="pagination justify-content-end">
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo; Previous</span>
+        </a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Next">
+          <span aria-hidden="true">Next &raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
   <div class="create-appointment d-flex justify-content-center my-3">
     <button class="btn btn-success" routerLink="book">Book Appointment</button>
   </div>
