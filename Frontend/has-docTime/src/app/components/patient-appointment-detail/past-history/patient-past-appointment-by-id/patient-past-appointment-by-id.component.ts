@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MedicalHistory } from 'src/app/models/medicalHistory.model';
-import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
+import { PastAppointment } from 'src/app/models/pastAppointment.model';
+import { PastAppointmentService } from 'src/app/services/past-appointment.service';
 
 @Component({
   selector: 'app-patient-past-appointment-by-id',
@@ -10,15 +10,15 @@ import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
 })
 export class PatientPastAppointmentByIdComponent implements OnInit{
 
-  medicalHistory!: MedicalHistory;
+  pastAppointment!: PastAppointment;
   id!: string | null;
 
-  constructor(private medicalHistoryService: MedicalHistoryService, private route: ActivatedRoute){}
+  constructor(private pastAppointmentService: PastAppointmentService, private route: ActivatedRoute){}
 
   ngOnInit(): void {
       this.id = this.route.snapshot.paramMap.get('id');
-      this.medicalHistoryService.getMedicalHistoryById(this.id).subscribe(data => {
-        this.medicalHistory = data;
+      this.pastAppointmentService.getPastAppointmentDataById(this.id).subscribe(data => {
+        this.pastAppointment = data;
       });
   }
 }

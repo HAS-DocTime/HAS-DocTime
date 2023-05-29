@@ -3,7 +3,7 @@ package com.spring.hasdocTime.service;
 import com.spring.hasdocTime.entity.PostAppointmentData;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
+import com.spring.hasdocTime.interfaces.PostAppointmentDataInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

@@ -7,7 +7,7 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.DepartmentInterface;
+import com.spring.hasdocTime.interfaces.DepartmentInterface;
 import java.util.List;
 
 import jakarta.validation.Valid;

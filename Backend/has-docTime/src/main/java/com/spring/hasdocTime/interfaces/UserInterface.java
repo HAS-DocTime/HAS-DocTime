@@ -1,11 +1,10 @@
-package com.spring.hasdocTime.interfc;
+package com.spring.hasdocTime.interfaces;
 
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface UserInterface {

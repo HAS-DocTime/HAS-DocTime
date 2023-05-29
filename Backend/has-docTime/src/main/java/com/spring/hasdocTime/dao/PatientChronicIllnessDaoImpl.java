@@ -3,7 +3,7 @@ package com.spring.hasdocTime.dao;
 import com.spring.hasdocTime.entity.CompositeKeyPatientChronicIllness;
 import com.spring.hasdocTime.entity.PatientChronicIllness;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdocTime.interfc.PatientChronicIllnessInterface;
+import com.spring.hasdocTime.interfaces.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

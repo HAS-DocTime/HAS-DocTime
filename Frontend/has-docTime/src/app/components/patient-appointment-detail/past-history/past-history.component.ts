@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MedicalHistory } from 'src/app/models/medicalHistory.model';
-import { PostAppointmentService } from 'src/app/services/post-appointment.service';
+import { PastAppointment } from 'src/app/models/pastAppointment.model';
+import { PastAppointmentService } from 'src/app/services/past-appointment.service';
 
 @Component({
   selector: 'app-past-history',
@@ -9,24 +9,24 @@ import { PostAppointmentService } from 'src/app/services/post-appointment.servic
   styleUrls: ['./past-history.component.css']
 })
 export class PastHistoryComponent {
-  postAppointmentDataList?: MedicalHistory[];
+  postAppointmentDataList?: PastAppointment[];
   userId?: string | null;
   postAppointmentId!: number | undefined;
 
-  constructor(private postAppointmentService: PostAppointmentService, private router: Router, private route: ActivatedRoute){
+  constructor(private pastAppointmentService: PastAppointmentService, private router: Router, private route: ActivatedRoute){
   }
 
   ngOnInit(){
 
     this.userId = sessionStorage.getItem('userId');
-    this.postAppointmentService.getPostAppointmentDataByUser(this.userId).subscribe(
+    this.pastAppointmentService.getPastAppointmentDataByUser(this.userId).subscribe(
       data => {
         this.postAppointmentDataList = data;
-        
+
       }
     );
 
-    
+
   }
 
   loadPostAppointment(i: number){

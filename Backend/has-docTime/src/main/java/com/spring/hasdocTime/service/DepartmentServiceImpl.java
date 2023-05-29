@@ -10,7 +10,7 @@ import java.util.List;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import org.springframework.stereotype.Service;
-import com.spring.hasdocTime.interfc.DepartmentInterface;
+import com.spring.hasdocTime.interfaces.DepartmentInterface;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**

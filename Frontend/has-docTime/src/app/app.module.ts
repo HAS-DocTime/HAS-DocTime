@@ -20,8 +20,8 @@ import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { CommonModule, DatePipe } from '@angular/common';
-import { MedicalHistoryComponent } from './components/medical-history/medical-history.component';
-import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
+import { PastAppointmentComponent } from './components/past-appointment/past-appointment.component';
+import { DetailedPastAppointmentComponent } from './components/past-appointment/detailed-past-appointment/detailed-past-appointment.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
@@ -56,8 +56,6 @@ import { TooltipDirective } from './directives/tooltip.directive';
     ProfilePageComponent,
     AppointmentDetailComponent,
     DashboardComponent,
-    MedicalHistoryComponent,
-    DetailedHistoryComponent,
     BookAppointmentComponent,
     UserDoctorListComponent,
     DepartmentComponent,
@@ -73,6 +71,8 @@ import { TooltipDirective } from './directives/tooltip.directive';
     PastHistoryComponent,
     AppointmentDetailFromDoctorComponent,
     PatientPastAppointmentByIdComponent,
+    PastAppointmentComponent,
+    DetailedPastAppointmentComponent,
     TooltipDirective
   ],
   imports: [

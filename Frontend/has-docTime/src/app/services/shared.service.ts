@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MedicalHistory } from '../models/medicalHistory.model';
+import { PastAppointment } from '../models/pastAppointment.model';
 import { Appointment } from '../models/appointment.model';
 
 @Injectable({
@@ -8,9 +8,9 @@ import { Appointment } from '../models/appointment.model';
 })
 export class SharedService {
 
-  private resolvedCaseDetailedData = new BehaviorSubject<MedicalHistory  | undefined>({});
-  setresolvedCaseDetailedData(medicalHistory: MedicalHistory | undefined){
-    this.resolvedCaseDetailedData.next(medicalHistory);
+  private resolvedCaseDetailedData = new BehaviorSubject<PastAppointment  | undefined>({});
+  setresolvedCaseDetailedData(pastAppointment: PastAppointment | undefined){
+    this.resolvedCaseDetailedData.next(pastAppointment);
   }
 
   getresolvedCaseDetailedData(){

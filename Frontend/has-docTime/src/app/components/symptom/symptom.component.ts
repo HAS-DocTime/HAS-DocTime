@@ -14,8 +14,8 @@ export class SymptomComponent implements OnInit{
   constructor(private symptomService : SymptomService, private route: ActivatedRoute, private departmentService : DepartmentService){}
   symptoms! : Symptom[];
   symptom:  string = "";
-  medicalHistoryLength: number = 0;
-  medicalHistoryLengths: number[] = [];
+  pastAppointmentLength: number = 0;
+  pastAppointmentLengths: number[] = [];
 
   ngOnInit(){
 
@@ -26,13 +26,13 @@ export class SymptomComponent implements OnInit{
         let departmentArray : Department[] = [];
         this.symptom = data[i].name as string;
         this.symptomService.getDiseaseWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
-          this.medicalHistoryLength=0;
+          this.pastAppointmentLength=0;
             if(data1!==null){
               for(let diseaseCaseCount of data1){
-                this.medicalHistoryLength += diseaseCaseCount.caseCount;
+                this.pastAppointmentLength += diseaseCaseCount.caseCount;
               }
             }
-            data[i].caseCount=this.medicalHistoryLength;
+            data[i].caseCount=this.pastAppointmentLength;
           })
 
         const departmentLength : number | undefined = data[i].departments?.length;

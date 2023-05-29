@@ -3,7 +3,7 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.ChronicIllness;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.ChronicIllnessInterface;
+import com.spring.hasdocTime.interfaces.ChronicIllnessInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
