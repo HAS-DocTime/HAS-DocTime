@@ -6,13 +6,11 @@ import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.RegisterInterface;
-import com.spring.hasdocTime.repository.UserRepository;
+import com.spring.hasdocTime.interfaces.RegisterInterface;
 import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
 import com.spring.hasdocTime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service

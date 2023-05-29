@@ -2,7 +2,7 @@ import { Doctor } from "./doctor.model";
 import { User } from "./user.model";
 import { TimeSlot } from "./timeSlot.model";
 
-export type MedicalHistory = {
+export type PastAppointment = {
   id? : number;
   disease? : string;
   medicine? : string;

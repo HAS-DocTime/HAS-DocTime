@@ -1,4 +1,4 @@
-package com.spring.hasdocTime.interfc;
+package com.spring.hasdocTime.interfaces;
 
 import com.spring.hasdocTime.entity.Symptom;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;

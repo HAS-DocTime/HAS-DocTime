@@ -1,19 +1,19 @@
 import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MedicalHistory } from 'src/app/models/medicalHistory.model';
+import { PastAppointment } from 'src/app/models/pastAppointment.model';
 import { Symptom } from 'src/app/models/symptom.model';
-import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
+import { PastAppointmentService } from 'src/app/services/past-appointment.service';
 import { SymptomService } from 'src/app/services/symptom.service';
 
 @Component({
-  selector: 'app-medical-history',
-  templateUrl: './medical-history.component.html',
-  styleUrls: ['./medical-history.component.css']
+  selector: 'app-past-appointments',
+  templateUrl: './past-appointment.component.html',
+  styleUrls: ['./past-appointment.component.css']
 })
-export class MedicalHistoryComponent implements OnInit{
+export class PastAppointmentComponent implements OnInit{
 
 
-  constructor(private medicalHistoryService: MedicalHistoryService, private symptomService: SymptomService, private router : Router, private route : ActivatedRoute){}
+  constructor(private pastAppointmentService: PastAppointmentService, private symptomService: SymptomService, private router : Router, private route : ActivatedRoute){}
 
   id : number = 0;
   tokenRole : string = "";
@@ -22,7 +22,7 @@ export class MedicalHistoryComponent implements OnInit{
   noDataFound : boolean = false;
   noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
 
-  medicalHistoryList: MedicalHistory[]=[];
+  pastAppointmentList: PastAppointment[]=[];
 
   ngOnInit() {
     const token = sessionStorage.getItem('token');
@@ -42,25 +42,25 @@ export class MedicalHistoryComponent implements OnInit{
           this.symptomId = parseInt(data[1].path);
           this.symptomService.getSymptomById(this.symptomId).subscribe((data)=> {
             this.symptom = data;
-            this.symptomService.getMedicalHistoryFromSymptom(this.symptom?.name).subscribe((data)=>{
+            this.symptomService.getPastAppointmentsFromSymptom(this.symptom?.name).subscribe((data)=>{
               if(data===null){
                 this.noDataFound = true;
               }
-              this.medicalHistoryList = data;
+              this.pastAppointmentList = data;
           })
          })
         }
         else{
-          this.medicalHistoryService.getMedicalHistory()
+          this.pastAppointmentService.getPastAppointmentData()
           .subscribe(
-            (data: MedicalHistory[]) => {
+            (data: PastAppointment[]) => {
               if(data===null){
                 this.noDataFound = true;
               }
-              this.medicalHistoryList = data;
+              this.pastAppointmentList = data;
             },
             (error: any) => {
-              console.error('Error getting medical history:', error);
+              console.error('Error getting past appointment:', error);
             }
           );
         }
@@ -70,13 +70,13 @@ export class MedicalHistoryComponent implements OnInit{
     }
 
     else{
-      this.medicalHistoryService.getMedicalHistoryByUserEmail()
+      this.pastAppointmentService.getPastAppointmentDataByUserEmail()
     .subscribe(
-      (data: MedicalHistory[]) => {
-        this.medicalHistoryList = data;
+      (data: PastAppointment[]) => {
+        this.pastAppointmentList = data;
       },
       (error: any) => {
-        console.error('Error getting medical history:', error);
+        console.error('Error getting past appointments history:', error);
       }
     );
     }
@@ -84,7 +84,7 @@ export class MedicalHistoryComponent implements OnInit{
 
   getdetailedHistory(id : number | undefined){
 
-    this.router.navigate(["dashboard", "medicalHistory", id]);
+    this.router.navigate(["dashboard", "pastAppointments", id]);
   }
 
 }

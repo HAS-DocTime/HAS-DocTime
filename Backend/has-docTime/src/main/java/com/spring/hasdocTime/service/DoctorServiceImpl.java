@@ -12,7 +12,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import com.spring.hasdocTime.interfc.DoctorInterface;
+import com.spring.hasdocTime.interfaces.DoctorInterface;
 
 /**
  *

@@ -3,7 +3,8 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.AppointmentInterface;
+import com.spring.hasdocTime.interfaces.AppointmentInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("appointment")
-@CrossOrigin(origins = "http://192.1.200.29:4200")
+@CrossOrigin(origins = "http://192.1.200.177:4200")
 public class AppointmentController {
 
     private AppointmentInterface appointmentService;

@@ -4,8 +4,8 @@ import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login.component';
 import { AppointmentComponent } from './components/appointment/appointment.component';
 import { HomeComponent } from './components/home/home.component';
-import { MedicalHistoryComponent } from './components/medical-history/medical-history.component';
-import { DetailedHistoryComponent } from './components/medical-history/detailed-history/detailed-history.component';
+import { PastAppointmentComponent } from './components/past-appointment/past-appointment.component';
+import { DetailedPastAppointmentComponent } from './components/past-appointment/detailed-past-appointment/detailed-past-appointment.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
@@ -46,8 +46,8 @@ const routes: Routes = [
     {path : "symptom", component : SymptomComponent},
     {path : "appointment/book", component : BookAppointmentComponent},
     {path : "appointment/:id", component : AppointmentDetailComponent},
-    {path : "medicalHistory", component : MedicalHistoryComponent},
-    {path : "medicalHistory/:id", component : DetailedHistoryComponent},
+    {path : "pastAppointments", component : PastAppointmentComponent},
+    {path : "pastAppointments/:id", component : DetailedPastAppointmentComponent},
     {path : "users", component : UserDoctorListComponent},
     {path : "users/:id", component : ProfilePageComponent},
     {path : "doctors", component : UserDoctorListComponent},
@@ -59,8 +59,7 @@ const routes: Routes = [
     {path : "chronicIllness", component : ChronicIllnessComponent},
     {path : "chronicIllness/:id", component : ChronicIllnessDetailComponent},
     {path : "resolvedCasesArchive", component : ResolvedCasesArchiveComponent},
-    {path : "resolvedCasesArchive/caseDetail", component : CaseDetailComponent},
-    {path : "medicalHistory/:id", component : DetailedHistoryComponent}
+    {path : "resolvedCasesArchive/caseDetail", component : CaseDetailComponent}
   ]}
 ];
 

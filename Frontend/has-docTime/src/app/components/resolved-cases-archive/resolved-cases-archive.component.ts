@@ -1,9 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { LoginComponent } from '../login/login.component';
-import { PostAppointmentService } from 'src/app/services/post-appointment.service';
-import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { SharedService } from 'src/app/services/shared.service';
+import { PastAppointmentService } from 'src/app/services/past-appointment.service';
+import { PastAppointment } from 'src/app/models/pastAppointment.model';
 
 @Component({
   selector: 'app-resolved-cases-archive',
@@ -12,10 +12,10 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class ResolvedCasesArchiveComponent implements OnInit{
 
-  constructor(private postAppointment: PostAppointmentService, private router: Router, private sharedService: SharedService, private route: ActivatedRoute){}
+  constructor(private pastAppointment: PastAppointmentService, private router: Router, private sharedService: SharedService, private route: ActivatedRoute){}
 
   id : string = "";
-  resolvedCases?: MedicalHistory[];
+  resolvedCases?: PastAppointment[];
 
   ngOnInit(): void {
     const token = sessionStorage.getItem('token');
@@ -25,17 +25,17 @@ export class ResolvedCasesArchiveComponent implements OnInit{
         this.id = this.id.substring(1, this.id.length-1);
       };
 
-      this.postAppointment.getPostAppointmentDataByDoctor(this.id).subscribe((data) =>{
+      this.pastAppointment.getPastAppointmentDataByDoctor(this.id).subscribe((data) =>{
         this.resolvedCases = data;
       });
   }
 
   caseDetail(id: number){
-    
+
     this.sharedService.setresolvedCaseDetailedData(this.resolvedCases?.[id]);
     this.router.navigate(['caseDetail'], {relativeTo : this.route});
   }
 
-  
+
 
 }

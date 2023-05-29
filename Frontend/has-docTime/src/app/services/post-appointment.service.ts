@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 export class PostAppointmentService {
 
   constructor(private http : HttpClient) { }
-  base_url = "http://192.1.200.29:8080/";
+  base_url = "http://192.1.200.177:8080/";
 
   getPostAppointmentDataByDoctor(id: string){
     return this.http.get<MedicalHistory[]> (`${this.base_url}postAppointmentData/doctor/${id}`);

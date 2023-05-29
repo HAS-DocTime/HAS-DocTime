@@ -8,6 +8,9 @@ import { DoctorService } from 'src/app/services/doctor.service';
 import { UserService } from 'src/app/services/user.service';
 import { LoginDetails } from 'src/app/models/login-details.model';
 import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswordMatch.validator';
+import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
+import { validatePassword } from 'src/app/customValidators/validatePassword.validator';
+import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
 
 @Component({
   selector: 'app-signup',
@@ -71,22 +74,24 @@ constructor(private userService : UserService, private doctorService : DoctorSer
   }
 
   signupForm : FormGroup = new FormGroup({
-    firstName : new FormControl("", [Validators.required]),
-    lastName : new FormControl("", [Validators.required]),
-    dob : new FormControl("2001-01-01", [Validators.required]),
+    firstName : new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
+    lastName : new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
+    dob : new FormControl("2001-01-01", [Validators.required, validateDateValidator()]),
     gender : new FormControl("MALE", [Validators.required]),
     bloodGroup : new FormControl("O_POSITIVE", [Validators.required]),
     contact : new FormControl("", [Validators.required]),
     height : new FormControl(),
     weight : new FormControl(),
-    email : new FormControl("", [Validators.required]),
-    password : new FormControl("", [Validators.required]),
+    email : new FormControl("", [Validators.required, Validators.email]),
+    password : new FormControl("", [Validators.required, validatePassword()]),
     confirmPassword : new FormControl("", [Validators.required]),
     role : new FormControl("PATIENT", [Validators.required]),
     qualification : new FormControl(""),
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([])
-  }, {validators : confirmPasswordValidator()})
+  },
+   {validators : confirmPasswordValidator()}
+   )
 
   toggleShowPassword(){
     this.showPassword = !this.showPassword;
@@ -100,6 +105,8 @@ constructor(private userService : UserService, private doctorService : DoctorSer
 
 
   register(){
+    this.signupForm.value["firstName"] = this.signupForm.value["firstName"].trim();
+    this.signupForm.value["lastName"] = this.signupForm.value["lastName"].trim();
     const date = new Date();
 
     const email = this.signupForm.value.email;
@@ -200,7 +207,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     this.chronicIllness.push(new FormGroup(
       {
         name : new FormControl("", [Validators.required]),
-        yearsOfIllness : new FormControl(0, [Validators.required, Validators.min(0.00273972601)]) //0.00273972601 = 1/365
+        yearsOfIllness : new FormControl("", [Validators.required, Validators.min(0.00273972601)]) //0.00273972601 = 1/365
       }
     ))
   }
@@ -220,4 +227,10 @@ constructor(private userService : UserService, private doctorService : DoctorSer
   get maxDate(): string {
     return new Date().toISOString().split('T')[0];
   }
+  get minDate(): string {
+    const date = new Date();
+    date.setFullYear(date.getFullYear()-150);
+    return date.toISOString().split('T')[0];
+  }
+
 }

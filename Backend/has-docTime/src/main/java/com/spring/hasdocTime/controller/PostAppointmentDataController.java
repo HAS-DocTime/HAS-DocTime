@@ -3,7 +3,8 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.PostAppointmentData;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.PostAppointmentDataInterface;
+import com.spring.hasdocTime.interfaces.PostAppointmentDataInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("postAppointmentData")
-@CrossOrigin(origins = "http://192.1.200.29:4200")
+@CrossOrigin(origins = "http://192.1.200.177:4200")
 public class PostAppointmentDataController {
 
     private PostAppointmentDataInterface postAppointmentDataService;
@@ -67,12 +68,12 @@ public class PostAppointmentDataController {
     }
 
     @PostMapping
-    public PostAppointmentData createPostAppointmentData(@RequestBody PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException {
+    public PostAppointmentData createPostAppointmentData(@Valid @RequestBody PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException {
         return postAppointmentDataService.createPostAppointmentData(postAppointmentData);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostAppointmentData> updatePostAppointmentData(@PathVariable int id, @RequestBody PostAppointmentData postAppointmentData) throws DoesNotExistException, MissingParameterException {
+    public ResponseEntity<PostAppointmentData> updatePostAppointmentData(@PathVariable int id, @Valid @RequestBody PostAppointmentData postAppointmentData) throws DoesNotExistException, MissingParameterException {
         try {
             PostAppointmentData updatedPostAppointmentData = postAppointmentDataService.updatePostAppointmentData(id, postAppointmentData);
             return ResponseEntity.ok(updatedPostAppointmentData);

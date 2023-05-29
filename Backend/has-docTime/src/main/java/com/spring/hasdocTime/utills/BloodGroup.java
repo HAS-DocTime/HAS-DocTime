@@ -1,5 +1,8 @@
 package com.spring.hasdocTime.utills;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+
 public enum BloodGroup {
     A_POSITIVE("A+"),
     A_NEGATIVE("A-"),
@@ -12,6 +15,8 @@ public enum BloodGroup {
 
     private final String value;
 
+    @NotEmpty
+    @Pattern(regexp="[A-Z_+-]+", message = "Enter Blood Group in valid Format")
     private BloodGroup(String value) {
         this.value = value;
     }

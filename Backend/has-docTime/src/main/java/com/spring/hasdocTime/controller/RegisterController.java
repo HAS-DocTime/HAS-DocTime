@@ -3,9 +3,7 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.LoginInterface;
-import com.spring.hasdocTime.interfc.RegisterInterface;
-import com.spring.hasdocTime.utills.Role;
+import com.spring.hasdocTime.interfaces.RegisterInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/register")
-@CrossOrigin(origins = "http://192.1.200.29:4200")
+@CrossOrigin(origins = "http://192.1.200.177:4200")
 public class RegisterController {
 
     @Autowired

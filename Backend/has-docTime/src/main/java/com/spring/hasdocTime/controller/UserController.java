@@ -2,7 +2,8 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.UserInterface;
+import com.spring.hasdocTime.interfaces.UserInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("user")
-@CrossOrigin(origins = "http://192.1.200.29:4200")
+@CrossOrigin(origins = "http://192.1.200.177:4200")
 public class UserController {
 
     private UserInterface userService;
@@ -58,13 +59,13 @@ public class UserController {
     }
 
     @PostMapping("")
-    public ResponseEntity<User> createUser(@RequestBody User theUser) throws MissingParameterException, DoesNotExistException {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User theUser) throws MissingParameterException, DoesNotExistException {
         User user = userService.createUser(theUser);
         return new ResponseEntity(user, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @RequestBody User theUser) throws DoesNotExistException, MissingParameterException {
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id, @Valid @RequestBody User theUser) throws DoesNotExistException, MissingParameterException {
         User user =  userService.updateUser(id, theUser);
         return new ResponseEntity(user, HttpStatus.OK);
     }

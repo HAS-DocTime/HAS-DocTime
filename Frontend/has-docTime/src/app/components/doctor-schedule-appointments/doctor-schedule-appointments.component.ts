@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
-import { MedicalHistory } from 'src/app/models/medicalHistory.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
-import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({

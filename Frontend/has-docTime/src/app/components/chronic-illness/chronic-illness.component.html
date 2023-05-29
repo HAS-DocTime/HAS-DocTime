@@ -16,7 +16,7 @@
         </thead>
         <tbody class=" text-center" *ngFor="let chronicIllness of chronicIllnessList; let i = index" [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
           <tr>
-            <td>{{ chronicIllness?.id }}</td>
+            <td>{{ i+1}}</td>
             <td>{{ chronicIllness?.name }}</td>
             <td>{{ chronicIllness?.patientChronicIllnesses?.length }}</td>
             <td>

@@ -3,7 +3,7 @@ package com.spring.hasdocTime.dao;
 import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.AppointmentInterface;
+import com.spring.hasdocTime.interfaces.AppointmentInterface;
 import com.spring.hasdocTime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.sql.Time;
 import java.util.*;
 
 @Service

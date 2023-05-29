@@ -11,14 +11,17 @@
           id="firstName"
           placeholder="(Eg : John)"
           formControlName="firstName"
+          [ngClass]="signupForm.get('firstName')?.errors && signupForm.get('firstName')?.touched ? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('firstName')?.touched && signupForm.get('firstName')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('firstName')?.errors">First Name is Required</span>
+          <span *ngIf="signupForm.get('firstName')?.errors?.['required']">First Name is Required</span>
+          <span *ngIf="signupForm.get('firstName')?.errors?.['pattern'] && !signupForm.get('firstName')?.errors?.['containsSpace']">Only Alphabets are allowed</span>
+          <span *ngIf="signupForm.get('firstName')?.errors?.['containsSpace']">Whitespaces are not allowed</span>
         </div>
       </div>
       <div class="form-group mb-4">
@@ -29,14 +32,17 @@
           id="lastName"
           placeholder="(Eg : John)"
           formControlName="lastName"
+          [ngClass]="signupForm.get('lastName')?.errors && signupForm.get('lastName')?.touched ? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('lastName')?.touched && signupForm.get('lastName')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('lastName')?.errors">Last Name is Required</span>
+          <span *ngIf="signupForm.get('lastName')?.errors?.['required']">Last Name is Required</span>
+          <span *ngIf="signupForm.get('lastName')?.errors?.['pattern'] && !signupForm.get('lastName')?.errors?.['containsSpace']">Only Alphabets are allowed</span>
+          <span *ngIf="signupForm.get('lastName')?.errors?.['containsSpace']">Whitespaces are not allowed</span>
         </div>
       </div>
       <div class="form-group mb-4">
@@ -47,18 +53,20 @@
           id="email"
           placeholder="(Eg : johndoe@gmail.com)"
           formControlName="email"
+          [ngClass]="signupForm.get('email')?.errors && signupForm.get('email')?.touched ? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('email')?.touched && signupForm.get('email')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('email')?.errors">Email is Required</span>
+          <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is Required</span>
+          <span *ngIf="signupForm.get('email')?.errors?.['email']">Enter Valid Email</span>
         </div>
       </div>
       <div class="form-group mb-4">
-        <label for="password">Password <span class="required-asterisk">*</span></label>
+        <div class="passwordInfo"><label for="password">Password <span class="required-asterisk">*</span></label></div>
         <div class="password d-flex">
           <input
             [type]="passwordType"
@@ -66,20 +74,45 @@
             id="password"
             placeholder="Enter Password"
             formControlName="password"
+            [ngClass]="{'errored-input' : signupForm.get('password')?.errors && signupForm.get('password')?.touched}"
           />
           <button mat-icon-button (click)="toggleShowPassword()" type="button" class="showPasswordIconButton">
-            <mat-icon>{{ showPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+            <mat-icon >{{ showPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
           </button>
         </div>
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('password')?.touched &&
             signupForm.get('password')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('password')?.errors"
+          <span *ngIf="signupForm.get('password')?.errors?.['required']"
             >Password is Required</span
+          >
+          <span *ngIf="signupForm.get('password')?.errors?.['containsWhitespace']"
+            >Password must not contain white-space characters
+            </span
+          >
+          <span *ngIf="signupForm.get('password')?.errors?.['lacksUppercase']"
+            >Password must contain at least one uppercase character
+            </span
+          >
+          <span *ngIf="signupForm.get('password')?.errors?.['lacksLowercase']"
+            >Password must contain at least one lowercase character
+            </span
+          >
+          <span *ngIf="signupForm.get('password')?.errors?.['lacksSpecialChar']"
+            >Password must contain at least one special character [Allowed -> !@#$%^&+=\-_/]
+            </span
+          >
+          <span *ngIf="signupForm.get('password')?.errors?.['lacksNumber']"
+            >Password must contain at least one number
+            </span
+          >
+          <span *ngIf="signupForm.get('password')?.errors?.['minLength']"
+            >Password should at least be 8 characters long.
+            </span
           >
         </div>
       </div>
@@ -92,25 +125,31 @@
           id="confirmPassword"
           placeholder="Confirm Password"
           formControlName="confirmPassword"
+          pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&+=_\-\*/])(?=\S+$).{8,}$"
+          [ngClass]="signupForm.get('confirmPassword')?.errors && signupForm.get('confirmPassword')?.touched ? 'errored-input' : ''"
         />
         <button mat-icon-button (click)="toggleShowConfirmPassword()" type="button" class="showPasswordIconButton">
           <mat-icon>{{ showConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
         </button>
       </div>
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('confirmPassword')?.touched &&
-            signupForm.get('confirmPassword')?.errors?.['required']
+            signupForm.get('confirmPassword')?.errors
           "
         >
           <span *ngIf="signupForm.get('confirmPassword')?.errors?.['required']"
             >
             Password is Required</span
           >
+          <span *ngIf="signupForm.get('confirmPassword')?.errors?.['pattern']"
+            >
+            Enter Valid Password</span
+          >
         </div>
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="signupForm.get('confirmPassword')?.hasError('passwordMismatch') && signupForm.get('confirmPassword')?.touched"
         >
         <span *ngIf="signupForm.get('confirmPassword')?.hasError('passwordMismatch')">
@@ -127,13 +166,18 @@
           placeholder="(Eg : 2001-01-01)"
           formControlName="dob"
           [max]="maxDate"
+          [min]="minDate"
+          [ngClass]="signupForm.get('dob')?.errors && signupForm.get('dob')?.touched ? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="signupForm.get('dob')?.touched && signupForm.get('dob')?.invalid"
         >
-          <span *ngIf="signupForm.get('dob')?.errors"
+          <span *ngIf="signupForm.get('dob')?.errors?.['required']"
             >Date of Birth is Required</span
+          >
+          <span *ngIf="signupForm.get('dob')?.errors?.['unrealisticDate']"
+            >Enter Realistic Date of Birth</span
           >
         </div>
       </div>
@@ -195,18 +239,23 @@
           type="text"
           class="form-control"
           id="contact"
-          placeholder="(Eg : 9724214413)"
+          placeholder="(Eg : +91-9724214413)"
           formControlName="contact"
+          pattern="^\+[0-9]{1,3}-[0-9]{10}$"
+          [ngClass]="signupForm.get('contact')?.errors && signupForm.get('contact')?.touched? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('contact')?.touched &&
             signupForm.get('contact')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('contact')?.errors"
+          <span *ngIf="signupForm.get('contact')?.errors?.['required']"
             >Contact is Required</span
+          >
+          <span *ngIf="signupForm.get('contact')?.errors?.['pattern']"
+            >Enter Valid Contact Number</span
           >
         </div>
       </div>
@@ -246,12 +295,12 @@
           <div class="d-flex my-3 justify-content-around" [formGroupName]="i">
               <div>
                 <label for="chronicIllnessName">Name <span class="required-asterisk">*</span></label>
-                <select class="form-select" id="chronicIllnessName" formControlName="name" >
+                <select  id="chronicIllnessName" formControlName="name" [ngClass]="signupForm.get('patientChronicIllness.'+i+'.name')?.errors && signupForm.get('patientChronicIllness.'+i+'.name')?.touched? 'form-select errored-input' : 'form-select'">
                   <option value="" selected disabled>Select Chronic Illness</option>
                   <option *ngFor="let chronicIllness of savedChronicIllnesses" [value]="chronicIllness.id" [disabled]="selectedIllness.includes(chronicIllness.id)">{{chronicIllness.name}}</option>
                 </select>
                 <div
-                  class="alert alert-danger"
+                  class="text-danger errored-input"
                   *ngIf="
                     signupForm.get('patientChronicIllness.'+i+'.name')?.touched && signupForm.get('patientChronicIllness.'+i+'.name')?.invalid
                   "
@@ -262,21 +311,25 @@
             <div>
               <label for="yearsOfIllness">Years of Illness <span class="required-asterisk">*</span></label>
               <input
-                type="text"
+                type="number"
                 class="form-control mx-2"
                 id="yearsOfIllness"
                 placeholder="Enter Years of Illness"
                 formControlName="yearsOfIllness"
+                [ngClass]="signupForm.get('yearsOfIllness')?.errors && signupForm.get('yearsOfIllness')?.touched? 'errored-input' : ''"
               />
               <div
-                class="alert alert-danger"
+                class="text-danger errored-input"
                 *ngIf="
                   signupForm.get('patientChronicIllness.'+i+'.yearsOfIllness')?.touched &&
                   signupForm.get('patientChronicIllness.'+i+'.yearsOfIllness')?.invalid
                 "
               >
-                <span *ngIf="signupForm.get('patientChronicIllness.'+i+'.yearsOfIllness')?.errors"
+                <span *ngIf="signupForm.get('patientChronicIllness.'+i+'.yearsOfIllness')?.errors?.['required']"
                   >Years of Illness is Required</span
+                >
+                <span *ngIf="signupForm.get('patientChronicIllness.'+i+'.yearsOfIllness')?.errors?.['min']"
+                  >Enter valid Years of Illness</span
                 >
               </div>
             </div>
@@ -307,16 +360,21 @@
           id="qualification"
           placeholder="Enter Qualifications"
           formControlName="qualification"
+          pattern="[a-zA-Z0-9,.-]+( [a-zA-Z0-9,.-]+)*"
+          [ngClass]="signupForm.get('qualification')?.errors && signupForm.get('qualification')?.touched? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('qualification')?.touched &&
             signupForm.get('qualification')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('qualification')?.errors"
+          <span *ngIf="signupForm.get('qualification')?.errors?.['required']"
             >Qualification is Required</span
+          >
+          <span *ngIf="signupForm.get('qualification')?.errors?.['pattern']"
+            >Enter Valid Qualification</span
           >
         </div>
       </div>
@@ -328,15 +386,16 @@
           id="casesSolved"
           placeholder="Enter Number of Cases Solved"
           formControlName="casesSolved"
+          [ngClass]="signupForm.get('casesSolved')?.errors && signupForm.get('casesSolved')?.touched? 'errored-input' : ''"
         />
         <div
-          class="alert alert-danger"
+          class="text-danger errored-input"
           *ngIf="
             signupForm.get('casesSolved')?.touched &&
             signupForm.get('casesSolved')?.invalid
           "
         >
-          <span *ngIf="signupForm.get('casesSolved')?.errors"
+          <span *ngIf="signupForm.get('casesSolved')?.errors?.['required']"
             >Cases Solved is Required</span
           >
         </div>
