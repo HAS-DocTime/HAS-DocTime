@@ -23,10 +23,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("SELECT a FROM Appointment a WHERE LOWER(a.user.name) LIKE %:search%")
     Page<Appointment> findAllAndUserNameContainsIgnoreCase(@Param("search")String search, Pageable pageable);
 
-    @Query("SELECT a FROM Appointment a JOIN a.user u WHERE u.id = :userId")
+    @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId")
     Page<Appointment> findByUser(@Param("userId")int userId, Pageable pageable);
 
-    @Query("SELECT a FROM Appointment a JOIN a.user u WHERE u.id = :userId AND LOWER(a.doctor.user.name) LIKE %:search%")
+    @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId AND LOWER(a.doctor.user.name) LIKE %:search%")
     Page<Appointment> findByUserAndDoctorNameContainsIgnoreCase(@Param("userId")int userId, @Param("search") String search, Pageable pageable);
 
     @Query("SELECT a FROM Appointment a JOIN a.doctor d WHERE d.id = :doctorId")

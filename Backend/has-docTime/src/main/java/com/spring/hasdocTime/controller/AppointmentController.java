@@ -29,7 +29,7 @@ public class AppointmentController {
     public ResponseEntity<List<Appointment>> getAllAppointments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,       //sort by user.name, doctor.user.name, timeSlotForAppointment.startTime
             @RequestParam(required = false) String search
     ) {
         try {
@@ -80,7 +80,7 @@ public class AppointmentController {
             @PathVariable int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "doctor.user.name") String sortBy,
+            @RequestParam(defaultValue = "doctor.user.name") String sortBy,     //sort by doctor.user.name, timeSlotForAppointment.startTime        &sortDirection=desc to sort ascending or descending
             @RequestParam(required = false) String search
     ) throws DoesNotExistException{
         Page<Appointment> appointments = appointmentService.getAppointmentsByUser(id, page, size, sortBy, search);
@@ -95,7 +95,7 @@ public class AppointmentController {
             @PathVariable int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "doctor.user.name") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,     //sort by user.name, timeSlotForAppointment.startTime
             @RequestParam(required = false) String search
     ) throws DoesNotExistException {
         Page<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id, page, size, sortBy, search);

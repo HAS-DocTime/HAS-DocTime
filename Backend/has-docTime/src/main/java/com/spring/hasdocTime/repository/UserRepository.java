@@ -35,7 +35,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Page<User> findByChronicIllnessIdAndNameContainsIgnoreCase(@Param("id")int id, @Param("search") String search, Pageable pageable);
 
     @Query("SELECT u FROM User u JOIN u.patientChronicIllness pc where pc.chronicIllness.id = :id ")
-//    @Query("SELECT u FROM User u JOIN u.patientChronicIllness pc JOIN pc.chronicIllness c WHERE c.id = :id ")
     Page<User> findByChronicIllnessId(@Param("id") int id, Pageable pageable);
 
 }

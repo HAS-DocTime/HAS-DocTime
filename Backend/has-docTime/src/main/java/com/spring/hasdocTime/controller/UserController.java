@@ -29,7 +29,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUser(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "name") String sortBy,     //sortBy name only
             @RequestParam(required = false) String search
     ){
         Page<User> users = userService.getAllUser(page, size, sortBy, search);

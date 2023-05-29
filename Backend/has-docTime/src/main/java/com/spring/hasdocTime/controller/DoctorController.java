@@ -54,7 +54,7 @@ public class DoctorController {
     public ResponseEntity<List<Doctor>> getAllDoctors(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "user.name") String sortBy,
+            @RequestParam(defaultValue = "user.name") String sortBy,        //Sort by user.name, user.dob(can place on age)
             @RequestParam(required = false) String search
     ){
         Page<Doctor> doctors = doctorService.getAllDoctors(page, size, sortBy, search);

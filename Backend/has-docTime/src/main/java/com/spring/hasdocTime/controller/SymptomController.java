@@ -24,7 +24,7 @@ public class SymptomController {
     public List<Symptom> getAllSymptom(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "name") String sortBy,     //sortBy name only
             @RequestParam(required = false) String search
     ){
         Page<Symptom> symptoms = symptomService.getAllSymptom(page, size, sortBy, search);
