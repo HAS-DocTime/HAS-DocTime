@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.Objects;
@@ -22,12 +24,16 @@ public class PostAppointmentData {
     private int id;
 
     @Column(name = "disease")
+    @Pattern(regexp = "[a-zA-Z,.-]+( [a-zA-Z,.-]+)*", message = "Invalid input. Please enter a valid string with alphanumeric characters, commas, periods, and dashes, allowing spaces in between.")
     private String disease;
 
     @Column(name = "medicine")
+    @Pattern(regexp = "[a-zA-Z0-9:,.-]+( [a-zA-Z0-9:,.-]+)*", message = "Invalid input. Please enter a valid string with alphanumeric characters, commas, periods, colons, and dashes allowing spaces in between.")
     private String medicine;
 
     @Column(name="symptoms")
+    @NotEmpty
+    @Pattern(regexp = "[a-zA-Z,.-]+( [a-zA-Z,.-]+)*", message = "Invalid input. Please enter a valid string with alphabetic characters, commas, periods, and dashes allowing spaces in between.")
     private String symptoms;
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})

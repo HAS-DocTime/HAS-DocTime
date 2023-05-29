@@ -8,6 +8,8 @@ import { DoctorService } from 'src/app/services/doctor.service';
 import { AdminService } from 'src/app/services/admin.service';
 import { Admin } from 'src/app/models/admin.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
+import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
 
 @Component({
   selector: 'app-profile-page',
@@ -218,13 +220,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   editForm: FormGroup = new FormGroup({
     firstName: new FormControl({ value: '', disabled: this.disable }, [
-      Validators.required,
+      Validators.required, trimmedInputValidateSpace()
     ]),
     lastName: new FormControl({ value: '', disabled: this.disable }, [
-      Validators.required,
+      Validators.required, trimmedInputValidateSpace()
     ]),
     dob: new FormControl({ value: '', disabled: this.disable }, [
-      Validators.required,
+      Validators.required, validateDateValidator()
     ]),
     gender: new FormControl({ value: '', disabled: this.disable }, [
       Validators.required,
@@ -249,7 +251,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const date = new Date();
-
+    this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
+    this.editForm.value['lastName'] = this.editForm.value["lastName"].trim();
     const user = this.editForm.value;
     if (date.getFullYear() > new Date(user.dob as Date).getFullYear()) {
       let age =
@@ -351,5 +354,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.router.navigate(['../'], { relativeTo: this.route });
       });
     }
+  }
+
+  get maxDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+  get minDate(): string {
+    const date = new Date();
+    date.setFullYear(date.getFullYear()-150);
+    return date.toISOString().split('T')[0];
   }
 }

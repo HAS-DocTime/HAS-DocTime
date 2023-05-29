@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.validation.constraints.*;
 import lombok.*;
 import java.util.Objects;
 
@@ -34,6 +36,8 @@ public class Doctor {
     private User user;
     
     @Column(name="qualification")
+    @NotBlank(message = "Please enter your Qualification")
+    @Pattern(regexp = "[a-zA-Z0-9,.-]+( [a-zA-Z0-9,.-]+)*", message = "Invalid input. Please enter a valid string with alphanumeric characters, commas, periods, and dashes, allowing spaces in between.")
     private String qualification;
    
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -42,9 +46,11 @@ public class Doctor {
     private Department department;
     
     @Column(name="cases_solved")
+    @Size(min=0, max=99999, message = "Please enter valid number of cases solved")
     private int casesSolved;
     
     @Column(name="is_available")
+    @NotNull(message = "Please enter boolean value")
     private boolean isAvailable;
     
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "availableDoctors")

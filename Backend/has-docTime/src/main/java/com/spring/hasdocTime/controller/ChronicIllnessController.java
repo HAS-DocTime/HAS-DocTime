@@ -4,6 +4,7 @@ import com.spring.hasdocTime.entity.ChronicIllness;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.ChronicIllnessInterface;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -43,13 +44,13 @@ public class ChronicIllnessController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ChronicIllness> createChronicIllness(@RequestBody ChronicIllness chronicIllness) throws MissingParameterException{
+    public ResponseEntity<ChronicIllness> createChronicIllness(@Valid @RequestBody ChronicIllness chronicIllness) throws MissingParameterException{
         ChronicIllness theChronicIllness = chronicIllnessService.createChronicIllness(chronicIllness);
         return new ResponseEntity<>(theChronicIllness, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ChronicIllness> updateChronicIllness(@PathVariable("id") int id, @RequestBody ChronicIllness chronicIllness) throws DoesNotExistException, MissingParameterException {
+    public ResponseEntity<ChronicIllness> updateChronicIllness(@PathVariable("id") int id, @Valid @RequestBody ChronicIllness chronicIllness) throws DoesNotExistException, MissingParameterException {
         ChronicIllness theChronicIllness = chronicIllnessService.updateChronicIllness(id, chronicIllness);
         if(theChronicIllness == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.Objects;
@@ -36,12 +38,18 @@ public class Department {
     private int id;
     
     @Column(name="name")
+    @NotBlank(message = "Please enter name")
+    @Pattern(regexp = "^[a-zA-Z]+([. _-]?[a-zA-Z]+)*$", message = "Please enter Valid Name")
     private String name;
     
     @Column(name="building")
+    @NotBlank(message = "Please enter Building Number")
+    @Pattern(regexp = "^[a-zA-Z0-9]+([. _-]?[a-zA-Z0-9]+)*$", message = "Please enter valid Building Id")
     private String building;
     
     @Column(name="time_duration")
+    @NotBlank(message = "Please enter Time Duration")
+    @Size(min=0, max=60, message = "Please enter valid minutes")
     private int timeDuration;
     
     @Column(name="description")
