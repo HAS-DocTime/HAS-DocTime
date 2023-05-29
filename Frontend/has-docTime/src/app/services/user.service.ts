@@ -4,6 +4,7 @@ import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
 import { Doctor } from '../models/doctor.model';
 import { Admin } from '../models/admin.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class UserService {
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = `http://192.1.200.177:8080/`;
+  baseUrl = environment.apiUrl;
   registerUser(user : User){
     this.isLoggedIn.next(true);
     sessionStorage.clear();

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Appointment } from '../models/appointment.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class AppointmentService {
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = `http://192.1.200.177:8080/`;
+  baseUrl = environment.apiUrl;
 
   getAppointmentByUser(userId : string | undefined){
     return this.http.get<Appointment[]>(`${this.baseUrl}appointment/user/${userId}`);

@@ -51,3 +51,7 @@ Thumbs.db
 ### Ignoring Environment.Properties File ###
 Backend/has-docTime/src/main/resources/environment.properties
 
+### Ignoring environment.ts File ###
+Frontend/has-docTime/src/environments/
+
+
