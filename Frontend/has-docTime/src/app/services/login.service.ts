@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class LoginService{
 
   isLoggedIn: Subject<Boolean> = new Subject<Boolean>;
 
-  private loginUrl = `http://192.1.200.177:8080/login`;
+  private loginUrl = `${environment.apiUrl}login`;
 
   constructor(private http:HttpClient) {}
 

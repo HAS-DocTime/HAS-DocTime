@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Symptom } from '../models/symptom.model';
 import { DiseaseCount } from '../models/diseaseCount.model';
 import { PastAppointment } from '../models/pastAppointment.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SymptomService {
 
-  baseUrl = `http://192.1.200.177:8080/`
+  baseUrl = environment.apiUrl
 
   constructor(private http : HttpClient) { }
 
