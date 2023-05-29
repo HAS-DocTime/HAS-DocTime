@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("appointment")
-@CrossOrigin(origins = "http://192.1.200.177:4200")
+@CrossOrigin(origins = "${port.address}")
 public class AppointmentController {
 
     private AppointmentInterface appointmentService;

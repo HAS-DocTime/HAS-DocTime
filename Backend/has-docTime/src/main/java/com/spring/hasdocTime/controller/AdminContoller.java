@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins = "http://192.1.200.177:4200")
+@CrossOrigin(origins = "${port.address}")
 public class AdminContoller {
 
     @Autowired

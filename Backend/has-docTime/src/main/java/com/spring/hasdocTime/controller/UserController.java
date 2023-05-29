@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("user")
-@CrossOrigin(origins = "http://192.1.200.177:4200")
+@CrossOrigin(origins = "${port.address}")
 public class UserController {
 
     private UserInterface userService;

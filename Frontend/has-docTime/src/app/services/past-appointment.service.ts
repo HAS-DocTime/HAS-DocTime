@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { PastAppointment } from '../models/pastAppointment.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 export class PastAppointmentService {
 
   constructor(private http : HttpClient) { }
-  base_url = "http://192.1.200.177:8080/";
+  base_url = environment.apiUrl;
 
   getPastAppointmentDataByDoctor(id: string){
     return this.http.get<PastAppointment[]> (`${this.base_url}postAppointmentData/doctor/${id}`);

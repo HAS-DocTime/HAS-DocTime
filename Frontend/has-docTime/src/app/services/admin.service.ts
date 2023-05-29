@@ -3,6 +3,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { Admin } from '../models/admin.model';
 import { User } from '../models/user.model';
 import { Doctor } from '../models/doctor.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class AdminService{
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = `http://192.1.200.177:8080/`;
+  baseUrl = environment.apiUrl;
 
   getAdmin(id : number){
     return this.http.get<Admin>(`${this.baseUrl}admin/${id}`);
