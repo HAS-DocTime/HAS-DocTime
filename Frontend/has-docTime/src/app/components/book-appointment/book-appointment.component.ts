@@ -61,6 +61,8 @@ export class BookAppointmentComponent implements OnInit{
     this.bookAppointment.value["timeSlotForAppointment"] = {
       "id": 4508
     }
+    console.log("-------------------",this.bookAppointment.value);
+
     this.appointmentService.createAppointment(this.bookAppointment.value).subscribe((data)=> {
       this.router.navigate(["../"], {relativeTo : this.route});
     })

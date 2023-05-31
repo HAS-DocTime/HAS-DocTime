@@ -37,13 +37,13 @@ public class ChronicIllnessController {
      * Retrieves all ChronicIllnesses.
      *
      * @return ResponseEntity containing a list of all ChronicIllnesses and HttpStatus.OK if successful,
-     * or HttpStatus.NOT_FOUND if no ChronicIllnesses are found.
+     * or HttpStatus.NO_CONTENT if no ChronicIllnesses are found.
      */
     @GetMapping("")
     public ResponseEntity<List<ChronicIllness>> getAllChronicIllness() {
         List<ChronicIllness> chronicIllnessList = chronicIllnessService.getAllChronicIllness();
-        if (chronicIllnessList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if(chronicIllnessList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return new ResponseEntity<>(chronicIllnessList, HttpStatus.OK);
     }

@@ -138,14 +138,14 @@ public class AppointmentController {
      *
      * @param id The ID of the Doctor.
      * @return ResponseEntity containing a list of Appointments associated with the Doctor and HttpStatus.OK if successful,
-     * or HttpStatus.NOT_FOUND if no Appointments are found.
+     * or HttpStatus.NO_CONTENT if no Appointments are found.
      * @throws DoesNotExistException If the Doctor with the given ID does not exist.
      */
     @GetMapping("/doctor/{id}")
     public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(@PathVariable int id) throws DoesNotExistException {
         List<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id);
-        if (appointments.isEmpty()) {
-            return new ResponseEntity<>(appointments, HttpStatus.NOT_FOUND);
+        if(appointments.isEmpty()){
+            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }

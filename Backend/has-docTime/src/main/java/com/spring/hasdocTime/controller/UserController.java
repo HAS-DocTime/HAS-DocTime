@@ -35,13 +35,13 @@ public class UserController {
      * Retrieves all users.
      *
      * @return ResponseEntity containing a list of all users and HttpStatus.OK if successful,
-     * or HttpStatus.NOT_FOUND if no users are found.
+     * or HttpStatus.NO_CONTENT if no users are found.
      */
     @GetMapping("")
     public ResponseEntity<List<User>> getAllUser() {
         List<User> users = userService.getAllUser();
-        if (users.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if(users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
