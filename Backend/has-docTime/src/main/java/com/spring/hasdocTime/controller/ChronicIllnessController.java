@@ -29,7 +29,7 @@ public class ChronicIllnessController {
     public ResponseEntity<List<ChronicIllness>> getAllChronicIllness() {
         List<ChronicIllness> chronicIllnessList = chronicIllnessService.getAllChronicIllness();
         if(chronicIllnessList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return new ResponseEntity(chronicIllnessList, HttpStatus.OK);
     }
