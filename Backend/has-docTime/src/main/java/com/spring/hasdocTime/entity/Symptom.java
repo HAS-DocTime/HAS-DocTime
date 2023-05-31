@@ -10,6 +10,11 @@ import lombok.*;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The Symptom class represents a symptom in the system.
+ * It contains information about the symptom's ID, name, associated users,
+ * associated departments, and associated appointments.
+ */
 @Entity
 @Table(name = "symptom")
 @Data
@@ -51,6 +56,12 @@ public class Symptom {
     @JsonIgnoreProperties(value = "symptoms", allowSetters = true)
     private List<Appointment> appointments;
 
+    /**
+     * Checks if the current Symptom object is equal to the given object.
+     *
+     * @param o the object to compare with
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,6 +70,11 @@ public class Symptom {
         return id == that.id;
     }
 
+    /**
+     * Generates a hash code for the Symptom object.
+     *
+     * @return the hash code value
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);

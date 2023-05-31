@@ -1,3 +1,6 @@
+/**
+ * Interface defining operations for time slots.
+ */
 package com.spring.hasdocTime.interfaces;
 
 import com.spring.hasdocTime.entity.TimeSlot;
@@ -8,14 +11,50 @@ import java.util.List;
 
 public interface TimeSlotInterface {
 
-    public List<TimeSlot> getAllTimeSlots();
+    /**
+     * Retrieves all time slots.
+     *
+     * @return a list of TimeSlot objects representing all time slots
+     */
+    List<TimeSlot> getAllTimeSlots();
 
-    public TimeSlot getTimeSlotById(int id) throws DoesNotExistException;
+    /**
+     * Retrieves a time slot by ID.
+     *
+     * @param id the ID of the time slot
+     * @return the TimeSlot object representing the retrieved time slot
+     * @throws DoesNotExistException if the time slot does not exist
+     */
+    TimeSlot getTimeSlotById(int id) throws DoesNotExistException;
 
-    public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException, DoesNotExistException;
+    /**
+     * Creates a new time slot.
+     *
+     * @param timeSlot the TimeSlot object representing the time slot to be created
+     * @return the TimeSlot object representing the created time slot
+     * @throws DoesNotExistException    if related entities do not exist
+     * @throws MissingParameterException if required parameters are missing
+     */
+    TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException, DoesNotExistException;
 
-    public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException;
+    /**
+     * Updates a time slot.
+     *
+     * @param id       the ID of the time slot to be updated
+     * @param timeSlot the TimeSlot object representing the updated time slot
+     * @return the TimeSlot object representing the updated time slot
+     * @throws DoesNotExistException    if the time slot does not exist
+     * @throws MissingParameterException if required parameters are missing
+     */
+    TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException;
 
-    public String deleteTimeSlot(int id) throws DoesNotExistException;
+    /**
+     * Deletes a time slot.
+     *
+     * @param id the ID of the time slot to be deleted
+     * @return a string indicating the result of the deletion
+     * @throws DoesNotExistException if the time slot does not exist
+     */
+    String deleteTimeSlot(int id) throws DoesNotExistException;
 
 }

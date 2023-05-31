@@ -12,11 +12,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+/**
+ * Configuration class for application-specific configurations.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -26,6 +28,11 @@ public class ApplicationConfig {
 
     private final UserRepository userRepository;
 
+    /**
+     * Custom UserDetailsService implementation that retrieves User records by email.
+     *
+     * @return the UserDetailsService bean
+     */
     @Bean
     public UserDetailsService userDetailsService(){
 
@@ -35,6 +42,11 @@ public class ApplicationConfig {
         };
     }
 
+    /**
+     * Configures the authentication provider for the application.
+     *
+     * @return the AuthenticationProvider bean
+     */
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -43,6 +55,13 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    /**
+     * Configures the AuthenticationManager bean.
+     *
+     * @param config the AuthenticationConfiguration
+     * @return the AuthenticationManager bean
+     * @throws Exception if an error occurs during configuration
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
@@ -53,6 +72,12 @@ public class ApplicationConfig {
 //        return NoOpPasswordEncoder.getInstance();
 //    }
 
+    /**
+     * Configures the password encoder for user passwords.
+     * Uses BCryptPasswordEncoder with the specified strength (if provided).
+     *
+     * @return the PasswordEncoder bean
+     */
      @Bean
      public PasswordEncoder getPasswordEncoder() {
          return new BCryptPasswordEncoder(PASSWORD_ENCODER_STRENGTH.get());

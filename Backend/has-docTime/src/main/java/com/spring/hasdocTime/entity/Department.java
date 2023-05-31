@@ -16,8 +16,9 @@ import lombok.*;
 import java.util.Objects;
 
 /**
- *
- * @author arpit
+ * The Department class represents a department in the system.
+ * It contains information about the department's ID, name, building, time duration, description,
+ * department image, associated doctors, symptoms, and time slots.
  */
 
 @Entity
@@ -75,6 +76,12 @@ public class Department {
     private List<TimeSlot> timeSlots;
 
 
+    /**
+     * Checks if the current Department object is equal to the given object.
+     *
+     * @param o the object to compare with
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,6 +90,12 @@ public class Department {
         return id == that.id;
     }
 
+
+    /**
+     * Generates a hash code value for the Department object.
+     *
+     * @return the hash code value
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);

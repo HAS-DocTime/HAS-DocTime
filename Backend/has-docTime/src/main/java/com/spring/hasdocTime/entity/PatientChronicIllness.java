@@ -6,6 +6,12 @@ import lombok.*;
 
 import java.util.Objects;
 
+
+/**
+ * The PatientChronicIllness class represents the chronic illness of a patient.
+ * It contains information about the composite key, associated user, associated
+ * chronic illness, and years of illness.
+ */
 @Entity
 @Data
 @AllArgsConstructor
