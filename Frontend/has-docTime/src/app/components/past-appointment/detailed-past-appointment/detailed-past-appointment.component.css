@@ -104,6 +104,11 @@
   color: #fff!important;
 }
 
+.bi-arrow-left-circle-fill{
+  font-size: 30px;
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 767px) {
   .col-md-6 {
     width: 100%;
