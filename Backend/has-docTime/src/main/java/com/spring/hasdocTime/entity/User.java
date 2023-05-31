@@ -66,12 +66,12 @@ public class User implements UserDetails {
     private String contact;
 
     @Column(name="height")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Height should not be less than 0ft")
+    @DecimalMin(value = "1.0", inclusive = true, message = "Height should not be less than 1ft")
     @DecimalMax(value = "10.0", inclusive = true, message = "Height should not be more than 10ft")
     private float height;
 
     @Column(name="weight")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Weight should not be less than 0kg")
+    @DecimalMin(value = "1.0", inclusive = true, message = "Weight should not be less than 1kg")
     @DecimalMax(value = "300.0", inclusive = true, message = "Weight should not be more than 300kg")
     private float weight;
 

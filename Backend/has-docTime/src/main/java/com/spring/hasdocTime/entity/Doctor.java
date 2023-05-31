@@ -51,10 +51,10 @@ public class Doctor {
     private Department department;
     
     @Column(name="cases_solved")
-//    @Size(min=0, max=99999, message = "Please enter valid number of cases solved")
     @Min(value = 0, message = "Please enter valid number of cases solved")
     @Max(value = 99999, message = "Please enter valid number of cases solved")
     private int casesSolved;
+
     
     @Column(name="is_available")
     @NotNull(message = "Please enter boolean value")
