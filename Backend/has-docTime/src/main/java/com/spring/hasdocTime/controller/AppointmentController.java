@@ -83,7 +83,7 @@ public class AppointmentController {
     public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(@PathVariable int id) throws DoesNotExistException {
         List<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id);
         if(appointments.isEmpty()){
-            return new ResponseEntity<>(appointments, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
