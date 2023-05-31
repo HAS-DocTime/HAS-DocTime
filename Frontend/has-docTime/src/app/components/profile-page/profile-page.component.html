@@ -7,8 +7,8 @@
           width="150px"
           src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
         />
-        <span class="font-weight-bold">{{ this.user?.name }}</span>
-        <span class="text-black-50">{{ this.user?.email }}</span>
+        <span class="font-weight-bold" >{{ editForm.get('firstName')?.value }} {{editForm.get('lastName')?.value}}</span>
+        <span class="text-black-50">{{ editForm.get('email')?.value }}</span>
       </div>
     </div>
     <div class="col-md-7 border-right">
@@ -251,7 +251,7 @@
               </button>
             </div>
             <div *ngIf="!disable" class="col">
-              <button type="submit" class="btn btn-outline-primary">
+              <button type="submit" class="btn btn-outline-primary" [disabled]="editForm.invalid">
                 Update
               </button>
             </div>
