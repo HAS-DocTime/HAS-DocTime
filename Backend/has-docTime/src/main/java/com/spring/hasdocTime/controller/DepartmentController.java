@@ -21,56 +21,104 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The DepartmentController class handles HTTP requests related to the Department entity.
+ */
 @RestController
 @RequestMapping("department")
-@CrossOrigin(origins="${port.address}")
+@CrossOrigin(origins = "${port.address}")
 public class DepartmentController {
-    
+
     private DepartmentInterface departmentService;
-    
-    public DepartmentController(@Qualifier("departmentServiceImpl") DepartmentInterface departmentService){
+
+    /**
+     * Constructs an instance of DepartmentController with the specified DepartmentService implementation.
+     *
+     * @param departmentService The DepartmentService implementation to use.
+     */
+    public DepartmentController(@Qualifier("departmentServiceImpl") DepartmentInterface departmentService) {
         this.departmentService = departmentService;
     }
-    
+
+    /**
+     * Creates a new Department.
+     *
+     * @param department The Department object to create.
+     * @return ResponseEntity containing the created Department and HttpStatus.OK if successful.
+     * @throws MissingParameterException If required parameters are missing in the creation request.
+     * @throws DoesNotExistException     If the Department with the given ID does not exist.
+     */
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public ResponseEntity<Department> createDepartment(@Valid @RequestBody Department department) throws MissingParameterException, DoesNotExistException{
+    public ResponseEntity<Department> createDepartment(@Valid @RequestBody Department department) throws MissingParameterException, DoesNotExistException {
         Department dep = departmentService.createDepartment(department);
-        return new ResponseEntity(dep, HttpStatus.OK);
+        return new ResponseEntity<>(dep, HttpStatus.OK);
     }
-    
+
+    /**
+     * Retrieves all Departments.
+     *
+     * @return ResponseEntity containing a list of all Departments and HttpStatus.OK if successful,
+     * or HttpStatus.NO_CONTENT if no Departments are found.
+     */
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public ResponseEntity<List<Department>> getAllDepartments(){
+    public ResponseEntity<List<Department>> getAllDepartments() {
         List<Department> departments = departmentService.getAllDepartments();
-        if(departments.isEmpty()){
-            return new ResponseEntity(departments, HttpStatus.NO_CONTENT);
+        if (departments.isEmpty()) {
+            return new ResponseEntity<>(departments, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(departments, HttpStatus.OK);
+        return new ResponseEntity<>(departments, HttpStatus.OK);
     }
-    
+
+    /**
+     * Retrieves a single Department by its ID.
+     *
+     * @param id The ID of the Department to retrieve.
+     * @return ResponseEntity containing the retrieved Department and HttpStatus.OK if successful,
+     * or HttpStatus.NOT_FOUND if the Department does not exist.
+     * @throws DoesNotExistException If the Department with the given ID does not exist.
+     */
     @RequestMapping(method = RequestMethod.GET, value = "{departmentId}")
-    public ResponseEntity<Department> getDepartment(@PathVariable("departmentId") int id) throws DoesNotExistException{
+    public ResponseEntity<Department> getDepartment(@PathVariable("departmentId") int id) throws DoesNotExistException {
         Department department = departmentService.getDepartment(id);
-        if(department == null){
-            return new ResponseEntity(department, HttpStatus.NOT_FOUND);
+        if (department == null) {
+            return new ResponseEntity<>(department, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(department, HttpStatus.OK);
+        return new ResponseEntity<>(department, HttpStatus.OK);
     }
-    
+
+    /**
+     * Updates a Department.
+     *
+     * @param id         The ID of the Department to update.
+     * @param department The updated Department object.
+     * @return ResponseEntity containing the updated Department and HttpStatus.OK if successful,
+     * or HttpStatus.NOT_FOUND if the Department does not exist.
+     * @throws DoesNotExistException     If the Department with the given ID does not exist.
+     * @throws MissingParameterException If required parameters are missing in the update request.
+     */
     @RequestMapping(method = RequestMethod.PUT, value = "{departmentId}")
-    public ResponseEntity<Department> updateDepartment(@PathVariable("departmentId") int id, @Valid @RequestBody Department department) throws DoesNotExistException, MissingParameterException{
+    public ResponseEntity<Department> updateDepartment(@PathVariable("departmentId") int id, @Valid @RequestBody Department department) throws DoesNotExistException, MissingParameterException {
         Department updatedDepartment = departmentService.updateDepartent(id, department);
-        if(updatedDepartment == null){
-            return new ResponseEntity(updatedDepartment, HttpStatus.NOT_FOUND);
+        if (updatedDepartment == null) {
+            return new ResponseEntity<>(updatedDepartment, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(updatedDepartment, HttpStatus.OK);
+        return new ResponseEntity<>(updatedDepartment, HttpStatus.OK);
     }
-    
+
+    /**
+     * Deletes a Department.
+     *
+     * @param id The ID of the Department to delete.
+     * @return ResponseEntity with HttpStatus.OK if the Department is successfully deleted,
+     * or HttpStatus.NOT_FOUND if the Department does not exist.
+     * @throws DoesNotExistException If the Department with the given ID does not exist.
+     */
     @RequestMapping(method = RequestMethod.DELETE, value = "{departmentId}")
     public ResponseEntity<Department> deleteDepartment(@PathVariable("departmentId") int id) throws DoesNotExistException {
         Department dep = departmentService.deleteDepartment(id);
-        if(dep==null){
-            return new ResponseEntity(dep, HttpStatus.NOT_FOUND);
+        if (dep == null) {
+            return new ResponseEntity<>(dep, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(dep, HttpStatus.OK);
+        return new ResponseEntity<>(dep, HttpStatus.OK);
     }
 }

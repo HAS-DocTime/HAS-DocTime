@@ -26,10 +26,8 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- *
- * @author arpit
+ * Implementation of the DepartmentInterface for performing CRUD operations on Department entities.
  */
-
 @Service
 public class DepartmentDaoImpl implements DepartmentInterface {
     
@@ -55,6 +53,15 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         this.timeSlotRepository = timeSlotRepository;
     }
 
+
+    /**
+     * Creates a new Department.
+     *
+     * @param department The Department to create.
+     * @return The created Department.
+     * @throws MissingParameterException if any required parameter is missing.
+     * @throws DoesNotExistException     if a Symptom referenced by the Department does not exist.
+     */
     @Override
     @Transactional
     public Department createDepartment(Department department) throws MissingParameterException, DoesNotExistException{
@@ -92,11 +99,25 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         return departmentRepository.save(department);
     }
 
+
+    /**
+     * Retrieves all Departments.
+     *
+     * @return A list of all Departments.
+     */
     @Override
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
     }
 
+
+    /**
+     * Retrieves a Department by its ID.
+     *
+     * @param id The ID of the Department to retrieve.
+     * @return The retrieved Department.
+     * @throws DoesNotExistException if the Department with the specified ID does not exist.
+     */
     @Override
     public Department getDepartment(int id) throws DoesNotExistException{
         Optional<Department> department = departmentRepository.findById(id);
@@ -106,6 +127,15 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         throw new DoesNotExistException("Department");
     }
 
+    /**
+     * Updates a Department.
+     *
+     * @param id         The ID of the Department to update.
+     * @param department The updated Department.
+     * @return The updated Department.
+     * @throws DoesNotExistException     if the Department with the specified ID does not exist.
+     * @throws MissingParameterException if any required parameter is missing.
+     */
     @Override
     public Department updateDepartent(int id, Department department) throws DoesNotExistException, MissingParameterException {
         if(department.getName()==null || department.getName().equals("")){
@@ -128,6 +158,14 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         throw new DoesNotExistException("Department");
     }
 
+
+    /**
+     * Deletes a Department by its ID.
+     *
+     * @param id The ID of the Department to delete.
+     * @return The deleted Department.
+     * @throws DoesNotExistException if the Department with the specified ID does not exist.
+     */
     @Override
     public Department deleteDepartment(int id) throws DoesNotExistException {
         Optional<Department> department = departmentRepository.findById(id);

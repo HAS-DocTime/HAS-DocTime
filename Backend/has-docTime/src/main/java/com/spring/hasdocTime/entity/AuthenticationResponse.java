@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The AuthenticationResponse class represents the response containing an authentication token.
+ */
 @Data
 @Builder
 @AllArgsConstructor

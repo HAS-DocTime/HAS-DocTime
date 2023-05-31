@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the SymptomInterface that interacts with the SymptomRepository to perform CRUD operations on Symptom entities.
+ */
 @Repository
 public class SymptomDaoImpl implements SymptomInterface {
 
@@ -29,6 +32,14 @@ public class SymptomDaoImpl implements SymptomInterface {
     private DepartmentInterface departmentDao;
 
     private AppointmentInterface appointmentDao;
+
+    /**
+     * Constructs a SymptomDaoImpl with the necessary dependencies.
+     * @param symptomRepository The repository for accessing and manipulating Symptom entities.
+     * @param userDao The interface for accessing User entities.
+     * @param departmentDao The interface for accessing Department entities.
+     * @param appointmentDao The interface for accessing Appointment entities.
+     */
     @Autowired
     public SymptomDaoImpl(SymptomRepository symptomRepository, @Qualifier("userDaoImpl") UserInterface userDao, @Qualifier("departmentDaoImpl") DepartmentInterface departmentDao, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao) {
         this.symptomRepository = symptomRepository;
@@ -36,6 +47,13 @@ public class SymptomDaoImpl implements SymptomInterface {
         this.departmentDao = departmentDao;
         this.appointmentDao = appointmentDao;
     }
+
+    /**
+     * Retrieves a symptom by its ID.
+     * @param id The ID of the symptom to retrieve.
+     * @return The symptom with the given ID.
+     * @throws DoesNotExistException if the symptom does not exist.
+     */
     @Override
     public Symptom getSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
@@ -45,11 +63,22 @@ public class SymptomDaoImpl implements SymptomInterface {
         return optionalSymptom.get();
     }
 
+    /**
+     * Retrieves all symptoms.
+     * @return A list of all symptoms.
+     */
     @Override
     public List<Symptom> getAllSymptom() {
         return symptomRepository.findAll();
     }
 
+    /**
+     * Creates a new symptom.
+     * @param symptom The symptom to create.
+     * @return The created symptom.
+     * @throws DoesNotExistException if the symptom does not exist.
+     * @throws MissingParameterException if a required parameter is missing.
+     */
     @Override
     public Symptom createSymptom(Symptom symptom) throws DoesNotExistException, MissingParameterException {
 //        symptom.setId(0);
@@ -95,6 +124,14 @@ public class SymptomDaoImpl implements SymptomInterface {
         return symptomRepository.save(symptom);
     }
 
+    /**
+     * Updates an existing symptom.
+     * @param id The ID of the symptom to update.
+     * @param symptom The updated symptom.
+     * @return The updated symptom.
+     * @throws DoesNotExistException if the symptom does not exist.
+     * @throws MissingParameterException if a required parameter is missing.
+     */
     @Override
     public Symptom updateSymptom(int id, Symptom symptom) throws DoesNotExistException, MissingParameterException{
         if(symptom.getName()==null || symptom.getName().equals("")){
@@ -109,6 +146,12 @@ public class SymptomDaoImpl implements SymptomInterface {
         throw new DoesNotExistException("Symptom");
     }
 
+    /**
+     * Deletes a symptom.
+     * @param id The ID of the symptom to delete.
+     * @return true if the symptom was successfully deleted, false otherwise.
+     * @throws DoesNotExistException if the symptom does not exist.
+     */
     @Override
     public boolean deleteSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);

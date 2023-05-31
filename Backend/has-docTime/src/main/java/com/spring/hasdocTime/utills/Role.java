@@ -1,8 +1,8 @@
 package com.spring.hasdocTime.utills;
 
-
-import jakarta.validation.constraints.NotBlank;
-
+/**
+ * Enumeration representing the possible roles.
+ */
 public enum Role {
     PATIENT,
     DOCTOR,

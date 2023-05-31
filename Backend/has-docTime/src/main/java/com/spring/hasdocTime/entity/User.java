@@ -18,6 +18,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+
+/**
+ * The User class represents a user in the system.
+ * It implements the UserDetails interface for Spring Security integration.
+ * It contains information about the user's ID, name, date of birth, age,
+ * gender, blood group, contact number, height, weight, email, password,
+ * role, associated doctor, associated admin, patient chronic illnesses,
+ * appointments, appointment data, and symptoms.
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -107,6 +116,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "symptom_id"))
     @JsonIgnoreProperties(value = {"users", "departments", "appointments"}, allowSetters = true)
     private List<Symptom> symptoms;
+
+
 
     @Override
     public boolean equals(Object o) {

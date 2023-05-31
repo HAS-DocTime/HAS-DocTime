@@ -1,6 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+/**
+ * Repository interface for accessing and manipulating Department entities.
  */
 package com.spring.hasdocTime.repository;
 
@@ -11,17 +10,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-/**
- *
- * @author arpit
- */
-
-
 @Repository
-public interface DepartmentRepository extends JpaRepository<Department, Integer>{
-    
-    @Modifying
-    @Query("DELETE FROM Department d where d.id= :id")
-    void deleteById(@Param("id") int id);
+public interface DepartmentRepository extends JpaRepository<Department, Integer> {
 
+    /**
+     * Deletes a department by ID.
+     *
+     * @param id the ID of the department to be deleted
+     */
+    @Modifying
+    @Query("DELETE FROM Department d WHERE d.id = :id")
+    void deleteById(@Param("id") int id);
 }

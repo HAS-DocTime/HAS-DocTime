@@ -15,7 +15,12 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import java.util.Objects;
 
-
+/**
+ * The Doctor class represents a doctor in the system.
+ * It contains information about the doctor's ID, associated user, qualification,
+ * department, number of cases solved, availability, available time slots,
+ * booked time slots, appointments, and post-appointment data.
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -71,6 +76,13 @@ public class Doctor {
     @JsonIgnoreProperties(value = "doctor", allowSetters = true)
     private List<PostAppointmentData> postAppointmentData;
 
+
+    /**
+     * Checks if the current Doctor object is equal to the given object.
+     *
+     * @param o the object to compare with
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,6 +91,12 @@ public class Doctor {
         return id == doctor.id;
     }
 
+
+    /**
+     * Generates a hash code for the Doctor object.
+     *
+     * @return the hash code value
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);
