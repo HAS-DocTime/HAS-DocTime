@@ -5,6 +5,7 @@ import { PatientChronicIllness } from "./patientChronicIllness.model";
 import { Role } from "./role.model";
 
 export type User = {
+  imageUrl? : string,
   id? : number;
   name? : string;
   dob? : Date;

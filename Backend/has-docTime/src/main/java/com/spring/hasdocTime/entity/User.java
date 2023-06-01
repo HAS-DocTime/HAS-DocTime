@@ -7,7 +7,6 @@ import com.spring.hasdocTime.utills.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.aspectj.lang.annotation.After;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -59,6 +58,9 @@ public class User implements UserDetails {
 
     @Column(name="blood_group")
     private BloodGroup bloodGroup;
+
+    @Column(name="profile_picture")
+    private String imageUrl;
 
     @Column(name="contact")
     @NotBlank(message = "Please enter a contact number")

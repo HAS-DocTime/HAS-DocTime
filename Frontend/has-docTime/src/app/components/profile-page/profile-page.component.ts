@@ -10,6 +10,9 @@ import { Admin } from 'src/app/models/admin.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs';
+import { FileUpload } from 'src/app/models/fileUpload.model';
 
 @Component({
   selector: 'app-profile-page',
@@ -24,7 +27,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private doctorService: DoctorService,
     private adminService: AdminService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router, 
+    private storage: AngularFireStorage
   ) {}
 
   user?: User;
@@ -39,9 +43,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   formattedDate = this.datePipe.transform(this.dateFromAPI, 'yyyy-MM-dd');
   urlPath!: string;
   doctors!: Doctor[];
+  selectedFile: FileUpload | null = null;
+  imageUrl!: string;
 
   ngOnInit(): void {
     this.route.url.subscribe((data) => {
+      // console.log("data", data);
       this.urlPath = data[0].path;
       const token = sessionStorage.getItem('token');
       if (token) {
@@ -61,8 +68,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
               this.adminService.getSingleUser(this.id).subscribe((data) => {
+                console.log("data", data);
                 this.user = data;
                 this.id = data.id as number;
+                this.imageUrl = data.imageUrl as string;
                 const nameArray: string[] =
                   this.user?.name?.split(' ', 2) ?? [];
                 this.firstName = nameArray[0];
@@ -77,6 +86,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
                 );
 
                 this.editForm.patchValue({
+                  imageUrl: this.imageUrl,
                   firstName: this.firstName,
                   lastName: this.lastName,
                   email: this.user.email,
@@ -95,6 +105,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
               this.doctorService.getDoctor(this.id).subscribe((data) => {
                 this.doctor = data;
                 this.user = data.user;
+                this.imageUrl = data.user.imageUrl as string;
                 this.id = data.id as number;
                 const docNameArray: string[] =
                   this.doctor?.user?.name?.split(' ', 2) ?? [];
@@ -109,6 +120,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
                 );
 
                 this.editForm.patchValue({
+                  imageUrl: this.imageUrl,
                   firstName: this.firstName,
                   lastName: this.lastName,
                   email: this.doctor.user.email,
@@ -127,6 +139,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             this.adminService.getAdmin(this.id).subscribe((data) => {
               this.admin = data;
               this.user = data.user;
+              this.imageUrl = data.user?.imageUrl as string;
               this.id = data.id as number;
               const adminNameArray: string[] =
                 this.admin?.user?.name?.split(' ', 2) ?? [];
@@ -142,6 +155,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
               );
 
               this.editForm.patchValue({
+                imageUrl: this.imageUrl,
                 firstName: this.firstName,
                 lastName: this.lastName,
                 email: this.admin?.user?.email,
@@ -158,6 +172,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.doctorService.getDoctor(this.id).subscribe((data) => {
             this.doctor = data;
             this.user = data.user;
+            this.imageUrl = data.user.imageUrl as string;
             this.id = data.id as number;
             const docNameArray: string[] =
               this.doctor?.user?.name?.split(' ', 2) ?? [];
@@ -172,6 +187,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             );
 
             this.editForm.patchValue({
+              imageUrl: this.imageUrl,
               firstName: this.firstName,
               lastName: this.lastName,
               email: this.doctor.user.email,
@@ -187,7 +203,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           });
         } else {
           this.userService.getUserByEmail().subscribe((data) => {
+            console.log("data", data);
             this.user = data;
+            
             this.id = data.id as number;
             const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
             this.firstName = nameArray[0];
@@ -195,13 +213,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             if (data.dob) {
               this.dateFromAPI = new Date(data?.dob);
             }
-
+            this.imageUrl = data.imageUrl as string;
             this.formattedDate = this.datePipe.transform(
               this.dateFromAPI,
               'yyyy-MM-dd'
             );
-
+            
             this.editForm.patchValue({
+              imageUrl: this.imageUrl,
               firstName: this.firstName,
               lastName: this.lastName,
               email: this.user.email,
@@ -219,6 +238,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   editForm: FormGroup = new FormGroup({
+    imageUrl: new FormControl({ value: '', disabled: this.disable }),
+
     firstName: new FormControl({ value: '', disabled: this.disable }, [
       Validators.required, trimmedInputValidateSpace()
     ]),
@@ -249,7 +270,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {}
 
-  onSubmit() {
+  submitProfile(){
     const date = new Date();
     this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
     this.editForm.value['lastName'] = this.editForm.value["lastName"].trim();
@@ -334,6 +355,158 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+  onSubmit() {
+
+    if(this.selectedFile != null){
+      console.log(this.selectedFile);
+      const filePath = `profiles/${this.user?.id}`;
+      const storageRef = this.storage.ref(filePath);
+      const uploadTask = this.storage.upload(filePath, this.selectedFile);
+
+      console.log("uploadTask", uploadTask);
+
+      uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe(downloadURL => {
+            console.log("data ", downloadURL);
+            (this.selectedFile as FileUpload).url = downloadURL;
+            console.log("selectedfiles ", this.selectedFile);
+            this.imageUrl = downloadURL;
+            this.submitProfile();
+            console.log("user", this.user);
+          });
+        })
+      ).subscribe();
+    }
+    else{
+      this.submitProfile();
+    }
+
+    // const date = new Date();
+    // this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
+    // this.editForm.value['lastName'] = this.editForm.value["lastName"].trim();
+    // const user = this.editForm.value;
+    // if (date.getFullYear() > new Date(user.dob as Date).getFullYear()) {
+    //   let age =
+    //     date.getFullYear() - new Date(user.dob as Date).getFullYear() - 1;
+    //   if (date.getMonth() > new Date(user.dob as Date).getMonth()) {
+    //     age++;
+    //   } else if (date.getMonth() === new Date(user.dob as Date).getMonth()) {
+    //     if (date.getDate() >= new Date(user.dob as Date).getDate()) {
+    //       age++;
+    //     }
+    //   }
+    //   user.age = age;
+    // }
+    // user.name = user.firstName + ' ' + user.lastName;
+    // let chronicIllnesses = [];
+    // for (let i = 0; i < user.patientChronicIllness.length; i++) {
+    //   let chronicIllness = {
+    //     chronicIllness: {
+    //       id: parseInt(user.patientChronicIllness[i].name),
+    //     },
+    //     yearsOfIllness: user.patientChronicIllness[i].yearsOfIllness,
+    //   };
+    //   chronicIllnesses.push(chronicIllness);
+    // }
+    // user.patientChronicIllness = chronicIllnesses;
+
+    // if (this.tokenRole === 'PATIENT' || this.urlPath === 'users') {
+    //   user.role = this.user?.role;
+    //   user.email = this.user?.email;
+
+    //   this.userService.updateUser(user, this.id).subscribe((data) => {
+    //     this.toggleDisable();
+    //     this.cdr.detectChanges();
+
+    //     this.userService.getUser(this.id).subscribe((data) => {
+    //       this.user = data;
+    //     });
+    //   });
+    // } else if (this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors') {
+    //   user.id = this.doctor?.user?.id;
+    //   user.role = this.doctor?.user.role;
+    //   user.email = this.doctor?.user.email;
+    //   let doctor: Doctor = {
+    //     user: user,
+    //     qualification: this.editForm.value.qualification,
+    //     casesSolved: this.editForm.value.casesSolved,
+    //     available: true,
+    //     department: {
+    //       id: 1,
+    //     },
+    //   };
+
+    //   this.userService.updateDoctor(doctor, this.id).subscribe((data) => {
+    //     this.doctorService.getDoctor(this.id).subscribe((data) => {
+    //       this.doctor = data;
+    //       this.user = data.user;
+    //       this.cdr.detectChanges();
+    //     });
+    //     this.toggleDisable();
+    //   });
+    // } else if (
+    //   this.tokenRole === 'ADMIN' &&
+    //   this.urlPath !== 'users' &&
+    //   this.urlPath !== 'doctors'
+    // ) {
+    //   let userId = 0;
+    //   user.role = this.admin?.user?.role;
+    //   user.email = this.admin?.user?.email;
+    //   let admin: Admin = {
+    //     user: user,
+    //   };
+    //   this.userService.updateAdmin(admin, this.id).subscribe((data) => {
+    //     this.adminService.getAdmin(this.id).subscribe((data) => {
+    //       this.admin = data;
+    //       this.user = data.user;
+    //       this.cdr.detectChanges();
+    //     });
+    //     this.toggleDisable();
+    //   });
+    // }
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    console.log("image ", this.selectedFile);
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imageUrl = e.target.result;
+    };
+    if(this.selectedFile){
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+
+  // uploadProfilePicture(){
+  //   console.log("submit");
+
+  //   if(this.selectedFile){
+      
+  //     console.log(this.selectedFile);
+  //     const filePath = `profiles/${this.selectedFile.name}`;
+  //     const storageRef = this.storage.ref(filePath);
+  //     const uploadTask = this.storage.upload(filePath, this.selectedFile);
+
+  //     console.log("uploadTask", uploadTask);
+
+  //     uploadTask.snapshotChanges().pipe(
+  //       finalize(() => {
+  //         storageRef.getDownloadURL().subscribe(downloadURL => {
+  //           console.log("data ", downloadURL);
+  //           (this.selectedFile as FileUpload).url = downloadURL;
+  //           console.log("selectedfiles ", this.selectedFile);
+  //           this.imageUrl = downloadURL;
+  //         });
+  //       })
+  //     ).subscribe();
+  //   }
+
+  //   console.log("after data subscribe");
+  // }
 
   toggleDisable() {
     this.disable = !this.disable;
