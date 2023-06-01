@@ -12,6 +12,7 @@ import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,9 @@ public class UserDaoImpl implements UserInterface {
     public User getUser(int id) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {
+            Hibernate.initialize(user.get().getPatientChronicIllness());
             return user.get();
+
         }
         throw new DoesNotExistException("User");
     }

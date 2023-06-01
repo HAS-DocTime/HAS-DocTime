@@ -30,7 +30,7 @@ public class Doctor {
     private int id;
     
     
-    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties(value = {"doctor", "admin", "appointments", "appointmentData", "symptoms", "patientChronicIllness"}, allowSetters = true)
     private User user;
@@ -40,14 +40,17 @@ public class Doctor {
     @Pattern(regexp = "[a-zA-Z0-9,.-]+( [a-zA-Z0-9,.-]+)*", message = "Invalid input. Please enter a valid string with alphanumeric characters, commas, periods, and dashes, allowing spaces in between.")
     private String qualification;
    
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"doctors", "symptoms", "timeSlots"}, allowSetters = true)
     private Department department;
     
     @Column(name="cases_solved")
-    @Size(min=0, max=99999, message = "Please enter valid number of cases solved")
+//    @Size(min=0, max=99999, message = "Please enter valid number of cases solved")
+    @Min(value = 0, message = "Please enter valid number of cases solved")
+    @Max(value = 99999, message = "Please enter valid number of cases solved")
     private int casesSolved;
+
     
     @Column(name="is_available")
     @NotNull(message = "Please enter boolean value")

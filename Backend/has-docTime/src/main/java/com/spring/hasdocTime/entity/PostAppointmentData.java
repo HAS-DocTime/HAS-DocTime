@@ -36,17 +36,17 @@ public class PostAppointmentData {
     @Pattern(regexp = "[a-zA-Z,.-]+( [a-zA-Z,.-]+)*", message = "Invalid input. Please enter a valid string with alphabetic characters, commas, periods, and dashes allowing spaces in between.")
     private String symptoms;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
     @JsonIgnoreProperties(value={"appointmentData", "admin", "appointments", "doctor"}, allowSetters = true)
     private User user;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"postAppointmentData", "availableTimeSlots", "bookedTimeSlots", "appointments"}, allowSetters = true)
     private Doctor doctor;
 
-    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "booked_time_slot_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"appointmentData", "bookedDoctors", "availableDoctors", "department", "appointment"}, allowSetters = true)
     private TimeSlot timeSlotForAppointmentData;

@@ -23,17 +23,17 @@ public class Appointment {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"doctor", "admin", "appointments", "appointmentData", "symptoms"}, allowSetters = true)
     private User user;
 
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"appointments", "availableTimeSlots", "bookedTimeSlots", "postAppointmentData"}, allowSetters = true)
     private Doctor doctor;
 
-    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "booked_time_slot_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"appointment", "department", "availableDoctors", "bookedDoctors", "appointmentData"}, allowSetters = true)
     private TimeSlot timeSlotForAppointment;

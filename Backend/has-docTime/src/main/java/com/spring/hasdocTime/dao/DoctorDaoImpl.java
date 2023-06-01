@@ -19,6 +19,7 @@ import com.spring.hasdocTime.repository.DepartmentRepository;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -99,13 +100,18 @@ public class DoctorDaoImpl implements DoctorInterface {
 
     @Override
     public List<Doctor> getDoctorsByDepartmentId(int id) {
-        return doctorRepository.findDoctorsByDepartmentId(id);
+        List<Doctor> doctors = doctorRepository.findDoctorsByDepartmentId(id);
+        for(Doctor doctor: doctors){
+            Hibernate.initialize(doctor.getUser());
+        }
+        return doctors;
     }
 
     @Override
     public Doctor getDoctor(int id) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
+            Hibernate.initialize(doctor.get().getUser());
             return doctor.get();
         }
         throw new DoesNotExistException("Doctor");
