@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
 import { Department } from 'src/app/models/department.model';
@@ -10,7 +11,7 @@ import { DepartmentService } from 'src/app/services/department.service';
 })
 export class DeptDetailComponent implements OnInit{
 
-  constructor(private departmentService: DepartmentService, private route: ActivatedRoute) { }
+  constructor(private departmentService: DepartmentService, private route: ActivatedRoute, private location : Location) { }
 
   id!: number;
   department!: Department;
@@ -26,5 +27,9 @@ export class DeptDetailComponent implements OnInit{
 
       });
 
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 }
