@@ -1,8 +1,6 @@
 package com.spring.hasdocTime.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -10,6 +8,11 @@ import lombok.*;
 
 import java.util.Objects;
 
+/**
+ * The PostAppointmentData class represents the data for a post-appointment record.
+ * It contains information about the ID, disease, medicine, symptoms, associated user,
+ * associated doctor, and time slot for the appointment data.
+ */
 @Entity
 @Data
 @ToString
@@ -50,6 +53,7 @@ public class PostAppointmentData {
     @JoinColumn(name = "booked_time_slot_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"appointmentData", "bookedDoctors", "availableDoctors", "department", "appointment"}, allowSetters = true)
     private TimeSlot timeSlotForAppointmentData;
+
 
 
     @Override

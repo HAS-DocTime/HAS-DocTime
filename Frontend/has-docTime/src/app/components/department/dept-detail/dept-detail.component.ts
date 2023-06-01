@@ -24,7 +24,6 @@ export class DeptDetailComponent implements OnInit{
         this.departmentService.getDepartmentById(this.id).subscribe((data) => {
           this.department = data;
         })
-
       });
 
   }

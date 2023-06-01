@@ -288,7 +288,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.toggleDisable();
         this.cdr.detectChanges();
 
-        this.userService.getUserByEmail().subscribe((data) => {
+        this.userService.getUser(this.id).subscribe((data) => {
           this.user = data;
         });
       });
