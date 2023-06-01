@@ -4,14 +4,18 @@
       <div class="d-flex flex-column align-items-center text-center p-3 py-5">
         <form [formGroup]="editForm" enctype="multipart/form-data">
           <span>
-            <img class="rounded-circle mt-5" width="150px" [src]="imageUrl" alt="Selected Picture" *ngIf="disable" />
+            <img class="rounded-circle mt-5 mb-3" width="150px" [src]="imageUrl" alt="Selected Picture"/>
           </span>
           <!-- <img
           class="rounded-circle mt-5"
           width="150px"
           src="{{ imageUrl }}"
         /> -->
-          <input type="file" *ngIf="!disable" (change)="onFileSelected($event)" accept="image/*" />
+
+        <button type="submit" class="btn btn-outline-primary mt-3" (click)="file.click()" [disabled]="editForm.invalid" *ngIf="!disable">
+          Upload File
+        </button>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
           <!-- <button *ngIf="!disable" type="button" (click)="uploadProfilePicture()">Upload</button> -->
         </form>
         <span class="font-weight-bold">{{ editForm.get('firstName')?.value }} {{editForm.get('lastName')?.value}}</span>
