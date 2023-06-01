@@ -32,22 +32,36 @@ export class AppointmentComponent implements OnInit{
       this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
     }
 
+<<<<<<< Updated upstream
     this.userService.getUserByEmail().subscribe((data)=>{
 
       if(this.tokenRole==='ADMIN'){
+=======
+    if(this.tokenRole==='ADMIN'){
+>>>>>>> Stashed changes
         this.appointmentService.getAppointments().subscribe((data)=>{
           this.appointments = data;
         })
       }
       else {
+<<<<<<< Updated upstream
         this.appointmentService.getAppointmentByUser((data.id?.toString())).subscribe((data)=> {
+=======
+        this.appointmentService.getAppointmentByUser((this.id.toString())).subscribe((data)=> {
+          for(let appointment of data){
+            if(!appointment?.doctor?.department?.id){
+              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                (appointment.doctor as Doctor).department = data;
+              });
+            }
+          }
+>>>>>>> Stashed changes
           this.appointments = data;
         });
       }
 
-    })
+    }
 
-  }
 
   appointmentDetails(id : number | undefined){
     this.router.navigate([id], {relativeTo : this.route})
@@ -55,13 +69,38 @@ export class AppointmentComponent implements OnInit{
 
   deleteAppointment(id : number | undefined){
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
+<<<<<<< Updated upstream
       this.userService.getUserByEmail().subscribe((data)=>{
         this.appointmentService.getAppointmentByUser((data.id?.toString())).subscribe((data)=> {
           this.appointments = data;
         });
+=======
+        if(this.tokenRole==="ADMIN"){
+          this.appointmentService.getAppointments().subscribe((data)=> {
+            for(let appointment of data){
+              if(!appointment?.doctor?.department?.id){
+                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                  (appointment.doctor as Doctor).department = data;
+                });
+              }
+            }
+            this.appointments = data;
+          });
+        }
+        else{
+          this.appointmentService.getAppointmentByUser(this.id.toString()).subscribe((data)=> {
+            for(let appointment of data){
+              if(!appointment?.doctor?.department?.id){
+                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                  (appointment.doctor as Doctor).department = data;
+                });
+              }
+            }
+            this.appointments = data;
+          });
+        }
+>>>>>>> Stashed changes
     })
     }
-    );
-  }
 
 }

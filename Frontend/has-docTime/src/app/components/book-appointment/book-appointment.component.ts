@@ -16,12 +16,23 @@ export class BookAppointmentComponent implements OnInit{
 
   symptoms : Symptom[] = [];
   selectedSymptom : number[] = [];
-  currentUser? : User;
+  tokenRole! : string;
+  id! : number;
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
      private userService : UserService, private router : Router, private route : ActivatedRoute){}
 
   ngOnInit(){
+    const token = sessionStorage.getItem('token');
+    if (token) {
+
+      let store = token?.split('.');
+      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+
+      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
+
+      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
+    }
     this.symptomService.getSymptoms().subscribe((data)=> {
       this.symptoms = data;
     })
@@ -31,9 +42,6 @@ export class BookAppointmentComponent implements OnInit{
         if(symptomName['id']!=='')
         this.selectedSymptom.push(parseInt(symptomName['id']))
       }
-    })
-    this.userService.getUserByEmail().subscribe((data)=>{
-      this.currentUser = data;
     })
   }
 
@@ -51,7 +59,7 @@ export class BookAppointmentComponent implements OnInit{
       symptom.id = parseInt(symptom.id);
     }
     this.bookAppointment.value["user"] = {
-      "id": this.currentUser?.id
+      "id": this.id
     }
     //Hard-Coded as of now
     this.bookAppointment.value["doctor"] = {

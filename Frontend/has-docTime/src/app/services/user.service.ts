@@ -59,10 +59,5 @@ export class UserService {
     this.isLoggedIn.next(false);
   }
 
-  getUserByEmail(){
-    return this.http.get<User>(`${this.baseUrl}user/findByEmail`);
-  }
-
-
 }
 

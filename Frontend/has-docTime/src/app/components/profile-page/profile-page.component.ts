@@ -186,7 +186,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             });
           });
         } else {
-          this.userService.getUserByEmail().subscribe((data) => {
+          this.userService.getUser(this.id).subscribe((data) => {
             this.user = data;
             this.id = data.id as number;
             const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
