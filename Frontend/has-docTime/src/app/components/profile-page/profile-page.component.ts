@@ -60,7 +60,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           if (data[0].path === 'users') {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
-              this.adminService.getSingleUser(this.id).subscribe((data) => {
+              this.userService.getUser(this.id).subscribe((data) => {
                 this.user = data;
                 this.id = data.id as number;
                 const nameArray: string[] =
@@ -324,7 +324,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       let admin: Admin = {
         user: user,
       };
-      this.userService.updateAdmin(admin, this.id).subscribe((data) => {
+      this.adminService.updateAdmin(admin, this.id).subscribe((data) => {
         this.adminService.getAdmin(this.id).subscribe((data) => {
           this.admin = data;
           this.user = data.user;

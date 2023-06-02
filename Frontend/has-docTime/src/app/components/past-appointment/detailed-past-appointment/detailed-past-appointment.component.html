@@ -38,7 +38,7 @@
           <p class="mb-4">{{ pastAppointment?.user?.weight }} kg</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row" *ngIf="pastAppointment?.user?.patientChronicIllness.length">
         <div class="col-md-12">
           <p class="fw-bold">Chronic Illness:</p>
           <div class="d-flex flex-wrap">

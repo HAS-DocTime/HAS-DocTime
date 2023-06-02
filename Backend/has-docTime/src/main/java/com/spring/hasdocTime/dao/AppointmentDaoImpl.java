@@ -5,6 +5,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.AppointmentInterface;
 import com.spring.hasdocTime.repository.*;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,12 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     @Override
     public List<Appointment> getAllAppointments() {
         List<Appointment> allAppointments= appointmentRepository.findAll();
+        for(Appointment appointment : allAppointments){
+            Hibernate.initialize(appointment.getUser());
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+            Hibernate.initialize(appointment.getDoctor().getUser());
+            Hibernate.initialize(appointment.getDoctor().getDepartment());
+        }
         return allAppointments;
     }
 
@@ -45,6 +52,14 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
 
         if(optionalAppointment.isPresent()){
+            Hibernate.initialize(optionalAppointment.get().getDoctor().getUser());
+            Hibernate.initialize(optionalAppointment.get().getUser().getPatientChronicIllness());
+            for(PatientChronicIllness p : optionalAppointment.get().getUser().getPatientChronicIllness()){
+                Hibernate.initialize(p.getChronicIllness());
+            }
+            Hibernate.initialize(optionalAppointment.get().getDoctor().getDepartment());
+            Hibernate.initialize(optionalAppointment.get().getTimeSlotForAppointment());
+            Hibernate.initialize(optionalAppointment.get().getSymptoms());
             return optionalAppointment.get();
         }
         throw new DoesNotExistException("Appointment");
@@ -192,6 +207,11 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         }
         User currentUser = user.get();
         List<Appointment> appointments = appointmentRepository.findByUser(currentUser);
+        for(Appointment appointment : appointments){
+            Hibernate.initialize(appointment.getDoctor().getUser());
+            Hibernate.initialize(appointment.getDoctor().getDepartment());
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+        }
         return appointments;
     }
 
@@ -202,6 +222,10 @@ public class AppointmentDaoImpl implements AppointmentInterface {
             throw new DoesNotExistException("Doctor");
         }
         List<Appointment> appointments = doctor.get().getAppointments();
+        for(Appointment appointment: appointments){
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+            Hibernate.initialize(appointment.getUser());
+        }
         return appointments;
     }
 }

@@ -8,6 +8,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfaces.ChronicIllnessInterface;
 import com.spring.hasdocTime.interfaces.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,11 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
 
     @Override
     public List<ChronicIllness> getAllChronicIllness() {
-        return chronicIllnessRepository.findAll();
+        List<ChronicIllness> chronicIllnesses = chronicIllnessRepository.findAll();
+        for(ChronicIllness chronicIllness : chronicIllnesses){
+            Hibernate.initialize(chronicIllness.getPatientChronicIllnesses());
+        }
+        return chronicIllnesses;
     }
 
     @Override

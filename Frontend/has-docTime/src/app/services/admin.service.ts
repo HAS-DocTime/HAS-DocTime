@@ -30,10 +30,6 @@ export class AdminService{
     return this.http.get<User[]>(`${this.baseUrl}user/patient/chronicIllness/${id}`);
   }
 
-  getSingleUser(id : number){
-    return this.http.get<User>(`${this.baseUrl}user/${id}`);
-  }
-
   getAllDoctors(){
     return this.http.get<Doctor[]>(`${this.baseUrl}doctor`);
   }
@@ -42,15 +38,8 @@ export class AdminService{
     return this.http.get<Doctor[]>(`${this.baseUrl}doctor/department/${id}`);
   }
 
-  getSingleDoctor(id : number){
-    return this.http.get<Doctor>(`${this.baseUrl}doctor/${id}`);
-  }
-
   deleteUser(id : number){
     return this.http.delete<User>(`${this.baseUrl}user/${id}`);
   }
 
-  deleteDoctor(id : number){
-    return this.http.delete<Doctor>(`${this.baseUrl}doctor/${id}`);
-  }
 }

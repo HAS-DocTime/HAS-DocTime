@@ -95,7 +95,11 @@ public class DoctorDaoImpl implements DoctorInterface {
 
     @Override
     public List<Doctor> getAllDoctors() {
-        return doctorRepository.findAll();
+        List<Doctor> doctors = doctorRepository.findAll();
+        for(Doctor d : doctors){
+            Hibernate.initialize(d.getUser());
+        }
+        return doctors;
     }
 
     @Override

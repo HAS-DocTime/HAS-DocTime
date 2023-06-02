@@ -1,9 +1,6 @@
 package com.spring.hasdocTime.dao;
 
-import com.spring.hasdocTime.entity.Doctor;
-import com.spring.hasdocTime.entity.PostAppointmentData;
-import com.spring.hasdocTime.entity.TimeSlot;
-import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.PostAppointmentDataInterface;
@@ -12,6 +9,7 @@ import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.PostAppointmentDataRepository;
 import com.spring.hasdocTime.repository.TimeSlotRepository;
 import com.spring.hasdocTime.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -48,8 +46,13 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
 
     @Override
     public List<PostAppointmentData> getAllPostAppointmentData() {
-        return postAppointmentDataRepository.findAll();
-
+        List<PostAppointmentData> postAppointmentDataList =  postAppointmentDataRepository.findAll();
+        for(PostAppointmentData postAppointmentData : postAppointmentDataList){
+            Hibernate.initialize(postAppointmentData.getUser());
+            Hibernate.initialize(postAppointmentData.getDoctor().getUser());
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+        }
+        return postAppointmentDataList;
     }
 
     @Override
@@ -57,6 +60,14 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(id);
 
         if(optionalPostAppointmentData.isPresent()){
+            Hibernate.initialize(optionalPostAppointmentData.get().getDoctor().getUser());
+            Hibernate.initialize(optionalPostAppointmentData.get().getDoctor().getDepartment());
+            Hibernate.initialize(optionalPostAppointmentData.get().getTimeSlotForAppointmentData());
+            Hibernate.initialize(optionalPostAppointmentData.get().getUser());
+            for(PatientChronicIllness pc : optionalPostAppointmentData.get().getUser().getPatientChronicIllness()){
+                Hibernate.initialize(pc.getChronicIllness());
+            }
+            Hibernate.initialize(optionalPostAppointmentData.get().getSymptoms());
             return optionalPostAppointmentData.get();
         }
         throw new DoesNotExistException("Post Appointment Data");
@@ -65,6 +76,10 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     @Override
     public List<PostAppointmentData> getPostAppointmentDataByEmail(String email) {
         List<PostAppointmentData> allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email);
+        for(PostAppointmentData postAppointmentData : allPostAppointmentData){
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+            Hibernate.initialize(postAppointmentData.getDoctor().getUser());
+        }
         return allPostAppointmentData;
     }
 
@@ -174,7 +189,13 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
 
     @Override
     public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException {
-        return postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom);
+        List<PostAppointmentData> postAppointmentDataList = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom);
+        for(PostAppointmentData postAppointmentData : postAppointmentDataList){
+            Hibernate.initialize(postAppointmentData.getUser());
+            Hibernate.initialize(postAppointmentData.getDoctor().getUser());
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+        }
+        return postAppointmentDataList;
     }
     
     public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException{
@@ -183,6 +204,10 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
             throw new DoesNotExistException("Doctor");
         }
         Doctor doctor = optionalDoctor.get();
+        for(PostAppointmentData postAppointmentData : doctor.getPostAppointmentData()){
+            Hibernate.initialize(postAppointmentData.getUser());
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+        }
         return doctor.getPostAppointmentData();
     }
 
@@ -190,6 +215,11 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException {
         User user = userDao.getUser(id);
         List<PostAppointmentData> postAppointmentDataList = user.getAppointmentData();
+        for(PostAppointmentData postAppointmentData : postAppointmentDataList){
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+            Hibernate.initialize(postAppointmentData.getDoctor().getUser());
+            Hibernate.initialize(postAppointmentData.getDoctor().getDepartment());
+        }
         return postAppointmentDataList;
     }
 }

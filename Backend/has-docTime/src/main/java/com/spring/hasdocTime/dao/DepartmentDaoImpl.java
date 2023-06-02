@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import com.spring.hasdocTime.repository.TimeSlotRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spring.hasdocTime.interfaces.DepartmentInterface;
@@ -101,6 +102,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
     public Department getDepartment(int id) throws DoesNotExistException{
         Optional<Department> department = departmentRepository.findById(id);
         if(department.isPresent()){
+            Hibernate.initialize(department.get().getSymptoms());
             return department.get();
         }
         throw new DoesNotExistException("Department");

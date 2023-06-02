@@ -11,6 +11,7 @@ import com.spring.hasdocTime.interfaces.DepartmentInterface;
 import com.spring.hasdocTime.interfaces.SymptomInterface;
 import com.spring.hasdocTime.interfaces.UserInterface;
 import com.spring.hasdocTime.repository.SymptomRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -47,7 +48,11 @@ public class SymptomDaoImpl implements SymptomInterface {
 
     @Override
     public List<Symptom> getAllSymptom() {
-        return symptomRepository.findAll();
+        List<Symptom> symptoms = symptomRepository.findAll();
+        for(Symptom symptom : symptoms){
+            Hibernate.initialize(symptom.getDepartments());
+        }
+        return symptoms;
     }
 
     @Override

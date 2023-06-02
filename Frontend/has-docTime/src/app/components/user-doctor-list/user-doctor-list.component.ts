@@ -39,6 +39,7 @@ export class UserDoctorListComponent implements OnInit{
       }
       else if(this.urlPath==="doctors"){
         this.adminService.getAllDoctors().subscribe(data=> {
+          console.log(data);
           this.doctors=data;
         })
       }
