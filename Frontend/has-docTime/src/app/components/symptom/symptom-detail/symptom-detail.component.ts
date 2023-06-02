@@ -67,7 +67,7 @@ export class SymptomDetailComponent implements OnInit{
       this.symptomService.getSymptomById(parseInt(data[1].path)).subscribe((data)=> {
 
         this.symptom = data.name as string;
-        this.symptomService.getDiseaseWithCaseCountFromSymptom(this.symptom).subscribe(
+        this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe(
           data => {
             if(data===null){
               this.noDataFound = true;

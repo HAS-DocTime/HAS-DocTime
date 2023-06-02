@@ -26,6 +26,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId")
     Page<Appointment> findByUser(@Param("userId")int userId, Pageable pageable);
 
+    @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId")
+    List<Appointment> findListByUser(int userId);
+
     @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId AND LOWER(a.doctor.user.name) LIKE %:search%")
     Page<Appointment> findByUserAndDoctorNameContainsIgnoreCase(@Param("userId")int userId, @Param("search") String search, Pageable pageable);
 

@@ -47,7 +47,7 @@ public class DoctorController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public ResponseEntity<List<Doctor>> getAllDoctors(
+    public ResponseEntity<Page<Doctor>> getAllDoctors(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "user.name") String sortBy,        //Sort by user.name, user.dob(can place on age)
@@ -55,13 +55,13 @@ public class DoctorController {
     ){
         Page<Doctor> doctors = doctorService.getAllDoctors(page, size, sortBy, search);
         if(doctors.isEmpty()){
-            return new ResponseEntity(doctors.getContent(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(doctors.getContent(), HttpStatus.OK);
+        return new ResponseEntity(doctors, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "department/{departmentId}")
-    public ResponseEntity<List<Doctor>> getDoctorsByDepartmentId(
+    public ResponseEntity<Page<Doctor>> getDoctorsByDepartmentId(
             @PathVariable("departmentId") int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -70,9 +70,9 @@ public class DoctorController {
     ){
         Page<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id, page, size, sortBy, search);
         if(doctors.isEmpty()){
-            return new ResponseEntity(doctors.getContent(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(doctors.getContent(), HttpStatus.OK);
+        return new ResponseEntity(doctors, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "{doctorId}")

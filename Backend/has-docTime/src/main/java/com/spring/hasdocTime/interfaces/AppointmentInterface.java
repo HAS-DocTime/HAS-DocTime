@@ -21,6 +21,8 @@ public interface AppointmentInterface {
 
     public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException;
 
+    public List<Appointment> getAppointmentListByUser(int userId) throws DoesNotExistException;
+
     public Page<Appointment> getAppointmentsOfDoctor( int id, int page, int size, String sortBy, String search) throws DoesNotExistException;
 
 }

@@ -52,6 +52,11 @@ public class AppointmentServiceImpl implements AppointmentInterface {
     }
 
     @Override
+    public List<Appointment> getAppointmentListByUser(int userId) throws DoesNotExistException {
+        return appointmentDao.getAppointmentListByUser(userId);
+    }
+
+    @Override
     public Page<Appointment> getAppointmentsOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         return appointmentDao.getAppointmentsOfDoctor(id, page, size, sortBy, search);
     }

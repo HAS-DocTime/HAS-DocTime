@@ -25,11 +25,11 @@ public interface PostAppointmentDataRepository extends JpaRepository<PostAppoint
     @Query("select p from PostAppointmentData p WHERE p.user.email = :userEmail")
     Page<PostAppointmentData> findByUserEmail(@Param("userEmail") String email, Pageable pageable);
 
-    @Query("SELECT p.disease AS disease, COUNT(p) AS caseCount FROM PostAppointmentData p WHERE LOWER(p.symptoms) LIKE %:symptom% GROUP BY p.disease")
-    Page<Map<String, Integer>> findDiseasesGroupedBySymptom(@Param("symptom") String symptom, Pageable pageable);
+    @Query("select p from PostAppointmentData p WHERE p.user.email = :userEmail AND LOWER(p.disease) LIKE %:search")
+    Page<PostAppointmentData> findByUserEmailAndDiseaseContainsIgnoreCase(@Param("userEmail") String email, @Param("search") String search, Pageable pageable);
 
-    @Query("SELECT p.disease AS disease, COUNT(p) AS caseCount FROM PostAppointmentData p WHERE LOWER(p.symptoms) LIKE %:symptom% AND LOWER(p.disease) LIKE %:search% GROUP BY p.disease")
-    Page<Map<String, Integer>> findDiseasesGroupedBySymptomAndDiseaseContainsIgnoreCase(@Param("symptom") String symptom, @Param("search") String search, Pageable pageable);
+    @Query("SELECT p.disease AS disease, COUNT(p) AS caseCount FROM PostAppointmentData p WHERE LOWER(p.symptoms) LIKE %:symptom% GROUP BY p.disease")
+    List<Map<String, Integer>> findDiseaseListGroupedBySymptom(@Param("symptom") String symptom);
 
     @Query("SELECT p from PostAppointmentData p where LOWER(p.symptoms) LIKE %:symptom%")
     Page<PostAppointmentData> findPostAppointmentDataGroupedBySymptom(@Param("symptom") String symptom, Pageable pageable);

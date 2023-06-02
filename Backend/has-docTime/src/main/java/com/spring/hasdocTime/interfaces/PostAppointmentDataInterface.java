@@ -21,7 +21,7 @@ public interface PostAppointmentDataInterface {
 
     public String deletePostAppointmentData(int id) throws DoesNotExistException;
 
-    public Page<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException;
+    public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String Symptom) throws DoesNotExistException;
 
     public Page<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException;
 

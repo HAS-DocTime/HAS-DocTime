@@ -32,6 +32,11 @@ public class ChronicIllnessServiceImpl implements ChronicIllnessInterface{
     }
 
     @Override
+    public List<ChronicIllness> getAllChronicIllnesses() {
+        return chronicIllnessDao.getAllChronicIllnesses();
+    }
+
+    @Override
     public ChronicIllness getChronicIllness(int id) throws DoesNotExistException {
         return chronicIllnessDao.getChronicIllness(id);
     }

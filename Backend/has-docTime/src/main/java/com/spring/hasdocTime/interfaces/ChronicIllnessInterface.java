@@ -14,6 +14,8 @@ public interface ChronicIllnessInterface {
 
     public Page<ChronicIllness> getAllChronicIllness(int page, int size, String sortBy, String search);
 
+    public List<ChronicIllness> getAllChronicIllnesses();
+
     public ChronicIllness getChronicIllness(int id) throws DoesNotExistException;
 
     public ChronicIllness updateChronicIllness(int id, ChronicIllness chronicIllness) throws DoesNotExistException, MissingParameterException;

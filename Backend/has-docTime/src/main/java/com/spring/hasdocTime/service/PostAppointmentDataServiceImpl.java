@@ -53,8 +53,8 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
     }
 
     @Override
-    public Page<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
-        return postAppointmentDataDao.getDiseasesGroupedBySymptom(symptom, page, size, sortBy, search);
+    public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataDao.getDiseaseListGroupedBySymptom(symptom);
     }
 
     @Override

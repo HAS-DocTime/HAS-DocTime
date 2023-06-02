@@ -35,17 +35,17 @@ public class DepartmentController {
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public ResponseEntity<List<Department>> getAllDepartments(
+    public ResponseEntity<Page<Department>> getAllDepartments(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "4") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(required = false) String search
     ){
         Page<Department> departments = departmentService.getAllDepartments(page, size, sortBy, search);
         if(departments.isEmpty()){
-            return new ResponseEntity(departments.getContent(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(departments, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(departments.getContent(), HttpStatus.OK);
+        return new ResponseEntity(departments, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "{departmentId}")

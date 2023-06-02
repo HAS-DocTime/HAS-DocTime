@@ -22,9 +22,10 @@ export class BookAppointmentComponent implements OnInit{
      private userService : UserService, private router : Router, private route : ActivatedRoute){}
 
   ngOnInit(){
-    this.symptomService.getSymptoms().subscribe((data)=> {
+    this.symptomService.getSymptomsList().subscribe((data)=> {
       this.symptoms = data;
     })
+
     this.bookAppointment.controls['symptoms'].valueChanges.subscribe(data=> {
       this.selectedSymptom = [];
       for(let symptomName of data){
@@ -32,6 +33,7 @@ export class BookAppointmentComponent implements OnInit{
         this.selectedSymptom.push(parseInt(symptomName['id']))
       }
     })
+
     this.userService.getUserByEmail().subscribe((data)=>{
       this.currentUser = data;
     })

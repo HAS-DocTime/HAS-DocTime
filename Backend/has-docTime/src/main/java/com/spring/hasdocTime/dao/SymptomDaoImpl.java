@@ -62,6 +62,11 @@ public class SymptomDaoImpl implements SymptomInterface {
     }
 
     @Override
+    public List<Symptom> getAllSymptomList() {
+        return symptomRepository.findAll();
+    }
+
+    @Override
     public Symptom createSymptom(Symptom symptom) throws DoesNotExistException, MissingParameterException {
 //        symptom.setId(0);
 

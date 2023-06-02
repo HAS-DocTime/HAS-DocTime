@@ -1,11 +1,33 @@
-<div class="col m-0 p-0 mt-5">
+<div *ngIf = "noDataFound" class="noData">
+  <img [src]="noDataFoundImg" alt="No Data Found">
+  <p>No Data Found!!</p>
+</div>
+<div *ngIf = "!noDataFound" class="col m-0 p-0 mt-5">
   <div class="container">
     <h1 class="mb-4 text-center" *ngIf="urlPath==='users'">Patients</h1>
     <h1 class="mb-4 text-center" *ngIf="urlPath==='doctors' || urlPath==='departments'">Doctors</h1>
-
     <hr>
-    <div class="table-responsive m-0 p-0" >
 
+    <div class="row mb-3" >
+      <div class="col-sm-4" *ngIf="totalPages > 1">
+        <label for="pageSize">Size:</label>
+        <select class="form-select" id="size" [(ngModel)]="size" (change)="onPageSizeChange()">
+          <option *ngFor="let sizeOption of sizeOptions" [value]="sizeOption">{{ sizeOption }}</option>
+        </select>
+      </div>
+      <div class="col-sm-4" *ngIf="totalPages > 1">
+        <label for="sortBy">Sort By:</label>
+        <select class="form-select" id="sortBy" [(ngModel)]="sortBy" (change)="onSortByChange()">
+          <option *ngFor="let sortByOption of sortByOptions" [value]="sortByOption.value">{{ sortByOption.label }}</option>
+        </select>
+      </div>
+      <div class="col-sm-4" *ngIf="totalPages >= 0">
+        <label for="search">Search:</label>
+        <input class="form-control" type="text" id="search" [(ngModel)]="search" (keyup)="onSearch()">
+      </div>
+    </div>
+
+    <div class="table-responsive m-0 p-0" >
       <table class="table table-striped table-dark mb-5 p-0" >
         <thead class="text-center">
           <tr>
@@ -47,5 +69,20 @@
         </tbody>
       </table>
     </div>
+
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="page === 1">
+          <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>
+        </li>
+        <li class="page-item" [class.active]="page === currentPage " *ngFor="let currentPage of range(totalPages)">
+          <a class="page-link" (click)="onPageChange(currentPage)">{{ currentPage }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="page === totalPages">
+          <a class="page-link" (click)="onPageChange(page + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+
   </div>
 </div>

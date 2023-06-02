@@ -27,7 +27,7 @@ public class ChronicIllnessController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<ChronicIllness>> getAllChronicIllness(
+    public ResponseEntity<Page<ChronicIllness>> getAllChronicIllness(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "name") String sortBy,
@@ -37,7 +37,16 @@ public class ChronicIllnessController {
         if(chronicIllnessList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return new ResponseEntity(chronicIllnessList.getContent(), HttpStatus.OK);
+        return new ResponseEntity(chronicIllnessList, HttpStatus.OK);
+    }
+
+    @GetMapping("list")
+    public ResponseEntity<List<ChronicIllness>> getAllChronicIllness() {
+        List<ChronicIllness> chronicIllnessList = chronicIllnessService.getAllChronicIllnesses();
+        if(chronicIllnessList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return new ResponseEntity(chronicIllnessList, HttpStatus.OK);
     }
 
     @GetMapping("{id}")

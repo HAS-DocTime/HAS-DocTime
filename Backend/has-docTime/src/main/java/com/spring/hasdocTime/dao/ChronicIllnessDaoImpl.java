@@ -52,6 +52,11 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
     }
 
     @Override
+    public List<ChronicIllness> getAllChronicIllnesses() {
+        return chronicIllnessRepository.findAll();
+    }
+
+    @Override
     public ChronicIllness getChronicIllness(int id) throws DoesNotExistException {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
         if(optionalChronicIllness.isPresent()) {

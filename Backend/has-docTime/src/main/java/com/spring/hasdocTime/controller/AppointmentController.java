@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("appointment")
@@ -27,7 +28,7 @@ public class AppointmentController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Appointment>> getAllAppointments(
+    public ResponseEntity<Page<Appointment>> getAllAppointments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "user.name") String sortBy,       //sort by user.name, doctor.user.name, timeSlotForAppointment.startTime
@@ -35,7 +36,7 @@ public class AppointmentController {
     ) {
         try {
             Page<Appointment> allAppointments = appointmentService.getAllAppointments(page, size, sortBy, search);
-            return ResponseEntity.ok(allAppointments.getContent());
+            return ResponseEntity.ok(allAppointments);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -77,7 +78,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByUser(
+    public ResponseEntity<Page<Appointment>> getAppointmentsByUser(
             @PathVariable int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -86,13 +87,22 @@ public class AppointmentController {
     ) throws DoesNotExistException{
         Page<Appointment> appointments = appointmentService.getAppointmentsByUser(id, page, size, sortBy, search);
         if(appointments==null){
-            return new ResponseEntity<>(appointments.getContent(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(appointments.getContent(), HttpStatus.OK);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
+
+    @GetMapping("/userList/{id}")
+    public ResponseEntity<List<Appointment>> getAppointmentListByUser(@PathVariable int id) throws DoesNotExistException{
+        List<Appointment> appointments = appointmentService.getAppointmentListByUser(id);
+        if(appointments==null){
+            return new ResponseEntity<>(appointments, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
     @GetMapping("/doctor/{id}")
-    public ResponseEntity<List<Appointment>> getAppointmentsOfDoctor(
+    public ResponseEntity<Page<Appointment>> getAppointmentsOfDoctor(
             @PathVariable int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -101,9 +111,9 @@ public class AppointmentController {
     ) throws DoesNotExistException {
         Page<Appointment> appointments = appointmentService.getAppointmentsOfDoctor(id, page, size, sortBy, search);
         if(appointments.isEmpty()){
-            return new ResponseEntity<>(appointments.getContent(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(appointments, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(appointments.getContent(), HttpStatus.OK);
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
 }

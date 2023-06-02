@@ -35,7 +35,7 @@ public class UserController {
     ){
         Page<User> users = userService.getAllUser(page, size, sortBy, search);
         if(users.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return new ResponseEntity(users.getContent(), HttpStatus.OK);
     }
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @GetMapping("patient")
-    public ResponseEntity<List<User>> getPatients(
+    public ResponseEntity<Page<User>> getPatients(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size,
             @RequestParam(defaultValue = "name") String sortBy,
@@ -86,11 +86,11 @@ public class UserController {
         if(users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return new ResponseEntity(users.getContent(), HttpStatus.OK);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
     @GetMapping("patient/chronicIllness/{id}")
-    public ResponseEntity<List<User>> getPatientsByChronicIllnessId(
+    public ResponseEntity<Page<User>> getPatientsByChronicIllnessId(
             @PathVariable("id") int id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -99,8 +99,8 @@ public class UserController {
     ) throws DoesNotExistException {
         Page<User> result = userService.getPatientsByChronicIllnessId(id, page, size, sortBy, search);
         if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return ResponseEntity.ok(result.getContent());
+        return ResponseEntity.ok(result);
     }
 }

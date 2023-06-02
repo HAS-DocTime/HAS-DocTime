@@ -78,7 +78,11 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     public Page<PostAppointmentData> getPostAppointmentDataByEmail(String email,int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         Page<PostAppointmentData> allPostAppointmentData;
-        allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email, pageable);
+        if(search != null && !search.isEmpty()){
+            allPostAppointmentData= postAppointmentDataRepository.findByUserEmailAndDiseaseContainsIgnoreCase(email, search, pageable);
+        }else {
+            allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email, pageable);
+        }
         return allPostAppointmentData;
     }
 
@@ -186,16 +190,11 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
 //        return postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom);
 //    }
 
+
+
     @Override
-    public Page<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        Page<Map<String, Integer>> diseaseList;
-        if(search !=null && !search.isEmpty()){
-            diseaseList = postAppointmentDataRepository.findDiseasesGroupedBySymptomAndDiseaseContainsIgnoreCase(symptom, search, pageable);
-        } else {
-            diseaseList = postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom, pageable);
-        }
-        return diseaseList;
+    public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataRepository.findDiseaseListGroupedBySymptom(symptom);
     }
 
 //    @Override
