@@ -143,7 +143,7 @@
             </div>
             <div class="col-md-12 mb-3">
               <label class="labels">Height</label><input type="number" min="1" max="10" class="form-control"
-                placeholder="enter address line 2" formControlName="height" />
+                placeholder="Enter Your Height in Feet ( Eg : 6.2 )" formControlName="height" />
               <div class="text-danger errored-input" *ngIf="
             editForm.get('height')?.touched &&
             editForm.get('height')?.invalid
@@ -154,7 +154,7 @@
             </div>
             <div class="col-md-12 mb-3">
               <label class="labels">Weight</label><input type="number" min="1" max="300" class="form-control"
-                placeholder="enter email id" formControlName="weight" />
+                placeholder="Enter Your Weight in Kg ( Eg : 78 )" formControlName="weight" />
               <div class="text-danger errored-input" *ngIf="
             editForm.get('weight')?.touched &&
             editForm.get('weight')?.invalid
@@ -168,7 +168,7 @@
           <div *ngIf="this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors'">
             <div class="col-md-12 mb-3">
               <label class="labels">Qualification
-                <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text" class="form-control"
+                <span *ngIf="!disable" class="required-asterisk">*</span></label><input placeholder="Enter Your Qualification ( Eg : MBBS )" type="text" class="form-control"
                 formControlName="qualification" />
             </div>
             <div class="col-md-12 mb-3">
