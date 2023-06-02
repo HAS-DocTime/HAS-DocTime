@@ -30,6 +30,7 @@
     "firebase": "^9.22.1",
     "hammerjs": "^2.0.8",
     "highcharts-angular": "^3.1.2",
+    "jwt-decode": "^3.1.2",
     "lord-icon-element": "^4.1.1",
     "lottie-web": "^5.11.0",
     "ng-apexcharts": "^1.7.6",

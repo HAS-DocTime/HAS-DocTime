@@ -11,6 +11,13 @@ import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswo
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { validatePassword } from 'src/app/customValidators/validatePassword.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { FileUpload } from 'src/app/models/fileUpload.model';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs';
+import jwt_decode from 'jwt-decode';
+import { Payload } from 'src/app/models/payload.model';
+import { User } from 'src/app/models/user.model';
+
 
 @Component({
   selector: 'app-signup',
@@ -21,9 +28,13 @@ import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInput
 
 export class SignupComponent implements OnInit, OnDestroy{
 
-constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
-
-  }
+constructor(
+  private userService : UserService, 
+  private doctorService : DoctorService, 
+  private router: Router, 
+  private chhronicIllnessService : ChronicIllnessService,
+  private storage: AngularFireStorage
+  ){}
 
   savedChronicIllnesses : ChronicIllness[] = [];
   selectedValue : string = "";
@@ -32,6 +43,8 @@ constructor(private userService : UserService, private doctorService : DoctorSer
   showConfirmPassword : boolean = false;
   passwordType : string = "password";
   confirmPasswordType : string = "password";
+  selectedFile: FileUpload | null = null;
+  imageUrl!: string;
 
   ngOnInit(){
       this.signupForm.get("role")?.valueChanges.subscribe(value => {
@@ -74,6 +87,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
   }
 
   signupForm : FormGroup = new FormGroup({
+    imageUrl: new FormControl(),
     firstName : new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
     lastName : new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
     dob : new FormControl("2001-01-01", [Validators.required, validateDateValidator()]),
@@ -104,7 +118,8 @@ constructor(private userService : UserService, private doctorService : DoctorSer
   }
 
 
-  register(){
+   submitProfile(user: any){
+    console.log("submitProfile", user);
     this.signupForm.value["firstName"] = this.signupForm.value["firstName"].trim();
     this.signupForm.value["lastName"] = this.signupForm.value["lastName"].trim();
     const date = new Date();
@@ -113,7 +128,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     const password = this.signupForm.value.password;
     let signupDetail: LoginDetails = {"email" : email, "password" : password};
 
-    const user = this.signupForm.value;
+    user = this.signupForm.value;
     if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){
       let age = date.getFullYear() - new Date(user.dob as Date).getFullYear() -  1;
       if(date.getMonth() > new Date(user.dob as Date).getMonth()){
@@ -152,9 +167,13 @@ constructor(private userService : UserService, private doctorService : DoctorSer
 
     doctor.qualification = this.signupForm.value.qualification;
     if(user.role==="PATIENT"){
-      this.userService.registerUser(user).subscribe((data)=> {
+     this.userService.registerUser(user).subscribe((data)=> {
         sessionStorage.clear();
         sessionStorage.setItem('token', data.token);
+        console.log("patient token set process", data.token);
+        
+        this.getToken(user);
+
         this.signupForm.reset({
           firstName : "",
           lastName : "",
@@ -201,6 +220,108 @@ constructor(private userService : UserService, private doctorService : DoctorSer
       });
     }
 
+  }
+
+
+  setImageUrl(user: User){
+    
+    console.log("set Image user", user);
+    const payload : Payload = jwt_decode(sessionStorage.getItem('token') as string);
+    if(payload.role === 'PATIENT'){
+      this.userService.updateUser(user, payload.id);
+    }
+
+  }
+
+  getToken(user: User){
+    console.log("after await", this.selectedFile);
+
+      console.log(sessionStorage.getItem('token'));
+      const payload : Payload = jwt_decode(sessionStorage.getItem('token') as string);
+      console.log("jet_decode", payload);
+      // console.log(payload.id);
+      // const id = payload.id;
+      
+      // console.log(id['id']);
+      
+
+      const filePath = `profiles/${payload.id}`;
+      const storageRef = this.storage.ref(filePath);
+      const uploadTask = this.storage.upload(filePath, this.selectedFile);
+
+      console.log("uploadTask", uploadTask);
+
+      uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe(downloadURL => {
+            console.log("data ", downloadURL);
+            (this.selectedFile as FileUpload).url = downloadURL;
+            console.log("selectedfiles ", this.selectedFile);
+            this.imageUrl = downloadURL;
+            user.imageUrl = downloadURL;
+            // user.imageUrl = downloadURL;
+            // console.log("user before", user);
+            // this.submitProfile(user);
+            // console.log("user", user);
+
+            this.setImageUrl(user);
+
+          });
+        })
+      ).subscribe();
+  }
+
+  register(){
+    const user = this.signupForm.value;
+    if(this.selectedFile != null){
+      console.log("before await");
+      
+      this.submitProfile(user);
+
+      
+      // console.log("after await", this.selectedFile);
+
+      // console.log(sessionStorage.getItem('token'));
+      // const id = jwt_decode(sessionStorage.getItem('token') as string);
+      // console.log("jet_decode", id);
+
+      // const filePath = `profiles/${user?.id}`;
+      // const storageRef = this.storage.ref(filePath);
+      // const uploadTask = this.storage.upload(filePath, this.selectedFile);
+
+      // console.log("uploadTask", uploadTask);
+
+      // uploadTask.snapshotChanges().pipe(
+      //   finalize(() => {
+      //     storageRef.getDownloadURL().subscribe(downloadURL => {
+      //       console.log("data ", downloadURL);
+      //       (this.selectedFile as FileUpload).url = downloadURL;
+      //       console.log("selectedfiles ", this.selectedFile);
+      //       this.imageUrl = downloadURL;
+      //       user.imageUrl = downloadURL;
+      //       console.log("user before", user);
+      //       // this.submitProfile(user);
+      //       console.log("user", user);
+      //     });
+      //   })
+      // ).subscribe();
+    }
+    else{
+      this.submitProfile(user);
+    }
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    console.log("image ", this.selectedFile);
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imageUrl = e.target.result;
+    };
+    if(this.selectedFile){
+      reader.readAsDataURL(event.target.files[0]);
+    }
   }
 
   addChronicIllness(){
