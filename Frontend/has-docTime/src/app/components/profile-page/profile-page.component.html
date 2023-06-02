@@ -3,26 +3,31 @@
     <div class="col-md-3 border-right">
       <div class="d-flex flex-column align-items-center text-center p-3 py-5">
         <form [formGroup]="editForm" enctype="multipart/form-data">
-          <span *ngIf="imageUrl !== null || selectedFile !== null">
-            <img class="rounded-circle mt-5 mb-3" width="150px" [src]="imageUrl" alt="Selected Picture"/>
-          </span>
-          <span *ngIf="imageUrl === null && selectedFile === null">
-            <img class="rounded-circle mt-5 mb-3" width="150px" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Selected Picture"/>
-          </span>
+          <div class="row">
+            <span *ngIf="imageUrl !== null || selectedFile !== null">
+              <img class="rounded-circle mt-5 mb-3" width="150px" [src]="imageUrl" alt="Selected Picture"/>
+            </span>
+            <span *ngIf="imageUrl === null && selectedFile === null">
+              <img class="rounded-circle mt-5 mb-3" width="150px" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Selected Picture"/>
+            </span>
+          </div>
           <!-- <img
           class="rounded-circle mt-5"
           width="150px"
           src="{{ imageUrl }}"
         /> -->
 
-        <button type="submit" class="btn btn-outline-primary mt-3" (click)="file.click()" *ngIf="!disable">
-          Upload File
-        </button>
-          <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
-          <!-- <button *ngIf="!disable" type="button" (click)="uploadProfilePicture()">Upload</button> -->
+        <div class="row">
+          <button type="submit" class="btn btn-outline-primary mt-3" (click)="file.click()" *ngIf="!disable">
+            Upload File
+          </button>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
+            <!-- <button *ngIf="!disable" type="button" (click)="uploadProfilePicture()">Upload</button> -->
+          
+        </div>
         </form>
-        <span class="font-weight-bold">{{ editForm.get('firstName')?.value }} {{editForm.get('lastName')?.value}}</span>
-        <span class="text-black-50">{{ editForm.get('email')?.value }}</span>
+        <span class="font-weight-bold mt-2">{{ editForm.get('firstName')?.value }} {{editForm.get('lastName')?.value}}</span>
+        <span class="text-black-50 mt-1">{{ editForm.get('email')?.value }}</span>
       </div>
     </div>
     <div class="col-md-7 border-right">
