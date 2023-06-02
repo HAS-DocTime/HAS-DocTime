@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 @SpringBootApplication
-@PropertySource("classpath:environment.properties")
+@PropertySources({
+	@PropertySource("classpath:environment.properties"),
+	@PropertySource("classpath:application.properties")
+})
 public class HasDocTimeApplication {
 
 

@@ -21,73 +21,113 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 /**
- *
- * @author arpit
+ * The DoctorController class handles HTTP requests related to the Doctor entity.
  */
-
 @RestController
 @RequestMapping("doctor")
 @CrossOrigin(origins = "${port.address}")
 public class DoctorController {
-    
-    
+
     private DoctorInterface doctorService;
 
     @Autowired
-    public DoctorController(@Qualifier("doctorServiceImpl") DoctorInterface doctorService){
+    public DoctorController(@Qualifier("doctorServiceImpl") DoctorInterface doctorService) {
         this.doctorService = doctorService;
     }
-    
+
+    /**
+     * Creates a new Doctor.
+     *
+     * @param doctor The Doctor object to create.
+     * @return ResponseEntity containing the created Doctor and HttpStatus.CREATED if successful.
+     * @throws MissingParameterException If required parameters are missing in the creation request.
+     * @throws DoesNotExistException     If the Doctor with the given ID does not exist.
+     */
     @RequestMapping(method = RequestMethod.POST, value = "")
-    public ResponseEntity<Doctor> createDoctor(@Valid @RequestBody Doctor doctor) throws MissingParameterException, DoesNotExistException{
+    public ResponseEntity<Doctor> createDoctor(@Valid @RequestBody Doctor doctor) throws MissingParameterException, DoesNotExistException {
         Doctor doc = doctorService.createDoctor(doctor);
-        return new ResponseEntity(doc, HttpStatus.CREATED);
+        return new ResponseEntity<>(doc, HttpStatus.CREATED);
     }
 
+    /**
+     * Retrieves all Doctors.
+     *
+     * @return ResponseEntity containing a list of all Doctors and HttpStatus.OK if successful,
+     * or HttpStatus.NO_CONTENT if no Doctors are found.
+     */
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public ResponseEntity<List<Doctor>> getAllDoctors(){
+    public ResponseEntity<List<Doctor>> getAllDoctors() {
         List<Doctor> doctors = doctorService.getAllDoctors();
-        if(doctors.isEmpty()){
-            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
+        if (doctors.isEmpty()) {
+            return new ResponseEntity<>(doctors, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(doctors, HttpStatus.OK);
+        return new ResponseEntity<>(doctors, HttpStatus.OK);
     }
 
+    /**
+     * Retrieves Doctors by Department ID.
+     *
+     * @param id The ID of the Department to filter Doctors by.
+     * @return ResponseEntity containing a list of Doctors in the specified Department and HttpStatus.OK if successful,
+     * or HttpStatus.NO_CONTENT if no Doctors are found in the Department.
+     */
     @RequestMapping(method = RequestMethod.GET, value = "department/{departmentId}")
-    public ResponseEntity<List<Doctor>> getDoctorsByDepartmentId(@PathVariable("departmentId") int id){
+    public ResponseEntity<List<Doctor>> getDoctorsByDepartmentId(@PathVariable("departmentId") int id) {
         List<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id);
-        if(doctors.isEmpty()){
-            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
+        if (doctors.isEmpty()) {
+            return new ResponseEntity<>(doctors, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(doctors, HttpStatus.OK);
+        return new ResponseEntity<>(doctors, HttpStatus.OK);
     }
-    
+
+    /**
+     * Retrieves a single Doctor by its ID.
+     *
+     * @param id The ID of the Doctor to retrieve.
+     * @return ResponseEntity containing the retrieved Doctor and HttpStatus.OK if successful,
+     * or HttpStatus.NOT_FOUND if the Doctor does not exist.
+     * @throws AccessDeniedException If the authenticated user does not have access to the Doctor resource.
+     * @throws DoesNotExistException If the Doctor with the given ID does not exist.
+     */
     @RequestMapping(method = RequestMethod.GET, value = "{doctorId}")
     public ResponseEntity<Doctor> getDoctor(@PathVariable("doctorId") int id) throws AccessDeniedException, DoesNotExistException {
-//        String authenticatedDoctorEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
         Doctor doctor = doctorService.getDoctor(id);
-
-//        if(!authenticatedDoctorEmailId.equals(doctor.getUser().getEmail())){
-//            throw new AccessDeniedException("You do not have access to this resource");
-//        };
-        return new ResponseEntity(doctor, HttpStatus.OK);
+        return new ResponseEntity<>(doctor, HttpStatus.OK);
     }
-    
+
+    /**
+     * Updates a Doctor.
+     *
+     * @param doctor The updated Doctor object.
+     * @param id     The ID of the Doctor to update.
+     * @return ResponseEntity containing the updated Doctor and HttpStatus.OK if successful,
+     * or HttpStatus.NOT_FOUND if the Doctor does not exist.
+     * @throws DoesNotExistException     If the Doctor with the given ID does not exist.
+     * @throws MissingParameterException If required parameters are missing in the update request.
+     */
     @RequestMapping(method = RequestMethod.PUT, value = "{doctorId}")
     public ResponseEntity<Doctor> updateDoctor(@Valid @RequestBody Doctor doctor, @PathVariable("doctorId") int id) throws DoesNotExistException, MissingParameterException {
         Doctor updatedDoctor = doctorService.updateDoctor(id, doctor);
-        if(updatedDoctor==null){
-            return new ResponseEntity(updatedDoctor, HttpStatus.NOT_FOUND);
+        if (updatedDoctor == null) {
+            return new ResponseEntity<>(updatedDoctor, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(updatedDoctor, HttpStatus.OK);
+        return new ResponseEntity<>(updatedDoctor, HttpStatus.OK);
     }
-    
+
+    /**
+     * Deletes a Doctor.
+     *
+     * @param id The ID of the Doctor to delete.
+     * @return ResponseEntity with HttpStatus.OK if the Doctor is successfully deleted,
+     * or HttpStatus.NOT_FOUND if the Doctor does not exist.
+     * @throws DoesNotExistException If the Doctor with the given ID does not exist.
+     */
     @RequestMapping(method = RequestMethod.DELETE, value = "{doctorId}")
-    public ResponseEntity<Doctor> deleteDoctor(@PathVariable("doctorId") int id) throws DoesNotExistException{
+    public ResponseEntity<Doctor> deleteDoctor(@PathVariable("doctorId") int id) throws DoesNotExistException {
         Doctor doctor = doctorService.deleteDoctor(id);
-        if(doctor==null){
-            return new ResponseEntity(doctor, HttpStatus.NOT_FOUND);
+        if (doctor == null) {
+            return new ResponseEntity<>(doctor, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(doctor, HttpStatus.OK);
+        return new ResponseEntity<>(doctor, HttpStatus.OK);
     }
 }

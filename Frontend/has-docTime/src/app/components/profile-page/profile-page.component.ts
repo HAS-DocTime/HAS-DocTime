@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Doctor } from 'src/app/models/doctor.model';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { AdminService } from 'src/app/services/admin.service';
@@ -24,7 +24,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private doctorService: DoctorService,
     private adminService: AdminService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location : Location
   ) {}
 
   user?: User;
@@ -354,6 +355,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.router.navigate(['../'], { relativeTo: this.route });
       });
     }
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 
   get maxDate(): string {

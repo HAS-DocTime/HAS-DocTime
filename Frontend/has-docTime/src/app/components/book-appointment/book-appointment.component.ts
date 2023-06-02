@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,7 +21,7 @@ export class BookAppointmentComponent implements OnInit{
   id! : number;
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
-     private userService : UserService, private router : Router, private route : ActivatedRoute){}
+     private userService : UserService, private router : Router, private route : ActivatedRoute, private location : Location){}
 
   ngOnInit(){
     const token = sessionStorage.getItem('token');
@@ -69,6 +70,8 @@ export class BookAppointmentComponent implements OnInit{
     this.bookAppointment.value["timeSlotForAppointment"] = {
       "id": 4509
     }
+    console.log("-------------------",this.bookAppointment.value);
+
     this.appointmentService.createAppointment(this.bookAppointment.value).subscribe((data)=> {
       this.router.navigate(["../"], {relativeTo : this.route});
     })
@@ -86,5 +89,13 @@ export class BookAppointmentComponent implements OnInit{
 
   deleteSymptom(id : number){
     this.symptomList.removeAt(id);
+  }
+
+  backToAppointments(){
+    this.router.navigate(["../"], {relativeTo : this.route})
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 }

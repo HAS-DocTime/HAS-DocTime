@@ -28,10 +28,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
- * @author arpit
+ * Implementation of the DoctorInterface for performing CRUD operations on Doctor entities.
  */
-
 @Service
 public class DoctorDaoImpl implements DoctorInterface {
     
@@ -56,6 +54,14 @@ public class DoctorDaoImpl implements DoctorInterface {
         this.userDao = userDao;
     }
 
+    /**
+     * Creates a new Doctor.
+     *
+     * @param doctor The Doctor to create.
+     * @return The created Doctor.
+     * @throws MissingParameterException if any required parameter is missing.
+     * @throws DoesNotExistException     if the referenced User or Department does not exist.
+     */
     @Override
     public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException{
         if(doctor.getUser()==null){
@@ -93,6 +99,11 @@ public class DoctorDaoImpl implements DoctorInterface {
         return doctorRepository.save(doctor);
     }
 
+    /**
+     * Retrieves all Doctors.
+     *
+     * @return A list of all Doctors.
+     */
     @Override
     public List<Doctor> getAllDoctors() {
         List<Doctor> doctors = doctorRepository.findAll();
@@ -102,6 +113,12 @@ public class DoctorDaoImpl implements DoctorInterface {
         return doctors;
     }
 
+    /**
+     * Retrieves Doctors by Department ID.
+     *
+     * @param id The ID of the Department.
+     * @return A list of Doctors in the specified Department.
+     */
     @Override
     public List<Doctor> getDoctorsByDepartmentId(int id) {
         List<Doctor> doctors = doctorRepository.findDoctorsByDepartmentId(id);
@@ -111,6 +128,13 @@ public class DoctorDaoImpl implements DoctorInterface {
         return doctors;
     }
 
+    /**
+     * Retrieves a Doctor by its ID.
+     *
+     * @param id The ID of the Doctor to retrieve.
+     * @return The retrieved Doctor.
+     * @throws DoesNotExistException if the Doctor with the specified ID does not exist.
+     */
     @Override
     public Doctor getDoctor(int id) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
@@ -121,6 +145,15 @@ public class DoctorDaoImpl implements DoctorInterface {
         throw new DoesNotExistException("Doctor");
     }
 
+    /**
+     * Updates a Doctor.
+     *
+     * @param id     The ID of the Doctor to update.
+     * @param doctor The updated Doctor.
+     * @return The updated Doctor.
+     * @throws DoesNotExistException     if the Doctor with the specified ID does not exist.
+     * @throws MissingParameterException if any required parameter is missing.
+     */
     @Override
     public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException {
         if(doctor.getUser()==null){
@@ -149,6 +182,13 @@ public class DoctorDaoImpl implements DoctorInterface {
         throw new DoesNotExistException("Doctor");
     }
 
+    /**
+     * Deletes a Doctor by its ID.
+     *
+     * @param id The ID of the Doctor to delete.
+     * @return The deleted Doctor.
+     * @throws DoesNotExistException if the Doctor with the specified ID does not exist.
+     */
     @Override
     public Doctor deleteDoctor(int id) throws DoesNotExistException{
         Optional<Doctor> doctor = doctorRepository.findById(id);

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
-import { Doctor } from 'src/app/models/doctor.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
@@ -14,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 
 export class AppointmentComponent implements OnInit{
 
-  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService: DepartmentService){}
+  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute){}
 
   appointments : Appointment[] = [];
 
@@ -34,13 +33,10 @@ export class AppointmentComponent implements OnInit{
       this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
     }
 
-    if(this.tokenRole==='ADMIN'){
+    this.userService.getUserByEmail().subscribe((data)=>{
+
+      if(this.tokenRole==='ADMIN'){
         this.appointmentService.getAppointments().subscribe((data)=>{
-          this.appointments = data;
-        })
-      }
-      else {
-        this.appointmentService.getAppointmentByUser((this.id.toString())).subscribe((data)=> {
           for(let appointment of data){
             if(!appointment?.doctor?.department?.id){
               this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
@@ -48,6 +44,11 @@ export class AppointmentComponent implements OnInit{
               });
             }
           }
+          this.appointments = data;
+        })
+      }
+      else {
+        this.appointmentService.getAppointmentByUser((data.id?.toString())).subscribe((data)=> {
           this.appointments = data;
         });
       }
@@ -61,30 +62,10 @@ export class AppointmentComponent implements OnInit{
 
   deleteAppointment(id : number | undefined){
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
-        if(this.tokenRole==="ADMIN"){
-          this.appointmentService.getAppointments().subscribe((data)=> {
-            for(let appointment of data){
-              if(!appointment?.doctor?.department?.id){
-                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                  (appointment.doctor as Doctor).department = data;
-                });
-              }
-            }
-            this.appointments = data;
-          });
-        }
-        else{
-          this.appointmentService.getAppointmentByUser(this.id.toString()).subscribe((data)=> {
-            for(let appointment of data){
-              if(!appointment?.doctor?.department?.id){
-                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                  (appointment.doctor as Doctor).department = data;
-                });
-              }
-            }
-            this.appointments = data;
-          });
-        }
+      this.userService.getUserByEmail().subscribe((data)=>{
+        this.appointmentService.getAppointmentByUser((data.id?.toString())).subscribe((data)=> {
+          this.appointments = data;
+        });
     })
     }
 

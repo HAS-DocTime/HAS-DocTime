@@ -28,11 +28,23 @@ public class UserDaoImpl implements UserInterface {
     private final SymptomRepository symptomRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Retrieves all users.
+     *
+     * @return The list of all users.
+     */
     @Override
     public List<User> getAllUser() {
         return userRepository.findAll();
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id The ID of the user.
+     * @return The user with the specified ID.
+     * @throws DoesNotExistException if the user does not exist.
+     */
     @Override
     public User getUser(int id) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(id);
@@ -44,7 +56,16 @@ public class UserDaoImpl implements UserInterface {
         throw new DoesNotExistException("User");
     }
 
+    /**
+     * Updates a user with the provided data, including the password.
+     *
+     * @param user The updated user object.
+     * @return The updated user.
+     * @throws DoesNotExistException     if the user does not exist.
+     * @throws MissingParameterException if any required parameter is missing.
+     */
     public User updateUserWithPassword(User user) throws DoesNotExistException, MissingParameterException{
+        // Validate required parameters
         if(user.getName() == null || user.getName().equals("")){
             throw new MissingParameterException("Name");
         }
@@ -69,6 +90,8 @@ public class UserDaoImpl implements UserInterface {
         if(user.getPassword()==null) {
             throw new MissingParameterException("Password");
         }
+
+        // Validate and update symptoms
         List<Symptom> symptomList = user.getSymptoms();
         if(symptomList!=null){
             List<Symptom> newSymptomList = new ArrayList<>();
@@ -82,6 +105,8 @@ public class UserDaoImpl implements UserInterface {
             }
             user.setSymptoms(newSymptomList);
         }
+
+        // Validate and update patient chronic illnesses
         List<PatientChronicIllness> patientChronicIllnessList = user.getPatientChronicIllness();
         if(patientChronicIllnessList != null){
             for(PatientChronicIllness patientChronicIllness : patientChronicIllnessList){
@@ -98,13 +123,23 @@ public class UserDaoImpl implements UserInterface {
                 user.setPatientChronicIllness(patientChronicIllnessList);
             }
         }
+        // Save the updated user
         return userRepository.save(user);
     }
 
 
 
+    /**
+     * Creates a new user with the provided data, including the password.
+     *
+     * @param user The user object to create.
+     * @return The created user.
+     * @throws MissingParameterException if any required parameter is missing.
+     * @throws DoesNotExistException     if the chronic illness does not exist.
+     */
     @Override
     public User createUser(User user) throws MissingParameterException, DoesNotExistException{
+        // Validate required parameters
         if(user.getName() == null || user.getName().equals("")){
             throw new MissingParameterException("Name");
         }
@@ -132,10 +167,24 @@ public class UserDaoImpl implements UserInterface {
         if(user.getRole()==null){
             user.setRole(Role.PATIENT);
         }
+
+        // Encrypt the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // Create or update the user
         return updateUserWithPassword(user);
     }
 
+
+    /**
+     * Updates a user with the provided data.
+     *
+     * @param id   The ID of the user to update.
+     * @param user The updated user object.
+     * @return The updated user.
+     * @throws DoesNotExistException     if the user does not exist.
+     * @throws MissingParameterException if any required parameter is missing.
+     */
     @Override
     public User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException{
         Optional<User> oldUser = userRepository.findById(id);
@@ -151,6 +200,13 @@ public class UserDaoImpl implements UserInterface {
         throw new DoesNotExistException("User");
     }
 
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param id The ID of the user to delete.
+     * @return The deleted user.
+     * @throws DoesNotExistException if the user does not exist.
+     */
     @Override
     @Transactional
     public User deleteUser(int id) throws DoesNotExistException{
@@ -162,6 +218,13 @@ public class UserDaoImpl implements UserInterface {
         throw new DoesNotExistException("User");
     }
 
+    /**
+     * Retrieves a user by their email.
+     *
+     * @param email The email of the user.
+     * @return The user with the specified email.
+     * @throws DoesNotExistException if the user does not exist.
+     */
     @Override
     public User getUserByEmail(String email) throws DoesNotExistException{
         Optional<User> user = userRepository.findByEmail(email);
@@ -171,13 +234,24 @@ public class UserDaoImpl implements UserInterface {
         return user.get();
     }
 
+    /**
+     * Retrieves all patients.
+     *
+     * @return The list of all patients.
+     */
     @Override
     public List<User> getPatients(){
         return userRepository.getPatients();
     }
 
 
-
+    /**
+     * Retrieves patients with a specific chronic illness.
+     *
+     * @param id The ID of the chronic illness.
+     * @return A set of users who have the specified chronic illness.
+     * @throws DoesNotExistException if the chronic illness does not exist.
+     */
     @Override
     public Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException{
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
