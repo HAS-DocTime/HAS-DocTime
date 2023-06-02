@@ -34,12 +34,7 @@ public class AppointmentController {
         this.appointmentService = appointmentService;
     }
 
-    /**
-     * Retrieves all Appointments.
-     *
-     * @return ResponseEntity containing a list of all Appointments and HttpStatus.OK if successful,
-     * or HttpStatus.NOT_FOUND if an error occurs.
-     */
+
     @GetMapping("")
     public ResponseEntity<Page<Appointment>> getAllAppointments(
             @RequestParam(defaultValue = "0") int page,
@@ -47,7 +42,6 @@ public class AppointmentController {
             @RequestParam(defaultValue = "user.name") String sortBy,       //sort by user.name, doctor.user.name, timeSlotForAppointment.startTime
             @RequestParam(required = false) String search
     ) {
-
         try {
             Page<Appointment> allAppointments = appointmentService.getAllAppointments(page, size, sortBy, search);
             return ResponseEntity.ok(allAppointments);
@@ -55,6 +49,23 @@ public class AppointmentController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    /**
+     * Retrieves all Appointments.
+     *
+     * @return ResponseEntity containing a list of all Appointments and HttpStatus.OK if successful,
+     * or HttpStatus.NOT_FOUND if an error occurs.
+     */
+    @GetMapping("list")
+    public ResponseEntity<List<Appointment>> getAllAppointments() {
+        try {
+            List<Appointment> allAppointments = appointmentService.getAllAppointmentList();
+            return ResponseEntity.ok(allAppointments);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     /**
      * Retrieves an Appointment by its ID.

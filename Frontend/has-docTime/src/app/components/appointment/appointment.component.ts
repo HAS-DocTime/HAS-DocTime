@@ -89,7 +89,7 @@ export class AppointmentComponent implements OnInit{
 
       if(this.tokenRole==='ADMIN'){
         this.appointmentService.getAppointments(params).subscribe((data)=>{
-          for(let appointment of data){
+          for(let appointment of data.content){
             if(!appointment?.doctor?.department?.id){
               this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
                 (appointment.doctor as Doctor).department = data;
@@ -102,7 +102,7 @@ export class AppointmentComponent implements OnInit{
       }
       else {
         this.appointmentService.getAppointmentByUser((data.id?.toString()), params).subscribe((data)=> {
-          for(let appointment of data){
+          for(let appointment of data.content){
             if(!appointment?.doctor?.department?.id){
               this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
                 (appointment.doctor as Doctor).department = data;

@@ -38,8 +38,6 @@ public interface PostAppointmentDataInterface {
      * @throws DoesNotExistException    if related entities do not exist
      */
     public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException;
-    
-    public Page<PostAppointmentData> getPostAppointmentDataByEmail(String email, int page, int size, String sortBy, String search);
 
     /**
      * Retrieves a list of post appointment data based on the specified email.
@@ -47,7 +45,7 @@ public interface PostAppointmentDataInterface {
      * @param email the email address
      * @return a list of PostAppointmentData objects matching the email
      */
-    List<PostAppointmentData> getPostAppointmentDataByEmail(String email);
+    public Page<PostAppointmentData> getPostAppointmentDataByEmail(String email, int page, int size, String sortBy, String search);
 
     /**
      * Updates the post appointment data with the specified ID.

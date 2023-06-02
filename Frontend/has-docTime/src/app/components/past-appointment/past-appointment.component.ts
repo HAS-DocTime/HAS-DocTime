@@ -83,7 +83,7 @@ export class PastAppointmentComponent implements OnInit{
           this.symptomService.getSymptomById(this.symptomId).subscribe((data)=> {
             this.symptom = data;
             this.symptomService.getPastAppointmentsFromSymptom(this.symptom?.name, params).subscribe((data)=>{
-              if(data===null){
+              if(data.content===null){
                 this.noDataFound = true;
               }
               this.pastAppointmentList = data.content;
@@ -113,7 +113,6 @@ export class PastAppointmentComponent implements OnInit{
 
     else{
       this.sortByOptions.pop();
-      console.log(this.sortByOptions);
 
       this.pastAppointmentService.getPastAppointmentDataByUserEmail(params)
     .subscribe(

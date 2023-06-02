@@ -19,6 +19,8 @@ export class PastHistoryComponent {
   postAppointmentDataList?: PastAppointment[];
   userId?: string | null;
   postAppointmentId!: number | undefined;
+  noDataFound : boolean = false;
+  noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
   page = 1;
   totalPages = 1;
   size = 5;
@@ -62,15 +64,21 @@ export class PastHistoryComponent {
 
     this.pastAppointmentService.getPastAppointmentDataByUser(this.userId, params).subscribe(
       data => {
-        for(let appointment of data){
-          if(!appointment?.doctor?.department?.id){
-            this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-              (appointment.doctor as Doctor ).department = data;
-            });
+        if(data.content.length !== 0){
+          for(let appointment of data.content){
+            if(!appointment?.doctor?.department?.id){
+              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                (appointment.doctor as Doctor ).department = data;
+              });
+            }
           }
+          this.postAppointmentDataList = data.content;
+          this.totalPages = data.totalPages;
         }
-        this.postAppointmentDataList = data.content;
-        this.totalPages = data.totalPages;
+        else{
+          this.noDataFound = true;
+        }
+
       }
     );
   }

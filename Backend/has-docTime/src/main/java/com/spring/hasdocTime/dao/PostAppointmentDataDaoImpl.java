@@ -245,6 +245,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         throw new DoesNotExistException("Post Appointment Data");
     }
 
+
     /**
      * Retrieves diseases grouped by symptom.
      *
@@ -253,8 +254,8 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @throws DoesNotExistException if no post-appointment data exists for the specified symptom
      */
     @Override
-    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
-        return postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom);
+    public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataRepository.findDiseaseListGroupedBySymptom(symptom);
     }
 
     /**
@@ -264,11 +265,6 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a list of post-appointment data for the specified symptom
      * @throws DoesNotExistException if no post-appointment data exists for the specified symptom
      */
-    @Override
-    public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String symptom) throws DoesNotExistException {
-        return postAppointmentDataRepository.findDiseaseListGroupedBySymptom(symptom);
-    }
-
     @Override
     public Page<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));

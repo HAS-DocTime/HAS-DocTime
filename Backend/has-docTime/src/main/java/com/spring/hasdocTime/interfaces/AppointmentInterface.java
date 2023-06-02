@@ -12,12 +12,14 @@ import java.util.List;
 
 public interface AppointmentInterface {
 
-/**
+    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search);
+
+    /**
      * Retrieves a list of all appointments.
      *
      * @return List of Appointment objects representing all appointments.
      */
-    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search);
+    public List<Appointment> getAllAppointmentList();
 
     /**
      * Retrieves the appointment with the specified ID.

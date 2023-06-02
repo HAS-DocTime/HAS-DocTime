@@ -1,4 +1,8 @@
-<div class="container">
+<div *ngIf = "noDataFound" class="noData">
+  <img [src]="noDataFoundImg" alt="No Data Found">
+  <p>No Data Found!!</p>
+</div>
+<div *ngIf = "!noDataFound" class="container">
 
   <div class="row mb-3" >
     <div class="col-sm-4" *ngIf="totalPages > 1">

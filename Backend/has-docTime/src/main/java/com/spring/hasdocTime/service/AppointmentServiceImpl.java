@@ -29,14 +29,20 @@ public class AppointmentServiceImpl implements AppointmentInterface {
         this.appointmentDao = appointmentDao;
     }
 
+
+    @Override
+    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
+        return appointmentDao.getAllAppointments(page, size, sortBy, search);
+    }
+
     /**
      * Retrieves all appointments.
      *
      * @return List of appointments.
      */
     @Override
-    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
-        return appointmentDao.getAllAppointments(page, size, sortBy, search);
+    public List<Appointment> getAllAppointmentList() {
+        return appointmentDao.getAllAppointmentList();
     }
 
     /**

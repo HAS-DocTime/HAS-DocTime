@@ -51,11 +51,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         this.symptomRepository = symptomRepository;
     }
 
-    /**
-     * Retrieves all appointments from the database.
-     *
-     * @return A list of all appointments.
-     */
+
     @Override
     public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -69,6 +65,16 @@ public class AppointmentDaoImpl implements AppointmentInterface {
 
         }
         return allAppointments;
+    }
+
+    /**
+     * Retrieves all appointments from the database.
+     *
+     * @return A list of all appointments.
+     */
+    @Override
+    public List<Appointment> getAllAppointmentList() {
+        return appointmentRepository.findAll();
     }
 
     /**
