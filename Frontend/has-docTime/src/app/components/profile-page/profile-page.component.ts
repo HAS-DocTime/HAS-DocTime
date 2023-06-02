@@ -303,6 +303,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     if (this.tokenRole === 'PATIENT' || this.urlPath === 'users') {
       user.role = this.user?.role;
       user.email = this.user?.email;
+      user.imageUrl = this.imageUrl;
 
       this.userService.updateUser(user, this.id).subscribe((data) => {
         this.toggleDisable();
@@ -316,6 +317,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       user.id = this.doctor?.user?.id;
       user.role = this.doctor?.user.role;
       user.email = this.doctor?.user.email;
+      user.imageUrl = this.imageUrl;
+
       let doctor: Doctor = {
         user: user,
         qualification: this.editForm.value.qualification,
@@ -342,6 +345,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       let userId = 0;
       user.role = this.admin?.user?.role;
       user.email = this.admin?.user?.email;
+      user.imageUrl = this.imageUrl;
+      
       let admin: Admin = {
         user: user,
       };
@@ -373,6 +378,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             (this.selectedFile as FileUpload).url = downloadURL;
             console.log("selectedfiles ", this.selectedFile);
             this.imageUrl = downloadURL;
+            this.user!.imageUrl = downloadURL;
+            console.log("user before", this.user);
             this.submitProfile();
             console.log("user", this.user);
           });
