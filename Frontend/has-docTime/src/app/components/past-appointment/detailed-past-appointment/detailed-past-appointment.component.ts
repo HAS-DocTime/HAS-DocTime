@@ -1,5 +1,6 @@
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PastAppointmentService } from 'src/app/services/past-appointment.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { PastAppointmentService } from 'src/app/services/past-appointment.servic
   styleUrls: ['./detailed-past-appointment.component.css']
 })
 export class DetailedPastAppointmentComponent {
-  constructor(private route : ActivatedRoute, private pastAppointmentService : PastAppointmentService){}
+  constructor(private route : ActivatedRoute, private pastAppointmentService : PastAppointmentService, private router : Router, private location : Location){}
 
   public id! : string | null;
 
@@ -22,5 +23,13 @@ export class DetailedPastAppointmentComponent {
       this.pastAppointment = data;
       this.symptoms = data.symptoms?.split("; ");
     })
+  }
+
+  backToPastAppointments(){
+    this.router.navigate(['../'], {relativeTo : this.route});
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 }

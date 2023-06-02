@@ -1,4 +1,5 @@
- <div *ngIf = "noDataFound" class="noData">
+<div><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
+<div *ngIf = "noDataFound" class="noData">
   <img [src]="noDataFoundImg" alt="No Data Found">
   <p>No Data Found!!</p>
 </div>
@@ -7,5 +8,4 @@
     <apx-chart [series]="chartSeries" [chart]="chartDetails" [labels]="chartLabels" [title]="chartTitle" [dataLabels]="chartDataLabels" [plotOptions]="plotOptions"></apx-chart>
    </div>
  </div>
-
  <app-past-appointments *ngIf="!noDataFound && tokenRole==='ADMIN'"></app-past-appointments>

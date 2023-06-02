@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +20,7 @@ export class BookAppointmentComponent implements OnInit{
   currentUser? : User;
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
-     private userService : UserService, private router : Router, private route : ActivatedRoute){}
+     private userService : UserService, private router : Router, private route : ActivatedRoute, private location : Location){}
 
   ngOnInit(){
     this.symptomService.getSymptomsList().subscribe((data)=> {
@@ -82,5 +83,13 @@ export class BookAppointmentComponent implements OnInit{
 
   deleteSymptom(id : number){
     this.symptomList.removeAt(id);
+  }
+
+  backToAppointments(){
+    this.router.navigate(["../"], {relativeTo : this.route})
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 }

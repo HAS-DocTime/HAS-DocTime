@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SymptomService } from 'src/app/services/symptom.service';
 import { ApexChart, ApexDataLabels, ApexNonAxisChartSeries, ApexTitleSubtitle } from 'ng-apexcharts';
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class SymptomDetailComponent implements OnInit{
   id?: number;
 
   symptom : string = "";
-  constructor(private symptomService: SymptomService, private route : ActivatedRoute) { }
+  constructor(private symptomService: SymptomService, private route : ActivatedRoute, private router : Router, private location : Location) { }
 
   noDataFound : boolean = false;
   noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
@@ -47,8 +48,6 @@ export class SymptomDetailComponent implements OnInit{
   };
 
   ngOnInit() {
-
-
 
     const token = sessionStorage.getItem('token');
       if (token) {
@@ -91,5 +90,9 @@ export class SymptomDetailComponent implements OnInit{
   }
 
 
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 }
