@@ -13,9 +13,17 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository interface for accessing and manipulating Appointment entities.
+ */
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
 
+    /**
+     * Deletes an appointment by ID.
+     *
+     * @param id the ID of the appointment to be deleted
+     */
     @Modifying
     @Query("DELETE FROM Appointment a where a.id=:id")
     void deleteById(@Param("id") int id);
@@ -23,6 +31,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("SELECT a FROM Appointment a WHERE LOWER(a.user.name) LIKE %:search%")
     Page<Appointment> findAllAndUserNameContainsIgnoreCase(@Param("search")String search, Pageable pageable);
 
+    /**
+     * Retrieves a list of appointments associated with the specified user.
+     *
+     * @param user the user entity
+     * @return a list of appointments associated with the user
+     */
     @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId")
     Page<Appointment> findByUser(@Param("userId")int userId, Pageable pageable);
 
@@ -32,6 +46,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId AND LOWER(a.doctor.user.name) LIKE %:search%")
     Page<Appointment> findByUserAndDoctorNameContainsIgnoreCase(@Param("userId")int userId, @Param("search") String search, Pageable pageable);
 
+    /**
+     * Retrieves a list of appointments associated with the specified doctor.
+     *
+     * @param doctor the doctor entity
+     * @return a list of appointments associated with the doctor
+     */
     @Query("SELECT a FROM Appointment a JOIN a.doctor d WHERE d.id = :doctorId")
     Page<Appointment> findByDoctor(@Param("doctorId")int doctorId, Pageable pageable);
 

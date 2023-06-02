@@ -11,34 +11,58 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Logger;
 
+/**
+ * Controller advice class for handling exceptions in the application.
+ */
 @RestControllerAdvice
 public class ExceptionController {
+
+    /**
+     * Exception handler for DoesNotExistException.
+     *
+     * @param exception The DoesNotExistException instance.
+     * @return ResponseEntity containing the error response body and HTTP status code.
+     */
     @ExceptionHandler(value = DoesNotExistException.class)
     public ResponseEntity<ErrorResponseBody> handleException(DoesNotExistException exception){
         ErrorResponseBody responseBody = new ErrorResponseBody(exception.getMessage() + " does not exist");
         return new ResponseEntity<>(responseBody ,HttpStatus.NOT_FOUND);
     }
+
+    /**
+     * Exception handler for MissingParameterException.
+     *
+     * @param exception The MissingParameterException instance.
+     * @return ResponseEntity containing the error response body and HTTP status code.
+     */
     @ExceptionHandler(value = MissingParameterException.class)
     public ResponseEntity<ErrorResponseBody> handleException(MissingParameterException exception){
         ErrorResponseBody responseBody = new ErrorResponseBody(exception.getMessage() + " cannot be null");
         return new ResponseEntity<>(responseBody ,HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Exception handler for SQLIntegrityConstraintViolationException.
+     *
+     * @param exception The SQLIntegrityConstraintViolationException instance.
+     * @return ResponseEntity containing the error response body and HTTP status code.
+     */
     @ExceptionHandler(value = SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<ErrorResponseBody> handleException(SQLIntegrityConstraintViolationException exception){
         ErrorResponseBody responseBody = new ErrorResponseBody(exception.getMessage());
         return new ResponseEntity<>(responseBody ,HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Exception handler for ConstraintViolationException.
+     *
+     * @param exception The ConstraintViolationException instance.
+     * @return ResponseEntity containing the error response body and HTTP status code.
+     */
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity<ErrorResponseBody> handleException(ConstraintViolationException exception){
         String invalidObjs = "";
@@ -50,6 +74,12 @@ public class ExceptionController {
         return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Exception handler for MethodArgumentNotValidException.
+     *
+     * @param methodArgumentNotValidException The MethodArgumentNotValidException instance.
+     * @return ResponseEntity containing the error response body and HTTP status code.
+     */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseBody> handleException(MethodArgumentNotValidException methodArgumentNotValidException){
             String errors = "";

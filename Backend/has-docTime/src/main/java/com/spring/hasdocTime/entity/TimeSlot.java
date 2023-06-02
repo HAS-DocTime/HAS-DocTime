@@ -12,6 +12,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+
+/**
+ * The TimeSlot class represents a time slot in the system.
+ * It contains information about the time slot's ID, start time, end time,
+ * associated department, available doctors, booked doctors, appointment data,
+ * and appointment.
+ */
 @Entity
 @Data
 @ToString
@@ -64,6 +71,12 @@ public class TimeSlot {
     @JsonIgnoreProperties(value = {"timeSlotForAppointment", "symptoms", "user", "doctor"}, allowSetters = true)
     private Appointment appointment;
 
+    /**
+     * Checks if the current TimeSlot object is equal to the given object.
+     *
+     * @param o the object to compare with
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -72,6 +85,11 @@ public class TimeSlot {
         return id == that.id;
     }
 
+    /**
+     * Generates a hash code for the TimeSlot object.
+     *
+     * @return the hash code value
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);

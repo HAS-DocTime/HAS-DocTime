@@ -30,7 +30,7 @@
         <table class="table table-striped table-dark m-0 p-0" >
           <thead class="text-center">
             <tr>
-              <th>Case Id</th>
+              <th>Sr. No.</th>
               <th>Patient Name</th>
               <th>Timeslot</th>
               <th>Action</th>
@@ -39,7 +39,7 @@
           <tbody class=" text-center" *ngFor="let case of resolvedCases; let i = index"
           [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
             <tr>
-              <td>{{ case.id}}</td>
+              <td>{{ i + 1}}</td>
               <td>{{ case.user?.name }}</td>
               <td>{{ case.timeSlotForAppointmentData?.startTime }} - {{ case.timeSlotForAppointmentData?.endTime }}</td>
               <td>

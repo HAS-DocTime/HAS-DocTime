@@ -1,6 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/**
+ * Repository interface for accessing and manipulating Doctor entities.
  */
 package com.spring.hasdocTime.repository;
 
@@ -15,18 +14,24 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- *
- * @author arpit
- */
-
 @Repository
-public interface DoctorRepository extends JpaRepository<Doctor, Integer>{
-    
+public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
+
+    /**
+     * Deletes a doctor by ID.
+     *
+     * @param id the ID of the doctor to be deleted
+     */
     @Modifying
-    @Query("DELETE FROM Doctor d where d.id = :id")
+    @Query("DELETE FROM Doctor d WHERE d.id = :id")
     void deleteById(@Param("id") int id);
 
+    /**
+     * Retrieves a list of doctors belonging to a specific department.
+     *
+     * @param id the ID of the department
+     * @return a list of doctors belonging to the specified department
+     */
     @Query("FROM Doctor d where d.department.id =:id")
     Page<Doctor> findDoctorsByDepartmentId(@Param("id") int id, Pageable pageable);
 

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
+import { Department } from 'src/app/models/department.model';
+import { Doctor } from 'src/app/models/doctor.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { DepartmentService } from 'src/app/services/department.service';
 import { UserService } from 'src/app/services/user.service';
 
 interface SortByOption {
@@ -17,7 +20,7 @@ interface SortByOption {
 
 export class AppointmentComponent implements OnInit{
 
-  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute){}
+  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService){}
 
   appointments : Appointment[] = [];
 
@@ -83,14 +86,29 @@ export class AppointmentComponent implements OnInit{
 
     this.userService.getUserByEmail().subscribe((data)=>{
 
+
       if(this.tokenRole==='ADMIN'){
         this.appointmentService.getAppointments(params).subscribe((data)=>{
+          for(let appointment of data){
+            if(!appointment?.doctor?.department?.id){
+              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                (appointment.doctor as Doctor).department = data;
+              });
+            }
+          }
           this.appointments = data.content;
           this.totalPages = data.totalPages;
         })
       }
       else {
         this.appointmentService.getAppointmentByUser((data.id?.toString()), params).subscribe((data)=> {
+          for(let appointment of data){
+            if(!appointment?.doctor?.department?.id){
+              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                (appointment.doctor as Doctor).department = data;
+              });
+            }
+          }
           this.appointments = data.content;
           this.totalPages = data.totalPages;
         });
@@ -106,9 +124,30 @@ export class AppointmentComponent implements OnInit{
   deleteAppointment(id : number | undefined){
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
       this.userService.getUserByEmail().subscribe((data)=>{
-        this.appointmentService.getAppointmentListByUser((data.id?.toString())).subscribe((data)=> {
-          this.appointments = data;
-        });
+        if(this.tokenRole==="ADMIN"){
+          this.appointmentService.getAppointments().subscribe((data)=> {
+            for(let appointment of data){
+              if(!appointment?.doctor?.department?.id){
+                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                  (appointment.doctor as Doctor).department = data;
+                });
+              }
+            }
+            this.appointments = data;
+          });
+        }
+        else{
+          this.appointmentService.getAppointmentListByUser((data.id?.toString())).subscribe((data)=> {
+            for(let appointment of data){
+              if(!appointment?.doctor?.department?.id){
+                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                  (appointment.doctor as Doctor).department = data;
+                });
+              }
+            }
+            this.appointments = data;
+          });
+        }
     })
     }
     );

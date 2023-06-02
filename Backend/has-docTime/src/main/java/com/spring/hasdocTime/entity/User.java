@@ -18,6 +18,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+
+/**
+ * The User class represents a user in the system.
+ * It implements the UserDetails interface for Spring Security integration.
+ * It contains information about the user's ID, name, date of birth, age,
+ * gender, blood group, contact number, height, weight, email, password,
+ * role, associated doctor, associated admin, patient chronic illnesses,
+ * appointments, appointment data, and symptoms.
+ */
 @Entity
 @Data
 @NoArgsConstructor
@@ -57,12 +66,12 @@ public class User implements UserDetails {
     private String contact;
 
     @Column(name="height")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Height should not be less than 0ft")
+    @DecimalMin(value = "1.0", inclusive = true, message = "Height should not be less than 1ft")
     @DecimalMax(value = "10.0", inclusive = true, message = "Height should not be more than 10ft")
     private float height;
 
     @Column(name="weight")
-    @DecimalMin(value = "0.0", inclusive = true, message = "Weight should not be less than 0kg")
+    @DecimalMin(value = "1.0", inclusive = true, message = "Weight should not be less than 1kg")
     @DecimalMax(value = "300.0", inclusive = true, message = "Weight should not be more than 300kg")
     private float weight;
 
@@ -107,6 +116,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "symptom_id"))
     @JsonIgnoreProperties(value = {"users", "departments", "appointments"}, allowSetters = true)
     private List<Symptom> symptoms;
+
+
 
     @Override
     public boolean equals(Object o) {

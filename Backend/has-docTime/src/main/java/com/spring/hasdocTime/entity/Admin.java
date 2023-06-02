@@ -1,14 +1,17 @@
 package com.spring.hasdocTime.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.*;
 
 import java.util.Objects;
 
+
+/**
+ * The Admin class represents an administrator in the system.
+ * It contains information about the admin's ID, associated User,
+ * and provides methods for equality comparison and hashing.
+ */
 @Entity
 @Table(name = "admin")
 @Data
@@ -26,7 +29,14 @@ public class Admin {
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-    
+
+
+    /**
+     * Checks if the current Admin object is equal to the given object.
+     *
+     * @param o the object to compare with
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,6 +45,12 @@ public class Admin {
         return id == admin.id;
     }
 
+
+    /**
+     * Generates a hash code value for the Admin object.
+     *
+     * @return the hash code value
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);

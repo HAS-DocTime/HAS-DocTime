@@ -13,7 +13,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
+/**
+ * This class implements the {@link AppointmentInterface} interface and provides the implementation for CRUD operations on appointment entities.
+ * It interacts with the repositories to perform the database operations.
+ * This class is annotated with {@code @Service} to indicate that it is a service component in the Spring framework.
+ */
 @Service
 public class AppointmentDaoImpl implements AppointmentInterface {
 
@@ -23,6 +27,15 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     private TimeSlotRepository timeSlotRepository;
     private SymptomRepository symptomRepository;
 
+    /**
+     * Constructor-based dependency injection is used to inject the repositories.
+     *
+     * @param appointmentRepository The repository for managing appointment entities.
+     * @param userRepository       The repository for managing user entities.
+     * @param doctorRepository     The repository for managing doctor entities.
+     * @param timeSlotRepository   The repository for managing time slot entities.
+     * @param symptomRepository    The repository for managing symptom entities.
+     */
     @Autowired
     public AppointmentDaoImpl(
             AppointmentRepository appointmentRepository,
@@ -38,6 +51,11 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         this.symptomRepository = symptomRepository;
     }
 
+    /**
+     * Retrieves all appointments from the database.
+     *
+     * @return A list of all appointments.
+     */
     @Override
     public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -53,6 +71,13 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         return allAppointments;
     }
 
+    /**
+     * Retrieves an appointment by its ID from the database.
+     *
+     * @param id The ID of the appointment to retrieve.
+     * @return The appointment with the specified ID.
+     * @throws DoesNotExistException If the appointment with the specified ID does not exist.
+     */
     @Override
     public Appointment getAppointmentById(int id) throws DoesNotExistException {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
@@ -63,6 +88,14 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         throw new DoesNotExistException("Appointment");
     }
 
+    /**
+     * Creates a new appointment in the database.
+     *
+     * @param appointment The appointment to create.
+     * @return The created appointment.
+     * @throws MissingParameterException If any required parameter is missing.
+     * @throws DoesNotExistException     If any referenced entity does not exist.
+     */
     @Override
     public Appointment createAppointment(Appointment appointment) throws MissingParameterException, DoesNotExistException{
         if(appointment.getDescription()==null){
@@ -122,6 +155,15 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         return appointmentRepository.save(appointment);
     }
 
+    /**
+     * Updates an existing appointment in the database.
+     *
+     * @param id          The ID of the appointment to update.
+     * @param appointment The updated appointment.
+     * @return The updated appointment.
+     * @throws DoesNotExistException     If the appointment with the specified ID does not exist.
+     * @throws MissingParameterException If any required parameter is missing.
+     */
     @Override
     public Appointment updateAppointment(int id, Appointment appointment) throws DoesNotExistException, MissingParameterException{
         if(appointment.getDescription()==null){
@@ -187,6 +229,13 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         throw new DoesNotExistException("Appointment");
     }
 
+    /**
+     * Deletes an appointment from the database.
+     *
+     * @param id The ID of the appointment to delete.
+     * @return The deleted appointment.
+     * @throws DoesNotExistException If the appointment with the specified ID does not exist.
+     */
     @Override
     public Appointment deleteAppointment(int id) throws DoesNotExistException{
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
@@ -197,18 +246,13 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         throw new DoesNotExistException("Appointment");
     }
 
-//    @Override
-//    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException{
-//        Optional<User> user = userRepository.findById(userId);
-//        if(user.isEmpty()){
-//            throw new DoesNotExistException("User");
-//        }
-//        User currentUser = user.get();
-//        List<Appointment> appointments = appointmentRepository.findByUser(currentUser);
-//        return appointments;
-//    }
-
-
+    /**
+     * Retrieves all appointments associated with a user from the database.
+     *
+     * @param userId The ID of the user.
+     * @return A list of appointments associated with the specified user.
+     * @throws DoesNotExistException If the user with the specified ID does not exist.
+     */
     @Override
     public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(userId);
@@ -227,6 +271,13 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         return appointments;
     }
 
+    /**
+     * Retrieves all appointments associated with a doctor from the database.
+     *
+     * @param id The ID of the doctor.
+     * @return A list of appointments associated with the specified doctor.
+     * @throws DoesNotExistException If the doctor with the specified ID does not exist.
+     */
     @Override
     public List<Appointment> getAppointmentListByUser(int userId) throws DoesNotExistException {
         Optional<User> user = userRepository.findById(userId);
@@ -237,20 +288,6 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         List<Appointment> appointments = appointmentRepository.findListByUser(userId);
         return appointments;
     }
-
-
-//    @Override
-//    public List<Appointment> getAppointmentsOfDoctor(int id) throws DoesNotExistException {
-//        Optional<Doctor> doctor = doctorRepository.findById(id);
-//        if(doctor.isEmpty()){
-//            throw new DoesNotExistException("Doctor");
-//        }
-////        List<Appointment> appointments = doctor.get().getAppointments();
-//        Doctor currentDoctor = doctor.get();
-//        List<Appointment> appointments = appointmentRepository.findByDoctor(currentDoctor);
-//        return appointments;
-//
-//    }
 
 
     @Override

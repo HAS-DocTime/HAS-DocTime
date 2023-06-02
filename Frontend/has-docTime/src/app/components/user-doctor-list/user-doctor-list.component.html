@@ -4,7 +4,7 @@
 </div>
 <div *ngIf = "!noDataFound" class="col m-0 p-0 mt-5">
   <div class="container">
-    <h1 class="mb-4 text-center" *ngIf="urlPath==='users'">Patients</h1>
+    <h1 class="mb-4 text-center" *ngIf="urlPath==='users' || urlPath==='chronicIllness'">Patients</h1>
     <h1 class="mb-4 text-center" *ngIf="urlPath==='doctors' || urlPath==='departments'">Doctors</h1>
     <hr>
 

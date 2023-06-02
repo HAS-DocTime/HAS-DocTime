@@ -1,3 +1,6 @@
+/**
+ * Interface defining operations for user registration.
+ */
 package com.spring.hasdocTime.interfaces;
 
 import com.spring.hasdocTime.entity.Admin;
@@ -9,11 +12,33 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 
 public interface RegisterInterface {
 
-    public AuthenticationResponse registerAdmin(Admin admin) throws DoesNotExistException, MissingParameterException;
+    /**
+     * Registers an admin.
+     *
+     * @param admin the Admin object representing the admin to be registered
+     * @return the AuthenticationResponse object containing the registration information
+     * @throws DoesNotExistException    if related entities do not exist
+     * @throws MissingParameterException if required parameters are missing
+     */
+    AuthenticationResponse registerAdmin(Admin admin) throws DoesNotExistException, MissingParameterException;
 
-    public AuthenticationResponse registerUser(User user) throws MissingParameterException, DoesNotExistException;
+    /**
+     * Registers a user.
+     *
+     * @param user the User object representing the user to be registered
+     * @return the AuthenticationResponse object containing the registration information
+     * @throws MissingParameterException if required parameters are missing
+     * @throws DoesNotExistException    if related entities do not exist
+     */
+    AuthenticationResponse registerUser(User user) throws MissingParameterException, DoesNotExistException;
 
-    public AuthenticationResponse registerDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException;
-
-
+    /**
+     * Registers a doctor.
+     *
+     * @param doctor the Doctor object representing the doctor to be registered
+     * @return the AuthenticationResponse object containing the registration information
+     * @throws MissingParameterException if required parameters are missing
+     * @throws DoesNotExistException    if related entities do not exist
+     */
+    AuthenticationResponse registerDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException;
 }
