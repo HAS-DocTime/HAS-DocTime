@@ -53,6 +53,10 @@ export class AppointmentService {
     return this.http.get<PagedObject>(`${this.baseUrl}appointment`, { params: httpParams });
   }
 
+  getAppointmentList(){
+    return this.http.get<Appointment[]>(`${this.baseUrl}appointment/list`);
+  }
+
 
   deleteAppointment(id : number | undefined){
     return this.http.delete(`${this.baseUrl}appointment/${id}`);

@@ -125,7 +125,7 @@ export class AppointmentComponent implements OnInit{
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
       this.userService.getUserByEmail().subscribe((data)=>{
         if(this.tokenRole==="ADMIN"){
-          this.appointmentService.getAppointments().subscribe((data)=> {
+          this.appointmentService.getAppointmentList().subscribe((data)=> {
             for(let appointment of data){
               if(!appointment?.doctor?.department?.id){
                 this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
