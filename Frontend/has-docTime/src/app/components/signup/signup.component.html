@@ -14,7 +14,7 @@
           </span>
         </div>
         <div class="row">
-          <button type="submit" class="btn btn-outline-primary mt-3" (click)="file.click()">
+          <button type="button" class="btn btn-outline-primary mt-3" (click)="file.click()">
             Upload File
           </button>
             <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #file/>

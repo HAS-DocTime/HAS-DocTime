@@ -100,6 +100,8 @@ public class UserController {
      */
     @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") int id, @Valid @RequestBody User theUser) throws DoesNotExistException, MissingParameterException {
+        System.out.println("=====================================================");
+        System.out.println("Update User" + theUser);
         User user = userService.updateUser(id, theUser);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

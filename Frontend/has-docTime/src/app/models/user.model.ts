@@ -19,4 +19,7 @@ export type User = {
   password? : string;
   role? : Role;
   patientChronicIllness? : PatientChronicIllness[];
+  authorities? : {
+    authority : string;
+  }[];
 }
