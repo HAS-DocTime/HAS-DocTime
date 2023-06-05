@@ -22,10 +22,6 @@
       <p class="mb-4">{{ caseDetailedData?.user?.age }} years</p>
     </div>
   </div>
-  <!-- <div class="row">
-
-
-  </div> -->
   <div class="row">
     <div class="col-md-4">
       <p class="fw-bold">Height:</p>
@@ -40,7 +36,7 @@
       <p class="mb-4">{{ caseDetailedData?.user?.weight }} kg</p>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="caseDetailedData?.user?.patientChronicIllness?.length">
     <div class="col-md-12">
       <p class="fw-bold">Chronic Illness:</p>
       <div class="d-flex flex-wrap">
@@ -52,33 +48,6 @@
   </div>
 </div>
 </div>
-<!-- <div class="card mb-4">
-  <div class="card-header bg-primary text-white">
-    <h5 class="mb-0">Doctor Details</h5>
-  </div>
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-6">
-        <p class="fw-bold">Doctor Name:</p>
-        <p class="mb-4">{{ caseDetailedData?.doctor?.user?.name }}</p>
-      </div>
-      <div class="col-md-6">
-        <p class="fw-bold">Department:</p>
-        <p class="mb-4">{{ caseDetailedData?.doctor?.department?.name }}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <p class="fw-bold">Qualification</p>
-        <p class="mb-4">{{ caseDetailedData?.doctor?.qualification }}</p>
-      </div>
-      <div class="col-md-6">
-        <p class="fw-bold">Contact:</p>
-        <p class="mb-4">{{ caseDetailedData?.doctor?.user?.contact }}</p>
-      </div>
-    </div>
-  </div>
-</div> -->
 <!-- Disease Details -->
 <div class="card mb-4">
 <div class="card-header bg-primary text-white">

@@ -1,9 +1,6 @@
 package com.spring.hasdocTime.dao;
 
-import com.spring.hasdocTime.entity.Doctor;
-import com.spring.hasdocTime.entity.PostAppointmentData;
-import com.spring.hasdocTime.entity.TimeSlot;
-import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.PostAppointmentDataInterface;
@@ -12,6 +9,7 @@ import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.PostAppointmentDataRepository;
 import com.spring.hasdocTime.repository.TimeSlotRepository;
 import com.spring.hasdocTime.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -59,15 +57,20 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     @Override
     public Page<PostAppointmentData> getAllPostAppointmentData(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        Page<PostAppointmentData> postAppointmentData;
+        Page<PostAppointmentData> postAppointmentDataList;
         if(search != null && !search.isEmpty()){
             //search Appointments based on userName only.
-            postAppointmentData = postAppointmentDataRepository.findAllAndUserNameContainsIgnoreCase(search, pageable);
+            postAppointmentDataList = postAppointmentDataRepository.findAllAndUserNameContainsIgnoreCase(search, pageable);
         }
         else{
-            postAppointmentData = postAppointmentDataRepository.findAll(pageable);
+            postAppointmentDataList = postAppointmentDataRepository.findAll(pageable);
         }
-        return postAppointmentData;
+        for(PostAppointmentData postAppointmentData : postAppointmentDataList){
+            Hibernate.initialize(postAppointmentData.getUser());
+            Hibernate.initialize(postAppointmentData.getDoctor().getUser());
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+        }
+        return postAppointmentDataList;
     }
 
     /**
@@ -82,6 +85,14 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(id);
 
         if(optionalPostAppointmentData.isPresent()){
+            Hibernate.initialize(optionalPostAppointmentData.get().getDoctor().getUser());
+            Hibernate.initialize(optionalPostAppointmentData.get().getDoctor().getDepartment());
+            Hibernate.initialize(optionalPostAppointmentData.get().getTimeSlotForAppointmentData());
+            Hibernate.initialize(optionalPostAppointmentData.get().getUser());
+            for(PatientChronicIllness pc : optionalPostAppointmentData.get().getUser().getPatientChronicIllness()){
+                Hibernate.initialize(pc.getChronicIllness());
+            }
+            Hibernate.initialize(optionalPostAppointmentData.get().getSymptoms());
             return optionalPostAppointmentData.get();
         }
         throw new DoesNotExistException("Post Appointment Data");
@@ -101,6 +112,10 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
             allPostAppointmentData= postAppointmentDataRepository.findByUserEmailAndDiseaseContainsIgnoreCase(email, search, pageable);
         }else {
             allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email, pageable);
+        }
+        for(PostAppointmentData postAppointmentData : allPostAppointmentData){
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+            Hibernate.initialize(postAppointmentData.getDoctor().getUser());
         }
         return allPostAppointmentData;
     }
@@ -268,15 +283,20 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
     @Override
     public Page<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        Page<PostAppointmentData> postAppointmentData;
+        Page<PostAppointmentData> postAppointmentDataList;
         if(search != null && !search.isEmpty()){
             //search Appointments based on userName only.
-            postAppointmentData = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptomAndUserNameContainsIgnoreCase(symptom, search, pageable);
+            postAppointmentDataList = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptomAndUserNameContainsIgnoreCase(symptom, search, pageable);
         }
         else{
-            postAppointmentData = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom, pageable);
+            postAppointmentDataList = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom, pageable);
         }
-        return postAppointmentData;
+        for(PostAppointmentData postAppointmentData : postAppointmentDataList){
+            Hibernate.initialize(postAppointmentData.getUser());
+            Hibernate.initialize(postAppointmentData.getDoctor().getUser());
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+        }
+        return postAppointmentDataList;
     }
 
     /**
@@ -294,13 +314,17 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         }
         Doctor doctor = optionalDoctor.get();
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        Page<PostAppointmentData> postAppointmentData;
+        Page<PostAppointmentData> postAppointmentDataList;
         if(search != null && !search.isEmpty()){
-            postAppointmentData = postAppointmentDataRepository.findByDoctorAndUserNameContainsIgnoreCase(doctor.getId(), search, pageable);
+            postAppointmentDataList = postAppointmentDataRepository.findByDoctorAndUserNameContainsIgnoreCase(doctor.getId(), search, pageable);
         }else {
-            postAppointmentData = postAppointmentDataRepository.findByDoctor(doctor.getId(), pageable);
+            postAppointmentDataList = postAppointmentDataRepository.findByDoctor(doctor.getId(), pageable);
         }
-        return postAppointmentData;
+        for(PostAppointmentData postAppointmentData : postAppointmentDataList){
+            Hibernate.initialize(postAppointmentData.getUser());
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+        }
+        return postAppointmentDataList;
     }
 
     /**
@@ -318,12 +342,17 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         }
         User currentUser = user.get();
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        Page<PostAppointmentData> postAppointmentData;
+        Page<PostAppointmentData> postAppointmentDataList;
         if(search != null && !search.isEmpty()){
-            postAppointmentData = postAppointmentDataRepository.findByUserAndDoctorNameContainsIgnoreCase(currentUser.getId(), search, pageable);
+            postAppointmentDataList = postAppointmentDataRepository.findByUserAndDoctorNameContainsIgnoreCase(currentUser.getId(), search, pageable);
         }else {
-            postAppointmentData = postAppointmentDataRepository.findByUser(currentUser.getId(), pageable);
+            postAppointmentDataList = postAppointmentDataRepository.findByUser(currentUser.getId(), pageable);
         }
-        return postAppointmentData;
+        for(PostAppointmentData postAppointmentData : postAppointmentDataList){
+            Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
+            Hibernate.initialize(postAppointmentData.getDoctor().getUser());
+            Hibernate.initialize(postAppointmentData.getDoctor().getDepartment());
+        }
+        return postAppointmentDataList;
     }
 }

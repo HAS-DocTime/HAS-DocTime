@@ -40,7 +40,7 @@ public class TimeSlot {
     @Future(message = "Timestamp must be in the future")
     private Time endTime;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"timeSlots", "doctors"}, allowSetters = true)
     private Department department;
@@ -63,11 +63,11 @@ public class TimeSlot {
     @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
     private List<Doctor> bookedDoctors;
 
-    @OneToOne(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"timeSlotForAppointmentData", "user", "doctor"}, allowSetters = true)
     private PostAppointmentData appointmentData;
 
-    @OneToOne(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"timeSlotForAppointment", "symptoms", "user", "doctor"}, allowSetters = true)
     private Appointment appointment;
 

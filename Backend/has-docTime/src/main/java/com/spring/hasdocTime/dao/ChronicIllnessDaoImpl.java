@@ -8,6 +8,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfaces.ChronicIllnessInterface;
 import com.spring.hasdocTime.interfaces.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,6 +69,9 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
             chronicIllnessPage = chronicIllnessRepository.findAllAndNameContainsIgnoreCase(search, pageable);
         } else {
             chronicIllnessPage = chronicIllnessRepository.findAll(pageable);
+        }
+        for(ChronicIllness chronicIllness : chronicIllnessPage){
+            Hibernate.initialize(chronicIllness.getPatientChronicIllnesses());
         }
         return chronicIllnessPage;
     }

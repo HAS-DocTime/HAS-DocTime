@@ -11,6 +11,7 @@ import com.spring.hasdocTime.interfaces.DepartmentInterface;
 import com.spring.hasdocTime.interfaces.SymptomInterface;
 import com.spring.hasdocTime.interfaces.UserInterface;
 import com.spring.hasdocTime.repository.SymptomRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -79,6 +80,9 @@ public class SymptomDaoImpl implements SymptomInterface {
             symptoms = symptomRepository.findAllAndNameContainsIgnoreCase(search, pageable);
         } else {
             symptoms = symptomRepository.findAll(pageable);
+        }
+        for(Symptom symptom : symptoms){
+            Hibernate.initialize(symptom.getDepartments());
         }
         return symptoms;
     }

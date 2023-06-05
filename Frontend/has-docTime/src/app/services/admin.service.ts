@@ -62,15 +62,8 @@ export class AdminService{
     return this.http.get<PagedObject>(`${this.baseUrl}doctor/department/${id}`, { params: httpParams });
   }
 
-  getSingleDoctor(id : number){
-    return this.http.get<Doctor>(`${this.baseUrl}doctor/${id}`);
-  }
-
   deleteUser(id : number){
     return this.http.delete<User>(`${this.baseUrl}user/${id}`);
   }
 
-  deleteDoctor(id : number){
-    return this.http.delete<Doctor>(`${this.baseUrl}doctor/${id}`);
-  }
 }

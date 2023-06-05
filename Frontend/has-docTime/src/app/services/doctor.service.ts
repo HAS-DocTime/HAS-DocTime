@@ -12,10 +12,6 @@ export class DoctorService {
 
   baseUrl = environment.apiUrl;
 
-  createDoctor(doctor : Doctor){
-    return this.http.post<Doctor>(`${this.baseUrl}doctor`, doctor);
-  }
-
   getDoctor(id : number){
     return this.http.get<Doctor>(`${this.baseUrl}doctor/${id}`);
   }

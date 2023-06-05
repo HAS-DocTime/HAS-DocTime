@@ -41,10 +41,6 @@ export class UserService {
     return this.http.put<Doctor>(`${this.baseUrl}doctor/${id}`, doctor);
   }
 
-  updateAdmin( admin: Admin, id : number ){
-    return this.http.put<Admin>(`${this.baseUrl}admin/${id}`, admin);
-  }
-
   getUser(id : number){
     return this.http.get<User>(`${this.baseUrl}user/${id}`);
   }
@@ -58,11 +54,6 @@ export class UserService {
   onCancel(){
     this.isLoggedIn.next(false);
   }
-
-  getUserByEmail(){
-    return this.http.get<User>(`${this.baseUrl}user/findByEmail`);
-  }
-
 
 }
 

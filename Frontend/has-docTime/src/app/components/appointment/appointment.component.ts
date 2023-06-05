@@ -84,10 +84,7 @@ export class AppointmentComponent implements OnInit{
     }
     params.page = this.page-1;
 
-    this.userService.getUserByEmail().subscribe((data)=>{
-
-
-      if(this.tokenRole==='ADMIN'){
+    if(this.tokenRole==='ADMIN'){
         this.appointmentService.getAppointments(params).subscribe((data)=>{
           for(let appointment of data.content){
             if(!appointment?.doctor?.department?.id){
@@ -101,7 +98,7 @@ export class AppointmentComponent implements OnInit{
         })
       }
       else {
-        this.appointmentService.getAppointmentByUser((data.id?.toString()), params).subscribe((data)=> {
+        this.appointmentService.getAppointmentByUser((this.id.toString()), params).subscribe((data)=> {
           for(let appointment of data.content){
             if(!appointment?.doctor?.department?.id){
               this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
@@ -114,8 +111,8 @@ export class AppointmentComponent implements OnInit{
         });
       }
 
-    })
-  }
+    }
+
 
   appointmentDetails(id : number | undefined){
     this.router.navigate([id], {relativeTo : this.route})
@@ -123,7 +120,6 @@ export class AppointmentComponent implements OnInit{
 
   deleteAppointment(id : number | undefined){
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
-      this.userService.getUserByEmail().subscribe((data)=>{
         if(this.tokenRole==="ADMIN"){
           this.appointmentService.getAppointmentList().subscribe((data)=> {
             for(let appointment of data){
@@ -137,7 +133,7 @@ export class AppointmentComponent implements OnInit{
           });
         }
         else{
-          this.appointmentService.getAppointmentListByUser((data.id?.toString())).subscribe((data)=> {
+          this.appointmentService.getAppointmentListByUser((this.id?.toString())).subscribe((data)=> {
             for(let appointment of data){
               if(!appointment?.doctor?.department?.id){
                 this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
@@ -150,8 +146,6 @@ export class AppointmentComponent implements OnInit{
         }
     })
     }
-    );
-  }
 
   onPageSizeChange() {
     this.page = 1;

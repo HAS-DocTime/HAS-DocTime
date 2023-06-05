@@ -19,6 +19,7 @@ import com.spring.hasdocTime.repository.DepartmentRepository;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -118,7 +119,10 @@ public class DoctorDaoImpl implements DoctorInterface {
         else{
             doctors = doctorRepository.findAll(pageable);
         }
-        return  doctors;
+        for(Doctor d : doctors){
+            Hibernate.initialize(d.getUser());
+        }
+        return doctors;
     }
 
     /**
@@ -138,6 +142,9 @@ public class DoctorDaoImpl implements DoctorInterface {
         else{
             doctors = doctorRepository.findDoctorsByDepartmentId(id, pageable);
         }
+        for(Doctor doctor: doctors){
+            Hibernate.initialize(doctor.getUser());
+        }
         return doctors;
     }
 
@@ -152,6 +159,7 @@ public class DoctorDaoImpl implements DoctorInterface {
     public Doctor getDoctor(int id) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
+            Hibernate.initialize(doctor.get().getUser());
             return doctor.get();
         }
         throw new DoesNotExistException("Doctor");
