@@ -270,7 +270,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         const doctor = data;
         const id = data.id;
 
-        const filePath = `profiles/${id}`;
+        const filePath = `profiles/${data.user.id}`;
         const storageRef = this.storage.ref(filePath);
         const uploadTask = this.storage.upload(filePath, this.selectedFile);
 
