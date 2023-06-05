@@ -27,9 +27,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private doctorService: DoctorService,
     private adminService: AdminService,
     private route: ActivatedRoute,
-    private router: Router, 
+    private router: Router,
     private storage: AngularFireStorage
-  ) {}
+  ) { }
 
   user?: User;
   doctor?: Doctor;
@@ -45,6 +45,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   doctors!: Doctor[];
   selectedFile: FileUpload | null = null;
   imageUrl!: string;
+  isLoading: boolean = false;
 
   ngOnInit(): void {
     this.route.url.subscribe((data) => {
@@ -205,7 +206,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.userService.getUserByEmail().subscribe((data) => {
             console.log("data", data);
             this.user = data;
-            
+
             this.id = data.id as number;
             const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
             this.firstName = nameArray[0];
@@ -218,7 +219,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
               this.dateFromAPI,
               'yyyy-MM-dd'
             );
-            
+
             this.editForm.patchValue({
               imageUrl: this.imageUrl,
               firstName: this.firstName,
@@ -268,9 +269,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     patientChronicIllness: new FormArray([]),
   });
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
-  submitProfile(){
+  submitProfile() {
+
     const date = new Date();
     this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
     this.editForm.value['lastName'] = this.editForm.value["lastName"].trim();
@@ -311,6 +313,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
         this.userService.getUser(this.id).subscribe((data) => {
           this.user = data;
+          this.isLoading = false;
         });
       });
     } else if (this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors') {
@@ -334,6 +337,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.doctor = data;
           this.user = data.user;
           this.cdr.detectChanges();
+          this.isLoading = false;
         });
         this.toggleDisable();
       });
@@ -346,7 +350,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       user.role = this.admin?.user?.role;
       user.email = this.admin?.user?.email;
       user.imageUrl = this.imageUrl;
-      
+
       let admin: Admin = {
         user: user,
       };
@@ -355,6 +359,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.admin = data;
           this.user = data.user;
           this.cdr.detectChanges();
+          this.isLoading != this.isLoading;
         });
         this.toggleDisable();
       });
@@ -362,8 +367,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-
-    if(this.selectedFile != null){
+    this.isLoading = true;
+    if (this.selectedFile != null) {
       console.log(this.selectedFile);
       const filePath = `profiles/${this.user?.id}`;
       const storageRef = this.storage.ref(filePath);
@@ -386,7 +391,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         })
       ).subscribe();
     }
-    else{
+    else {
       this.submitProfile();
     }
   }
@@ -399,7 +404,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     reader.onload = (e: any) => {
       this.imageUrl = e.target.result;
     };
-    if(this.selectedFile){
+    if (this.selectedFile) {
       reader.readAsDataURL(event.target.files[0]);
     }
   }
@@ -408,7 +413,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   //   console.log("submit");
 
   //   if(this.selectedFile){
-      
+
   //     console.log(this.selectedFile);
   //     const filePath = `profiles/${this.selectedFile.name}`;
   //     const storageRef = this.storage.ref(filePath);
@@ -457,7 +462,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
   get minDate(): string {
     const date = new Date();
-    date.setFullYear(date.getFullYear()-150);
+    date.setFullYear(date.getFullYear() - 150);
     return date.toISOString().split('T')[0];
   }
 }

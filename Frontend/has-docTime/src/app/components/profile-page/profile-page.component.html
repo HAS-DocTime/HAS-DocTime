@@ -23,7 +23,6 @@
           </button>
             <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
             <!-- <button *ngIf="!disable" type="button" (click)="uploadProfilePicture()">Upload</button> -->
-          
         </div>
         </form>
         <span class="font-weight-bold mt-2">{{ editForm.get('firstName')?.value }} {{editForm.get('lastName')?.value}}</span>
@@ -191,6 +190,9 @@
               <button type="submit" class="btn btn-outline-primary" [disabled]="editForm.invalid">
                 Update
               </button>
+              <div *ngIf="isLoading" class="spinner-border ms-2 spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
             <div *ngIf="urlPath === 'users' || urlPath === 'doctors'" class="col">
               <button type="button" class="btn btn-outline-danger" (click)="delete()">
