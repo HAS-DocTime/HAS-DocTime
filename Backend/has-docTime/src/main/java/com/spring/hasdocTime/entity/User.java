@@ -89,12 +89,12 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = "user", allowSetters = true)
     private Doctor doctor;
 
     @JsonIgnoreProperties(value = "user", allowSetters = true)
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Admin admin;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

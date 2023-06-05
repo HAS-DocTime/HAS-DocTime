@@ -11,8 +11,13 @@ import com.spring.hasdocTime.interfaces.DepartmentInterface;
 import com.spring.hasdocTime.interfaces.SymptomInterface;
 import com.spring.hasdocTime.interfaces.UserInterface;
 import com.spring.hasdocTime.repository.SymptomRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -68,7 +73,22 @@ public class SymptomDaoImpl implements SymptomInterface {
      * @return A list of all symptoms.
      */
     @Override
-    public List<Symptom> getAllSymptom() {
+    public Page<Symptom> getAllSymptom(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Symptom> symptoms;
+        if(search != null && !search.isEmpty()){
+            symptoms = symptomRepository.findAllAndNameContainsIgnoreCase(search, pageable);
+        } else {
+            symptoms = symptomRepository.findAll(pageable);
+        }
+        for(Symptom symptom : symptoms){
+            Hibernate.initialize(symptom.getDepartments());
+        }
+        return symptoms;
+    }
+
+    @Override
+    public List<Symptom> getAllSymptomList() {
         return symptomRepository.findAll();
     }
 

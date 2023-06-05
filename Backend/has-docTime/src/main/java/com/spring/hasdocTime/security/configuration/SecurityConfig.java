@@ -89,6 +89,7 @@ public class SecurityConfig{
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/chronicIllness").permitAll()
                             .requestMatchers("/appointment/doctor**").permitAll()
+                            .requestMatchers("/appointment/user/**").permitAll()
                         .requestMatchers("/chronicIllness/**").permitAll() // Should only be allowed when the user/doctor tries to edit his/her own chronic Illness
                         .requestMatchers("/department").permitAll()
                         .requestMatchers("/appointment/**", "/appointment").permitAll()

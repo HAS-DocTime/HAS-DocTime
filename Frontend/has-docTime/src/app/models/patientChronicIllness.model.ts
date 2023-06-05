@@ -6,6 +6,6 @@ export type PatientChronicIllness = {
     chronicIllnessId: number;
   };
   user?: User;
-  chronicIllness : ChronicIllness;
+  chronicIllness? : ChronicIllness;
   yearsOfIllness : number;
 }

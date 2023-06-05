@@ -6,6 +6,7 @@ package com.spring.hasdocTime.interfaces;
 import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -26,24 +27,22 @@ public interface DoctorInterface {
      *
      * @return List of Doctor objects representing all doctors
      */
-    public List<Doctor> getAllDoctors();
+    public Page<Doctor> getAllDoctors(int page, int size, String sortBy, String search);
 
     /**
-     * Retrieves the doctor with the specified ID.
+     * Retrieves a doctor from its ID.
      *
-     * @param id the ID of the doctor to retrieve
-     * @return the Doctor object representing the doctor
-     * @throws DoesNotExistException if the doctor does not exist
+     * @param id the ID of the doctor
+     * @return Doctor object representing doctor of corresponding id 
      */
     public Doctor getDoctor(int id) throws DoesNotExistException;
-
     /**
      * Retrieves a list of doctors based on the department ID.
      *
      * @param id the ID of the department to filter doctors by
      * @return List of Doctor objects representing doctors in the specified department
      */
-    public List<Doctor> getDoctorsByDepartmentId(int id);
+    public Page<Doctor> getDoctorsByDepartmentId(int id, int page, int size, String sortBy, String search);
 
     /**
      * Updates the doctor with the specified ID.

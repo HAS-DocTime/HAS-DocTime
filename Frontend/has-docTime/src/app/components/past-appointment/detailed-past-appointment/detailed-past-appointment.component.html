@@ -1,5 +1,56 @@
 <div><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
 <div class="container my-5">
+
+      <!-- Patient Information -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mt-1 mb-1">Patient Information</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <p class="fw-bold">Name:</p>
+          <p class="mb-4">{{ pastAppointment?.user?.name }}</p>
+        </div>
+        <div class="col-md-4">
+          <p class="fw-bold">Gender:</p>
+          <p class="mb-4">{{ pastAppointment?.user?.gender }}</p>
+        </div>
+        <div class="col-md-4">
+          <p class="fw-bold">Age:</p>
+          <p class="mb-4">{{ pastAppointment?.user?.age }} years</p>
+        </div>
+      </div>
+      <!-- <div class="row">
+
+
+      </div> -->
+      <div class="row">
+        <div class="col-md-4">
+          <p class="fw-bold">Height:</p>
+          <p class="mb-4">{{ pastAppointment?.user?.height }} feet</p>
+        </div>
+        <div class="col-md-4">
+          <p class="fw-bold">Blood Group:</p>
+          <p class="mb-4">{{ pastAppointment?.user?.bloodGroup }}</p>
+        </div>
+        <div class="col-md-4">
+          <p class="fw-bold">Weight:</p>
+          <p class="mb-4">{{ pastAppointment?.user?.weight }} kg</p>
+        </div>
+      </div>
+      <div class="row" *ngIf="pastAppointment?.user?.patientChronicIllness.length">
+        <div class="col-md-12">
+          <p class="fw-bold">Chronic Illness:</p>
+          <div class="d-flex flex-wrap">
+            <div class="badge bg-secondary me-2 mb-2" *ngFor="let illness of pastAppointment?.user?.patientChronicIllness">
+              {{ illness?.chronicIllness?.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="card mb-4">
       <div class="card-header bg-primary text-white">
         <h5 class="mb-0">Doctor Details</h5>

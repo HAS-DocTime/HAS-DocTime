@@ -12,10 +12,28 @@
     Here are your Scheduled Appointments
   </h3>
   <div class="appointment-container">
+    <div class="row mb-3" >
+      <div class="col-sm-4" *ngIf="totalPages > 1">
+        <label for="pageSize">Size:</label>
+        <select class="form-select" id="size" [(ngModel)]="size" (change)="onPageSizeChange()">
+          <option *ngFor="let sizeOption of sizeOptions" [value]="sizeOption">{{ sizeOption }}</option>
+        </select>
+      </div>
+      <div class="col-sm-4" *ngIf="totalPages > 1">
+        <label for="sortBy">Sort By:</label>
+        <select class="form-select" id="sortBy" [(ngModel)]="sortBy" (change)="onSortByChange()">
+          <option *ngFor="let sortByOption of sortByOptions" [value]="sortByOption.value">{{ sortByOption.label }}</option>
+        </select>
+      </div>
+      <div class="col-sm-4" *ngIf="totalPages >= 0">
+        <label for="search">Search:</label>
+        <input class="form-control" type="text" id="search" [(ngModel)]="search" (keyup)="onSearch()">
+      </div>
+    </div>
+
     <div
       class="appointments p-3 rounded my-4"
-      *ngFor="let appointment of appointments"
-    >
+      *ngFor="let appointment of appointments">
       <div class="d-flex justify-content-between align-items-start my-3 px-4">
         <h5>Patient Name : {{ appointment.user.name }}</h5>
         <h5>Time : {{ appointment.timeSlotForAppointment?.startTime }}</h5>
@@ -39,7 +57,22 @@
         </button>
       </div>
     </div>
+
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="page === 1">
+          <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>
+        </li>
+        <li class="page-item" [class.active]="page === currentPage " *ngFor="let currentPage of range(totalPages)">
+          <a class="page-link" (click)="onPageChange(currentPage)">{{ currentPage }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="page === totalPages">
+          <a class="page-link" (click)="onPageChange(page + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
   </div>
+
   <div class="create-appointment d-flex justify-content-center my-3">
     <button class="btn btn-success" routerLink="book">Book Appointment</button>
   </div>

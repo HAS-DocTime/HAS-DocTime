@@ -7,6 +7,7 @@ import com.spring.hasdocTime.interfaces.ChronicIllnessInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +41,22 @@ public class ChronicIllnessController {
      * or HttpStatus.NO_CONTENT if no ChronicIllnesses are found.
      */
     @GetMapping("")
+    public ResponseEntity<Page<ChronicIllness>> getAllChronicIllness(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) {
+        Page<ChronicIllness> chronicIllnessList = chronicIllnessService.getAllChronicIllness(page, size, sortBy, search);
+        if(chronicIllnessList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return new ResponseEntity(chronicIllnessList, HttpStatus.OK);
+    }
+
+    @GetMapping("list")
     public ResponseEntity<List<ChronicIllness>> getAllChronicIllness() {
-        List<ChronicIllness> chronicIllnessList = chronicIllnessService.getAllChronicIllness();
+        List<ChronicIllness> chronicIllnessList = chronicIllnessService.getAllChronicIllnesses();
         if(chronicIllnessList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }

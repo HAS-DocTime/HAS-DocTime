@@ -1,9 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Admin } from '../models/admin.model';
 import { User } from '../models/user.model';
 import { Doctor } from '../models/doctor.model';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
+import { PagedObject } from '../models/pagedObject.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,35 +24,46 @@ export class AdminService{
     return this.http.put<Admin>(`${this.baseUrl}admin/${id}`, admin);
   }
 
-  getAllUsers(){
-    return this.http.get<User[]>(`${this.baseUrl}user/patient`);
-  }
 
-  getPatientsByChronicIllnessId(id : number){
-    return this.http.get<User[]>(`${this.baseUrl}user/patient/chronicIllness/${id}`);
-  }
 
   getSingleUser(id : number){
     return this.http.get<User>(`${this.baseUrl}user/${id}`);
   }
 
-  getAllDoctors(){
-    return this.http.get<Doctor[]>(`${this.baseUrl}doctor`);
+  getAllUsers(params : any): Observable<any> {
+    let httpParams = new HttpParams();
+    Object.keys(params).forEach((key) => {
+      httpParams = httpParams.set(key, params[key]);
+    });
+    return this.http.get<PagedObject>(`${this.baseUrl}user/patient`, { params: httpParams });
   }
 
-  getDoctorsByDepartmentId(id : number){
-    return this.http.get<Doctor[]>(`${this.baseUrl}doctor/department/${id}`);
+  getPatientsByChronicIllnessId(id : number, params : any): Observable<any> {
+    let httpParams = new HttpParams();
+    Object.keys(params).forEach((key) => {
+      httpParams = httpParams.set(key, params[key]);
+    });
+    return this.http.get<PagedObject>(`${this.baseUrl}user/patient/chronicIllness/${id}`, { params: httpParams });
   }
 
-  getSingleDoctor(id : number){
-    return this.http.get<Doctor>(`${this.baseUrl}doctor/${id}`);
+  getAllDoctors( params : any): Observable<any> {
+    let httpParams = new HttpParams();
+    Object.keys(params).forEach((key) => {
+      httpParams = httpParams.set(key, params[key]);
+    });
+    return this.http.get<PagedObject>(`${this.baseUrl}doctor`, { params: httpParams });
+  }
+
+  getDoctorsByDepartmentId(id : number, params : any): Observable<any> {
+    let httpParams = new HttpParams();
+    Object.keys(params).forEach((key) => {
+      httpParams = httpParams.set(key, params[key]);
+    });
+    return this.http.get<PagedObject>(`${this.baseUrl}doctor/department/${id}`, { params: httpParams });
   }
 
   deleteUser(id : number){
     return this.http.delete<User>(`${this.baseUrl}user/${id}`);
   }
 
-  deleteDoctor(id : number){
-    return this.http.delete<Doctor>(`${this.baseUrl}doctor/${id}`);
-  }
 }

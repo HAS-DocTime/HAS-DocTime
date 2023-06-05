@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfaces.PostAppointmentDataInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
      * @return The list of post-appointment data.
      */
     @Override
-    public List<PostAppointmentData> getAllPostAppointmentData() {
-        return postAppointmentDataDao.getAllPostAppointmentData();
+    public Page<PostAppointmentData> getAllPostAppointmentData(int page, int size, String sortBy, String search) {
+        return postAppointmentDataDao.getAllPostAppointmentData(page, size, sortBy, search);
     }
 
     /**
@@ -53,9 +54,10 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
      * @return The list of post-appointment data.
      */
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataByEmail(String email) {
-        return postAppointmentDataDao.getPostAppointmentDataByEmail(email);
+    public Page<PostAppointmentData> getPostAppointmentDataByEmail(String email, int page, int size, String sortBy, String search) {
+        return postAppointmentDataDao.getPostAppointmentDataByEmail(email, page, size, sortBy, search);
     }
+
 
     /**
      * Creates post-appointment data.
@@ -104,8 +106,8 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
      * @throws DoesNotExistException If the data does not exist.
      */
     @Override
-    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
-        return postAppointmentDataDao.getDiseasesGroupedBySymptom(symptom);
+    public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataDao.getDiseaseListGroupedBySymptom(symptom);
     }
 
     /**
@@ -116,8 +118,8 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
      * @throws DoesNotExistException If the data does not exist.
      */
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException {
-        return postAppointmentDataDao.getPostAppointmentDataBySymptom(symptom);
+    public Page<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        return postAppointmentDataDao.getPostAppointmentDataBySymptom(symptom, page, size, sortBy, search);
     }
 
     /**
@@ -127,8 +129,9 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
      * @return The list of post-appointment data.
      * @throws DoesNotExistException If the data does not exist.
      */
-    public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException{
-        return postAppointmentDataDao.getPostAppointmentsDataOfDoctor(id);
+    public Page<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException{
+        Page<PostAppointmentData> postAppointmentData = postAppointmentDataDao.getPostAppointmentsDataOfDoctor(id, page, size, sortBy, search);
+        return postAppointmentData;
     }
 
     /**
@@ -139,7 +142,8 @@ public class PostAppointmentDataServiceImpl implements PostAppointmentDataInterf
      * @throws DoesNotExistException If the data does not exist.
      */
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException {
-        return postAppointmentDataDao.getPostAppointmentDataByUserId(id);
+    public Page<PostAppointmentData> getPostAppointmentDataByUserId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        Page<PostAppointmentData> postAppointmentData =  postAppointmentDataDao.getPostAppointmentDataByUserId(id, page, size, sortBy, search);
+        return postAppointmentData;
     }
 }
