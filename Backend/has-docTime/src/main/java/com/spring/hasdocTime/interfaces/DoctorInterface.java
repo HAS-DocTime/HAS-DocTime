@@ -28,6 +28,13 @@ public interface DoctorInterface {
      * @return List of Doctor objects representing all doctors
      */
     public Page<Doctor> getAllDoctors(int page, int size, String sortBy, String search);
+
+    /**
+     * Retrieves a doctor from its ID.
+     *
+     * @param id the ID of the doctor
+     * @return Doctor object representing doctor of corresponding id 
+     */
     public Doctor getDoctor(int id) throws DoesNotExistException;
     /**
      * Retrieves a list of doctors based on the department ID.
