@@ -42,6 +42,7 @@ import { PastHistoryComponent } from './components/patient-appointment-detail/pa
 import { AppointmentDetailFromDoctorComponent } from './components/patient-appointment-detail/appointment-detail-from-doctor/appointment-detail-from-doctor.component';
 import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
 import { TooltipDirective } from './directives/tooltip.directive';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { TooltipDirective } from './directives/tooltip.directive';
     PatientPastAppointmentByIdComponent,
     PastAppointmentComponent,
     DetailedPastAppointmentComponent,
-    TooltipDirective
+    TooltipDirective,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
