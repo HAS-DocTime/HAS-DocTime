@@ -81,14 +81,21 @@ export class PastAppointmentComponent implements OnInit{
         if(data[0].path === "symptoms"){
           this.symptomId = parseInt(data[1].path);
           this.symptomService.getSymptomById(this.symptomId).subscribe((data)=> {
-            this.symptom = data;
-            this.symptomService.getPastAppointmentsFromSymptom(this.symptom?.name, params).subscribe((data)=>{
-              if(data.content===null){
-                this.noDataFound = true;
-              }
-              this.pastAppointmentList = data.content;
-              this.totalPages = data.totalPages;
-          })
+            if(data === null){
+              this.noDataFound = true;
+            }
+            else{
+              this.symptom = data;
+              this.symptomService.getPastAppointmentsFromSymptom(this.symptom?.name, params).subscribe((data)=>{
+                if(data===null){
+                  this.noDataFound = true;
+                } else{
+                  this.pastAppointmentList = data.content;
+                  this.totalPages = data.totalPages;
+                }
+              })
+            }
+
          })
         }
         else{
