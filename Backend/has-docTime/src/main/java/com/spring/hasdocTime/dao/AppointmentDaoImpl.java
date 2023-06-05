@@ -65,6 +65,12 @@ public class AppointmentDaoImpl implements AppointmentInterface {
             allAppointments = appointmentRepository.findAll(pageable);
 
         }
+        for(Appointment appointment : allAppointments){
+            Hibernate.initialize(appointment.getUser());
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+            Hibernate.initialize(appointment.getDoctor().getUser());
+            Hibernate.initialize(appointment.getDoctor().getDepartment());
+        }
         return allAppointments;
     }
 

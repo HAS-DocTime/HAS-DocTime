@@ -47,7 +47,10 @@ public interface PostAppointmentDataRepository extends JpaRepository<PostAppoint
      * @param symptom the symptom to group the diseases by
      * @return the list of diseases and their case counts grouped by the symptom
      */
-    @Query("SELECT p.disease AS disease, COUNT(p) AS caseCount FROM PostAppointmentData p WHERE LOWER(p.symptoms) LIKE %:symptom% GROUP BY p.disease")
+    @Query("SELECT p.disease AS disease, COUNT(p) AS caseCount \n" +
+            "FROM PostAppointmentData p \n" +
+            "WHERE LOWER(p.symptoms) LIKE CONCAT('%', :symptom, '%') \n" +
+            "GROUP BY p.disease")
     List<Map<String, Integer>> findDiseaseListGroupedBySymptom(@Param("symptom") String symptom);
 
     @Query("SELECT p from PostAppointmentData p where LOWER(p.symptoms) LIKE %:symptom%")
