@@ -1,0 +1,47 @@
+app-sidebar{
+  margin-top:4vh;
+  max-width: max-content;
+  padding: 0% 0%;
+}
+
+
+
+.col {
+  padding: 0% 0%;
+  margin: 0;
+}
+
+.row {
+  padding: 0% 0%;
+  margin: 0;
+}
+
+th {
+  color: #ffffff;
+}
+
+tr {
+  color: transparent;
+  background-color: transparent;
+}
+ td {
+  color: transparent;
+  background-color: transparent;
+ }
+
+
+ i.fa-caret-right {
+  font-size: 1.4em;
+}
+
+.noData{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.noData p{
+  margin-top: 2.5%;
+  font-size: 2rem;
+}

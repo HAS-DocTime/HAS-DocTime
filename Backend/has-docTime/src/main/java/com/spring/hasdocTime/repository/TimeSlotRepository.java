@@ -1,8 +1,9 @@
+/**
+ * Repository interface for accessing and manipulating TimeSlot entities.
+ */
 package com.spring.hasdocTime.repository;
 
-import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.entity.TimeSlot;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,12 +13,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TimeSlotRepository extends JpaRepository<TimeSlot, Integer> {
 
+    /**
+     * Deletes a TimeSlot record by ID.
+     *
+     * @param id the ID of the TimeSlot record to be deleted
+     */
     @Modifying
-    @Query("DELETE FROM TimeSlot t where t.id= :id")
+    @Query("DELETE FROM TimeSlot t WHERE t.id = :id")
     void deleteById(@Param("id") int id);
 
+    /**
+     * Deletes TimeSlot records associated with a Department by Department ID.
+     *
+     * @param departmentId the ID of the Department
+     */
     @Modifying
-    @Transactional
-    @Query("DELETE FROM TimeSlot t where t.department.id=:departmentId")
+    @Query("DELETE FROM TimeSlot t WHERE t.department.id = :departmentId")
     void deleteByDepartment(@Param("departmentId") int departmentId);
 }

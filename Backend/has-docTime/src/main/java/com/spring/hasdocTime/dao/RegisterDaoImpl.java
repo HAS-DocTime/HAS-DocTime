@@ -6,15 +6,16 @@ import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.RegisterInterface;
-import com.spring.hasdocTime.repository.UserRepository;
+import com.spring.hasdocTime.interfaces.RegisterInterface;
 import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
 import com.spring.hasdocTime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+
+/**
+ * Implementation of the {@link RegisterInterface} for registering users, admins, and doctors.
+ */
 @Service
 @RequiredArgsConstructor
 public class RegisterDaoImpl implements RegisterInterface {
@@ -23,7 +24,15 @@ public class RegisterDaoImpl implements RegisterInterface {
     private final DoctorDaoImpl doctorDao;
     private final AdminDaoImpl adminDao;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+
+    /**
+     * Registers an admin.
+     *
+     * @param admin the admin to register
+     * @return an authentication response containing the generated JWT token
+     * @throws DoesNotExistException     if the user or admin does not exist
+     * @throws MissingParameterException if a required parameter is missing
+     */
     @Override
     public AuthenticationResponse registerAdmin(Admin admin) throws DoesNotExistException, MissingParameterException {
         var createdUser = userDao.createUser(admin.getUser());
@@ -36,17 +45,17 @@ public class RegisterDaoImpl implements RegisterInterface {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
+    /**
+     * Registers a user.
+     *
+     * @param user the user to register
+     * @return an authentication response containing the generated JWT token
+     * @throws MissingParameterException if a required parameter is missing
+     * @throws DoesNotExistException     if the user does not exist
+     */
     @Override
     public AuthenticationResponse registerUser(User user) throws MissingParameterException, DoesNotExistException {
         var createdUser = userDao.createUser(user);
-
-        // Only needed in Login
-//        authenticationManager.authenticate
-//                (new UsernamePasswordAuthenticationToken(
-//                                user.getEmail(),
-//                                user.getPassword()
-//                        )
-//                );
 
         UserDetailForToken userDetailForToken = new UserDetailForToken(createdUser.getEmail(), createdUser.getId(), createdUser.getRole());
         var jwtToken = jwtService.generateToken(userDetailForToken);
@@ -54,19 +63,20 @@ public class RegisterDaoImpl implements RegisterInterface {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
+    /**
+     * Registers a doctor.
+     *
+     * @param doctor the doctor to register
+     * @return an authentication response containing the generated JWT token
+     * @throws MissingParameterException if a required parameter is missing
+     * @throws DoesNotExistException     if the doctor or user does not exist
+     */
     @Override
     public AuthenticationResponse registerDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException {
         var createdUser = userDao.createUser(doctor.getUser());
         doctor.setUser(createdUser);
         var createdDoctor = doctorDao.createDoctor(doctor);
 
-        // Only needed in Login
-//        authenticationManager.authenticate
-//                (new UsernamePasswordAuthenticationToken(
-//                                doctor.getUser().getEmail(),
-//                                doctor.getUser().getPassword()
-//                        )
-//                );
         UserDetailForToken userDetailForToken = new UserDetailForToken(createdDoctor.getUser().getEmail(), createdDoctor.getId(), createdDoctor.getUser().getRole());
         var jwtToken = jwtService.generateToken(userDetailForToken);
         return AuthenticationResponse.builder().token(jwtToken).build();

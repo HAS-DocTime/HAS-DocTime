@@ -58,3 +58,7 @@ body {
 .timeShow{
   font-size: 18px;
 }
+.bi-arrow-left-circle-fill{
+  font-size: 30px;
+  cursor: pointer;
+}

@@ -1,25 +1,76 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Department } from 'src/app/models/department.model';
 import { Symptom } from 'src/app/models/symptom.model';
 import { DepartmentService } from 'src/app/services/department.service';
 import { SymptomService } from 'src/app/services/symptom.service';
 
+interface SortByOption {
+  label: string;
+  value: string;
+}
+
 @Component({
   selector: 'app-symptom',
   templateUrl: './symptom.component.html',
   styleUrls: ['./symptom.component.css']
 })
-export class SymptomComponent {
+export class SymptomComponent implements OnInit{
   constructor(private symptomService : SymptomService, private route: ActivatedRoute, private departmentService : DepartmentService){}
   symptoms! : Symptom[];
+  symptom:  string = "";
+  pastAppointmentLength: number = 0;
+  pastAppointmentLengths: number[] = [];
+  page = 1;
+  totalPages = 1;
+  size = 5;
+  sortBy = 'name';
+  search = '';
+
+  sizeOptions = [5, 10, 15];
+  range(totalPages: number): number[] {
+    return Array(totalPages).fill(0).map((_, index) => index + 1);
+  }
+
   ngOnInit(){
-    this.symptomService.getSymptoms().subscribe((data)=>{
-      for(let i=0; i<data.length; i++){
+
+    this.getData(0);
+  }
+
+  getData(page : number) {
+
+    let params: any = {};
+
+    // Add query parameters based on selected options
+    if (this.size) {
+      params.size = this.size;
+    }
+    if (this.sortBy) {
+      params.sortBy = this.sortBy;
+    }
+    if (this.search) {
+      params.search = this.search;
+    }
+    params.page = this.page-1;
+
+    this.symptomService.getSymptoms(params).subscribe((data)=>{
+      for(let i=0; i<data.totalElements; i++){
         let departmentArray : Department[] = [];
-        const departmentLength : number | undefined = data[i].departments?.length;
+        this.symptom = data.content[i].name as string;
+        this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
+          this.pastAppointmentLength=0;
+          if(data1!==null){
+            for(let diseaseCaseCount of data1){
+              this.pastAppointmentLength += diseaseCaseCount.caseCount;
+            }
+          }
+          data.content[i].caseCount = this.pastAppointmentLength;
+        })
+
+
+        const departmentLength : number | undefined = data.content[i].departments?.length;
         for(let j=0; j<(departmentLength as number); j++){
-          let departmentObj : Department | undefined = data[i].departments?.[j];
+          let departmentObj : Department | undefined = data.content[i].departments?.[j];
           if(departmentObj?.id){
             departmentArray.push(departmentObj as Department);
           }
@@ -32,12 +83,32 @@ export class SymptomComponent {
             );
           }
         }
-        data[i].departments = departmentArray;
+        data.content[i].departments = departmentArray;
       }
-      this.symptoms = data;
+
+      this.symptoms = data.content;
+      this.totalPages = data.totalPages;
     })
   }
-  getAppointmentsFromSymptoms(id: number | undefined) {
 
+  onPageSizeChange() {
+    this.page = 1;
+    this.getData(this.page);
   }
+
+  onSortByChange() {
+    this.page = 1;
+    this.getData(this.page);
+  }
+
+  onSearch() {
+    this.page = 1;
+    this.getData(this.page);
+  }
+
+  onPageChange(pageNumber: number) {
+    this.page = pageNumber ;
+    this.getData(this.page);
+  }
+
 }

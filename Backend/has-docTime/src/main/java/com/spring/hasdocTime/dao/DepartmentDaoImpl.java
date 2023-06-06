@@ -10,27 +10,29 @@ import com.spring.hasdocTime.entity.Symptom;
 import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import java.util.List;
 import java.util.Optional;
 
 import com.spring.hasdocTime.repository.TimeSlotRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import com.spring.hasdocTime.interfc.DepartmentInterface;
-import com.spring.hasdocTime.interfc.DoctorInterface;
+import com.spring.hasdocTime.interfaces.DepartmentInterface;
+import com.spring.hasdocTime.interfaces.DoctorInterface;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
- *
- * @author arpit
+ * Implementation of the DepartmentInterface for performing CRUD operations on Department entities.
  */
-
 @Service
 public class DepartmentDaoImpl implements DepartmentInterface {
     
@@ -56,6 +58,15 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         this.timeSlotRepository = timeSlotRepository;
     }
 
+
+    /**
+     * Creates a new Department.
+     *
+     * @param department The Department to create.
+     * @return The created Department.
+     * @throws MissingParameterException if any required parameter is missing.
+     * @throws DoesNotExistException     if a Symptom referenced by the Department does not exist.
+     */
     @Override
     @Transactional
     public Department createDepartment(Department department) throws MissingParameterException, DoesNotExistException{
@@ -93,20 +104,53 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         return departmentRepository.save(department);
     }
 
+
+    /**
+     * Retrieves all Departments.
+     *
+     * @return A list of all Departments.
+     */
     @Override
-    public List<Department> getAllDepartments() {
-        return departmentRepository.findAll();
+    public Page<Department> getAllDepartments(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Department> departments;
+        if(search != null && !search.isEmpty()){
+            //search Departments based on DepartmentName only.
+            departments = departmentRepository.findAllAndNameContainsIgnoreCase(search, pageable);
+        }
+        else{
+            departments = departmentRepository.findAll(pageable);
+        }
+        return departments;
     }
 
+
+    /**
+     * Retrieves a Department by its ID.
+     *
+     * @param id The ID of the Department to retrieve.
+     * @return The retrieved Department.
+     * @throws DoesNotExistException if the Department with the specified ID does not exist.
+     */
     @Override
     public Department getDepartment(int id) throws DoesNotExistException{
         Optional<Department> department = departmentRepository.findById(id);
         if(department.isPresent()){
+            Hibernate.initialize(department.get().getSymptoms());
             return department.get();
         }
         throw new DoesNotExistException("Department");
     }
 
+    /**
+     * Updates a Department.
+     *
+     * @param id         The ID of the Department to update.
+     * @param department The updated Department.
+     * @return The updated Department.
+     * @throws DoesNotExistException     if the Department with the specified ID does not exist.
+     * @throws MissingParameterException if any required parameter is missing.
+     */
     @Override
     public Department updateDepartent(int id, Department department) throws DoesNotExistException, MissingParameterException {
         if(department.getName()==null || department.getName().equals("")){
@@ -129,6 +173,14 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         throw new DoesNotExistException("Department");
     }
 
+
+    /**
+     * Deletes a Department by its ID.
+     *
+     * @param id The ID of the Department to delete.
+     * @return The deleted Department.
+     * @throws DoesNotExistException if the Department with the specified ID does not exist.
+     */
     @Override
     public Department deleteDepartment(int id) throws DoesNotExistException {
         Optional<Department> department = departmentRepository.findById(id);

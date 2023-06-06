@@ -2,7 +2,7 @@
 <div class="outer-container bg-body-tertiary">
   <div class="container">
     <div class="text-center mb-2">
-      <h2 class="heading text-lg-center pt-4">Login Form</h2>
+      <h2 class="heading text-lg-center pt-4">Login</h2>
     </div>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="row my-4">
@@ -11,8 +11,8 @@
         </div>
         <div>
           <input type="email" id="email" placeholder="name@example.com" formControlName="email" required
-            [ngClass]="{'is-invalid': submitted && loginForm.controls['email'].invalid}" class="form-control">
-          <div *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors" class="alert alert-danger mt-3 py-1">
+            [ngClass]="{'is-invalid': submitted && loginForm.controls['email'].invalid}" class="form-control" [ngClass]="loginForm.get('email')?.errors && loginForm.get('email')?.touched ? 'errored-input' : ''">
+          <div *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors" class="text-danger errored-input mt-1 py-1">
             <span *ngIf="loginForm.controls['email'].errors?.['required']">
               Email is required field.
             </span>
@@ -29,15 +29,17 @@
         <div>
           <div class="password d-flex">
             <input [type]="passwordType" id="password" placeholder="Password" formControlName="password" required
-              [ngClass]="{'is-invalid': submitted && loginForm.controls['password'].invalid}" class="form-control">
+              [ngClass]="{'is-invalid': submitted && loginForm.controls['password'].invalid}" class="form-control" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&+=_\-\*/])(?=\S+$).{8,}$"
+              [ngClass]="loginForm.get('password')?.errors && loginForm.get('password')?.touched ? 'errored-input' : ''">
               <button mat-icon-button (click)="toggleShowPassword()" type="button" class="showPasswordIconButton">
                 <mat-icon>{{ showPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
               </button>
           </div>
-          <div *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors" class="alert alert-danger mt-3 py-1">
-            <span *ngIf="loginForm.controls['password'].invalid && loginForm.get('password')?.value.length">
-              Password must be at least 6 characters long.
-            </span>
+          <div *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors" class="text-danger errored-input mt-1 py-1">
+            <span *ngIf="loginForm.get('password')?.errors?.['pattern']"
+            >Enter Valid Password.
+            </span
+          >
             <span *ngIf="loginForm.controls['password'].errors?.['required']">
               Password is required field.
             </span>
@@ -47,7 +49,6 @@
       <div class="mt-1 d-flex justify-content-center mt-3">
         <div class="d-inline-block">
           <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Submit</button>
-          <!-- <button type="register" class="btn btn-primary">Register</button> -->
         </div>
       </div>
       <div *ngIf="submitted && invalidLogin" class="alert alert-danger mt-3">
@@ -55,6 +56,4 @@
       </div>
     </form>
   </div>
-  <!-- *ngIf="submitted && loginForm.controls['password'].invalid" -->
-  <!-- *ngIf="submitted && invalidLogin" -->
 </div>

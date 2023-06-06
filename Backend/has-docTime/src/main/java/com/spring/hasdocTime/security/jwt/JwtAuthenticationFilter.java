@@ -22,6 +22,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+
+    /**
+     * Filters the incoming HTTP requests and validates the JWT token in the "Authorization" header.
+     * If the token is valid, sets the authentication in the security context.
+     *
+     * @param request      the HTTP servlet request
+     * @param response     the HTTP servlet response
+     * @param filterChain  the filter chain
+     * @throws ServletException  if a servlet-specific error occurs
+     * @throws IOException       if an I/O error occurs
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -32,13 +43,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
 
+
         if(authHeader == null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
             return;
         }
         jwt = authHeader.substring(7);
 
-        // To Extract Email from JWT token need jwtService class
+        // Extract Email from JWT token need jwtService class
         userEmail = jwtService.extractUsername(jwt);
         if(userEmail != null || SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);

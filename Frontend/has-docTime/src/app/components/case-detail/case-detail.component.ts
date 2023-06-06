@@ -1,5 +1,6 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MedicalHistory } from 'src/app/models/medicalHistory.model';
+import { PastAppointment } from 'src/app/models/pastAppointment.model';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -9,15 +10,19 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class CaseDetailComponent implements OnInit{
 
-  caseDetailedData?: MedicalHistory | null;
+  caseDetailedData?: PastAppointment | null;
 
-  constructor(private sharedService: SharedService){}
+  constructor(private sharedService: SharedService, private location : Location){}
 
   ngOnInit(): void {
       this.sharedService.getresolvedCaseDetailedData().subscribe((data) => {
         this.caseDetailedData = data;
-        
+
       });
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 
 }

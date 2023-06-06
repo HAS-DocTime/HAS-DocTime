@@ -1,3 +1,4 @@
+<div><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
 <div class="outer-container">
   <div class="book-appointment">
     <div class="container">
@@ -78,6 +79,9 @@
         </div>
         <div class="d-flex justify-content-center pb-4">
           <button class="btn btn-success" [disabled]="bookAppointment.invalid" (click)="getDoctorsBySymptomAndTimeSlot()" type="button">Show Doctors</button>
+          </div>
+        <div class="d-flex justify-content-around pb-4 align-items-center">
+          <button class="btn btn-success" type="submit" [disabled]="bookAppointment.invalid">Book Appointment</button>
         </div>
       </form>
     </div>

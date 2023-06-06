@@ -1,14 +1,54 @@
 <div class="outer-container bg-body-tertiary">
   <div class="container pt-3">
-    <h1 class="text-center pb-3">Departments</h1>
+    <h1 class="text-center pb-3">{{ title }}</h1>
+
+    <div class="row mb-3" >
+      <div class="col-sm-4" *ngIf="totalPages > 1">
+        <label for="pageSize">Size:</label>
+        <select class="form-select" id="size" [(ngModel)]="size" (change)="onPageSizeChange()">
+          <option *ngFor="let sizeOption of sizeOptions" [value]="sizeOption">{{ sizeOption }}</option>
+        </select>
+      </div>
+      <div class="col-sm-4" *ngIf="totalPages >= 0">
+        <label for="search">Search:</label>
+        <input class="form-control" type="text" id="search" [(ngModel)]="search" (keyup)="onSearch()">
+      </div>
+    </div>
+
     <div class="card-container">
-      <div class="card py-3 px-3 my-3 mx-3" style="width: 18rem;" *ngFor="let department of departments">
-        <img class="card-img-top" [src]="department.departmentImage" [alt]="department.name" height="200" width="300">
-        <div class="card-body">
-          <h4 class="card-heading text-center">{{department.name}}</h4>
-          <p class="card-text text-center">{{department.description}}</p>
+      <div class="admin-department" *ngIf="tokenRole==='ADMIN'">
+        <div class="card admin-card py-3 px-3 my-3 mx-3" style="width: 18rem;" *ngFor="let department of departments" (click)="deptDetail(department?.id)" >
+          <img class="card-img-top" [src]="department.departmentImage" [alt]="department.name" height="200" width="300">
+          <div class="card-body">
+            <h4 class="card-heading text-center">{{department.name}}</h4>
+            <p class="card-text text-center">{{department.description}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="department" *ngIf="tokenRole!=='ADMIN'">
+        <div class="card py-3 px-3 my-3 mx-3" style="width: 18rem;" *ngFor="let department of departments">
+          <img class="card-img-top" [src]="department.departmentImage" [alt]="department.name" height="200" width="300">
+          <div class="card-body">
+            <h4 class="card-heading text-center">{{department.name}}</h4>
+            <p class="card-text text-center">{{department.description}}</p>
+          </div>
         </div>
       </div>
     </div>
+
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="page === 1">
+          <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>
+        </li>
+        <li class="page-item" [class.active]="page === currentPage " *ngFor="let currentPage of range(totalPages)">
+          <a class="page-link" (click)="onPageChange(currentPage)">{{ currentPage }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="page === totalPages">
+          <a class="page-link" (click)="onPageChange(page + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+
   </div>
 </div>

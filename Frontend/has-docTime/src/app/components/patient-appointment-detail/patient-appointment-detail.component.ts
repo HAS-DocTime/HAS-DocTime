@@ -1,10 +1,5 @@
+import { Location } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Appointment } from 'src/app/models/appointment.model';
-import { MedicalHistory } from 'src/app/models/medicalHistory.model';
-import { MedicalHistoryService } from 'src/app/services/medicalHistory.service';
-import { PostAppointmentService } from 'src/app/services/post-appointment.service';
-import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-patient-appointment-detail',
@@ -13,13 +8,17 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class PatientAppointmentDetailComponent implements OnInit{
 
-  
+
   constructor(
-    
+      private location : Location
     ){}
 
   ngOnInit(): void {
-    
+
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 
 }

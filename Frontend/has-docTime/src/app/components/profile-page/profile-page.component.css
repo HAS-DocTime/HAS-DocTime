@@ -1,3 +1,12 @@
 .required-asterisk{
   color : red;
 }
+
+.errored-input{
+  border-color: #dc3545;
+}
+
+.bi-arrow-left-circle-fill{
+  font-size: 30px;
+  cursor: pointer;
+}
