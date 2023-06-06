@@ -296,7 +296,11 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             timeSlot.setStartTime(timeSlotStartTime);
             timeSlot.setEndTime(timeSlotEndTime);
             timeSlot.setDepartment(department);
-            timeSlots.add(timeSlot);
+            TimeSlot checkTimeSlot = timeSlotRepository.checkIfTimeSlotExists(timeSlot.getStartTime(), timeSlot.getEndTime(), timeSlot.getDepartment().getId());
+            if(checkTimeSlot == null){
+                System.out.println("Adding TimeSlot");
+                timeSlots.add(timeSlot);
+            }
             timeSlotStartTime = (Timestamp) timeSlotEndTime.clone();
             timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
             timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
@@ -310,7 +314,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         // clone is required as Java takes value as pass by reference and changes the value of both the objects
         int weekDays = 7;
         List<TimeSlot> timeSlots = new ArrayList<>();
-        Hibernate.initialize(department.getTimeSlots());
         if(department.getTimeSlots().isEmpty()){
             for(int i=0; i<weekDays; i++){
                 createTimeSlots(department, i, timeSlots);
@@ -351,7 +354,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Transactional
-//    @Scheduled(cron = "00 04 10 ? * *", zone = "Asia/Kolkata") // For Testing
+//    @Scheduled(cron = "00 41 11 ? * *", zone = "Asia/Kolkata") // For Testing
     @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
     public void refreshTimeSlots(){
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
@@ -361,7 +364,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
                 timeSlotRepository.deleteById(timeSlot.getId());
             }
         }
-        timeSlotRepository.deleteAll();
         List<Department> departments = departmentRepository.findAll();
         for(Department department : departments){
             Department dep = departmentRepository.findById(department.getId()).get();
