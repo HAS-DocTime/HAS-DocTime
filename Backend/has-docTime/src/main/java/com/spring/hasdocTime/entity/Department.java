@@ -24,10 +24,6 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @ToString
-@JsonIdentityInfo(
-        scope = Department.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Department {
     
     @Column(name="id")

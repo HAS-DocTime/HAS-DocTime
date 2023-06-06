@@ -5,9 +5,11 @@ import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfc.TimeSlotInterface;
 import com.spring.hasdocTime.repository.*;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -251,9 +253,8 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         // clone is required as Java takes value as pass by reference and changes the value of both the objects
         int weekDays = 7;
         List<TimeSlot> timeSlots = new ArrayList<>();
-        
+        Hibernate.initialize(department.getTimeSlots());
         if(department.getTimeSlots().isEmpty()){
-
             for(int i=0; i<weekDays; i++){
                 createTimeSlots(department, i, timeSlots);
             }
@@ -292,7 +293,8 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         return timeSlots;
     }
 
-//    @Scheduled(cron = "00 26 16 ? * *", zone = "Asia/Kolkata") // For Testing
+    @Transactional
+//    @Scheduled(cron = "00 04 10 ? * *", zone = "Asia/Kolkata") // For Testing
     @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
     public void refreshTimeSlots(){
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
