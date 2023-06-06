@@ -1,5 +1,5 @@
 <div><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
-<div class="outer-container">
+<!-- <div class="outer-container">
   <div class="book-appointment">
     <div class="container">
       <h2 class="text-center pt-3 heading">Book Appointment</h2>
@@ -50,7 +50,7 @@
             <option value="12:00:00-15:00:00">12:00:00-15:00:00</option>
             <option value="15:00:00-18:00:00">15:00:00-18:00:00</option>
             <option value="18:00:00-21:00:00">18:00:00-21:00:00</option>
-        </select>
+          </select>
           <div
             class="alert alert-danger"
             *ngIf="
@@ -79,11 +79,95 @@
         </div>
         <div class="d-flex justify-content-center pb-4">
           <button class="btn btn-success" [disabled]="bookAppointment.invalid" (click)="getDoctorsBySymptomAndTimeSlot()" type="button">Show Doctors</button>
-          </div>
+        </div>
+        <div class="doctor-list" *ngIf = "doctorList.length">
+
+        </div>
         <div class="d-flex justify-content-around pb-4 align-items-center">
           <button class="btn btn-success" type="submit" [disabled]="bookAppointment.invalid">Book Appointment</button>
         </div>
       </form>
     </div>
+  </div>
+</div> -->
+<h3 class="text-center mb-5">Book Appointment</h3>
+<div class="book-appointment-container container bg-body-tertiary">
+  <form class="row" [formGroup]="bookAppointment">
+    <div class="symptoms border col-md-6 text-center">
+      <h5 class="row-heading bg-dark text-white mb-3 pt-2 pb-2">Symptoms</h5>
+      <div class="ms-2 me-2 mb-2 d-flex justify-space-around flex-column">
+        <div class="mb-3">
+          <div
+            *ngFor="let symptom of symptomList.controls; let i = index"
+            formArrayName="symptoms"
+          >
+            <div
+              class="d-flex my-3 justify-content-around"
+              [formGroupName]="i"
+            >
+              <div class="select-field">
+                <select
+                  class="form-select text-dark"
+                  id="symptomName"
+                  formControlName="id"
+                >
+                  <option value="" selected disabled>Select Symptom</option>
+                  <option
+                    *ngFor="let symptom of symptoms"
+                    [value]="symptom.id"
+                    [disabled]="selectedSymptom.includes(symptom.id)"
+                  >
+                    {{ symptom.name }}
+                  </option>
+                </select>
+              </div>
+              <div *ngIf="symptomList.controls.length>1">
+                <i class="bi bi-trash-fill" (click)="deleteSymptom(i)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <i
+            (click)="addSymptom()"
+            class="bi bi-plus-circle"
+            style="cursor: pointer"
+          ></i>
+        </div>
+      </div>
+    </div>
+    <div class="timeSlots border col-md-3 text-center">
+      <h5 class="row-heading bg-dark text-white mb-3 pt-2 pb-2">Time Slots</h5>
+      <div class="form-group my-4 d-flex justify-content-center align-items-center">
+        <div class="select-field">
+          <select class="form-select" id="timeSlot" formControlName="timeSlot">
+            <option value="" selected disabled>Select TimeSlot</option>
+            <option value="09:00:00-12:00:00">09:00:00-12:00:00</option>
+            <option value="12:00:00-15:00:00">12:00:00-15:00:00</option>
+            <option value="15:00:00-18:00:00">15:00:00-18:00:00</option>
+            <option value="18:00:00-21:00:00">18:00:00-21:00:00</option>
+          </select>
+        </div>
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            bookAppointment.get('timeSlot')?.touched && bookAppointment.get('timeSlot')?.invalid
+          "
+        >
+          <span *ngIf="bookAppointment.get('timeSlot')?.errors">TimeSlot is Required</span>
+        </div>
+      </div>
+    </div>
+    <div class="description border col-md-3 text-center">
+      <h5 class="row-heading bg-dark text-white mb-3 pt-2 pb-2">Description</h5>
+      <div class="form-group my-4 d-flex justify-content-center align-items-center">
+        <div class="select-field">
+          <span class="textarea" role="textbox" contenteditable></span>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="d-flex justify-content-center align-items-center mt-5">
+    <button class="btn btn-primary">Show Doctors</button>
   </div>
 </div>

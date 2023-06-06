@@ -64,21 +64,7 @@ export class PastHistoryComponent {
 
     this.pastAppointmentService.getPastAppointmentDataByUser(this.userId, params).subscribe(
       data => {
-        if(data.content.length !== 0){
-          for(let appointment of data.content){
-            if(!appointment?.doctor?.department?.id){
-              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                (appointment.doctor as Doctor ).department = data;
-              });
-            }
-          }
-          this.postAppointmentDataList = data.content;
-          this.totalPages = data.totalPages;
-        }
-        else{
-          this.noDataFound = true;
-        }
-
+        this.postAppointmentDataList = data;
       }
     );
   }

@@ -257,8 +257,14 @@ public class DoctorDaoImpl implements DoctorInterface {
         for(Symptom symptom: symptoms){
             for(Department department: symptom.getDepartments()) {
                 for (Doctor doctor : department.getDoctors()) {
+                    Hibernate.initialize(doctor.getUser());
                     for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
                         if(((timeSlot.getStartTime().after(filteredDoctorBody.getTimeSlotStartTime()) || timeSlot.getStartTime().equals(filteredDoctorBody.getTimeSlotStartTime()))  && (timeSlot.getStartTime().before(filteredDoctorBody.getTimeSlotEndTime()))) && doctor.isAvailable()){
+                            doctor.setBookedTimeSlots(null);
+                            doctor.setDepartment(null);
+                            doctor.setAvailableTimeSlots(null);
+                            doctor.setAppointments(null);
+                            doctor.setPostAppointmentData(null);
                             doctors.add(doctor);
                         }
                     }
