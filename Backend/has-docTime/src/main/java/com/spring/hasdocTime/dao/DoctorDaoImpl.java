@@ -29,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -229,8 +230,19 @@ public class DoctorDaoImpl implements DoctorInterface {
         throw new DoesNotExistException("Doctor");
     }
 
+    Timestamp manipulateTimeSlotBasedOnTimeZone(Timestamp timestamp){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT+05:30"));
+        calendar.setTimeInMillis(timestamp.getTime());
+        calendar.add(Calendar.HOUR_OF_DAY, -5);
+        calendar.add(Calendar.MINUTE, -30);
+        return new Timestamp(calendar.getTimeInMillis());
+    }
+
     @Override
     public Set<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody) throws  DoesNotExistException{
+        filteredDoctorBody.setTimeSlotStartTime(manipulateTimeSlotBasedOnTimeZone(filteredDoctorBody.getTimeSlotStartTime()));
+        filteredDoctorBody.setTimeSlotEndTime(manipulateTimeSlotBasedOnTimeZone(filteredDoctorBody.getTimeSlotEndTime()));
         List<Symptom> givenSymptoms = filteredDoctorBody.getSymptoms();
         List<Symptom> symptoms = new ArrayList<>();
         for(Symptom symptom : givenSymptoms){
@@ -246,12 +258,6 @@ public class DoctorDaoImpl implements DoctorInterface {
             for(Department department: symptom.getDepartments()) {
                 for (Doctor doctor : department.getDoctors()) {
                     for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
-                        System.out.println(timeSlot.getStartTime());
-                        System.out.println(timeSlot.getEndTime());
-                        System.out.println(timeSlot.getStartTime().after(filteredDoctorBody.getTimeSlotStartTime()));
-                        System.out.println(timeSlot.getStartTime().equals(filteredDoctorBody.getTimeSlotStartTime()));
-                        System.out.println(timeSlot.getStartTime().before(filteredDoctorBody.getTimeSlotEndTime()));
-                        System.out.println(filteredDoctorBody.getTimeSlotEndTime());
                         if(((timeSlot.getStartTime().after(filteredDoctorBody.getTimeSlotStartTime()) || timeSlot.getStartTime().equals(filteredDoctorBody.getTimeSlotStartTime()))  && (timeSlot.getStartTime().before(filteredDoctorBody.getTimeSlotEndTime()))) && doctor.isAvailable()){
                             doctors.add(doctor);
                         }
