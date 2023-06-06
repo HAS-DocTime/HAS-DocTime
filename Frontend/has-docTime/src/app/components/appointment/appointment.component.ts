@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
-import { Department } from 'src/app/models/department.model';
 import { Doctor } from 'src/app/models/doctor.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DepartmentService } from 'src/app/services/department.service';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
 
 interface SortByOption {
@@ -20,7 +20,7 @@ interface SortByOption {
 
 export class AppointmentComponent implements OnInit{
 
-  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService){}
+  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService, private toast : ToastMessageService){}
 
   appointments : Appointment[] = [];
 
@@ -130,6 +130,7 @@ export class AppointmentComponent implements OnInit{
               }
             }
             this.appointments = data;
+
           });
         }
         else{
@@ -144,6 +145,7 @@ export class AppointmentComponent implements OnInit{
             this.appointments = data;
           });
         }
+        this.toast.show(`The Appointment is deleted`, "Appointment deleted");
     })
     }
 

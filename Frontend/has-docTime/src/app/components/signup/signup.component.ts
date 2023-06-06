@@ -11,6 +11,7 @@ import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswo
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { validatePassword } from 'src/app/customValidators/validatePassword.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +22,7 @@ import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInput
 
 export class SignupComponent implements OnInit, OnDestroy{
 
-constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
+constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService, private toast: ToastMessageService){
 
   }
 
@@ -196,8 +197,10 @@ constructor(private userService : UserService, private doctorService : DoctorSer
             patientChronicIllness : []
         });
         this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
+        this.toast.showSuccess("Registered Successfully!", "Success");
       }, (err)=> {
         console.log(err);
+        this.toast.showError("Registration Unsuccessful","Failed");
       });
     }
 

@@ -72,11 +72,11 @@
 
     <nav *ngIf="totalPages > 1">
       <ul class="pagination">
-        <li class="page-item" [class.disabled]="page === 1">
+        <li class="page-item"  [class.disabled]="page === 1">
           <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>
         </li>
-        <li class="page-item" [class.active]="page === currentPage " *ngFor="let currentPage of range(totalPages)">
-          <a class="page-link" (click)="onPageChange(currentPage)">{{ currentPage }}</a>
+        <li class="page-item" style="cursor : pointer" [class.active]="page === currentPage " *ngFor="let currentPage of range(totalPages)">
+          <a class="page-link"  (click)="onPageChange(currentPage)">{{ currentPage }}</a>
         </li>
         <li class="page-item" [class.disabled]="page === totalPages">
           <a class="page-link" (click)="onPageChange(page + 1)">Next</a>

@@ -32,6 +32,8 @@ export class AppointmentService {
 
   getAppointmentsByDoctor(id : string, params : any): Observable<any>{
     let httpParams = new HttpParams();
+    console.log(params);
+
     Object.keys(params).forEach((key) => {
       httpParams = httpParams.set(key, params[key]);
     });
