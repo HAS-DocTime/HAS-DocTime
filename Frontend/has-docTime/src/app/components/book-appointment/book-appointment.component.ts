@@ -31,6 +31,8 @@ export class BookAppointmentComponent implements OnInit{
   tokenRole! : string;
   id! : number;
   doctorList : Doctor[] = [];
+  noDataFound : boolean = false;
+  noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537"
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
      private userService : UserService, private router : Router, private route : ActivatedRoute, private doctorService : DoctorService, private location : Location){}
@@ -83,6 +85,12 @@ export class BookAppointmentComponent implements OnInit{
     this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value).subscribe((data)=> {
       console.log(data);
       this.doctorList = data;
+      if(this.doctorList.length<=0){
+        this.noDataFound = true;
+      }
+      else{
+        this.noDataFound = false;
+      }
     });
     console.log(this.bookAppointment.value);
 

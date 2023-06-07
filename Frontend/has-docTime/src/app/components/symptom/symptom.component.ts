@@ -54,6 +54,7 @@ export class SymptomComponent implements OnInit{
     params.page = this.page-1;
 
     this.symptomService.getSymptoms(params).subscribe((data)=>{
+      console.log(data);
       for(let i=0; i<data.totalElements; i++){
         let departmentArray : Department[] = [];
         this.symptom = data.content[i].name as string;

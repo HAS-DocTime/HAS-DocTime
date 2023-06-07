@@ -29,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -255,11 +256,16 @@ public class DoctorDaoImpl implements DoctorInterface {
         }
         Set<Doctor> doctors = new HashSet<>();
         for(Symptom symptom: symptoms){
-            for(Department department: symptom.getDepartments()) {
+            for(Department department: symptom.getDepartments()) {;
                 for (Doctor doctor : department.getDoctors()) {
                     Hibernate.initialize(doctor.getUser());
                     for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
-                        if(((timeSlot.getStartTime().after(filteredDoctorBody.getTimeSlotStartTime()) || timeSlot.getStartTime().equals(filteredDoctorBody.getTimeSlotStartTime()))  && (timeSlot.getStartTime().before(filteredDoctorBody.getTimeSlotEndTime()))) && doctor.isAvailable()){
+                        System.out.println(doctor.getUser().getName());
+                        Time timeSlotStartTime = new Time(timeSlot.getStartTime().getHours(), timeSlot.getStartTime().getMinutes(), timeSlot.getStartTime().getSeconds());
+                        Time timeSlotEndTime = new Time(timeSlot.getEndTime().getHours(), timeSlot.getEndTime().getMinutes(), timeSlot.getEndTime().getSeconds());
+                        Time doctorStartTime = new Time(filteredDoctorBody.getTimeSlotStartTime().getHours(), filteredDoctorBody.getTimeSlotStartTime().getMinutes(), filteredDoctorBody.getTimeSlotStartTime().getSeconds());
+                        Time doctorEndTime = new Time(filteredDoctorBody.getTimeSlotEndTime().getHours(), filteredDoctorBody.getTimeSlotEndTime().getMinutes(), filteredDoctorBody.getTimeSlotEndTime().getSeconds());
+                        if(timeSlotStartTime.compareTo(doctorStartTime) >= 0  && timeSlotStartTime.compareTo(doctorEndTime)<0 && doctor.isAvailable()){
                             doctor.setBookedTimeSlots(null);
                             doctor.setDepartment(null);
                             doctor.setAvailableTimeSlots(null);

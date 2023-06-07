@@ -88,8 +88,6 @@ export class SymptomDetailComponent implements OnInit{
     })
 
   }
-
-
   }
 
   navigateBack(){
