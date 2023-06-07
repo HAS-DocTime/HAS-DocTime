@@ -55,7 +55,7 @@ export class SymptomComponent implements OnInit{
 
     this.symptomService.getSymptoms(params).subscribe((data)=>{
       console.log(data);
-      for(let i=0; i<data.totalElements; i++){
+      for(let i=0; i<data.numberOfElements; i++){
         let departmentArray : Department[] = [];
         this.symptom = data.content[i].name as string;
         this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
@@ -71,7 +71,8 @@ export class SymptomComponent implements OnInit{
 
         const departmentLength : number | undefined = data.content[i].departments?.length;
         for(let j=0; j<(departmentLength as number); j++){
-          let departmentObj : Department | undefined = data[i].departments?.[j];
+          console.log(i);
+          let departmentObj : Department | undefined = data.content[i].departments?.[j];
             departmentArray.push(departmentObj as Department);
         }
         data.content[i].departments = departmentArray;
