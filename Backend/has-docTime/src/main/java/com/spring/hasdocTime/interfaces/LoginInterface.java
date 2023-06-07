@@ -3,9 +3,14 @@
  */
 package com.spring.hasdocTime.interfaces;
 
+import java.io.IOException;
+
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.LoginDetail;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface LoginInterface {
 
@@ -17,4 +22,6 @@ public interface LoginInterface {
      * @throws MissingParameterException if there are missing parameters in the login details
      */
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) throws MissingParameterException;
+
+    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }
