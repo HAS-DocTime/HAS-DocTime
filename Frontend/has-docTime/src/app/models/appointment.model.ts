@@ -5,9 +5,9 @@ import { User } from "./user.model";
 
 export type Appointment = {
   id : number;
-  description : string;
+  description? : string;
   user : User;
-  doctor : Doctor;
-  timeSlotForAppointment : TimeSlot;
-  symptoms : Symptom[]
+  doctor? : Doctor;
+  timeSlotForAppointment? : TimeSlot;
+  symptoms? : Symptom[]
 }

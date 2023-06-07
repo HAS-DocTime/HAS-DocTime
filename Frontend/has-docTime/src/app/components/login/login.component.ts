@@ -15,9 +15,13 @@ export class LoginComponent implements OnInit, OnDestroy{
   submitted = false;
   invalidLogin = false;
   user: string = "";
+  tokenRole: string = "";
 
   inLogin: Boolean = true;
   isLoggedIn: Boolean = false;
+
+  showPassword : boolean = false;
+  passwordType : string = "password";
 
 
   constructor(private loginService: LoginService, private router: Router, private userService: UserService) {
@@ -26,10 +30,9 @@ export class LoginComponent implements OnInit, OnDestroy{
   ngOnInit(){
     this.inLogin = true;
   }
-  emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   loginForm:FormGroup = new FormGroup({
-    email: new FormControl("", [Validators.required, Validators.pattern(this.emailPattern)]),
-    password: new FormControl("", [Validators.required, Validators.minLength(6)])
+    email: new FormControl("", [Validators.required, Validators.email]),
+    password: new FormControl("", [Validators.required])
   })
 
   ngDoCheck(){
@@ -43,6 +46,11 @@ export class LoginComponent implements OnInit, OnDestroy{
       this.userService.isLoggedIn.next(this.isLoggedIn);
   }
 
+  toggleShowPassword(){
+    this.showPassword = !this.showPassword;
+    this.passwordType = this.showPassword ? "text" : "password";
+  }
+
   onSubmit(){
     this.submitted = true;
     if(this.loginForm.invalid) {
@@ -54,13 +62,23 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loginService.checkDetail(email, password).subscribe(data => {
 
       this.user = data.token;
-      // console.log(data);
       this.isLoggedIn = true;
 
       sessionStorage.clear();
       sessionStorage.setItem('token',data.token);
 
-      this.router.navigate(['/dashboard']);
+      const token = sessionStorage.getItem('token');
+      if (token) {
+        let store = token?.split('.');
+        this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+        this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length-1);
+      }
+      if(this.tokenRole === "PATIENT" || this.tokenRole === "ADMIN"){
+        this.router.navigate(['/dashboard/appointment']);
+      }else {
+        this.router.navigate(['/dashboard/doctorScheduleAppointments']);
+      }
+
     }, (err)=> {
       if(err){
         this.isLoggedIn = false;
@@ -70,6 +88,5 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loginService.isLoggedIn.subscribe((data) => {
         this.isLoggedIn = data;
     });
-    // this.router.navigate([""]);
   }
 }

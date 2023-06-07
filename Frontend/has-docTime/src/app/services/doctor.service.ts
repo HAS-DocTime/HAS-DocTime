@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Doctor } from '../models/doctor.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +10,7 @@ export class DoctorService {
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = "http://localhost:8080/";
-
-  createDoctor(doctor : Doctor){
-    return this.http.post<Doctor>(`${this.baseUrl}doctor`, doctor);
-  }
+  baseUrl = environment.apiUrl;
 
   getDoctor(id : number){
     return this.http.get<Doctor>(`${this.baseUrl}doctor/${id}`);

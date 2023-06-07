@@ -2,10 +2,15 @@ h1{
   margin-bottom: 0;
 }
 
-.card-container{
+.admin-department, .department{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+
+}
+
+.admin-card{
+  cursor: pointer;
 }
 
 .card{

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
@@ -10,11 +11,10 @@ import { AppointmentService } from 'src/app/services/appointment.service';
 })
 export class AppointmentDetailComponent implements OnInit{
 
-  constructor(private appointmentService : AppointmentService, private route : ActivatedRoute){
+  constructor(private appointmentService : AppointmentService, private route : ActivatedRoute, private location : Location){
     this.route.params.subscribe((params : Params)=> {
       this.id = params["id"]
       this.appointmentService.getAppointment(this.id).subscribe((data)=> {
-        console.log(data);
         this.appointment = data;
       })
     });
@@ -26,6 +26,10 @@ export class AppointmentDetailComponent implements OnInit{
   ngOnInit(){
 
 
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 
 }
