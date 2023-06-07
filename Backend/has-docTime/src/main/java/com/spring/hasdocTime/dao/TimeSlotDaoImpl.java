@@ -11,8 +11,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.print.Doc;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -277,8 +280,13 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
          * @return The list of created time slots.
          */
     public List<TimeSlot> createTimeSlots(Department department, int index, List<TimeSlot> timeSlots){
+        Timestamp timeSlotStartTime;
+        if(index == 0){
+            timeSlotStartTime = roundTheTimeSlot(new Timestamp(System.currentTimeMillis()));
+        }else{
+            timeSlotStartTime = (Timestamp) hospitalStartTime.clone();
+        }
 
-        Timestamp timeSlotStartTime = (Timestamp) hospitalStartTime.clone();
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
         timeSlotStartTime.setYear(currentTimeStamp.getYear());
         timeSlotStartTime.setMonth(currentTimeStamp.getMonth());
@@ -316,10 +324,10 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         List<TimeSlot> timeSlots = new ArrayList<>();
         if(department.getTimeSlots().isEmpty()){
             for(int i=0; i<weekDays; i++){
-                createTimeSlots(department, i, timeSlots);
+                timeSlots = createTimeSlots(department, i, timeSlots);
             }
         }else{
-            createTimeSlots(department, 6, timeSlots);
+            timeSlots = createTimeSlots(department, 6, timeSlots);
         }
             
         
@@ -354,11 +362,12 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Transactional
-//    @Scheduled(cron = "00 41 11 ? * *", zone = "Asia/Kolkata") // For Testing
-    @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
+    @Scheduled(cron = "10 06 17 ? * *", zone = "Asia/Kolkata") // For Testing
+//    @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
     public void refreshTimeSlots(){
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
         List<TimeSlot> timeSlots = timeSlotRepository.findAll();
+        List<TimeSlot> timeSlotsToSave = new ArrayList<>();
         for(TimeSlot timeSlot : timeSlots){
             if(timeSlot.getStartTime().before(currentTimeStamp)){
                 timeSlotRepository.deleteById(timeSlot.getId());
@@ -366,12 +375,39 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         }
         List<Department> departments = departmentRepository.findAll();
         for(Department department : departments){
+            Hibernate.initialize(department.getDoctors());
             Department dep = departmentRepository.findById(department.getId()).get();
             List<TimeSlot> timeslots = createTimeSlotsFromDepartment(department);
             for(TimeSlot timeSlot : timeslots){
                 timeSlot.setDepartment(dep);
+                Hibernate.initialize(timeSlot.getDepartment().getDoctors());
+                List<Doctor> doctors = timeSlot.getDepartment().getDoctors();
+                for(Doctor doctor: doctors){
+                    timeSlot.addAvailableDoctor(doctor);
+                }
             }
-            timeSlotRepository.saveAll(timeslots);
+            timeSlotsToSave.addAll(timeslots);
         }
+        timeSlotRepository.saveAll(timeSlotsToSave);
     }
+
+    public Timestamp roundTheTimeSlot(Timestamp timestamp){
+        LocalDateTime now = timestamp.toLocalDateTime();
+        LocalDateTime roundedDateTime;
+
+        if (now.getMinute() >= 30) {
+            // Already in the second half of the hour, round to the next hour
+            roundedDateTime = now.plusHours(1).truncatedTo(ChronoUnit.HOURS);
+        } else {
+            // Round to the next 30-minute increment
+            roundedDateTime = now.plusMinutes(30 - (now.getMinute() % 30)).truncatedTo(ChronoUnit.MINUTES);
+        }
+
+        roundedDateTime = roundedDateTime.withSecond(0); // Truncate seconds to zero
+
+        Timestamp roundedTimestamp = Timestamp.valueOf(roundedDateTime);
+
+        return roundedTimestamp;
+    }
+
 }
