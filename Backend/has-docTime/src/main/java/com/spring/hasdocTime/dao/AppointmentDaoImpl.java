@@ -291,9 +291,9 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         Page<Appointment> appointments;
         if(search != null && !search.isEmpty()){
-            appointments = appointmentRepository.findByUserAndDoctorNameContainsIgnoreCase(currentUser.getId(), search, pageable);
+            appointments = appointmentRepository.findByUserIdAndDoctorNameContainsIgnoreCase(currentUser.getId(), search, pageable);
         }else{
-            appointments = appointmentRepository.findByUser(currentUser.getId(),pageable);
+            appointments = appointmentRepository.findByUserId(currentUser.getId(),pageable);
         }
         for(Appointment appointment : appointments){
             Hibernate.initialize(appointment.getDoctor().getUser());
@@ -318,7 +318,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
             throw new DoesNotExistException("User");
         }
         User currentUser = user.get();
-        List<Appointment> appointments = appointmentRepository.findListByUser(userId);
+        List<Appointment> appointments = appointmentRepository.findListByUserId(userId);
         return appointments;
     }
 
@@ -329,13 +329,13 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         if(doctor.isEmpty()){
             throw new DoesNotExistException("Doctor");
         }
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(page, size, Sort.by( sortBy));
         Page<Appointment> appointments;
         Doctor currentDoctor = doctor.get();
         if(search != null && !search.isEmpty()){
-            appointments = appointmentRepository.findByDoctorAndUserNameContainsIgnoreCase(currentDoctor.getId(), search, pageable);
+            appointments = appointmentRepository.findByDoctorIdAndUserNameContainsIgnoreCase(currentDoctor.getId(), search, pageable);
         }else {
-            appointments = appointmentRepository.findByDoctor(currentDoctor.getId(), pageable);
+            appointments = appointmentRepository.findByDoctorId(currentDoctor.getId(), pageable);
         }
         for(Appointment appointment: appointments){
             Hibernate.initialize(appointment.getTimeSlotForAppointment());

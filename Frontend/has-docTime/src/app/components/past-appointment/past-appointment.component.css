@@ -45,3 +45,8 @@ tr {
   margin-top: 2.5%;
   font-size: 2rem;
 }
+
+.page-item
+{
+  cursor: pointer;
+}

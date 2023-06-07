@@ -40,7 +40,7 @@ export class PastAppointmentComponent implements OnInit{
   }
 
   sortByOptions: SortByOption[] = [
-    { label: 'StartTime', value: 'timeSlotForAppointment.startTime' },
+    { label: 'StartTime', value: 'timeSlotForAppointmentData.startTime' },
     { label: 'Doctor Name', value: 'doctor.user.name' },
     { label: 'Patient Name', value: 'user.name'}
   ];
@@ -92,6 +92,7 @@ export class PastAppointmentComponent implements OnInit{
                 } else{
                   this.pastAppointmentList = data.content;
                   this.totalPages = data.totalPages;
+                  this.noDataFound = false;
                 }
               })
             }
@@ -104,9 +105,12 @@ export class PastAppointmentComponent implements OnInit{
             (data: any) => {
               if(data===null){
                 this.noDataFound = true;
+              } else {
+                this.pastAppointmentList = data.content;
+                this.totalPages = data.totalPages;
+                this.noDataFound = false;
               }
-              this.pastAppointmentList = data.content;
-              this.totalPages = data.totalPages;
+
             },
             (error: any) => {
               console.error('Error getting past appointment:', error);
@@ -130,6 +134,7 @@ export class PastAppointmentComponent implements OnInit{
         else{
           this.pastAppointmentList = data.content;
           this.totalPages = data.totalPages;
+          this.noDataFound = false;
         }
       },
       (error: any) => {

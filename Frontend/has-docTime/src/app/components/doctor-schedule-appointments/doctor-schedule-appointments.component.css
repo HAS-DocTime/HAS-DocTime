@@ -24,3 +24,8 @@ app-sidebar{
     font-size: 30px;
     cursor: pointer;
   }
+
+  .page-item
+{
+  cursor: pointer;
+}

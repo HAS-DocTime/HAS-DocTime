@@ -32,7 +32,7 @@ export class AppointmentComponent implements OnInit{
   sortBy = 'user.name';
   search = '';
   urlPath!: string;
-
+  totalElements: number = 0;
   sizeOptions = [5, 10, 15];
   range(totalPages: number): number[] {
     return Array(totalPages).fill(0).map((_, index) => index + 1);
@@ -86,28 +86,28 @@ export class AppointmentComponent implements OnInit{
 
     if(this.tokenRole==='ADMIN'){
         this.appointmentService.getAppointments(params).subscribe((data)=>{
-          for(let appointment of data.content){
-            if(!appointment?.doctor?.department?.id){
-              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                (appointment.doctor as Doctor).department = data;
-              });
+            for(let appointment of data.content){
+              if(!appointment?.doctor?.department?.id){
+                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                  (appointment.doctor as Doctor).department = data;
+                });
+              }
             }
-          }
-          this.appointments = data.content;
-          this.totalPages = data.totalPages;
+            this.appointments = data.content;
+            this.totalPages = data.totalPages;
         })
       }
       else {
         this.appointmentService.getAppointmentByUser((this.id.toString()), params).subscribe((data)=> {
-          for(let appointment of data.content){
-            if(!appointment?.doctor?.department?.id){
-              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                (appointment.doctor as Doctor).department = data;
-              });
+            for(let appointment of data.content){
+              if(!appointment?.doctor?.department?.id){
+                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
+                  (appointment.doctor as Doctor).department = data;
+                });
+              }
             }
-          }
-          this.appointments = data.content;
-          this.totalPages = data.totalPages;
+            this.appointments = data.content;
+            this.totalPages = data.totalPages;
         });
       }
 

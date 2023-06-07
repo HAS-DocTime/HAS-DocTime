@@ -28,9 +28,7 @@ export class DoctorScheduleAppointmentsComponent {
   size = 5;
   sortBy = 'user.name';
   search = '';
-  dataBySearch: Boolean = false;
-  sortDescending: Boolean = false;
-
+  noDataBySearch: Boolean = false;
 
   sizeOptions = [5, 10, 15];
   range(totalPages: number): number[] {
@@ -49,8 +47,6 @@ export class DoctorScheduleAppointmentsComponent {
         this.id = atob(store[1]).split(',')[1].split(':')[1];
         this.id = this.id.substring(1, this.id.length-1);
       }
-      console.log(this.sortDescending);
-
       this.getData(0);
   }
 
@@ -65,11 +61,6 @@ export class DoctorScheduleAppointmentsComponent {
     if (this.sortBy) {
       params.sortBy = this.sortBy;
     }
-
-    console.log(this.sortDescending);
-    if (this.sortDescending) {
-      params.sortDirection = "desc";
-    }
     if (this.search) {
       params.search = this.search;
     }
@@ -79,9 +70,9 @@ export class DoctorScheduleAppointmentsComponent {
     .subscribe(
       (data) => {
         if(data === null){
-          this.dataBySearch = true;
+          this.noDataBySearch = true;
         } else{
-          this.dataBySearch = false;
+          this.noDataBySearch = false;
           this.appointments = data.content;
           this.totalPages = data.totalPages;
         }
@@ -103,16 +94,6 @@ export class DoctorScheduleAppointmentsComponent {
     sessionStorage.setItem('userId', this.appointments[i].user.id?.toString() as string);
     sessionStorage.setItem('appointmentId', this.appointments[i].id.toString());
     this.router.navigate(['patientAppointmentDetail/appointmentDetails'], {relativeTo:this.route});
-  }
-
-  onSortDescending(){
-    if(this.sortDescending){
-      this.sortDescending = false;
-    } else {
-      this.sortDescending = true;
-    }
-    console.log(this.sortDescending);
-
   }
 
   onPageSizeChange() {
