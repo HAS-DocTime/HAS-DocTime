@@ -91,7 +91,7 @@ export class AppointmentComponent implements OnInit{
       }
       else {
         this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
-          this.appointments = data.content;
+          this.appointments = data.content as Appointment[];
         });
       }
 
@@ -121,7 +121,7 @@ export class AppointmentComponent implements OnInit{
         }
         else{
           this.appointmentService.getAppointmentByUser(this.id.toString(), this.params).subscribe((data)=> {
-            this.appointments = data.content;
+            this.appointments = data.content as Appointment[];
           });
         }
     })

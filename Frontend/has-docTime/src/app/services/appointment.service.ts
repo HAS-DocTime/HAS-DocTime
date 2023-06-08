@@ -18,7 +18,7 @@ export class AppointmentService {
   search : string = '';
   sortBy : string = '';
 
-  getAppointmentByUser(userId : string | undefined, params : any): Observable<any> {
+  getAppointmentByUser(userId : string | undefined, params : any): Observable<PagedObject> {
     let httpParams = new HttpParams();
     Object.keys(params).forEach((key) => {
       httpParams = httpParams.set(key, params[key]);

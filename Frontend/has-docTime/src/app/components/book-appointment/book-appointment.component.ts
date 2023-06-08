@@ -130,9 +130,10 @@ export class BookAppointmentComponent implements OnInit{
   }
 
   closeModal() {
-    var modal = document.querySelector(".modal-backdrop");
-    console.log(modal);
-    (modal as HTMLDivElement).style.display = "none";
+    var modal = document.querySelectorAll(".modal-backdrop");
+    modal.forEach((mod)=> {
+      (mod as HTMLDivElement).style.display = "none";
+    })
     document.body.style.overflow = "auto";
   }
 

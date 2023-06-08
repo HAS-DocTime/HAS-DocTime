@@ -36,7 +36,7 @@
       *ngFor="let appointment of appointments">
       <div class="d-flex justify-content-between align-items-start my-3 px-4">
         <h5>Patient Name : {{ appointment.user.name }}</h5>
-        <h5>Time : {{ appointment.timeSlotForAppointment?.startTime }}</h5>
+        <h5>Time : {{ appointment.timeSlotForAppointment?.startTime | date : 'medium'}}</h5>
       </div>
       <div class="d-flex justify-content-between align-items-start my-3 px-4">
         <h5>Doctor Name : {{ appointment.doctor?.user?.name }}</h5>

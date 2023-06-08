@@ -39,6 +39,7 @@
               <th>Sr. No.</th>
               <th>Description</th>
               <th>Patient</th>
+              <th>Date</th>
               <th>Timeslot</th>
               <th>More Information</th>
             </tr>
@@ -49,7 +50,8 @@
               <td>{{i + 1}}</td>
               <td>{{ appointment.description}}</td>
               <td>{{ appointment.user.name }}</td>
-              <td>{{ appointment.timeSlotForAppointment?.startTime }} - {{ appointment.timeSlotForAppointment?.endTime }}</td>
+              <td>{{ appointment.timeSlotForAppointment?.startTime | date : 'mediumDate' }}</td>
+              <td>{{appointment.timeSlotForAppointment?.startTime | date : 'mediumTime'}} - {{ appointment.timeSlotForAppointment?.endTime | date : 'mediumTime'}}</td>
               <td>
                 <a class="btn" (click)="appointmentDetail(i)">
                   <i class="fa-solid fa-caret-right"></i>
