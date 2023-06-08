@@ -101,4 +101,9 @@ public class TimeSlot {
         this.availableDoctors.add(doctor);
         doctor.getAvailableTimeSlots().add(this);
     }
+
+    public void addBookedDoctor(Doctor doctor) {
+        this.bookedDoctors.add(doctor);
+        doctor.getBookedTimeSlots().add(this);
+    }
 }
