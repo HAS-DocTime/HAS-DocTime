@@ -4,7 +4,7 @@
  */
 package com.spring.hasdocTime.dao;
 
-import com.spring.hasdocTime.entity.Appointment;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.DoctorInterface;
@@ -17,6 +17,7 @@ import com.spring.hasdocTime.interfaces.PostAppointmentDataInterface;
 import com.spring.hasdocTime.interfaces.UserInterface;
 import com.spring.hasdocTime.repository.DepartmentRepository;
 import com.spring.hasdocTime.repository.DoctorRepository;
+import com.spring.hasdocTime.repository.SymptomRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
 import org.hibernate.Hibernate;
@@ -28,14 +29,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Implementation of the DoctorInterface for performing CRUD operations on Doctor entities.
  */
 @Service
 public class DoctorDaoImpl implements DoctorInterface {
+
+    private SymptomRepository symptomRepository;
     
     private DoctorRepository doctorRepository;
     
@@ -49,13 +53,14 @@ public class DoctorDaoImpl implements DoctorInterface {
     private PostAppointmentDataInterface postAppointmentDataDao;
     
     @Autowired
-    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao, @Qualifier("userDaoImpl") UserInterface userDao){
+    public DoctorDaoImpl(DoctorRepository doctorRepository, UserRepository userRepository, DepartmentRepository departmentRepository, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao, @Qualifier("postAppointmentDataDaoImpl") PostAppointmentDataInterface postAppointmentDataDao, @Qualifier("userDaoImpl") UserInterface userDao, SymptomRepository symptomRepository){
         this.doctorRepository = doctorRepository;
         this.userRepository = userRepository;
         this.departmentRepository = departmentRepository;
         this.appointmentDao = appointmentDao;
         this.postAppointmentDataDao = postAppointmentDataDao;
         this.userDao = userDao;
+        this.symptomRepository = symptomRepository;
     }
 
     /**
@@ -224,5 +229,54 @@ public class DoctorDaoImpl implements DoctorInterface {
                 return doctor.get();
         }
         throw new DoesNotExistException("Doctor");
-    } 
+    }
+
+    Timestamp manipulateTimeSlotBasedOnTimeZone(Timestamp timestamp){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT+05:30"));
+        calendar.setTimeInMillis(timestamp.getTime());
+        calendar.add(Calendar.HOUR_OF_DAY, -5);
+        calendar.add(Calendar.MINUTE, -30);
+        return new Timestamp(calendar.getTimeInMillis());
+    }
+
+    @Override
+    public Set<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody) throws  DoesNotExistException{
+        filteredDoctorBody.setTimeSlotStartTime(manipulateTimeSlotBasedOnTimeZone(filteredDoctorBody.getTimeSlotStartTime()));
+        filteredDoctorBody.setTimeSlotEndTime(manipulateTimeSlotBasedOnTimeZone(filteredDoctorBody.getTimeSlotEndTime()));
+        List<Symptom> givenSymptoms = filteredDoctorBody.getSymptoms();
+        List<Symptom> symptoms = new ArrayList<>();
+        for(Symptom symptom : givenSymptoms){
+            Optional<Symptom> optionalSymptom = symptomRepository.findById(symptom.getId());
+            if(optionalSymptom.isEmpty()){
+                throw new DoesNotExistException("Symptom");
+            }
+            symptom = optionalSymptom.get();
+            symptoms.add(symptom);
+        }
+        Set<Doctor> doctors = new HashSet<>();
+        for(Symptom symptom: symptoms){
+            for(Department department: symptom.getDepartments()) {;
+                for (Doctor doctor : department.getDoctors()) {
+                    Hibernate.initialize(doctor.getUser());
+                    if(doctor.getAvailableTimeSlots()!=null){
+                        for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
+                            Time timeSlotStartTime = new Time(timeSlot.getStartTime().getHours(), timeSlot.getStartTime().getMinutes(), timeSlot.getStartTime().getSeconds());
+                            Time timeSlotEndTime = new Time(timeSlot.getEndTime().getHours(), timeSlot.getEndTime().getMinutes(), timeSlot.getEndTime().getSeconds());
+                            Time doctorStartTime = new Time(filteredDoctorBody.getTimeSlotStartTime().getHours(), filteredDoctorBody.getTimeSlotStartTime().getMinutes(), filteredDoctorBody.getTimeSlotStartTime().getSeconds());
+                            Time doctorEndTime = new Time(filteredDoctorBody.getTimeSlotEndTime().getHours(), filteredDoctorBody.getTimeSlotEndTime().getMinutes(), filteredDoctorBody.getTimeSlotEndTime().getSeconds());
+                            if(timeSlotStartTime.compareTo(doctorStartTime) >= 0  && timeSlotStartTime.compareTo(doctorEndTime)<0 && doctor.isAvailable()){
+                                doctor.setBookedTimeSlots(null);
+                                doctor.setDepartment(null);
+                                doctor.setAppointments(null);
+                                doctor.setPostAppointmentData(null);
+                                doctors.add(doctor);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return doctors;
+    }
 }

@@ -27,7 +27,7 @@ export class AppointmentComponent implements OnInit{
   id : number = 0;
   tokenRole : string = "";
   page = 1;
-  totalPages = 1;
+  totalPages = 0;
   size = 5;
   sortBy = 'user.name';
   search = '';
@@ -42,9 +42,12 @@ export class AppointmentComponent implements OnInit{
     { label: 'StartTime', value: 'timeSlotForAppointment.startTime' },
     { label: 'Doctor Name', value: 'doctor.user.name' }
   ];
+  params : any = {};
+
 
 
   ngOnInit(){
+
 
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -70,44 +73,26 @@ export class AppointmentComponent implements OnInit{
   }
 
   getData(page : number){
-    let params: any = {};
-
     // Add query parameters based on selected options
     if (this.size) {
-      params.size = this.size;
+      this.params.size = this.size;
     }
     if (this.sortBy) {
-      params.sortBy = this.sortBy;
+      this.params.sortBy = this.sortBy;
     }
     if (this.search) {
-      params.search = this.search;
+      this.params.search = this.search;
     }
-    params.page = this.page-1;
+    this.params.page = this.page-1;
 
     if(this.tokenRole==='ADMIN'){
-        this.appointmentService.getAppointments(params).subscribe((data)=>{
-            for(let appointment of data.content){
-              if(!appointment?.doctor?.department?.id){
-                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                  (appointment.doctor as Doctor).department = data;
-                });
-              }
-            }
-            this.appointments = data.content;
-            this.totalPages = data.totalPages;
+        this.appointmentService.getAppointments(this.params).subscribe((data)=>{
+          this.appointments = data.content as Appointment[];
         })
       }
       else {
-        this.appointmentService.getAppointmentByUser((this.id.toString()), params).subscribe((data)=> {
-            for(let appointment of data.content){
-              if(!appointment?.doctor?.department?.id){
-                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                  (appointment.doctor as Doctor).department = data;
-                });
-              }
-            }
-            this.appointments = data.content;
-            this.totalPages = data.totalPages;
+        this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
+          this.appointments = data.content;
         });
       }
 
@@ -119,29 +104,24 @@ export class AppointmentComponent implements OnInit{
   }
 
   deleteAppointment(id : number | undefined){
+    if (this.size) {
+      this.params.size = this.size;
+    }
+    if (this.sortBy) {
+      this.params.sortBy = this.sortBy;
+    }
+    if (this.search) {
+      this.params.search = this.search;
+    }
+    this.params.page = this.page-1;
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
         if(this.tokenRole==="ADMIN"){
-          this.appointmentService.getAppointmentList().subscribe((data)=> {
-            for(let appointment of data){
-              if(!appointment?.doctor?.department?.id){
-                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                  (appointment.doctor as Doctor).department = data;
-                });
-              }
-            }
-            this.appointments = data;
-
+          this.appointmentService.getAppointments(this.params).subscribe((data)=> {
+            this.appointments = data.content as Appointment[];
           });
         }
         else{
-          this.appointmentService.getAppointmentListByUser((this.id?.toString())).subscribe((data)=> {
-            for(let appointment of data){
-              if(!appointment?.doctor?.department?.id){
-                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                  (appointment.doctor as Doctor).department = data;
-                });
-              }
-            }
+          this.appointmentService.getAppointmentByUser(this.id.toString(), this.params).subscribe((data)=> {
             this.appointments = data;
           });
         }

@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Future;
 import lombok.*;
 
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -34,11 +36,11 @@ public class TimeSlot {
 
     @Column(name = "start_time")
     @Future(message = "Timestamp must be in the future")
-    private Time startTime;
+    private Timestamp startTime;
 
     @Column(name = "end_Time")
     @Future(message = "Timestamp must be in the future")
-    private Time endTime;
+    private Timestamp endTime;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id")
@@ -52,7 +54,7 @@ public class TimeSlot {
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
     @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
-    private List<Doctor> availableDoctors;
+    private List<Doctor> availableDoctors = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -93,5 +95,10 @@ public class TimeSlot {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void addAvailableDoctor(Doctor doctor) {
+        this.availableDoctors.add(doctor);
+        doctor.getAvailableTimeSlots().add(this);
     }
 }

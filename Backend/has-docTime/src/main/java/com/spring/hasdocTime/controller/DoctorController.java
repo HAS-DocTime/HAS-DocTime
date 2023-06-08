@@ -5,6 +5,7 @@
 package com.spring.hasdocTime.controller;
 
 import com.spring.hasdocTime.entity.Doctor;
+import com.spring.hasdocTime.entity.FilteredDoctorBody;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.DoctorInterface;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The DoctorController class handles HTTP requests related to the Doctor entity.
@@ -142,5 +144,12 @@ public class DoctorController {
             return new ResponseEntity<>(doctor, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(doctor, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "bookAppointment")
+    public ResponseEntity<Set<Doctor>> getDoctorsBySymptomsAndTimeSlot(@RequestBody FilteredDoctorBody filteredDoctorBody) throws DoesNotExistException {
+        System.out.println("Hello---------------------------------------------------------------------");
+        Set<Doctor> doctors = doctorService.getDoctorsBySymptomsAndTimeSlot(filteredDoctorBody);
+        return new ResponseEntity<>(doctors, HttpStatus.OK);//As of now
     }
 }

@@ -2,7 +2,7 @@
 
 export type TimeSlot = {
   id? : number;
-  startTime? : string;
-  endTime? : string;
+  startTime? : number;
+  endTime? : number;
   departmentId? : number;
 }

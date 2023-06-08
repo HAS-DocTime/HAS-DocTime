@@ -42,7 +42,7 @@ export class AppointmentService {
     return this.http.get<Appointment>(`${this.baseUrl}appointment/${id}`);
   }
 
-  getAppointments(params: any): Observable<any> {
+  getAppointments(params: any): Observable<PagedObject> {
 
     // Create HttpParams object from params object
     let httpParams = new HttpParams();

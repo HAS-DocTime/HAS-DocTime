@@ -4,15 +4,17 @@
  */
 package com.spring.hasdocTime.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import java.util.List;
-
-import jakarta.validation.constraints.*;
-import lombok.*;
-
 import java.util.Objects;
 
 /**
@@ -27,10 +29,6 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @ToString
-@JsonIdentityInfo(
-        scope = Department.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Department {
     
     @Column(name="id")
@@ -71,7 +69,7 @@ public class Department {
     @JsonIgnoreProperties(value = {"departments", "users", "appointments"}, allowSetters = true)
     private List<Symptom> symptoms;
     
-    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
     private List<TimeSlot> timeSlots;
 
