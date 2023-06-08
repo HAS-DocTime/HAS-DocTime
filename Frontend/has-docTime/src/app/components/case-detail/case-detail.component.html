@@ -1,0 +1,77 @@
+<div><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
+
+<div class="container my-5">
+
+  <!-- Patient Information -->
+<div class="card mb-4">
+<div class="card-header bg-primary text-white">
+  <h5 class="mt-1 mb-1">Patient Information</h5>
+</div>
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-4">
+      <p class="fw-bold">Name:</p>
+      <p class="mb-4">{{ caseDetailedData?.user?.name }}</p>
+    </div>
+    <div class="col-md-4">
+      <p class="fw-bold">Gender:</p>
+      <p class="mb-4">{{ caseDetailedData?.user?.gender }}</p>
+    </div>
+    <div class="col-md-4">
+      <p class="fw-bold">Age:</p>
+      <p class="mb-4">{{ caseDetailedData?.user?.age }} years</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <p class="fw-bold">Height:</p>
+      <p class="mb-4">{{ caseDetailedData?.user?.height }} feet</p>
+    </div>
+    <div class="col-md-4">
+      <p class="fw-bold">Blood Group:</p>
+      <p class="mb-4">{{ caseDetailedData?.user?.bloodGroup }}</p>
+    </div>
+    <div class="col-md-4">
+      <p class="fw-bold">Weight:</p>
+      <p class="mb-4">{{ caseDetailedData?.user?.weight }} kg</p>
+    </div>
+  </div>
+  <div class="row" *ngIf="caseDetailedData?.user?.patientChronicIllness?.length">
+    <div class="col-md-12">
+      <p class="fw-bold">Chronic Illness:</p>
+      <div class="d-flex flex-wrap">
+        <div class="badge bg-secondary me-2 mb-2" *ngFor="let illness of caseDetailedData?.user?.patientChronicIllness">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Disease Details -->
+<div class="card mb-4">
+<div class="card-header bg-primary text-white">
+  <h5 class="mb-0">Disease Details</h5>
+</div>
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-6">
+      <p class="fw-bold">Disease Name:</p>
+      <p class="mb-4">{{ caseDetailedData?.disease }}</p>
+    </div>
+    <div class="col-md-6">
+      <p class="fw-bold">Appointment Time:</p>
+      <p class="mb-4">{{ caseDetailedData?.timeSlotForAppointmentData?.startTime }} - {{ caseDetailedData?.timeSlotForAppointmentData?.endTime }}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <p class="fw-bold">Medication:</p>
+      <p class="mb-4">{{ caseDetailedData?.medicine }}</p>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+

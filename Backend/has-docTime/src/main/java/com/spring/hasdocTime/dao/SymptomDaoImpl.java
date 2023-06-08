@@ -6,19 +6,27 @@ import com.spring.hasdocTime.entity.Symptom;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.AppointmentInterface;
-import com.spring.hasdocTime.interfc.DepartmentInterface;
-import com.spring.hasdocTime.interfc.SymptomInterface;
-import com.spring.hasdocTime.interfc.UserInterface;
+import com.spring.hasdocTime.interfaces.AppointmentInterface;
+import com.spring.hasdocTime.interfaces.DepartmentInterface;
+import com.spring.hasdocTime.interfaces.SymptomInterface;
+import com.spring.hasdocTime.interfaces.UserInterface;
 import com.spring.hasdocTime.repository.SymptomRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the SymptomInterface that interacts with the SymptomRepository to perform CRUD operations on Symptom entities.
+ */
 @Repository
 public class SymptomDaoImpl implements SymptomInterface {
 
@@ -29,6 +37,14 @@ public class SymptomDaoImpl implements SymptomInterface {
     private DepartmentInterface departmentDao;
 
     private AppointmentInterface appointmentDao;
+
+    /**
+     * Constructs a SymptomDaoImpl with the necessary dependencies.
+     * @param symptomRepository The repository for accessing and manipulating Symptom entities.
+     * @param userDao The interface for accessing User entities.
+     * @param departmentDao The interface for accessing Department entities.
+     * @param appointmentDao The interface for accessing Appointment entities.
+     */
     @Autowired
     public SymptomDaoImpl(SymptomRepository symptomRepository, @Qualifier("userDaoImpl") UserInterface userDao, @Qualifier("departmentDaoImpl") DepartmentInterface departmentDao, @Qualifier("appointmentDaoImpl") AppointmentInterface appointmentDao) {
         this.symptomRepository = symptomRepository;
@@ -36,21 +52,53 @@ public class SymptomDaoImpl implements SymptomInterface {
         this.departmentDao = departmentDao;
         this.appointmentDao = appointmentDao;
     }
+
+    /**
+     * Retrieves a symptom by its ID.
+     * @param id The ID of the symptom to retrieve.
+     * @return The symptom with the given ID.
+     * @throws DoesNotExistException if the symptom does not exist.
+     */
     @Override
     public Symptom getSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
-        Symptom s = null;
-        if(optionalSymptom.isPresent()){
-            s = optionalSymptom.get();
+        if(optionalSymptom.isEmpty()){
+            throw new DoesNotExistException("Symptom");
         }
-        throw new DoesNotExistException("Symptom");
+        return optionalSymptom.get();
+    }
+
+    /**
+     * Retrieves all symptoms.
+     * @return A list of all symptoms.
+     */
+    @Override
+    public Page<Symptom> getAllSymptom(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Symptom> symptoms;
+        if(search != null && !search.isEmpty()){
+            symptoms = symptomRepository.findAllAndNameContainsIgnoreCase(search, pageable);
+        } else {
+            symptoms = symptomRepository.findAll(pageable);
+        }
+        for(Symptom symptom : symptoms){
+            Hibernate.initialize(symptom.getDepartments());
+        }
+        return symptoms;
     }
 
     @Override
-    public List<Symptom> getAllSymptom() {
+    public List<Symptom> getAllSymptomList() {
         return symptomRepository.findAll();
     }
 
+    /**
+     * Creates a new symptom.
+     * @param symptom The symptom to create.
+     * @return The created symptom.
+     * @throws DoesNotExistException if the symptom does not exist.
+     * @throws MissingParameterException if a required parameter is missing.
+     */
     @Override
     public Symptom createSymptom(Symptom symptom) throws DoesNotExistException, MissingParameterException {
 //        symptom.setId(0);
@@ -96,6 +144,14 @@ public class SymptomDaoImpl implements SymptomInterface {
         return symptomRepository.save(symptom);
     }
 
+    /**
+     * Updates an existing symptom.
+     * @param id The ID of the symptom to update.
+     * @param symptom The updated symptom.
+     * @return The updated symptom.
+     * @throws DoesNotExistException if the symptom does not exist.
+     * @throws MissingParameterException if a required parameter is missing.
+     */
     @Override
     public Symptom updateSymptom(int id, Symptom symptom) throws DoesNotExistException, MissingParameterException{
         if(symptom.getName()==null || symptom.getName().equals("")){
@@ -110,6 +166,12 @@ public class SymptomDaoImpl implements SymptomInterface {
         throw new DoesNotExistException("Symptom");
     }
 
+    /**
+     * Deletes a symptom.
+     * @param id The ID of the symptom to delete.
+     * @return true if the symptom was successfully deleted, false otherwise.
+     * @throws DoesNotExistException if the symptom does not exist.
+     */
     @Override
     public boolean deleteSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);

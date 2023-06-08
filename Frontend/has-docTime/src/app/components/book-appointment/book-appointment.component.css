@@ -59,3 +59,12 @@ i{
   background-color: rgb(223, 220, 220);
   color: rgb(0, 0, 0);
 }
+
+.required-asterisk{
+  color : red;
+}
+
+.bi-arrow-left-circle-fill{
+  font-size: 30px;
+  cursor: pointer;
+}

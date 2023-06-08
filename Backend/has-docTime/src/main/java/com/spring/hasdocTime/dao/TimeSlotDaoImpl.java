@@ -3,7 +3,7 @@ package com.spring.hasdocTime.dao;
 import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
-import com.spring.hasdocTime.interfc.TimeSlotInterface;
+import com.spring.hasdocTime.interfaces.TimeSlotInterface;
 import com.spring.hasdocTime.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Time;
 import java.util.*;
 
+/**
+ * Implementation of the TimeSlotInterface that interacts with the TimeSlotRepository to perform CRUD operations on TimeSlot entities.
+ */
 @Service
 public class TimeSlotDaoImpl implements TimeSlotInterface {
 
@@ -24,6 +27,15 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     private PostAppointmentDataRepository postAppointmentDataRepository;
 
 
+    /**
+     * Constructs a TimeSlotDaoImpl with the necessary dependencies.
+     *
+     * @param timeSlotRepository         The repository for accessing and manipulating TimeSlot entities.
+     * @param departmentRepository       The repository for accessing and manipulating Department entities.
+     * @param doctorRepository           The repository for accessing and manipulating Doctor entities.
+     * @param appointmentRepository      The repository for accessing and manipulating Appointment entities.
+     * @param postAppointmentDataRepository The repository for accessing and manipulating PostAppointmentData entities.
+     */
     @Autowired
     public TimeSlotDaoImpl(
             TimeSlotRepository timeSlotRepository,
@@ -41,12 +53,24 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         this.postAppointmentDataRepository = postAppointmentDataRepository;
     }
 
+    /**
+     * Retrieves all time slots.
+     *
+     * @return A list of all time slots.
+     */
     @Override
     public List<TimeSlot> getAllTimeSlots() {
         List<TimeSlot> allTimeSlots= timeSlotRepository.findAll();
         return allTimeSlots;
     }
 
+    /**
+     * Retrieves a time slot by its ID.
+     *
+     * @param id The ID of the time slot to retrieve.
+     * @return The time slot with the given ID.
+     * @throws DoesNotExistException if the time slot does not exist.
+     */
     @Override
     public TimeSlot getTimeSlotById(int id) throws DoesNotExistException {
         Optional<TimeSlot> optionalTimeSlot = timeSlotRepository.findById(id);
@@ -57,6 +81,15 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         throw new DoesNotExistException("Time Slot");
     }
 
+
+    /**
+     * Creates a new time slot.
+     *
+     * @param timeSlot The time slot to create.
+     * @return The created time slot.
+     * @throws MissingParameterException if a required parameter is missing.
+     * @throws DoesNotExistException     if the department, appointment, or post-appointment data does not exist.
+     */
     @Override
     public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException, DoesNotExistException{
         if(timeSlot.getStartTime()==null){
@@ -126,6 +159,16 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         return timeSlotRepository.save(timeSlot);
     }
 
+
+    /**
+     * Updates an existing time slot.
+     *
+     * @param id       The ID of the time slot to update.
+     * @param timeSlot The updated time slot.
+     * @return The updated time slot.
+     * @throws DoesNotExistException     if the time slot, department, appointment, or post-appointment data does not exist.
+     * @throws MissingParameterException if a required parameter is missing.
+     */
     @Override
     public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException{
         if(timeSlot.getStartTime()==null){
@@ -208,6 +251,14 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         throw new DoesNotExistException("Time Slot");
     }
 
+
+    /**
+     * Deletes a time slot.
+     *
+     * @param id The ID of the time slot to delete.
+     * @return A message indicating the success of the operation.
+     * @throws DoesNotExistException if the time slot does not exist.
+     */
     @Override
     public String deleteTimeSlot(int id) throws DoesNotExistException{
         Optional<TimeSlot> optionalTimeSlot = timeSlotRepository.findById(id);
@@ -218,6 +269,12 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         throw new DoesNotExistException("Time Slot");
     }
 
+    /**
+     * Creates time slots from a department.
+     *
+     * @param department The department to create time slots for.
+     * @return The list of created time slots.
+     */
     public List<TimeSlot> createTimeSlotsFromDepartment(Department department){
         // clone is required as Java takes value as pass by reference and changes the value of both the objects
         Time timeSlotStartTime = (Time)hospitalStartTime.clone();

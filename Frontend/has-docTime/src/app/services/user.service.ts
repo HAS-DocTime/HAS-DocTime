@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
 import { Doctor } from '../models/doctor.model';
+import { Admin } from '../models/admin.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,7 @@ export class UserService {
 
   constructor(private http : HttpClient) { }
 
-  baseUrl = "http://localhost:8080/";
+  baseUrl = environment.apiUrl;
   registerUser(user : User){
     this.isLoggedIn.next(true);
     sessionStorage.clear();
@@ -39,8 +41,8 @@ export class UserService {
     return this.http.put<Doctor>(`${this.baseUrl}doctor/${id}`, doctor);
   }
 
-  getUser(){
-    return this.http.get<User>(`${this.baseUrl}user/findByEmail`);
+  getUser(id : number){
+    return this.http.get<User>(`${this.baseUrl}user/${id}`);
   }
 
   logOutUser(){
@@ -53,12 +55,5 @@ export class UserService {
     this.isLoggedIn.next(false);
   }
 
-  getUserByEmail(){
-    return this.http.get<User>(`${this.baseUrl}user/findByEmail`);
-  }
-
-  // getDataSubject(): Subject<any> {
-  //   return this.dataSubject;
-  // }
 }
 

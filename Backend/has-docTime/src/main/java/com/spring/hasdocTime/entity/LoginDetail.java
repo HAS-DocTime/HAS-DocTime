@@ -5,6 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
+/**
+ * The LoginDetail class represents the login details of a user.
+ * It contains information about the user's email and password.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

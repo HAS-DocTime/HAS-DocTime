@@ -1,3 +1,4 @@
+
 .fontinc{
     font-size: x-large;
     margin-top: 10px;
@@ -6,6 +7,12 @@
 
 .navbar{
   border-bottom: 2px solid rgb(200, 202, 199);
+  --bs-navbar-padding-y: 0rem;
+}
+
+.container-fluid{
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .mat-mdc-raised-button.mat-primary{
@@ -18,7 +25,12 @@
   color: white;
 }
 
+.row>*{
+  padding-left: 0;
+}
+
 /* .show .example-button-row{
   display: flex;
   flex-direction: column;
 } */
+
