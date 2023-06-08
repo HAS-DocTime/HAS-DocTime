@@ -32,7 +32,9 @@ export class BookAppointmentComponent implements OnInit{
   id! : number;
   doctorList : Doctor[] = [];
   noDataFound : boolean = false;
-  noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537"
+  noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
+  currentDoctor! : Doctor;
+  selectedSymptoms : string[] = [];
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
      private userService : UserService, private router : Router, private route : ActivatedRoute, private doctorService : DoctorService, private location : Location){}
@@ -56,9 +58,16 @@ export class BookAppointmentComponent implements OnInit{
 
     this.bookAppointment.controls['symptoms'].valueChanges.subscribe(data=> {
       this.selectedSymptom = [];
+      this.selectedSymptoms = [];
       for(let symptomName of data){
         if(symptomName['id']!=='')
-        this.selectedSymptom.push(parseInt(symptomName['id']))
+        this.selectedSymptom.push(parseInt(symptomName['id']));
+        for(let symptom of this.symptoms){
+          if(parseInt(symptomName['id'])===symptom.id){
+            this.selectedSymptoms.push(symptom.name as string);
+            break;
+          }
+        }
       }
     })
   }
@@ -78,12 +87,9 @@ export class BookAppointmentComponent implements OnInit{
     this.currentDate.setDate(1);
     this.startTimeInString = `${this.currentDate.getFullYear()}-${this.currentMonth}-${this.currentDay}T${this.startTime}`
     this.endTimeInString = `${this.currentDate.getFullYear()}-${this.currentMonth}-${this.currentDay}T${this.endTime}`
-    console.log(this.startTimeInString);
-    console.log(this.endTimeInString);
     this.bookAppointment.value["timeSlotStartTime"] = this.startTimeInString;
     this.bookAppointment.value["timeSlotEndTime"] = this.endTimeInString;
     this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value).subscribe((data)=> {
-      console.log(data);
       this.doctorList = data;
       if(this.doctorList.length<=0){
         this.noDataFound = true;
@@ -116,14 +122,12 @@ export class BookAppointmentComponent implements OnInit{
     }
     //Hard-Coded as of now
     this.bookAppointment.value["doctor"] = {
-      "id": 4
+      "id": this.currentDoctor.id
     }
     //Hard-Coded as of now
     this.bookAppointment.value["timeSlotForAppointment"] = {
       "id": 5
     }
-    console.log("-------------------",this.bookAppointment.value);
-
     this.appointmentService.createAppointment(this.bookAppointment.value).subscribe((data)=> {
       this.router.navigate(["../"], {relativeTo : this.route});
     })
@@ -149,5 +153,13 @@ export class BookAppointmentComponent implements OnInit{
 
   navigateBack(){
     this.location.back();
+  }
+
+  selectDoctor(index : number){
+    this.currentDoctor = this.doctorList[index];
+  }
+
+  convertTimeStampToDate(timestamp : number | undefined){
+    return new Date(timestamp as number);
   }
 }

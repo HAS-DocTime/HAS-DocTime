@@ -259,19 +259,19 @@ public class DoctorDaoImpl implements DoctorInterface {
             for(Department department: symptom.getDepartments()) {;
                 for (Doctor doctor : department.getDoctors()) {
                     Hibernate.initialize(doctor.getUser());
-                    for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
-                        System.out.println(doctor.getUser().getName());
-                        Time timeSlotStartTime = new Time(timeSlot.getStartTime().getHours(), timeSlot.getStartTime().getMinutes(), timeSlot.getStartTime().getSeconds());
-                        Time timeSlotEndTime = new Time(timeSlot.getEndTime().getHours(), timeSlot.getEndTime().getMinutes(), timeSlot.getEndTime().getSeconds());
-                        Time doctorStartTime = new Time(filteredDoctorBody.getTimeSlotStartTime().getHours(), filteredDoctorBody.getTimeSlotStartTime().getMinutes(), filteredDoctorBody.getTimeSlotStartTime().getSeconds());
-                        Time doctorEndTime = new Time(filteredDoctorBody.getTimeSlotEndTime().getHours(), filteredDoctorBody.getTimeSlotEndTime().getMinutes(), filteredDoctorBody.getTimeSlotEndTime().getSeconds());
-                        if(timeSlotStartTime.compareTo(doctorStartTime) >= 0  && timeSlotStartTime.compareTo(doctorEndTime)<0 && doctor.isAvailable()){
-                            doctor.setBookedTimeSlots(null);
-                            doctor.setDepartment(null);
-                            doctor.setAvailableTimeSlots(null);
-                            doctor.setAppointments(null);
-                            doctor.setPostAppointmentData(null);
-                            doctors.add(doctor);
+                    if(doctor.getAvailableTimeSlots()!=null){
+                        for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
+                            Time timeSlotStartTime = new Time(timeSlot.getStartTime().getHours(), timeSlot.getStartTime().getMinutes(), timeSlot.getStartTime().getSeconds());
+                            Time timeSlotEndTime = new Time(timeSlot.getEndTime().getHours(), timeSlot.getEndTime().getMinutes(), timeSlot.getEndTime().getSeconds());
+                            Time doctorStartTime = new Time(filteredDoctorBody.getTimeSlotStartTime().getHours(), filteredDoctorBody.getTimeSlotStartTime().getMinutes(), filteredDoctorBody.getTimeSlotStartTime().getSeconds());
+                            Time doctorEndTime = new Time(filteredDoctorBody.getTimeSlotEndTime().getHours(), filteredDoctorBody.getTimeSlotEndTime().getMinutes(), filteredDoctorBody.getTimeSlotEndTime().getSeconds());
+                            if(timeSlotStartTime.compareTo(doctorStartTime) >= 0  && timeSlotStartTime.compareTo(doctorEndTime)<0 && doctor.isAvailable()){
+                                doctor.setBookedTimeSlots(null);
+                                doctor.setDepartment(null);
+                                doctor.setAppointments(null);
+                                doctor.setPostAppointmentData(null);
+                                doctors.add(doctor);
+                            }
                         }
                     }
                 }

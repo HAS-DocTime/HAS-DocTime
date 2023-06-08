@@ -93,7 +93,7 @@
 <h3 class="text-center mb-5">Book Appointment</h3>
 <div class="book-appointment-container container bg-body-tertiary">
   <form class="row" [formGroup]="bookAppointment">
-    <div class="symptoms border col-md-6 text-center">
+    <div class="symptoms border col-md-12 text-center p-0">
       <h5 class="row-heading bg-dark text-white mb-3 pt-2 pb-2">Symptoms</h5>
       <div class="ms-2 me-2 mb-2 d-flex justify-space-around flex-column">
         <div class="mb-3">
@@ -120,6 +120,14 @@
                     {{ symptom.name }}
                   </option>
                 </select>
+                <div
+                    class="alert alert-danger"
+                    *ngIf="
+                      bookAppointment.get('symptoms.'+i+'.id')?.touched && bookAppointment.get('symptoms.'+i+'.id')?.invalid
+                    "
+                  >
+                    <span *ngIf="bookAppointment.get('symptoms.'+i+'.id')?.errors">Symptom is Required</span>
+                  </div>
               </div>
               <div *ngIf="symptomList.controls.length>1">
                 <i class="bi bi-trash-fill" (click)="deleteSymptom(i)"></i>
@@ -136,9 +144,25 @@
         </div>
       </div>
     </div>
-    <div class="timeSlots border col-md-3 text-center">
+    <div class="dates border col-md-4 text-center p-0">
+      <h5 class="row-heading bg-dark text-white mb-3 pt-2 pb-2">Date</h5>
+      <div class="form-group my-4 d-flex justify-content-center align-items-center flex-column">
+        <div class="select-field">
+          <input type="date" max="" min="" formControlName="date"/>
+        </div>
+        <div
+          class="alert alert-danger"
+          *ngIf="
+            bookAppointment.get('timeSlot')?.touched && bookAppointment.get('timeSlot')?.invalid
+          "
+        >
+          <span *ngIf="bookAppointment.get('timeSlot')?.errors">TimeSlot is Required</span>
+        </div>
+      </div>
+    </div>
+    <div class="timeSlots border col-md-4 text-center p-0">
       <h5 class="row-heading bg-dark text-white mb-3 pt-2 pb-2">Time Slots</h5>
-      <div class="form-group my-4 d-flex justify-content-center align-items-center">
+      <div class="form-group my-4 d-flex justify-content-center align-items-center flex-column">
         <div class="select-field">
           <select class="form-select" id="timeSlot" formControlName="timeSlot">
             <option value="" selected disabled>Select TimeSlot</option>
@@ -158,11 +182,11 @@
         </div>
       </div>
     </div>
-    <div class="description border col-md-3 text-center">
+    <div class="description border col-md-4 text-center p-0">
       <h5 class="row-heading bg-dark text-white mb-3 pt-2 pb-2">Description</h5>
       <div class="form-group my-4 d-flex justify-content-center align-items-center">
         <div class="select-field">
-          <span class="textarea" role="textbox" contenteditable></span>
+          <input type="text" name="description" id="description" formControlName="description" class="form-control" placeholder="Enter Description"/>
         </div>
       </div>
     </div>
@@ -218,7 +242,7 @@
                 <td>{{ doctor?.user?.gender }} </td>
                 <td>{{ doctor?.user?.age }} </td>
                 <td>{{ doctor?.qualification }} </td>
-                <td><button class="btn btn-primary book-btn">Book</button></td>
+                <td><button class="btn btn-primary book-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectDoctor(i)">Book</button></td>
               </tr>
             </tbody>
           </table>
@@ -241,5 +265,53 @@
       </div>
     </div>
 
+  </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Booking</h5>
+        <button type="button" class="close btn" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="close-btn"><i class="bi bi-x-lg"></i></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="symptoms d-flex field">
+          <p class="label">Symptoms</p>
+          <div class="symptom-list value">
+            <div class="card p-0 mx-1 my-1 shadow-none border-dark badge bg-secondary" *ngFor="let symptom of selectedSymptoms">
+              <div class="card-body py-0 text-light" >
+                {{ symptom }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="timeSlot d-flex field">
+          <p class="label">Time Slot</p>
+          <div class="value">{{bookAppointment.get('timeSlot')?.value}}</div>
+        </div>
+        <div class="description d-flex field">
+          <p class="label">Description</p>
+          <div class="value">{{bookAppointment.get('description')?.value}}</div>
+        </div>
+        <div class="doctor d-flex field">
+          <p class="label">Doctor Name</p>
+          <div class="value">{{currentDoctor?.user?.name}}</div>
+        </div>
+        <div class="availableTimeSlot d-flex field">
+          <p class="label">Select Date</p>
+          <select class="form-select timeSlot-select value" id="timeSlot">
+            <option value="" selected disabled>Select Available TimeSlot</option>
+            <option [value]="times.startTime+'-'+times.endTime" *ngFor="let times of currentDoctor?.availableTimeSlots">{{convertTimeStampToDate(times.startTime) | date : 'medium'}}-{{convertTimeStampToDate(times.endTime) | date : 'medium'}}</option>
+          </select>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="createAppointment()">Book Appointment</button>
+      </div>
+    </div>
   </div>
 </div>
