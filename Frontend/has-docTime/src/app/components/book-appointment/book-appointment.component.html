@@ -148,15 +148,15 @@
       <h5 class="row-heading bg-dark text-white mb-3 pt-2 pb-2">Date</h5>
       <div class="form-group my-4 d-flex justify-content-center align-items-center flex-column">
         <div class="select-field">
-          <input type="date" max="" min="" formControlName="date"/>
+          <input type="date" [max]="getMaxDate()" [min]="getMinDate()" formControlName="date"/>
         </div>
         <div
           class="alert alert-danger"
           *ngIf="
-            bookAppointment.get('timeSlot')?.touched && bookAppointment.get('timeSlot')?.invalid
+            bookAppointment.get('date')?.touched && bookAppointment.get('date')?.invalid
           "
         >
-          <span *ngIf="bookAppointment.get('timeSlot')?.errors">TimeSlot is Required</span>
+          <span *ngIf="bookAppointment.get('timeSlot')?.errors">Date is Required</span>
         </div>
       </div>
     </div>

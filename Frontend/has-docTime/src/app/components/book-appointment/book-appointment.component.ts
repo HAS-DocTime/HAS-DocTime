@@ -23,11 +23,9 @@ export class BookAppointmentComponent implements OnInit{
   currentUser? : User;
   startTime? : Date;
   endTime? : Date;
-  currentDate? : Date;
+  date! : Date;
   startTimeInString : string = "";
   endTimeInString : string = "";
-  currentMonth : string = "";
-  currentDay : string = "";
   tokenRole! : string;
   id! : number;
   doctorList : Doctor[] = [];
@@ -73,20 +71,12 @@ export class BookAppointmentComponent implements OnInit{
   }
 
   getDoctorsBySymptomAndTimeSlot(){
+    console.log(this.bookAppointment.value);
     this.startTime = this.bookAppointment.value["timeSlot"].split("-")[0];
     this.endTime = this.bookAppointment.value["timeSlot"].split("-")[1];
-    this.currentDate = new Date();
-    this.currentDay = this.currentDate.getDate().toString();
-    this.currentMonth = (this.currentDate.getMonth()+1).toString();
-    if(parseInt(this.currentDay) < 10){
-      this.currentDay = "0" + this.currentDay;
-    }
-    if(parseInt(this.currentMonth) < 10){
-      this.currentMonth = "0" + this.currentMonth;
-    }
-    this.currentDate.setDate(1);
-    this.startTimeInString = `${this.currentDate.getFullYear()}-${this.currentMonth}-${this.currentDay}T${this.startTime}`
-    this.endTimeInString = `${this.currentDate.getFullYear()}-${this.currentMonth}-${this.currentDay}T${this.endTime}`
+    this.date = this.bookAppointment.value["date"];
+    this.startTimeInString = `${this.date}T${this.startTime}`
+    this.endTimeInString = `${this.date}T${this.endTime}`
     this.bookAppointment.value["timeSlotStartTime"] = this.startTimeInString;
     this.bookAppointment.value["timeSlotEndTime"] = this.endTimeInString;
     this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value).subscribe((data)=> {
@@ -110,7 +100,8 @@ export class BookAppointmentComponent implements OnInit{
       }),
     ]),
     timeSlot : new FormControl('', Validators.required),
-    description : new FormControl("")
+    description : new FormControl(""),
+    date : new FormControl(new Date(), Validators.required)
   })
 
   createAppointment(){
@@ -120,7 +111,6 @@ export class BookAppointmentComponent implements OnInit{
     this.bookAppointment.value["user"] = {
       "id": this.id
     }
-    //Hard-Coded as of now
     this.bookAppointment.value["doctor"] = {
       "id": this.currentDoctor.id
     }
@@ -161,5 +151,16 @@ export class BookAppointmentComponent implements OnInit{
 
   convertTimeStampToDate(timestamp : number | undefined){
     return new Date(timestamp as number);
+  }
+
+  getMinDate(){
+    var today = new Date();
+    return today.toISOString().split('T')[0];
+  }
+
+  getMaxDate(){
+    var today = new Date();
+    today.setDate(today.getDate()+6);
+    return today.toISOString().split('T')[0];
   }
 }
