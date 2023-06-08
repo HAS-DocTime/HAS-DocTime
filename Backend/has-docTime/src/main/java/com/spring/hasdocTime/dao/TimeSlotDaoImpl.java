@@ -362,7 +362,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Transactional
-    @Scheduled(cron = "10 06 17 ? * *", zone = "Asia/Kolkata") // For Testing
+    @Scheduled(cron = "10 33 11 ? * *", zone = "Asia/Kolkata") // For Testing
 //    @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
     public void refreshTimeSlots(){
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
