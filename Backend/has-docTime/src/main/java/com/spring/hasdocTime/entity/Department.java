@@ -6,14 +6,13 @@ package com.spring.hasdocTime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,8 +46,9 @@ public class Department {
     private String building;
     
     @Column(name="time_duration")
-    @NotBlank(message = "Please enter Time Duration")
-    @Size(min=0, max=60, message = "Please enter valid minutes")
+    @NotNull(message = "Time duration must not be null")
+    @Min(value = 0, message = "Minutes entered should be more than 0")
+    @Max(value = 60, message = "Minutes entered should not be more than 60")
     private int timeDuration;
     
     @Column(name="description")
@@ -71,7 +71,7 @@ public class Department {
     
     @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
-    private List<TimeSlot> timeSlots;
+    private List<TimeSlot> timeSlots = new ArrayList<>();
 
 
     /**
