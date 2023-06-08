@@ -277,36 +277,47 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="symptoms d-flex field">
-          <p class="label">Symptoms</p>
-          <div class="symptom-list value">
-            <div class="card p-0 mx-1 my-1 shadow-none border-dark badge bg-secondary" *ngFor="let symptom of selectedSymptoms">
-              <div class="card-body py-0 text-light" >
-                {{ symptom }}
+        <form [formGroup]="confirmAppointment">
+          <div class="symptoms d-flex field">
+            <p class="label">Symptoms</p>
+            <div class="symptom-list value">
+              <div class="card p-0 mx-1 my-1 shadow-none border-dark badge bg-secondary" *ngFor="let symptom of selectedSymptoms">
+                <div class="card-body py-0 text-light" >
+                  {{ symptom }}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="timeSlot d-flex field">
-          <p class="label">Time Slot</p>
-          <div class="value">{{bookAppointment.get('timeSlot')?.value}}</div>
-        </div>
-        <div class="description d-flex field">
-          <p class="label">Description</p>
-          <div class="value">{{bookAppointment.get('description')?.value}}</div>
-        </div>
-        <div class="doctor d-flex field">
-          <p class="label">Doctor Name</p>
-          <div class="value">{{currentDoctor?.user?.name}}</div>
-        </div>
-        <div class="availableTimeSlot d-flex field">
-          <p class="label">Select Date</p>
-          <select class="form-select timeSlot-select value" id="timeSlot">
-            <option value="" selected disabled>Select Available TimeSlot</option>
-            <option [value]="times.startTime+'-'+times.endTime" *ngFor="let times of currentDoctor?.availableTimeSlots">{{convertTimeStampToDate(times.startTime) | date : 'medium'}}-{{convertTimeStampToDate(times.endTime) | date : 'medium'}}</option>
-          </select>
-        </div>
-
+          <div class="timeSlot d-flex field">
+            <p class="label">Preferred Time Slot</p>
+            <div class="value">{{bookAppointment.get('timeSlot')?.value}}</div>
+          </div>
+          <div class="description d-flex field">
+            <p class="label">Description</p>
+            <div class="value">{{bookAppointment.get('description')?.value}}</div>
+          </div>
+          <div class="doctor d-flex field">
+            <p class="label">Doctor Name</p>
+            <div class="value">{{currentDoctor?.user?.name}}</div>
+          </div>
+          <div class="availableTimeSlot d-flex field">
+              <p class="label">Select Date</p>
+              <div>
+                <select class="form-select timeSlot-select value" id="timeSlot" formControlName="timeSlot">
+                  <option value="" selected disabled>Select TimeSlot</option>
+                  <option [value]="times.id" *ngFor="let times of currentDoctor?.availableTimeSlots">{{convertTimeStampToDate(times.startTime) | date : 'mediumTime'}}-{{convertTimeStampToDate(times.endTime) | date : 'mediumTime'}}</option>
+                </select>
+                <div
+                  class="alert alert-danger"
+                  *ngIf="
+                    confirmAppointment.get('timeSlot')?.touched && confirmAppointment.get('timeSlot')?.invalid
+                  "
+                >
+                  <span *ngIf="confirmAppointment.get('timeSlot')?.errors">TimeSlot is Required</span>
+                </div>
+              </div>
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

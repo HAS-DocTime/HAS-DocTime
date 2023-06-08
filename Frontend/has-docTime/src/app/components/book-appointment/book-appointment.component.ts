@@ -101,7 +101,11 @@ export class BookAppointmentComponent implements OnInit{
     ]),
     timeSlot : new FormControl('', Validators.required),
     description : new FormControl(""),
-    date : new FormControl(new Date(), Validators.required)
+    date : new FormControl(new Date().toISOString().split("T")[0], Validators.required)
+  })
+
+  confirmAppointment : FormGroup = new FormGroup({
+    timeSlot : new FormControl('', Validators.required)
   })
 
   createAppointment(){
@@ -116,11 +120,20 @@ export class BookAppointmentComponent implements OnInit{
     }
     //Hard-Coded as of now
     this.bookAppointment.value["timeSlotForAppointment"] = {
-      "id": 5
+      "id": this.confirmAppointment.get('timeSlot')?.value
     }
+    console.log(this.bookAppointment.value);
+    this.closeModal();
     this.appointmentService.createAppointment(this.bookAppointment.value).subscribe((data)=> {
       this.router.navigate(["../"], {relativeTo : this.route});
     })
+  }
+
+  closeModal() {
+    var modal = document.querySelector(".modal-backdrop");
+    console.log(modal);
+    (modal as HTMLDivElement).style.display = "none";
+    document.body.style.overflow = "auto";
   }
 
   get symptomList() : FormArray{
