@@ -148,3 +148,9 @@ i{
 .timeSlot-select{
   height: fit-content;
 }
+
+#datePicker::-webkit-inner-spin-button,
+#datePicker::-webkit-calendar-picker-indicator {
+  display: none;
+}
+

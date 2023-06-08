@@ -166,10 +166,10 @@
         <div class="select-field">
           <select class="form-select" id="timeSlot" formControlName="timeSlot">
             <option value="" selected disabled>Select TimeSlot</option>
-            <option value="09:00:00-12:00:00">09:00:00-12:00:00</option>
-            <option value="12:00:00-15:00:00">12:00:00-15:00:00</option>
-            <option value="15:00:00-18:00:00">15:00:00-18:00:00</option>
-            <option value="18:00:00-21:00:00">18:00:00-21:00:00</option>
+            <option value="09:00:00-12:00:00" [disabled]="checkValidTimeSlot('12:00:00')">09:00:00-12:00:00</option>
+            <option value="12:00:00-15:00:00" [disabled]="checkValidTimeSlot('15:00:00')">12:00:00-15:00:00</option>
+            <option value="15:00:00-18:00:00" [disabled]="checkValidTimeSlot('18:00:00')">15:00:00-18:00:00</option>
+            <option value="18:00:00-21:00:00" [disabled]="checkValidTimeSlot('21:00:00')">18:00:00-21:00:00</option>
           </select>
         </div>
         <div
@@ -321,7 +321,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="createAppointment()">Book Appointment</button>
+        <button type="button" class="btn btn-primary" [disabled]="confirmAppointment.invalid" (click)="createAppointment()">Book Appointment</button>
       </div>
     </div>
   </div>

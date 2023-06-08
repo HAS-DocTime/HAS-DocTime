@@ -33,6 +33,8 @@ export class BookAppointmentComponent implements OnInit{
   noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
   currentDoctor! : Doctor;
   selectedSymptoms : string[] = [];
+  datePicker = document.getElementById("datePicker");
+
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
      private userService : UserService, private router : Router, private route : ActivatedRoute, private doctorService : DoctorService, private location : Location){}
@@ -67,8 +69,18 @@ export class BookAppointmentComponent implements OnInit{
           }
         }
       }
+
+      let dateInput = document.getElementById("date");
+      let timeSlotInput = document.getElementById("timeSlot");
+      dateInput?.addEventListener("change", ()=> {
+        (timeSlotInput as HTMLInputElement).value = "";
+        (timeSlotInput as HTMLSelectElement).selectedIndex = 0;
+      })
     })
+
   }
+
+
 
   getDoctorsBySymptomAndTimeSlot(){
     console.log(this.bookAppointment.value);
@@ -177,4 +189,17 @@ export class BookAppointmentComponent implements OnInit{
     today.setDate(today.getDate()+6);
     return today.toISOString().split('T')[0];
   }
+
+  checkValidTimeSlot(time : string){
+    let date = this.bookAppointment.get('date')?.value;
+    date+=("T" + time);
+    const currentDate = new Date();
+    date = new Date(date);
+    if(date<currentDate){
+      return true;
+    }
+    return false;
+  }
+
+
 }
