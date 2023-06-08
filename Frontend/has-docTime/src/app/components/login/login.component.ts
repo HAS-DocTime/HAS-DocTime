@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   passwordType : string = "password";
 
 
-  constructor(private loginService: LoginService, private router: Router, private userService: UserService) {
+  constructor(private loginService: LoginService, private router: Router, private userService: UserService, private toast : ToastMessageService) {
   }
 
   ngOnInit(){
@@ -78,11 +79,13 @@ export class LoginComponent implements OnInit, OnDestroy{
       }else {
         this.router.navigate(['/dashboard/doctorScheduleAppointments']);
       }
+      this.toast.showSuccess("LoggedIn Successfully!", "Success");
 
     }, (err)=> {
       if(err){
         this.isLoggedIn = false;
         this.invalidLogin=true;
+        this.toast.showWarning("Incorrect Password", "Warning");
       }
     })
     this.loginService.isLoggedIn.subscribe((data) => {

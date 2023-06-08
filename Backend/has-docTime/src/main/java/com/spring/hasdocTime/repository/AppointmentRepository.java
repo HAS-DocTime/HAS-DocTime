@@ -28,7 +28,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("DELETE FROM Appointment a where a.id=:id")
     void deleteById(@Param("id") int id);
 
-    @Query("SELECT a FROM Appointment a WHERE LOWER(a.user.name) LIKE %:search%")
+    @Query("SELECT a FROM Appointment a WHERE LOWER(a.user.name) LIKE %:search% ")
     Page<Appointment> findAllAndUserNameContainsIgnoreCase(@Param("search")String search, Pageable pageable);
 
     /**
@@ -37,14 +37,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
      * @param user the user entity
      * @return a list of appointments associated with the user
      */
-    @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId")
-    Page<Appointment> findByUser(@Param("userId")int userId, Pageable pageable);
+    Page<Appointment> findByUserId(@Param("userId")int userId, Pageable pageable);
 
-    @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId")
-    List<Appointment> findListByUser(int userId);
+    List<Appointment> findListByUserId(int userId);
 
     @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId AND LOWER(a.doctor.user.name) LIKE %:search%")
-    Page<Appointment> findByUserAndDoctorNameContainsIgnoreCase(@Param("userId")int userId, @Param("search") String search, Pageable pageable);
+    Page<Appointment> findByUserIdAndDoctorNameContainsIgnoreCase(@Param("userId")int userId, @Param("search") String search, Pageable pageable);
 
     /**
      * Retrieves a list of appointments associated with the specified doctor.
@@ -52,11 +50,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
      * @param doctor the doctor entity
      * @return a list of appointments associated with the doctor
      */
-    @Query("SELECT a FROM Appointment a JOIN a.doctor d WHERE d.id = :doctorId")
-    Page<Appointment> findByDoctor(@Param("doctorId")int doctorId, Pageable pageable);
+    Page<Appointment> findByDoctorId(@Param("doctorId")int doctorId, Pageable pageable);
 
-    @Query("SELECT a FROM Appointment a JOIN a.doctor d WHERE d.id = :doctorId AND LOWER(a.user.name) LIKE %:search%")
-    Page<Appointment> findByDoctorAndUserNameContainsIgnoreCase(@Param("doctorId") int doctorId, @Param("search") String search,Pageable pageable);
+    Page<Appointment> findByDoctorIdAndUserNameContainsIgnoreCase(@Param("doctorId") int doctorId, @Param("search") String search,Pageable pageable);
 
 
 }

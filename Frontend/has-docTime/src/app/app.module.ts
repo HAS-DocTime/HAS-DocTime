@@ -43,6 +43,7 @@ import { AppointmentDetailFromDoctorComponent } from './components/patient-appoi
 import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
 import { TooltipDirective } from './directives/tooltip.directive';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,12 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     CommonModule,
     NgbModule,
     NgApexchartsModule,
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot({
+      positionClass: "toast-top-right",
+      preventDuplicates : true,
+      timeOut: 2500
+    })
   ],
   providers: [
     {

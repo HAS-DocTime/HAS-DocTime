@@ -26,6 +26,9 @@ export class SymptomComponent implements OnInit{
   size = 5;
   sortBy = 'name';
   search = '';
+  noDataFound : boolean = false;
+  noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
+
 
   sizeOptions = [5, 10, 15];
   range(totalPages: number): number[] {
@@ -54,40 +57,46 @@ export class SymptomComponent implements OnInit{
     params.page = this.page-1;
 
     this.symptomService.getSymptoms(params).subscribe((data)=>{
-      for(let i=0; i<data.totalElements; i++){
-        let departmentArray : Department[] = [];
-        this.symptom = data.content[i].name as string;
-        this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
-          this.pastAppointmentLength=0;
-          if(data1!==null){
-            for(let diseaseCaseCount of data1){
-              this.pastAppointmentLength += diseaseCaseCount.caseCount;
+      if(data.content.length !== 0){
+        for(let i=0; i<data.totalElements; i++){
+          let departmentArray : Department[] = [];
+          this.symptom = data.content[i].name as string;
+          this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
+            this.pastAppointmentLength=0;
+            if(data1!==null){
+              for(let diseaseCaseCount of data1){
+                this.pastAppointmentLength += diseaseCaseCount.caseCount;
+              }
+            }
+            data.content[i].caseCount = this.pastAppointmentLength;
+          })
+
+
+          const departmentLength : number | undefined = data.content[i].departments?.length;
+          for(let j=0; j<(departmentLength as number); j++){
+            let departmentObj : Department | undefined = data.content[i].departments?.[j];
+            if(departmentObj?.id){
+              departmentArray.push(departmentObj as Department);
+            }
+            else{
+              this.departmentService.getDepartmentById(departmentObj as number).subscribe(
+                (data)=> {
+                  let dep = data;
+                  departmentArray.push(dep);
+                }
+              );
             }
           }
-          data.content[i].caseCount = this.pastAppointmentLength;
-        })
-
-
-        const departmentLength : number | undefined = data.content[i].departments?.length;
-        for(let j=0; j<(departmentLength as number); j++){
-          let departmentObj : Department | undefined = data.content[i].departments?.[j];
-          if(departmentObj?.id){
-            departmentArray.push(departmentObj as Department);
-          }
-          else{
-            this.departmentService.getDepartmentById(departmentObj as number).subscribe(
-              (data)=> {
-                let dep = data;
-                departmentArray.push(dep);
-              }
-            );
-          }
+          data.content[i].departments = departmentArray;
         }
-        data.content[i].departments = departmentArray;
+
+        this.symptoms = data.content;
+        this.totalPages = data.totalPages;
+        this.noDataFound = false;
+      } else {
+        this.noDataFound = true;
       }
 
-      this.symptoms = data.content;
-      this.totalPages = data.totalPages;
     })
   }
 

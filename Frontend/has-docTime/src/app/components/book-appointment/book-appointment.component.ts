@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Symptom } from 'src/app/models/symptom.model';
-import { User } from 'src/app/models/user.model';
+
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { SymptomService } from 'src/app/services/symptom.service';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -21,7 +22,7 @@ export class BookAppointmentComponent implements OnInit{
   id! : number;
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
-     private userService : UserService, private router : Router, private route : ActivatedRoute, private location : Location){}
+     private userService : UserService, private router : Router, private route : ActivatedRoute, private location : Location, private toast: ToastMessageService){}
 
   ngOnInit(){
     const token = sessionStorage.getItem('token');
@@ -65,16 +66,17 @@ export class BookAppointmentComponent implements OnInit{
     }
     //Hard-Coded as of now
     this.bookAppointment.value["doctor"] = {
-      "id": 4
+      "id": 2
     }
     //Hard-Coded as of now
     this.bookAppointment.value["timeSlotForAppointment"] = {
-      "id": 5
+      "id": 8
     }
     console.log("-------------------",this.bookAppointment.value);
 
     this.appointmentService.createAppointment(this.bookAppointment.value).subscribe((data)=> {
       this.router.navigate(["../"], {relativeTo : this.route});
+      this.toast.showSuccess(`Appointemnt created successfully`, "Created!");
     })
   }
 

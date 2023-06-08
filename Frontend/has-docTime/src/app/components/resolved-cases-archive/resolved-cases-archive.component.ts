@@ -68,6 +68,8 @@ export class ResolvedCasesArchiveComponent implements OnInit{
     this.pastAppointment.getPastAppointmentDataByDoctor(this.id, params).subscribe((data) =>{
       if(data.content.length !== 0) {
         this.resolvedCases = data.content;
+        this.totalPages = data.totalPages;
+        this.noDataFound = false;
       }else {
         this.noDataFound = true;
       }
