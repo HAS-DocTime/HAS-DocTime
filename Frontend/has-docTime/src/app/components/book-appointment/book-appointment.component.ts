@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Timestamp } from 'rxjs';
+import { validateDateForBookingDoctorValidator } from 'src/app/customValidators/validateDateForBookingDoctor.validator';
 import { Doctor } from 'src/app/models/doctor.model';
 import { Symptom } from 'src/app/models/symptom.model';
 import { User } from 'src/app/models/user.model';
@@ -100,7 +101,6 @@ export class BookAppointmentComponent implements OnInit{
         this.noDataFound = false;
       }
     });
-    console.log(this.bookAppointment.value);
 
   }
 
@@ -113,7 +113,7 @@ export class BookAppointmentComponent implements OnInit{
     ]),
     timeSlot : new FormControl('', Validators.required),
     description : new FormControl(""),
-    date : new FormControl(new Date().toISOString().split("T")[0], Validators.required)
+    date : new FormControl(new Date().toISOString().split("T")[0], [Validators.required, validateDateForBookingDoctorValidator()])
   })
 
   confirmAppointment : FormGroup = new FormGroup({

@@ -156,7 +156,9 @@
             bookAppointment.get('date')?.touched && bookAppointment.get('date')?.invalid
           "
         >
-          <span *ngIf="bookAppointment.get('timeSlot')?.errors">Date is Required</span>
+          <span *ngIf="bookAppointment.get('date')?.errors?.['required']">Date is Required</span>
+          <br>
+          <span *ngIf="bookAppointment.get('date')?.errors?.['unavailableDate']">Date is not available</span>
         </div>
       </div>
     </div>
