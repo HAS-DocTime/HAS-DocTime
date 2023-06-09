@@ -137,7 +137,7 @@ public class UserController {
     ){
         Page<User> users = userService.getPatients(page, size, sortBy, search);
         if(users.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }

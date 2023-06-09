@@ -92,8 +92,14 @@ export class AppointmentComponent implements OnInit{
       }
       else {
         this.appointmentService.getAppointmentByUser((this.id.toString()), params).subscribe((data)=> {
-          this.appointments = data.content;
-          this.totalPages = data.totalPages;
+          console.log(data);
+          if(data){
+            this.appointments = data.content;
+            this.totalPages = data.totalPages;
+          }
+          else{
+            this.appointments = [];
+          }
         });
       }
 
@@ -117,7 +123,7 @@ export class AppointmentComponent implements OnInit{
             this.appointments = data;
           });
         }
-        this.toast.show(`The Appointment is deleted`, "Appointment deleted");
+        this.toast.showError(`The Appointment is deleted`, "Appointment deleted");
     })
     }
 
