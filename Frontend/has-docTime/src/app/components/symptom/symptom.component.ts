@@ -70,18 +70,8 @@ export class SymptomComponent implements OnInit{
 
         const departmentLength : number | undefined = data.content[i].departments?.length;
         for(let j=0; j<(departmentLength as number); j++){
-          let departmentObj : Department | undefined = data.content[i].departments?.[j];
-          if(departmentObj?.id){
-            departmentArray.push(departmentObj as Department);
-          }
-          else{
-            this.departmentService.getDepartmentById(departmentObj as number).subscribe(
-              (data)=> {
-                let dep = data;
-                departmentArray.push(dep);
-              }
-            );
-          }
+          let departmentObj : Department | undefined = data[i].departments?.[j];
+          departmentArray.push(departmentObj as Department);
         }
         data.content[i].departments = departmentArray;
       }
