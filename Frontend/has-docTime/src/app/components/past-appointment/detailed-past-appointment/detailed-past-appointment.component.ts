@@ -15,8 +15,16 @@ export class DetailedPastAppointmentComponent {
 
   public pastAppointment?: any;
   symptoms: string[] | undefined = [];
+  tokenRole : string = "";
 
   ngOnInit() {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      let store = token?.split('.');
+      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
+    }
+
     this.id = this.route.snapshot.paramMap.get('id');
     this.pastAppointmentService.getPastAppointmentDataById(this.id)
     .subscribe((data)=> {

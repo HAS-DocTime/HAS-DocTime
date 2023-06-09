@@ -26,6 +26,9 @@ export class SymptomComponent implements OnInit{
   size = 5;
   sortBy = 'name';
   search = '';
+  noDataFound : boolean = false;
+  noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
+
 
   sizeOptions = [5, 10, 15];
   range(totalPages: number): number[] {
@@ -54,7 +57,8 @@ export class SymptomComponent implements OnInit{
     params.page = this.page-1;
 
     this.symptomService.getSymptoms(params).subscribe((data)=>{
-      console.log(data);
+      if(data === null){
+        console.log(data);
       for(let i=0; i<data.numberOfElements; i++){
         let departmentArray : Department[] = [];
         this.symptom = data.content[i].name as string;
@@ -75,11 +79,16 @@ export class SymptomComponent implements OnInit{
           let departmentObj : Department | undefined = data.content[i].departments?.[j];
             departmentArray.push(departmentObj as Department);
         }
-        data.content[i].departments = departmentArray;
+
+        this.symptoms = data.content;
+        this.totalPages = data.totalPages;
+        this.noDataFound = false;
+      }
+      }
+       else {
+        this.noDataFound = true;
       }
 
-      this.symptoms = data.content;
-      this.totalPages = data.totalPages;
     })
   }
 

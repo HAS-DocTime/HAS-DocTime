@@ -6,9 +6,11 @@ import { Timestamp } from 'rxjs';
 import { Doctor } from 'src/app/models/doctor.model';
 import { Symptom } from 'src/app/models/symptom.model';
 import { User } from 'src/app/models/user.model';
+
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { SymptomService } from 'src/app/services/symptom.service';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -37,7 +39,7 @@ export class BookAppointmentComponent implements OnInit{
 
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
-     private userService : UserService, private router : Router, private route : ActivatedRoute, private doctorService : DoctorService, private location : Location){}
+     private userService : UserService, private router : Router, private route : ActivatedRoute, private doctorService : DoctorService, private location : Location, private toast: ToastMessageService){}
 
 
 
@@ -138,6 +140,7 @@ export class BookAppointmentComponent implements OnInit{
     this.closeModal();
     this.appointmentService.createAppointment(this.bookAppointment.value).subscribe((data)=> {
       this.router.navigate(["../"], {relativeTo : this.route});
+      this.toast.showSuccess(`Appointemnt created successfully`, "Created!");
     })
   }
 

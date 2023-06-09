@@ -10,6 +10,7 @@ import { Admin } from 'src/app/models/admin.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -25,7 +26,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private adminService: AdminService,
     private route: ActivatedRoute,
     private router: Router,
-    private location : Location
+    private location : Location,
+    private toast : ToastMessageService
   ) {}
 
   user?: User;
@@ -291,6 +293,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.userService.getUser(this.id).subscribe((data) => {
           this.user = data;
         });
+        this.toast.showSuccess("User Updated Successfully", "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     } else if (this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors') {
       user.id = this.doctor?.user?.id;
@@ -313,6 +320,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         });
         this.toggleDisable();
+        this.toast.showSuccess("Doctor Updated Successfully",  "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     } else if (
       this.tokenRole === 'ADMIN' &&
@@ -332,6 +344,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         });
         this.toggleDisable();
+        this.toast.showSuccess("User Updated Successfully", "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     }
   }
@@ -353,6 +370,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     if (this.urlPath === 'users') {
       this.adminService.deleteUser(this.id).subscribe((data) => {
         this.router.navigate(['../'], { relativeTo: this.route });
+        this.toast.show(`Patient with ID ${this.id} deleted`, "Patient Deleted");
       });
     }
   }

@@ -49,7 +49,7 @@ public class ChronicIllnessController {
     ) {
         Page<ChronicIllness> chronicIllnessList = chronicIllnessService.getAllChronicIllness(page, size, sortBy, search);
         if(chronicIllnessList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return new ResponseEntity<>(chronicIllnessList, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity(chronicIllnessList, HttpStatus.OK);
     }
