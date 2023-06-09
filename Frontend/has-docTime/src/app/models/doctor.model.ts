@@ -8,4 +8,5 @@ export type Doctor = {
   casesSolved : number;
   available : boolean;
   department : Department;
+  
 }
