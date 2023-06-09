@@ -1,0 +1,2 @@
+ALTER TABLE user
+MODIFY COLUMN contact varchar(19) NOT NULL;

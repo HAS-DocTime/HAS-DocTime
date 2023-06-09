@@ -11,6 +11,9 @@ import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswo
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { validatePassword } from 'src/app/customValidators/validatePassword.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { PhoneNumber, getCountryCallingCode } from 'libphonenumber-js';
+import { CountryService } from 'src/app/services/country.service';
+import { Country } from 'src/app/models/country.model';
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +24,13 @@ import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInput
 
 export class SignupComponent implements OnInit, OnDestroy{
 
-constructor(private userService : UserService, private doctorService : DoctorService, private router: Router, private chhronicIllnessService : ChronicIllnessService){
+constructor(
+  private userService : UserService, 
+  private doctorService : DoctorService, 
+  private router: Router, 
+  private chhronicIllnessService : ChronicIllnessService,
+  private countryService : CountryService
+  ){
 
   }
 
@@ -32,8 +41,23 @@ constructor(private userService : UserService, private doctorService : DoctorSer
   showConfirmPassword : boolean = false;
   passwordType : string = "password";
   confirmPasswordType : string = "password";
+  countries : Country[] = [];
 
   ngOnInit(){
+
+      this.countryService.getAllCountries().then((data) => {
+        this.countries = data;
+        var dropdown =document.getElementById('countryCodeDropdown');
+        this.countries.forEach( country => {
+          var option = document.createElement('option');
+          option.value = country.code;
+          option.textContent = country.code + ":" + country.name;
+          dropdown?.appendChild(option);
+          this.signupForm.get("contact")?.get("countryCode")?.valueChanges.subscribe((data)=> {
+            console.log(data);
+          })
+      });
+      });
       this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
@@ -61,6 +85,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     })
   }
 
+  
   ngDoCheck(){
     this.userService.inSignup.next(true);
     this.userService.inLogin.next(false);
@@ -79,7 +104,10 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     dob : new FormControl("2001-01-01", [Validators.required, validateDateValidator()]),
     gender : new FormControl("MALE", [Validators.required]),
     bloodGroup : new FormControl("O_POSITIVE", [Validators.required]),
-    contact : new FormControl("", [Validators.required]),
+    contact : new FormGroup({
+      countryCode : new FormControl("", [Validators.required]),
+      number : new FormControl("", [Validators.required])
+    }),
     height : new FormControl(),
     weight : new FormControl(),
     email : new FormControl("", [Validators.required, Validators.email]),
@@ -114,6 +142,7 @@ constructor(private userService : UserService, private doctorService : DoctorSer
     let signupDetail: LoginDetails = {"email" : email, "password" : password};
 
     const user = this.signupForm.value;
+    user.contact = this.signupForm.get('contact')?.get('countryCode')?.value + "-" + this.signupForm.get('contact')?.get('number')?.value;
     if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){
       let age = date.getFullYear() - new Date(user.dob as Date).getFullYear() -  1;
       if(date.getMonth() > new Date(user.dob as Date).getMonth()){

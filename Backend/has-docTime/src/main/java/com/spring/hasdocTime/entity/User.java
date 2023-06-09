@@ -62,7 +62,7 @@ public class User implements UserDetails {
 
     @Column(name="contact")
     @NotBlank(message = "Please enter a contact number")
-    @Pattern(regexp = "\\+[0-9]{1,3}-[0-9]{10}", message = "Please enter a valid contact number")
+    @Pattern(regexp = "\\+[0-9]{1,7}-[0-9]{10}", message = "Please enter a valid contact number")
     private String contact;
 
     @Column(name="height")
