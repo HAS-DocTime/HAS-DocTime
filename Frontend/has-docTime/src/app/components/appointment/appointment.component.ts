@@ -67,11 +67,11 @@ export class AppointmentComponent implements OnInit{
       this.sortByOptions.push({ label: 'Patient Name', value: 'user.name' });
     }
 
-    this.getData(0);
+    this.getData();
 
   }
 
-  getData(page : number){
+  getData(){
     // Add query parameters based on selected options
     if (this.size) {
       this.params.size = this.size;
@@ -87,6 +87,7 @@ export class AppointmentComponent implements OnInit{
     if(this.tokenRole==='ADMIN'){
         this.appointmentService.getAppointments(this.params).subscribe((data)=>{
           this.appointments = data.content as Appointment[];
+          this.totalPages = data.totalPages;
         })
       }
       else {
@@ -129,22 +130,22 @@ export class AppointmentComponent implements OnInit{
 
   onPageSizeChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSortByChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSearch() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
-    this.getData(this.page);
+    this.getData();
   }
 
 }

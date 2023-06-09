@@ -23,10 +23,7 @@ import com.spring.hasdocTime.utills.Role;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -241,7 +238,7 @@ public class DoctorDaoImpl implements DoctorInterface {
     }
 
     @Override
-    public Set<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody) throws  DoesNotExistException{
+    public Page<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody, int page, int size, String sortBy, String search) throws  DoesNotExistException{
         filteredDoctorBody.setTimeSlotStartTime(manipulateTimeSlotBasedOnTimeZone(filteredDoctorBody.getTimeSlotStartTime()));
         filteredDoctorBody.setTimeSlotEndTime(manipulateTimeSlotBasedOnTimeZone(filteredDoctorBody.getTimeSlotEndTime()));
         List<Symptom> givenSymptoms = filteredDoctorBody.getSymptoms();
@@ -280,6 +277,8 @@ public class DoctorDaoImpl implements DoctorInterface {
                 }
             }
         }
-        return doctors;
+        PageRequest pageRequest = PageRequest.of(page, size);
+        List<Doctor> doctorList = new ArrayList<>(doctors);
+        return new PageImpl<>(doctorList, pageRequest, doctorList.size());
     }
 }

@@ -116,23 +116,32 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         Department department = optionalDepartment.get();
         timeSlot.setDepartment(department);
         if(timeSlot.getAppointment() != null){
-            Optional<Appointment> optionalAppointment = appointmentRepository.findById(timeSlot.getAppointment().getId());
-            if(optionalAppointment.isEmpty()){
-                throw new DoesNotExistException("Appointment");
+            Set<Appointment> appointmentList = new HashSet<>();
+            for(Appointment appointment : timeSlot.getAppointment()){
+                Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointment.getId());
+                if(optionalAppointment.isEmpty()){
+                    throw new DoesNotExistException("Appointment");
+                }
+                Appointment foundAppointment = optionalAppointment.get();
+                appointmentList.add(foundAppointment);
             }
-            Appointment appointment = optionalAppointment.get();
-            timeSlot.setAppointment(appointment);
+            timeSlot.setAppointment(appointmentList);
+
         }
         if(timeSlot.getAppointmentData() != null){
-            Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId());
-            if(optionalPostAppointmentData.isEmpty()){
-                throw new DoesNotExistException("Post Appointment");
+            Set<PostAppointmentData> postAppointmentDataList = new HashSet<>();
+            for(PostAppointmentData postAppointmentData : timeSlot.getAppointmentData()) {
+                Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(postAppointmentData.getId());
+                if (optionalPostAppointmentData.isEmpty()) {
+                    throw new DoesNotExistException("Post Appointment");
+                }
+                PostAppointmentData foundPostAppointmentData = optionalPostAppointmentData.get();
+                postAppointmentDataList.add(foundPostAppointmentData);
             }
-            PostAppointmentData postAppointmentData = optionalPostAppointmentData.get();
-            timeSlot.setAppointmentData(postAppointmentData);
+            timeSlot.setAppointmentData(postAppointmentDataList);
         }
 
-        List<Doctor> availableDoctors = new ArrayList<>();
+        Set<Doctor> availableDoctors = new HashSet<>();
         if(timeSlot.getAvailableDoctors() != null){
             for(Doctor d: timeSlot.getAvailableDoctors()){
                 if(d.getId() != 0){
@@ -202,25 +211,33 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             }
 
             if(timeSlot.getAppointment() != null){
-                Optional<Appointment> optionalAppointment = appointmentRepository.findById(timeSlot.getAppointment().getId());
-                if(optionalAppointment.isEmpty()){
-                    throw new DoesNotExistException("Appointment");
+                Set<Appointment> appointments = new HashSet<>();
+                for(Appointment appointment : timeSlot.getAppointment()){
+                    Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointment.getId());
+                    if(optionalAppointment.isEmpty()){
+                        throw new DoesNotExistException("Appointment");
+                    }
+                    Appointment foundAppointment = optionalAppointment.get();
+                    appointments.add(foundAppointment);
                 }
-                Appointment appointment = optionalAppointment.get();
-                timeSlot.setAppointment(appointment);
+                timeSlot.setAppointment(appointments);
             }
 
             if(timeSlot.getAppointmentData() != null){
-                Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId());
-                if(optionalPostAppointmentData.isEmpty()){
-                    throw new DoesNotExistException("Post Appointment");
+                Set<PostAppointmentData> postAppointmentDataList = new HashSet<>();
+                for(PostAppointmentData postAppointmentData : timeSlot.getAppointmentData()){
+                    Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(postAppointmentData.getId());
+                    if(optionalPostAppointmentData.isEmpty()){
+                        throw new DoesNotExistException("Post Appointment");
+                    }
+                    PostAppointmentData foundPostAppointmentData = optionalPostAppointmentData.get();
+                    postAppointmentDataList.add(foundPostAppointmentData);
                 }
-                PostAppointmentData postAppointmentData = optionalPostAppointmentData.get();
-                timeSlot.setAppointmentData(postAppointmentData);
+                timeSlot.setAppointmentData(postAppointmentDataList);
             }
             
 
-            List<Doctor> availableDoctors = new ArrayList<>();
+            Set<Doctor> availableDoctors = new HashSet<>();
             if(timeSlot.getAvailableDoctors() != null){
                 for(Doctor d: timeSlot.getAvailableDoctors()){
                     if(d.getId() != 0){

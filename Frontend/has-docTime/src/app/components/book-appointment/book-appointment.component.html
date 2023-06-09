@@ -206,7 +206,7 @@
         <h3 class="mb-4 text-center">Available Doctors</h3>
         <hr>
 
-        <!-- <div class="row mb-3" >
+        <div class="row mb-3" >
           <div class="col-sm-4" *ngIf="totalPages > 1">
             <label for="pageSize">Size:</label>
             <select class="form-select" id="size" [(ngModel)]="size" (change)="onPageSizeChange()">
@@ -223,7 +223,7 @@
             <label for="search">Search:</label>
             <input class="form-control" type="text" id="search" [(ngModel)]="search" (keyup)="onSearch()">
           </div>
-        </div> -->
+        </div>
 
         <div class="table-responsive m-0 p-0" >
           <table class="table table-striped table-dark mb-5 p-0" >
@@ -250,7 +250,7 @@
           </table>
         </div>
 
-        <!-- <nav *ngIf="totalPages > 1">
+        <nav *ngIf="totalPages > 1">
           <ul class="pagination">
             <li class="page-item" [class.disabled]="page === 1">
               <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>
@@ -262,7 +262,7 @@
               <a class="page-link" (click)="onPageChange(page + 1)">Next</a>
             </li>
           </ul>
-        </nav> -->
+        </nav>
 
       </div>
     </div>
