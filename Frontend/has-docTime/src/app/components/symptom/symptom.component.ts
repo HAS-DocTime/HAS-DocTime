@@ -88,12 +88,12 @@ export class SymptomComponent implements OnInit{
             }
           }
           data.content[i].departments = departmentArray;
-        }
+          data.content[i].caseCount = this.pastAppointmentLength;
 
         this.symptoms = data.content;
         this.totalPages = data.totalPages;
         this.noDataFound = false;
-      } else {
+      }} else {
         this.noDataFound = true;
       }
 

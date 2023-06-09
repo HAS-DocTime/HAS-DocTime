@@ -29,7 +29,8 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
@@ -67,7 +68,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "has-docTime:build",
-            "host": "192.1.200.29"
+            "host": ""
           },
           "configurations": {
             "production": {
