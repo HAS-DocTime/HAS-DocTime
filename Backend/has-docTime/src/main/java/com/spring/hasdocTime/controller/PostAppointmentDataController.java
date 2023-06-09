@@ -48,7 +48,6 @@ public class PostAppointmentDataController {
                 return new ResponseEntity<>(allPostAppointmentData, HttpStatus.NO_CONTENT);
             }
             return ResponseEntity.ok(allPostAppointmentData);
-
     }
 
     /**

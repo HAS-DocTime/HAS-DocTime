@@ -16,6 +16,10 @@ export class ChronicIllnessComponent implements OnInit{
   size = 5;
   sortBy = 'name';
   search = '';
+  noDataFound : boolean = false;
+  noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
+
+
   sizeOptions = [5, 10, 15];
   range(totalPages: number): number[] {
     return Array(totalPages).fill(0).map((_, index) => index + 1);
@@ -41,8 +45,14 @@ export class ChronicIllnessComponent implements OnInit{
     params.page = this.page-1;
 
     this.chronicIllnessService.getAllChronicIllness(params).subscribe((data) => {
-      this.chronicIllnessList = data.content;
-      this.totalPages = data.totalPages;
+      if(data===null){
+        this.noDataFound= true;
+      } else {
+        this.noDataFound= false;
+        this.chronicIllnessList = data.content;
+        this.totalPages = data.totalPages;
+      }
+
     })
   }
 

@@ -11,6 +11,7 @@ import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswo
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { validatePassword } from 'src/app/customValidators/validatePassword.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { FileUpload } from 'src/app/models/fileUpload.model';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs';
@@ -28,13 +29,12 @@ import { User } from 'src/app/models/user.model';
 
 export class SignupComponent implements OnInit, OnDestroy {
 
-  constructor(
-    private userService: UserService,
-    private doctorService: DoctorService,
+constructor(private userService : UserService,
+   private doctorService : DoctorService,
     private router: Router,
-    private chhronicIllnessService: ChronicIllnessService,
-    private storage: AngularFireStorage
-  ) { }
+     private chhronicIllnessService : ChronicIllnessService,
+      private toast: ToastMessageService,
+      private storage: AngularFireStorage){}
 
   savedChronicIllnesses: ChronicIllness[] = [];
   selectedValue: string = "";
@@ -219,8 +219,10 @@ export class SignupComponent implements OnInit, OnDestroy {
           patientChronicIllness: []
         });
         this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
-      }, (err) => {
+        this.toast.showSuccess("Registered Successfully!", "Success");
+      }, (err)=> {
         console.log(err);
+        this.toast.showError("Registration Unsuccessful","Failed");
       });
     }
 

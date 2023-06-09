@@ -10,6 +10,7 @@ import { Admin } from 'src/app/models/admin.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs';
 import { FileUpload } from 'src/app/models/fileUpload.model';
@@ -28,9 +29,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private adminService: AdminService,
     private route: ActivatedRoute,
     private router: Router,
-    private storage: AngularFireStorage,
-    private location : Location
-  ) { }
+    private location : Location,
+    private toast : ToastMessageService,
+    private storage: AngularFireStorage
+  ) {}
 
   user?: User;
   doctor?: Doctor;
@@ -314,6 +316,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.user = data;
           this.isLoading = false;
         });
+        this.toast.showSuccess("User Updated Successfully", "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     } else if (this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors') {
       user.id = this.doctor?.user?.id;
@@ -339,6 +346,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         });
         this.toggleDisable();
+        this.toast.showSuccess("Doctor Updated Successfully",  "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     } else if (
       this.tokenRole === 'ADMIN' &&
@@ -361,6 +373,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.isLoading != this.isLoading;
         });
         this.toggleDisable();
+        this.toast.showSuccess("User Updated Successfully", "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     }
   }
@@ -452,6 +469,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     if (this.urlPath === 'users') {
       this.adminService.deleteUser(this.id).subscribe((data) => {
         this.router.navigate(['../'], { relativeTo: this.route });
+        this.toast.show(`Patient with ID ${this.id} deleted`, "Patient Deleted");
       });
     }
   }
