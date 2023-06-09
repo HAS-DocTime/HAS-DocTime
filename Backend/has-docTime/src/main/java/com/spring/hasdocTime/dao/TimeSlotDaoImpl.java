@@ -235,8 +235,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
                 }
                 timeSlot.setAppointmentData(postAppointmentDataList);
             }
-            
-
             Set<Doctor> availableDoctors = new HashSet<>();
             if(timeSlot.getAvailableDoctors() != null){
                 for(Doctor d: timeSlot.getAvailableDoctors()){

@@ -93,6 +93,7 @@ export class AppointmentComponent implements OnInit{
       else {
         this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
           this.appointments = data.content as Appointment[];
+          this.totalPages = data.totalPages;
         });
       }
 
@@ -118,11 +119,13 @@ export class AppointmentComponent implements OnInit{
         if(this.tokenRole==="ADMIN"){
           this.appointmentService.getAppointments(this.params).subscribe((data)=> {
             this.appointments = data.content as Appointment[];
+            this.totalPages = data.totalPages;
           });
         }
         else{
           this.appointmentService.getAppointmentByUser(this.id.toString(), this.params).subscribe((data)=> {
             this.appointments = data.content as Appointment[];
+            this.totalPages = data.totalPages;
           });
         }
     })
