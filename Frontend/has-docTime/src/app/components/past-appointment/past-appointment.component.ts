@@ -104,9 +104,10 @@ export class PastAppointmentComponent implements OnInit{
             (data: any) => {
               if(data===null){
                 this.noDataFound = true;
+              } else {
+                this.pastAppointmentList = data.content;
+                this.totalPages = data.totalPages;
               }
-              this.pastAppointmentList = data.content;
-              this.totalPages = data.totalPages;
             },
             (error: any) => {
               console.error('Error getting past appointment:', error);
