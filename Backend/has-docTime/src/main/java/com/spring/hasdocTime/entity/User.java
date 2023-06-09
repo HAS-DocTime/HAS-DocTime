@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.spring.hasdocTime.utills.BloodGroup;
 import com.spring.hasdocTime.utills.Gender;
 import com.spring.hasdocTime.utills.Role;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -68,12 +69,12 @@ public class User implements UserDetails {
     @Column(name="height")
     @DecimalMin(value = "1.0", inclusive = true, message = "Height should not be less than 1ft")
     @DecimalMax(value = "10.0", inclusive = true, message = "Height should not be more than 10ft")
-    private float height;
+    private Float height;
 
     @Column(name="weight")
     @DecimalMin(value = "1.0", inclusive = true, message = "Weight should not be less than 1kg")
     @DecimalMax(value = "300.0", inclusive = true, message = "Weight should not be more than 300kg")
-    private float weight;
+    private Float weight;
 
     @Column(name="email")
     @NotBlank(message = "Please enter your email")
