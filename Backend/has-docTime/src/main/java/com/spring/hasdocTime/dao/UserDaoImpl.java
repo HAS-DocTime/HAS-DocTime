@@ -12,11 +12,14 @@ import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +37,15 @@ public class UserDaoImpl implements UserInterface {
      * @return The list of all users.
      */
     @Override
-    public List<User> getAllUser() {
-        return userRepository.findAll();
+    public Page<User> getAllUser(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<User> userList;
+        if(search != null && !search.isEmpty()){
+            userList = userRepository.findAllAndNameContainsIgnoreCase(search, pageable);
+        } else {
+            userList =  userRepository.findAll(pageable);
+        }
+        return userList;
     }
 
     /**
@@ -240,10 +250,16 @@ public class UserDaoImpl implements UserInterface {
      * @return The list of all patients.
      */
     @Override
-    public List<User> getPatients(){
-        return userRepository.getPatients();
+    public Page<User> getPatients(int page, int size, String sortBy, String search) {
+        Page<User> userList;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        if (search != null && !search.isEmpty()){
+            userList = userRepository.getPatientsAndNameContainsIgnoreCase(search, pageable);
+        }else{
+            userList = userRepository.getPatients(pageable);
+        }
+        return userList;
     }
-
 
     /**
      * Retrieves patients with a specific chronic illness.
@@ -253,26 +269,26 @@ public class UserDaoImpl implements UserInterface {
      * @throws DoesNotExistException if the chronic illness does not exist.
      */
     @Override
-    public Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException{
+    public Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
-        if(optionalChronicIllness.isEmpty()){
+        if (optionalChronicIllness.isEmpty()) {
             throw new DoesNotExistException("Chronic Illness");
         }
-        else{
-            Set<User> users = new HashSet<>();
-            for(int i=0; i<optionalChronicIllness.get().getPatientChronicIllnesses().toArray().length; i++){
-                Integer tempUserId = (optionalChronicIllness.get().getPatientChronicIllnesses().get(i).getId().getPatientId());
-                Optional<User> tempUser = userRepository.findById(tempUserId);
-                if(tempUser.isPresent()){
-                    users.add(tempUser.get());
-                }
-                else{
-                    return null;
-                }
-            }
-            return users;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+
+        // Use the appropriate query method in your userRepository to fetch the users with pagination, sorting, and searching
+        Page<User> userPage;
+        if (search != null && !search.isEmpty()) {
+            //To search based on user's name only
+            userPage = userRepository.findByChronicIllnessIdAndNameContainsIgnoreCase(id, search, pageable);
+        } else {
+            userPage = userRepository.findByChronicIllnessId(id, pageable);
         }
 
+        return userPage;
     }
+
+
 
 }

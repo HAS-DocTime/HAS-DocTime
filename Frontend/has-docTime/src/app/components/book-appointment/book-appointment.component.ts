@@ -34,9 +34,10 @@ export class BookAppointmentComponent implements OnInit{
 
       this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
     }
-    this.symptomService.getSymptoms().subscribe((data)=> {
+    this.symptomService.getSymptomsList().subscribe((data)=> {
       this.symptoms = data;
     })
+
     this.bookAppointment.controls['symptoms'].valueChanges.subscribe(data=> {
       this.selectedSymptom = [];
       for(let symptomName of data){
@@ -68,7 +69,7 @@ export class BookAppointmentComponent implements OnInit{
     }
     //Hard-Coded as of now
     this.bookAppointment.value["timeSlotForAppointment"] = {
-      "id": 4509
+      "id": 5
     }
     console.log("-------------------",this.bookAppointment.value);
 

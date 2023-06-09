@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfaces.AppointmentInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,14 +29,20 @@ public class AppointmentServiceImpl implements AppointmentInterface {
         this.appointmentDao = appointmentDao;
     }
 
+
+    @Override
+    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
+        return appointmentDao.getAllAppointments(page, size, sortBy, search);
+    }
+
     /**
      * Retrieves all appointments.
      *
      * @return List of appointments.
      */
     @Override
-    public List<Appointment> getAllAppointments() {
-        return appointmentDao.getAllAppointments();
+    public List<Appointment> getAllAppointmentList() {
+        return appointmentDao.getAllAppointmentList();
     }
 
     /**
@@ -97,8 +104,8 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      * @throws DoesNotExistException If the user does not exist.
      */
     @Override
-    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException{
-        return appointmentDao.getAppointmentsByUser(userId);
+    public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException{
+        return appointmentDao.getAppointmentsByUser(userId, page, size, sortBy, search);
     }
 
     /**
@@ -109,7 +116,12 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      * @throws DoesNotExistException If the doctor does not exist.
      */
     @Override
-    public List<Appointment> getAppointmentsOfDoctor(int id) throws DoesNotExistException {
-        return appointmentDao.getAppointmentsOfDoctor(id);
+    public List<Appointment> getAppointmentListByUser(int userId) throws DoesNotExistException {
+        return appointmentDao.getAppointmentListByUser(userId);
+    }
+
+    @Override
+    public Page<Appointment> getAppointmentsOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        return appointmentDao.getAppointmentsOfDoctor(id, page, size, sortBy, search);
     }
 }

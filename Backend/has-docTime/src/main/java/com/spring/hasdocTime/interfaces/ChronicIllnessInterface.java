@@ -6,6 +6,7 @@ package com.spring.hasdocTime.interfaces;
 import com.spring.hasdocTime.entity.ChronicIllness;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,12 +21,14 @@ public interface ChronicIllnessInterface {
      */
     public ChronicIllness createChronicIllness(ChronicIllness chronicIllness) throws MissingParameterException;
 
+    public Page<ChronicIllness> getAllChronicIllness(int page, int size, String sortBy, String search);
+
     /**
      * Retrieves a list of all chronic illnesses.
      *
      * @return List of ChronicIllness objects representing all chronic illnesses
      */
-    public List<ChronicIllness> getAllChronicIllness();
+    public List<ChronicIllness> getAllChronicIllnesses();
 
     /**
      * Retrieves the chronic illness with the specified ID.

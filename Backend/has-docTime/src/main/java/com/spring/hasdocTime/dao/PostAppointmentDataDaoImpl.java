@@ -12,6 +12,10 @@ import com.spring.hasdocTime.repository.UserRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,8 +55,16 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a list of post-appointment data
      */
     @Override
-    public List<PostAppointmentData> getAllPostAppointmentData() {
-        List<PostAppointmentData> postAppointmentDataList =  postAppointmentDataRepository.findAll();
+    public Page<PostAppointmentData> getAllPostAppointmentData(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> postAppointmentDataList;
+        if(search != null && !search.isEmpty()){
+            //search Appointments based on userName only.
+            postAppointmentDataList = postAppointmentDataRepository.findAllAndUserNameContainsIgnoreCase(search, pageable);
+        }
+        else{
+            postAppointmentDataList = postAppointmentDataRepository.findAll(pageable);
+        }
         for(PostAppointmentData postAppointmentData : postAppointmentDataList){
             Hibernate.initialize(postAppointmentData.getUser());
             Hibernate.initialize(postAppointmentData.getDoctor().getUser());
@@ -93,8 +105,14 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a list of post-appointment data associated with the user's email
      */
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataByEmail(String email) {
-        List<PostAppointmentData> allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email);
+    public Page<PostAppointmentData> getPostAppointmentDataByEmail(String email,int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> allPostAppointmentData;
+        if(search != null && !search.isEmpty()){
+            allPostAppointmentData= postAppointmentDataRepository.findByUserEmailAndDiseaseContainsIgnoreCase(email, search, pageable);
+        }else {
+            allPostAppointmentData= postAppointmentDataRepository.findByUserEmail(email, pageable);
+        }
         for(PostAppointmentData postAppointmentData : allPostAppointmentData){
             Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
             Hibernate.initialize(postAppointmentData.getDoctor().getUser());
@@ -242,6 +260,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
         throw new DoesNotExistException("Post Appointment Data");
     }
 
+
     /**
      * Retrieves diseases grouped by symptom.
      *
@@ -250,8 +269,8 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @throws DoesNotExistException if no post-appointment data exists for the specified symptom
      */
     @Override
-    public List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException {
-        return postAppointmentDataRepository.findDiseasesGroupedBySymptom(symptom);
+    public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String symptom) throws DoesNotExistException {
+        return postAppointmentDataRepository.findDiseaseListGroupedBySymptom(symptom);
     }
 
     /**
@@ -262,8 +281,16 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @throws DoesNotExistException if no post-appointment data exists for the specified symptom
      */
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException {
-        List<PostAppointmentData> postAppointmentDataList = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom);
+    public Page<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> postAppointmentDataList;
+        if(search != null && !search.isEmpty()){
+            //search Appointments based on userName only.
+            postAppointmentDataList = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptomAndUserNameContainsIgnoreCase(symptom, search, pageable);
+        }
+        else{
+            postAppointmentDataList = postAppointmentDataRepository.findPostAppointmentDataGroupedBySymptom(symptom, pageable);
+        }
         for(PostAppointmentData postAppointmentData : postAppointmentDataList){
             Hibernate.initialize(postAppointmentData.getUser());
             Hibernate.initialize(postAppointmentData.getDoctor().getUser());
@@ -279,17 +306,25 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a list of post-appointment data associated with the specified doctor
      * @throws DoesNotExistException if the doctor does not exist
      */
-    public List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException {
+    @Override
+    public Page<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException{
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         if(optionalDoctor.isEmpty()){
             throw new DoesNotExistException("Doctor");
         }
         Doctor doctor = optionalDoctor.get();
-        for(PostAppointmentData postAppointmentData : doctor.getPostAppointmentData()){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> postAppointmentDataList;
+        if(search != null && !search.isEmpty()){
+            postAppointmentDataList = postAppointmentDataRepository.findByDoctorAndUserNameContainsIgnoreCase(doctor.getId(), search, pageable);
+        }else {
+            postAppointmentDataList = postAppointmentDataRepository.findByDoctor(doctor.getId(), pageable);
+        }
+        for(PostAppointmentData postAppointmentData : postAppointmentDataList){
             Hibernate.initialize(postAppointmentData.getUser());
             Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
         }
-        return doctor.getPostAppointmentData();
+        return postAppointmentDataList;
     }
 
     /**
@@ -300,9 +335,19 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @throws DoesNotExistException if the user does not exist
      */
     @Override
-    public List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException {
-        User user = userDao.getUser(id);
-        List<PostAppointmentData> postAppointmentDataList = user.getAppointmentData();
+    public Page<PostAppointmentData> getPostAppointmentDataByUserId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        User currentUser = user.get();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<PostAppointmentData> postAppointmentDataList;
+        if(search != null && !search.isEmpty()){
+            postAppointmentDataList = postAppointmentDataRepository.findByUserAndDoctorNameContainsIgnoreCase(currentUser.getId(), search, pageable);
+        }else {
+            postAppointmentDataList = postAppointmentDataRepository.findByUser(currentUser.getId(), pageable);
+        }
         for(PostAppointmentData postAppointmentData : postAppointmentDataList){
             Hibernate.initialize(postAppointmentData.getTimeSlotForAppointmentData());
             Hibernate.initialize(postAppointmentData.getDoctor().getUser());

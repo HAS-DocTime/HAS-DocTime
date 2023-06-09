@@ -4,6 +4,8 @@
 package com.spring.hasdocTime.repository;
 
 import com.spring.hasdocTime.entity.Doctor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,6 +32,12 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
      * @param id the ID of the department
      * @return a list of doctors belonging to the specified department
      */
-    @Query("FROM Doctor d WHERE d.department.id = :id")
-    List<Doctor> findDoctorsByDepartmentId(@Param("id") int id);
+    @Query("FROM Doctor d where d.department.id =:id")
+    Page<Doctor> findDoctorsByDepartmentId(@Param("id") int id, Pageable pageable);
+
+    @Query("FROM Doctor d WHERE LOWER(d.user.name) LIKE %:search%")
+    Page<Doctor> findAllAndDoctorNameContainsIgnoreCase(@Param("search") String search, Pageable pageable);
+
+    @Query("FROM Doctor d where d.department.id =:id and LOWER(d.user.name) LIKE %:search%")
+    Page<Doctor> findDoctorsByDepartmentIdAndDoctorNameContainsIgnoreCase(@Param("search") String search, Pageable pageable);
 }

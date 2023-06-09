@@ -1,5 +1,4 @@
 package com.spring.hasdocTime.controller;
-
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
@@ -7,14 +6,13 @@ import com.spring.hasdocTime.interfaces.UserInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.Set;
 
 /**
  * The UserController class handles HTTP requests related to the User entity.
@@ -38,12 +36,17 @@ public class UserController {
      * or HttpStatus.NO_CONTENT if no users are found.
      */
     @GetMapping("")
-    public ResponseEntity<List<User>> getAllUser() {
-        List<User> users = userService.getAllUser();
+    public ResponseEntity<List<User>> getAllUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size,
+            @RequestParam(defaultValue = "name") String sortBy,     //sortBy name only
+            @RequestParam(required = false) String search
+    ){
+        Page<User> users = userService.getAllUser(page, size, sortBy, search);
         if(users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity(users.getContent(), HttpStatus.OK);
     }
 
     /**
@@ -124,9 +127,14 @@ public class UserController {
      * or HttpStatus.NOT_FOUND if no patients are found.
      */
     @GetMapping("patient")
-    public ResponseEntity<List<User>> getPatients() {
-        List<User> users = userService.getPatients();
-        if (users.isEmpty()) {
+    public ResponseEntity<Page<User>> getPatients(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ){
+        Page<User> users = userService.getPatients(page, size, sortBy, search);
+        if(users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -141,11 +149,17 @@ public class UserController {
      * @throws DoesNotExistException If the chronic illness with the given ID does not exist.
      */
     @GetMapping("patient/chronicIllness/{id}")
-    public ResponseEntity<Set<User>> getPatientsByChronicIllnessId(@PathVariable("id") int id) throws DoesNotExistException {
-        Set<User> users = userService.getPatientsByChronicIllnessId(id);
-        if (users.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<Page<User>> getPatientsByChronicIllnessId(
+            @PathVariable("id") int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(required = false) String search
+    ) throws DoesNotExistException {
+        Page<User> result = userService.getPatientsByChronicIllnessId(id, page, size, sortBy, search);
+        if (result.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return ResponseEntity.ok(result);
     }
 }

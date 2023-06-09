@@ -10,6 +10,10 @@ import com.spring.hasdocTime.interfaces.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,12 +62,23 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
      * @return The list of all ChronicIllness entities.
      */
     @Override
-    public List<ChronicIllness> getAllChronicIllness() {
-        List<ChronicIllness> chronicIllnesses = chronicIllnessRepository.findAll();
-        for(ChronicIllness chronicIllness : chronicIllnesses){
+    public Page<ChronicIllness> getAllChronicIllness(int page, int size, String sortBy, String search){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<ChronicIllness> chronicIllnessPage;
+        if(search != null && !search.isEmpty()){
+            chronicIllnessPage = chronicIllnessRepository.findAllAndNameContainsIgnoreCase(search, pageable);
+        } else {
+            chronicIllnessPage = chronicIllnessRepository.findAll(pageable);
+        }
+        for(ChronicIllness chronicIllness : chronicIllnessPage){
             Hibernate.initialize(chronicIllness.getPatientChronicIllnesses());
         }
-        return chronicIllnesses;
+        return chronicIllnessPage;
+    }
+
+    @Override
+    public List<ChronicIllness> getAllChronicIllnesses() {
+        return chronicIllnessRepository.findAll();
     }
 
 

@@ -6,6 +6,7 @@ package com.spring.hasdocTime.interfaces;
 import com.spring.hasdocTime.entity.Department;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,13 +21,12 @@ public interface DepartmentInterface {
      * @throws DoesNotExistException     if the department does not exist
      */
     public Department createDepartment(Department department) throws MissingParameterException, DoesNotExistException;
-
-    /**
+/**
      * Retrieves a list of all departments.
      *
      * @return List of Department objects representing all departments
      */
-    public List<Department> getAllDepartments();
+    public Page<Department> getAllDepartments(int page, int size, String sortBy, String search);
 
     /**
      * Retrieves the department with the specified ID.

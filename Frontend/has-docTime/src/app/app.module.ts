@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http'
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -88,7 +88,8 @@ import { TooltipDirective } from './directives/tooltip.directive';
     RouterModule,
     CommonModule,
     NgbModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    FormsModule
   ],
   providers: [
     {

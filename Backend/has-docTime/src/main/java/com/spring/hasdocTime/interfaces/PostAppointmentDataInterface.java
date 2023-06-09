@@ -6,6 +6,7 @@ package com.spring.hasdocTime.interfaces;
 import com.spring.hasdocTime.entity.PostAppointmentData;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public interface PostAppointmentDataInterface {
      *
      * @return a list of PostAppointmentData objects representing all post appointment data
      */
-    List<PostAppointmentData> getAllPostAppointmentData();
+    public Page<PostAppointmentData> getAllPostAppointmentData(int page, int size, String sortBy, String search);
 
     /**
      * Retrieves the post appointment data with the specified ID.
@@ -28,7 +29,7 @@ public interface PostAppointmentDataInterface {
      */
     PostAppointmentData getPostAppointmentDataById(int id) throws DoesNotExistException;
 
-    /**
+/**
      * Creates a new post appointment data.
      *
      * @param postAppointmentData the PostAppointmentData object representing the post appointment data to be created
@@ -36,7 +37,7 @@ public interface PostAppointmentDataInterface {
      * @throws MissingParameterException if required parameters are missing
      * @throws DoesNotExistException    if related entities do not exist
      */
-    PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException;
+    public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException;
 
     /**
      * Retrieves a list of post appointment data based on the specified email.
@@ -44,7 +45,7 @@ public interface PostAppointmentDataInterface {
      * @param email the email address
      * @return a list of PostAppointmentData objects matching the email
      */
-    List<PostAppointmentData> getPostAppointmentDataByEmail(String email);
+    public Page<PostAppointmentData> getPostAppointmentDataByEmail(String email, int page, int size, String sortBy, String search);
 
     /**
      * Updates the post appointment data with the specified ID.
@@ -73,7 +74,7 @@ public interface PostAppointmentDataInterface {
      * @return a list of maps containing the disease names and their occurrence count
      * @throws DoesNotExistException if no data is found for the specified symptom
      */
-    List<Map<String, Integer>> getDiseasesGroupedBySymptom(String symptom) throws DoesNotExistException;
+    public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String Symptom) throws DoesNotExistException;
 
     /**
      * Retrieves a list of post appointment data based on the specified symptom.
@@ -82,7 +83,7 @@ public interface PostAppointmentDataInterface {
      * @return a list of PostAppointmentData objects matching the symptom
      * @throws DoesNotExistException if no data is found for the specified symptom
      */
-    List<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom) throws DoesNotExistException;
+    public Page<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException;
 
     /**
      * Retrieves a list of post appointment data of a specific doctor.
@@ -91,7 +92,7 @@ public interface PostAppointmentDataInterface {
      * @return a list of PostAppointmentData objects associated with the doctor
      * @throws DoesNotExistException if the doctor does not exist
      */
-    List<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id) throws DoesNotExistException;
+    public Page<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException;
 
     /**
      * Retrieves a list of post appointment data based on the specified user ID.
@@ -100,5 +101,5 @@ public interface PostAppointmentDataInterface {
      * @return a list of PostAppointmentData objects associated with the user
      * @throws DoesNotExistException if the user does not exist
      */
-    List<PostAppointmentData> getPostAppointmentDataByUserId(int id) throws DoesNotExistException;
+    public Page<PostAppointmentData> getPostAppointmentDataByUserId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException;
 }

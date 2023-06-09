@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfaces.SymptomInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,8 +39,13 @@ public class SymptomServiceImpl implements SymptomInterface {
      * @return The list of symptoms.
      */
     @Override
-    public List<Symptom> getAllSymptom() {
-        return symptomDao.getAllSymptom();
+    public Page<Symptom> getAllSymptom(int page, int size, String sortBy, String search) {
+        return symptomDao.getAllSymptom(page, size, sortBy, search);
+    }
+
+    @Override
+    public List<Symptom> getAllSymptomList() {
+        return symptomDao.getAllSymptomList();
     }
 
     /**
