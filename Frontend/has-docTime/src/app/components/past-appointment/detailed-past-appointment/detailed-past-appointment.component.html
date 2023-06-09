@@ -1,3 +1,4 @@
+<div><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
 <div class="container my-5">
 
       <!-- Patient Information -->
@@ -38,7 +39,7 @@
           <p class="mb-4">{{ pastAppointment?.user?.weight }} kg</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row" *ngIf="pastAppointment?.user?.patientChronicIllness.length">
         <div class="col-md-12">
           <p class="fw-bold">Chronic Illness:</p>
           <div class="d-flex flex-wrap">

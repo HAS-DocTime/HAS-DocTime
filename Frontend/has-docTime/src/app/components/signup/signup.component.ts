@@ -60,8 +60,8 @@ export class SignupComponent implements OnInit, OnDestroy {
       this.signupForm.controls['casesSolved'].updateValueAndValidity();
     })
 
-    this.chhronicIllnessService.getAllChronicIllness().subscribe(data => {
-      this.savedChronicIllnesses = data;
+    this.chhronicIllnessService.getAllChronicIllnesses().subscribe(data => {
+      this.savedChronicIllnesses = data as ChronicIllness[];
     });
 
     this.signupForm.controls["patientChronicIllness"].valueChanges.subscribe((data) => {

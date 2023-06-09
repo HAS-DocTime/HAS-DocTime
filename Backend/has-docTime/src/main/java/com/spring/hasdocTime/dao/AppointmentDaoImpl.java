@@ -5,7 +5,12 @@ import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.AppointmentInterface;
 import com.spring.hasdocTime.repository.*;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -47,14 +52,42 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         this.symptomRepository = symptomRepository;
     }
 
+
+    @Override
+    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Appointment> allAppointments;
+        if(search != null && !search.isEmpty()){
+            //search Appointments based on userName only.
+            allAppointments = appointmentRepository.findAllAndUserNameContainsIgnoreCase(search, pageable);
+        }
+        else{
+            allAppointments = appointmentRepository.findAll(pageable);
+
+        }
+        for(Appointment appointment : allAppointments){
+            Hibernate.initialize(appointment.getUser());
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+            Hibernate.initialize(appointment.getDoctor().getUser());
+            Hibernate.initialize(appointment.getDoctor().getDepartment());
+        }
+        return allAppointments;
+    }
+
     /**
      * Retrieves all appointments from the database.
      *
      * @return A list of all appointments.
      */
     @Override
-    public List<Appointment> getAllAppointments() {
+    public List<Appointment> getAllAppointmentList() {
         List<Appointment> allAppointments= appointmentRepository.findAll();
+        for(Appointment appointment : allAppointments){
+            Hibernate.initialize(appointment.getUser());
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+            Hibernate.initialize(appointment.getDoctor().getUser());
+            Hibernate.initialize(appointment.getDoctor().getDepartment());
+        }
         return allAppointments;
     }
 
@@ -70,6 +103,14 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
 
         if(optionalAppointment.isPresent()){
+            Hibernate.initialize(optionalAppointment.get().getDoctor().getUser());
+            Hibernate.initialize(optionalAppointment.get().getUser().getPatientChronicIllness());
+            for(PatientChronicIllness p : optionalAppointment.get().getUser().getPatientChronicIllness()){
+                Hibernate.initialize(p.getChronicIllness());
+            }
+            Hibernate.initialize(optionalAppointment.get().getDoctor().getDepartment());
+            Hibernate.initialize(optionalAppointment.get().getTimeSlotForAppointment());
+            Hibernate.initialize(optionalAppointment.get().getSymptoms());
             return optionalAppointment.get();
         }
         throw new DoesNotExistException("Appointment");
@@ -241,13 +282,25 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      * @throws DoesNotExistException If the user with the specified ID does not exist.
      */
     @Override
-    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException{
+    public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty()){
             throw new DoesNotExistException("User");
         }
         User currentUser = user.get();
-        List<Appointment> appointments = appointmentRepository.findByUser(currentUser);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Appointment> appointments;
+        if(search != null && !search.isEmpty()){
+            appointments = appointmentRepository.findByUserAndDoctorNameContainsIgnoreCase(currentUser.getId(), search, pageable);
+        }else{
+            appointments = appointmentRepository.findByUser(currentUser.getId(),pageable);
+        }
+        for(Appointment appointment : appointments){
+            Hibernate.initialize(appointment.getDoctor().getUser());
+            Hibernate.initialize(appointment.getDoctor().getDepartment());
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+        }
+
         return appointments;
     }
 
@@ -259,12 +312,36 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      * @throws DoesNotExistException If the doctor with the specified ID does not exist.
      */
     @Override
-    public List<Appointment> getAppointmentsOfDoctor(int id) throws DoesNotExistException {
+    public List<Appointment> getAppointmentListByUser(int userId) throws DoesNotExistException {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        User currentUser = user.get();
+        List<Appointment> appointments = appointmentRepository.findListByUser(userId);
+        return appointments;
+    }
+
+
+    @Override
+    public Page<Appointment> getAppointmentsOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isEmpty()){
             throw new DoesNotExistException("Doctor");
         }
-        List<Appointment> appointments = doctor.get().getAppointments();
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Appointment> appointments;
+        Doctor currentDoctor = doctor.get();
+        if(search != null && !search.isEmpty()){
+            appointments = appointmentRepository.findByDoctorAndUserNameContainsIgnoreCase(currentDoctor.getId(), search, pageable);
+        }else {
+            appointments = appointmentRepository.findByDoctor(currentDoctor.getId(), pageable);
+        }
+        for(Appointment appointment: appointments){
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+            Hibernate.initialize(appointment.getUser());
+        }
         return appointments;
+
     }
 }

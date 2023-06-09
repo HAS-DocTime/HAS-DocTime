@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http'
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -96,7 +96,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     NgbModule,
     NgApexchartsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    FormsModule
   ],
   providers: [
     {

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,24 +17,33 @@ export class BookAppointmentComponent implements OnInit{
 
   symptoms : Symptom[] = [];
   selectedSymptom : number[] = [];
-  currentUser? : User;
+  tokenRole! : string;
+  id! : number;
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
-     private userService : UserService, private router : Router, private route : ActivatedRoute){}
+     private userService : UserService, private router : Router, private route : ActivatedRoute, private location : Location){}
 
   ngOnInit(){
-    this.symptomService.getSymptoms().subscribe((data)=> {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+
+      let store = token?.split('.');
+      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+
+      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
+
+      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
+    }
+    this.symptomService.getSymptomsList().subscribe((data)=> {
       this.symptoms = data;
     })
+
     this.bookAppointment.controls['symptoms'].valueChanges.subscribe(data=> {
       this.selectedSymptom = [];
       for(let symptomName of data){
         if(symptomName['id']!=='')
         this.selectedSymptom.push(parseInt(symptomName['id']))
       }
-    })
-    this.userService.getUserByEmail().subscribe((data)=>{
-      this.currentUser = data;
     })
   }
 
@@ -51,7 +61,7 @@ export class BookAppointmentComponent implements OnInit{
       symptom.id = parseInt(symptom.id);
     }
     this.bookAppointment.value["user"] = {
-      "id": this.currentUser?.id
+      "id": this.id
     }
     //Hard-Coded as of now
     this.bookAppointment.value["doctor"] = {
@@ -59,7 +69,7 @@ export class BookAppointmentComponent implements OnInit{
     }
     //Hard-Coded as of now
     this.bookAppointment.value["timeSlotForAppointment"] = {
-      "id": 4508
+      "id": 5
     }
     console.log("-------------------",this.bookAppointment.value);
 
@@ -80,5 +90,13 @@ export class BookAppointmentComponent implements OnInit{
 
   deleteSymptom(id : number){
     this.symptomList.removeAt(id);
+  }
+
+  backToAppointments(){
+    this.router.navigate(["../"], {relativeTo : this.route})
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 }

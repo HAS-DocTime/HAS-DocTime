@@ -5,6 +5,11 @@ import { Symptom } from 'src/app/models/symptom.model';
 import { DepartmentService } from 'src/app/services/department.service';
 import { SymptomService } from 'src/app/services/symptom.service';
 
+interface SortByOption {
+  label: string;
+  value: string;
+}
+
 @Component({
   selector: 'app-symptom',
   templateUrl: './symptom.component.html',
@@ -16,45 +21,84 @@ export class SymptomComponent implements OnInit{
   symptom:  string = "";
   pastAppointmentLength: number = 0;
   pastAppointmentLengths: number[] = [];
+  page = 1;
+  totalPages = 1;
+  size = 5;
+  sortBy = 'name';
+  search = '';
+
+  sizeOptions = [5, 10, 15];
+  range(totalPages: number): number[] {
+    return Array(totalPages).fill(0).map((_, index) => index + 1);
+  }
 
   ngOnInit(){
 
+    this.getData(0);
+  }
 
+  getData(page : number) {
 
-    this.symptomService.getSymptoms().subscribe((data)=>{
-      for(let i=0; i<data.length; i++){
+    let params: any = {};
+
+    // Add query parameters based on selected options
+    if (this.size) {
+      params.size = this.size;
+    }
+    if (this.sortBy) {
+      params.sortBy = this.sortBy;
+    }
+    if (this.search) {
+      params.search = this.search;
+    }
+    params.page = this.page-1;
+
+    this.symptomService.getSymptoms(params).subscribe((data)=>{
+      for(let i=0; i<data.totalElements; i++){
         let departmentArray : Department[] = [];
-        this.symptom = data[i].name as string;
-        this.symptomService.getDiseaseWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
+        this.symptom = data.content[i].name as string;
+        this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
           this.pastAppointmentLength=0;
-            if(data1!==null){
-              for(let diseaseCaseCount of data1){
-                this.pastAppointmentLength += diseaseCaseCount.caseCount;
-              }
+          if(data1!==null){
+            for(let diseaseCaseCount of data1){
+              this.pastAppointmentLength += diseaseCaseCount.caseCount;
             }
-            data[i].caseCount=this.pastAppointmentLength;
-          })
+          }
+          data.content[i].caseCount = this.pastAppointmentLength;
+        })
 
-        const departmentLength : number | undefined = data[i].departments?.length;
+
+        const departmentLength : number | undefined = data.content[i].departments?.length;
         for(let j=0; j<(departmentLength as number); j++){
           let departmentObj : Department | undefined = data[i].departments?.[j];
-          if(departmentObj?.id){
-            departmentArray.push(departmentObj as Department);
-          }
-          else{
-            this.departmentService.getDepartmentById(departmentObj as number).subscribe(
-              (data)=> {
-                let dep = data;
-                departmentArray.push(dep);
-              }
-            );
-          }
+          departmentArray.push(departmentObj as Department);
         }
-        data[i].departments = departmentArray;
+        data.content[i].departments = departmentArray;
       }
 
-      this.symptoms = data;
+      this.symptoms = data.content;
+      this.totalPages = data.totalPages;
     })
+  }
+
+  onPageSizeChange() {
+    this.page = 1;
+    this.getData(this.page);
+  }
+
+  onSortByChange() {
+    this.page = 1;
+    this.getData(this.page);
+  }
+
+  onSearch() {
+    this.page = 1;
+    this.getData(this.page);
+  }
+
+  onPageChange(pageNumber: number) {
+    this.page = pageNumber ;
+    this.getData(this.page);
   }
 
 }

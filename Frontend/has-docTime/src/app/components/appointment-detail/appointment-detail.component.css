@@ -54,3 +54,8 @@ body {
   background-color: #b9396a!important;
   color: #fff!important;
 }
+
+.bi-arrow-left-circle-fill{
+  font-size: 30px;
+  cursor: pointer;
+}

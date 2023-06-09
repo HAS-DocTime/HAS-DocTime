@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Doctor } from 'src/app/models/doctor.model';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { AdminService } from 'src/app/services/admin.service';
@@ -28,7 +28,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private adminService: AdminService,
     private route: ActivatedRoute,
     private router: Router,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private location : Location
   ) { }
 
   user?: User;
@@ -68,8 +69,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           if (data[0].path === 'users') {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
-              this.adminService.getSingleUser(this.id).subscribe((data) => {
-                console.log("data", data);
+              this.userService.getUser(this.id).subscribe((data) => {
                 this.user = data;
                 this.id = data.id as number;
                 this.imageUrl = data.imageUrl as string;
@@ -203,8 +203,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             });
           });
         } else {
-          this.userService.getUserByEmail().subscribe((data) => {
-            console.log("data", data);
+          this.userService.getUser(this.id).subscribe((data) => {
             this.user = data;
 
             this.id = data.id as number;
@@ -354,7 +353,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       let admin: Admin = {
         user: user,
       };
-      this.userService.updateAdmin(admin, this.id).subscribe((data) => {
+      this.adminService.updateAdmin(admin, this.id).subscribe((data) => {
         this.adminService.getAdmin(this.id).subscribe((data) => {
           this.admin = data;
           this.user = data.user;
@@ -455,6 +454,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.router.navigate(['../'], { relativeTo: this.route });
       });
     }
+  }
+
+  navigateBack(){
+    this.location.back();
   }
 
   get maxDate(): string {

@@ -92,7 +92,7 @@
               *ngFor="let  chronicIllness of appointment?.user?.patientChronicIllness"
             >
               <div class="py-1 text-light p-2">
-                {{ chronicIllness.chronicIllness.name }}
+                {{ chronicIllness.chronicIllness?.name }}
               </div>
             </div>
           </div>

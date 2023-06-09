@@ -6,6 +6,7 @@ import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterExcepti
 import com.spring.hasdocTime.interfaces.UserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +30,8 @@ public class UserServiceImpl implements UserInterface {
      * @return The list of users.
      */
     @Override
-    public List<User> getAllUser() {
-        return userDao.getAllUser();
+    public Page<User> getAllUser(int page, int size, String sortBy, String search) {
+        return userDao.getAllUser(page, size, sortBy, search);
     }
 
     /**
@@ -102,8 +103,8 @@ public class UserServiceImpl implements UserInterface {
      * @return The list of patients.
      */
     @Override
-    public List<User> getPatients() {
-        return userDao.getPatients();
+    public Page<User> getPatients(int page, int size, String sortBy, String search) {
+        return userDao.getPatients(page, size, sortBy, search);
     }
 
     /**
@@ -114,7 +115,7 @@ public class UserServiceImpl implements UserInterface {
      * @throws DoesNotExistException If the chronic illness does not exist.
      */
     @Override
-    public Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException {
-        return userDao.getPatientsByChronicIllnessId(id);
+    public Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        return userDao.getPatientsByChronicIllnessId(id, page, size, sortBy, search);
     }
 }
