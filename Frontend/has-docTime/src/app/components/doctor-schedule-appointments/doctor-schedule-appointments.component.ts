@@ -69,8 +69,13 @@ export class DoctorScheduleAppointmentsComponent {
     this.appointmentService.getAppointmentsByDoctor(this.id, params)
     .subscribe(
       (data) => {
-        this.appointments = data.content;
-        this.totalPages = data.totalPages;
+        if(data!==null){
+          this.appointments = data.content;
+          this.totalPages = data.totalPages;
+        }
+        else{
+          this.appointments = [];
+        }
       },
       (error: any) => {
         console.error('Error getting doctor apppointments', error);
