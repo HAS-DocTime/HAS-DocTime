@@ -9,8 +9,6 @@ import com.spring.hasdocTime.entity.FilteredDoctorBody;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.DoctorInterface;
-import com.spring.hasdocTime.security.jwt.JwtService;
-import io.jsonwebtoken.Jwt;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -147,9 +144,11 @@ public class DoctorController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "bookAppointment")
-    public ResponseEntity<Set<Doctor>> getDoctorsBySymptomsAndTimeSlot(@RequestBody FilteredDoctorBody filteredDoctorBody) throws DoesNotExistException {
-        System.out.println("Hello---------------------------------------------------------------------");
-        Set<Doctor> doctors = doctorService.getDoctorsBySymptomsAndTimeSlot(filteredDoctorBody);
+    public ResponseEntity<Page<Doctor>> getDoctorsBySymptomsAndTimeSlot(@RequestBody FilteredDoctorBody filteredDoctorBody, @RequestParam(defaultValue = "0") int page,
+                                                                        @RequestParam(defaultValue = "5") int size,
+                                                                        @RequestParam(defaultValue = "user.name") String sortBy,
+                                                                        @RequestParam(required = false) String search) throws DoesNotExistException {
+        Page<Doctor> doctors = doctorService.getDoctorsBySymptomsAndTimeSlot(filteredDoctorBody, page, size, sortBy, search);
         return new ResponseEntity<>(doctors, HttpStatus.OK);//As of now
     }
 }

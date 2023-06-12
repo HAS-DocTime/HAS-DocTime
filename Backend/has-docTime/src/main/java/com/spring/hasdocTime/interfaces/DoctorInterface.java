@@ -67,6 +67,6 @@ public interface DoctorInterface {
      */
     public Doctor deleteDoctor(int id) throws DoesNotExistException;
 
-    public Set<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody) throws  DoesNotExistException;
+    public Page<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody, int page, int size, String sortBy, String search) throws  DoesNotExistException;
 
 }

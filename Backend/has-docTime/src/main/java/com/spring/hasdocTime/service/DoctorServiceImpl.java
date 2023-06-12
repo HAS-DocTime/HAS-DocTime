@@ -106,7 +106,7 @@ public class DoctorServiceImpl implements DoctorInterface {
     }
 
     @Override
-    public Set<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody) throws DoesNotExistException {
-        return doctorDao.getDoctorsBySymptomsAndTimeSlot(filteredDoctorBody);
+    public Page<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody, int page, int size, String sortBy, String search) throws DoesNotExistException {
+        return doctorDao.getDoctorsBySymptomsAndTimeSlot(filteredDoctorBody, page, size, sortBy, search);
     }
 }

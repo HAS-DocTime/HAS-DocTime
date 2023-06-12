@@ -5,13 +5,13 @@
   </h3>
   <div class="appointment-container" *ngIf="totalPages >= 0">
     <div class="row mb-3" >
-      <div class="col-sm-4">
+      <div class="col-sm-4" *ngIf="totalPages > 0">
         <label for="pageSize">Size:</label>
         <select class="form-select" id="size" [(ngModel)]="size" (change)="onPageSizeChange()">
           <option *ngFor="let sizeOption of sizeOptions" [value]="sizeOption">{{ sizeOption }}</option>
         </select>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-4" *ngIf="totalPages > 0">
         <label for="sortBy">Sort By:</label>
         <select class="form-select" id="sortBy" [(ngModel)]="sortBy" (change)="onSortByChange()">
           <option *ngFor="let sortByOption of sortByOptions" [value]="sortByOption.value">{{ sortByOption.label }}</option>

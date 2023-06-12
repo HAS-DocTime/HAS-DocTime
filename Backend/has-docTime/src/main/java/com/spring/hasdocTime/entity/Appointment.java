@@ -39,7 +39,7 @@ public class Appointment {
     @JsonIgnoreProperties(value = {"appointments", "availableTimeSlots", "bookedTimeSlots", "postAppointmentData"}, allowSetters = true)
     private Doctor doctor;
 
-    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "booked_time_slot_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"appointment", "department", "availableDoctors", "bookedDoctors", "appointmentData"}, allowSetters = true)
     private TimeSlot timeSlotForAppointment;

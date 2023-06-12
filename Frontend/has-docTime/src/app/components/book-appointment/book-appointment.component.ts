@@ -2,16 +2,21 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Timestamp } from 'rxjs';
+import { validateDateForBookingDoctorValidator } from 'src/app/customValidators/validateDateForBookingDoctor.validator';
 import { Doctor } from 'src/app/models/doctor.model';
 import { Symptom } from 'src/app/models/symptom.model';
+import { TimeSlot } from 'src/app/models/timeSlot.model';
 import { User } from 'src/app/models/user.model';
-
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { SymptomService } from 'src/app/services/symptom.service';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
+
+interface SortByOption {
+  label: string;
+  value: string;
+}
 
 @Component({
   selector: 'app-book-appointment',
@@ -22,7 +27,8 @@ export class BookAppointmentComponent implements OnInit{
 
   symptoms : Symptom[] = [];
   selectedSymptom : number[] = [];
-  currentUser? : User;
+  currentUser : User = {
+  };
   startTime? : Date;
   endTime? : Date;
   date! : Date;
@@ -33,9 +39,26 @@ export class BookAppointmentComponent implements OnInit{
   doctorList : Doctor[] = [];
   noDataFound : boolean = false;
   noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
-  currentDoctor! : Doctor;
+  currentDoctor : Doctor = {
+
+    user : {
+      name : "Dummy Name"
+      },
+      qualification : "Dummy Qualification",
+      casesSolved : 0,
+      available : true,
+      department  : {
+      }
+  };
   selectedSymptoms : string[] = [];
   datePicker = document.getElementById("datePicker");
+  page = 1;
+  totalPages = 0;
+  size = 5;
+  sortBy = 'user.name';
+  search = '';
+  availableTimeSlots : TimeSlot[] = [];
+
 
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
@@ -82,10 +105,20 @@ export class BookAppointmentComponent implements OnInit{
 
   }
 
+  sizeOptions = [5, 10, 15];
+  range(totalPages: number): number[] {
+    return Array(totalPages).fill(0).map((_, index) => index + 1);
+  }
+
+  sortByOptions: SortByOption[] = [
+    { label: 'StartTime', value: 'timeSlotForAppointment.startTime' },
+    { label: 'Doctor Name', value: 'doctor.user.name' }
+  ];
+  params : any = {};
+
 
 
   getDoctorsBySymptomAndTimeSlot(){
-    console.log(this.bookAppointment.value);
     this.startTime = this.bookAppointment.value["timeSlot"].split("-")[0];
     this.endTime = this.bookAppointment.value["timeSlot"].split("-")[1];
     this.date = this.bookAppointment.value["date"];
@@ -93,8 +126,9 @@ export class BookAppointmentComponent implements OnInit{
     this.endTimeInString = `${this.date}T${this.endTime}`
     this.bookAppointment.value["timeSlotStartTime"] = this.startTimeInString;
     this.bookAppointment.value["timeSlotEndTime"] = this.endTimeInString;
-    this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value).subscribe((data)=> {
-      this.doctorList = data;
+    this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value, this.params).subscribe((data)=> {
+      console.log(data);
+      this.doctorList = data.content as Doctor[];
       if(this.doctorList.length<=0){
         this.noDataFound = true;
       }
@@ -102,7 +136,6 @@ export class BookAppointmentComponent implements OnInit{
         this.noDataFound = false;
       }
     });
-    console.log(this.bookAppointment.value);
 
   }
 
@@ -115,7 +148,7 @@ export class BookAppointmentComponent implements OnInit{
     ]),
     timeSlot : new FormControl('', Validators.required),
     description : new FormControl(""),
-    date : new FormControl(new Date().toISOString().split("T")[0], Validators.required)
+    date : new FormControl(new Date().toISOString().split("T")[0], [Validators.required, validateDateForBookingDoctorValidator()])
   })
 
   confirmAppointment : FormGroup = new FormGroup({
@@ -176,6 +209,13 @@ export class BookAppointmentComponent implements OnInit{
 
   selectDoctor(index : number){
     this.currentDoctor = this.doctorList[index];
+    this.currentDoctor.availableTimeSlots = this.currentDoctor.availableTimeSlots?.filter((timeSlot)=>{
+      if((new Date()).getTime() < (timeSlot.startTime as number)){
+        return true;
+      }
+      return false;
+    })
+
   }
 
   convertTimeStampToDate(timestamp : number | undefined){
@@ -203,6 +243,60 @@ export class BookAppointmentComponent implements OnInit{
     }
     return false;
   }
+
+  getData(){
+    // Add query parameters based on selected options
+    if (this.size) {
+      this.params.size = this.size;
+    }
+    if (this.sortBy) {
+      this.params.sortBy = this.sortBy;
+    }
+    if (this.search) {
+      this.params.search = this.search;
+    }
+    this.params.page = this.page-1;
+
+    this.startTime = this.bookAppointment.value["timeSlot"].split("-")[0];
+    this.endTime = this.bookAppointment.value["timeSlot"].split("-")[1];
+    this.date = this.bookAppointment.value["date"];
+    this.startTimeInString = `${this.date}T${this.startTime}`
+    this.endTimeInString = `${this.date}T${this.endTime}`
+    this.bookAppointment.value["timeSlotStartTime"] = this.startTimeInString;
+    this.bookAppointment.value["timeSlotEndTime"] = this.endTimeInString;
+    this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value, this.params).subscribe((data)=> {
+      console.log(data);
+      this.doctorList = data.content as Doctor[];
+      if(this.doctorList.length<=0){
+        this.noDataFound = true;
+      }
+      else{
+        this.noDataFound = false;
+      }
+    });
+  }
+
+  onPageSizeChange() {
+    this.page = 1;
+    this.getData();
+  }
+
+  onSortByChange() {
+    this.page = 1;
+    this.getData();
+  }
+
+  onSearch() {
+    this.page = 1;
+    this.getData();
+  }
+
+  onPageChange(pageNumber: number) {
+    this.page = pageNumber ;
+    this.getData();
+  }
+
+
 
 
 }

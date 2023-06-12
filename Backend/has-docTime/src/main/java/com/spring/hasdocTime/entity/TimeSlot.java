@@ -9,10 +9,7 @@ import lombok.*;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -54,7 +51,7 @@ public class TimeSlot {
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
     @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
-    private List<Doctor> availableDoctors = new ArrayList<>();
+    private Set<Doctor> availableDoctors = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -65,13 +62,13 @@ public class TimeSlot {
     @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
     private List<Doctor> bookedDoctors;
 
-    @OneToOne(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"timeSlotForAppointmentData", "user", "doctor"}, allowSetters = true)
-    private PostAppointmentData appointmentData;
+    private Set<PostAppointmentData> appointmentData;
 
-    @OneToOne(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"timeSlotForAppointment", "symptoms", "user", "doctor"}, allowSetters = true)
-    private Appointment appointment;
+    private Set<Appointment> appointment;
 
     /**
      * Checks if the current TimeSlot object is equal to the given object.

@@ -57,26 +57,26 @@ export class SymptomComponent implements OnInit{
     params.page = this.page-1;
 
     this.symptomService.getSymptoms(params).subscribe((data)=>{
-      if(data.content.length !== 0){
 
-        for(let i=0; i<data.numberOfElements; i++){
-          let departmentArray : Department[] = [];
-          this.symptom = data.content[i].name as string;
-          this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
-            this.pastAppointmentLength=0;
-            if(data1!==null){
-              for(let diseaseCaseCount of data1){
-                this.pastAppointmentLength += diseaseCaseCount.caseCount;
-              }
+      if(data.content.length!==0){for(let i=0; i<data.numberOfElements; i++){
+        let departmentArray : Department[] = [];
+        this.symptom = data.content[i].name as string;
+        this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
+          this.pastAppointmentLength=0;
+          if(data1!==null){
+            for(let diseaseCaseCount of data1){
+              this.pastAppointmentLength += diseaseCaseCount.caseCount;
             }
-            data.content[i].caseCount = this.pastAppointmentLength;
-          })
+          }
+          data.content[i].departments = departmentArray;
+          data.content[i].caseCount = this.pastAppointmentLength;
 
-          this.symptoms = data.content;
-          this.totalPages = data.totalPages;
-          this.noDataFound = false;
-        }
-      } else {
+        this.symptoms = data.content;
+        this.totalPages = data.totalPages;
+        this.noDataFound = false;
+      })
+    }}
+    else {
         this.noDataFound = true;
       }
 
