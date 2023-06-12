@@ -49,6 +49,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 // const firebaseConfig = environment.firebase;
 // firebase.initializeApp(environment.firebase);
+import { CreateDepartmentComponent } from './components/department/create-department/create-department.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     PatientPastAppointmentByIdComponent,
     PastAppointmentComponent,
     DetailedPastAppointmentComponent,
-    TooltipDirective
+    TooltipDirective,
+    CreateDepartmentComponent
   ],
   imports: [
     BrowserModule,

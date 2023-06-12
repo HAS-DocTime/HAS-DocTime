@@ -25,6 +25,7 @@ import { AppointmentDetailFromDoctorComponent } from './components/patient-appoi
 import { PastHistoryComponent } from './components/patient-appointment-detail/past-history/past-history.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
 import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
+import { CreateDepartmentComponent } from './components/department/create-department/create-department.component';
 
 
 const routes: Routes = [
@@ -53,6 +54,7 @@ const routes: Routes = [
     {path : "doctors", component : UserDoctorListComponent},
     {path : "doctors/:id", component : ProfilePageComponent},
     {path : "departments", component : DepartmentComponent},
+    {path : "departments/createDepartment", component : CreateDepartmentComponent},
     {path : "departments/:id", component : DeptDetailComponent},
     {path : "symptoms", component : SymptomComponent},
     {path : "symptoms/:id", component : SymptomDetailComponent},

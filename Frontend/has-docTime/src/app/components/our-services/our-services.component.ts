@@ -17,6 +17,7 @@ export class OurServicesComponent implements OnInit{
   departments : Department[] = [];
   id : number = 0;
   tokenRole: string = "";
+  urlPath: string ="";
   page = 1;
   totalPages = 1;
   size = 5;
@@ -41,6 +42,11 @@ export class OurServicesComponent implements OnInit{
 
       this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
     }
+    this.route.url.subscribe((data) => {
+      this.urlPath = data[0].path;
+      console.log(this.urlPath);
+
+    })
 
     this.getData(0);
   }
@@ -72,6 +78,10 @@ export class OurServicesComponent implements OnInit{
     if(this.tokenRole==='ADMIN') {
       this.router.navigate(["dashboard", "departments", id])
     }
+  }
+
+  createDepartment(){
+    this.router.navigate(["dashboard" ,"departments", "createDepartment"])
   }
 
   onPageSizeChange() {
