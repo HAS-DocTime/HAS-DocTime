@@ -83,6 +83,9 @@ export class AppointmentComponent implements OnInit{
     if (this.search) {
       this.params.search = this.search;
     }
+    else{
+      this.params.search = "";
+    }
     this.params.page = this.page-1;
 
     if(this.tokenRole==='ADMIN'){
@@ -91,18 +94,19 @@ export class AppointmentComponent implements OnInit{
           this.totalPages = data.totalPages;
         })
       }
-      else {
-        this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
-          console.log(data);
-          if(data){
-            this.appointments = data.content as Appointment[];
-            this.totalPages = data.totalPages;
-          }
-          else{
-            this.appointments = [];
-          }
-        });
-      }
+    else {
+      this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
+        console.log(data);
+        if(data){
+          this.appointments = data.content as Appointment[];
+          this.totalPages = data.totalPages;
+        }
+        else{
+          this.appointments = [];
+          this.totalPages = 0;
+        }
+      });
+    }
 
     }
 
@@ -125,6 +129,7 @@ export class AppointmentComponent implements OnInit{
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
         if(this.tokenRole==="ADMIN"){
           this.appointmentService.getAppointments(this.params).subscribe((data)=> {
+            console.log(data);
             this.appointments = data.content as Appointment[];
             this.totalPages = data.totalPages;
           });
