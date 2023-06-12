@@ -47,7 +47,7 @@ export class AppointmentComponent implements OnInit{
 
   ngOnInit(){
 
-    this.dynamicTimeSlotService.convertToTimeZone(100);
+    this.dynamicTimeSlotService.convertToTimeZone(1686576145094);
 
     const decoded_token : Token = this.authService.decodeToken();
 

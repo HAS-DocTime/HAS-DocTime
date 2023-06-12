@@ -38,6 +38,8 @@
     "jwt-decode": "^3.1.2",
     "lord-icon-element": "^4.1.1",
     "lottie-web": "^5.11.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "ng-apexcharts": "^1.7.6",
     "ngx-toastr": "^16.2.0",
     "rxjs": "~7.8.0",
