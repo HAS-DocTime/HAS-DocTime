@@ -277,7 +277,7 @@ public class DoctorDaoImpl implements DoctorInterface {
                 }
             }
         }
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
+        PageRequest pageRequest = PageRequest.of(page, size);
         List<Doctor> doctorList = new ArrayList<>(doctors);
         if(sortBy.equals("doctor.user.name")){
             doctorList.sort((d1, d2)-> {
