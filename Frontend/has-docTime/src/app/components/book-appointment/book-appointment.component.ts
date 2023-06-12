@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { validateDateForBookingDoctorValidator } from 'src/app/customValidators/validateDateForBookingDoctor.validator';
 import { Doctor } from 'src/app/models/doctor.model';
 import { Symptom } from 'src/app/models/symptom.model';
+import { TimeSlot } from 'src/app/models/timeSlot.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DoctorService } from 'src/app/services/doctor.service';
@@ -25,7 +26,8 @@ export class BookAppointmentComponent implements OnInit{
 
   symptoms : Symptom[] = [];
   selectedSymptom : number[] = [];
-  currentUser? : User;
+  currentUser : User = {
+  };
   startTime? : Date;
   endTime? : Date;
   date! : Date;
@@ -36,7 +38,17 @@ export class BookAppointmentComponent implements OnInit{
   doctorList : Doctor[] = [];
   noDataFound : boolean = false;
   noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
-  currentDoctor! : Doctor;
+  currentDoctor : Doctor = {
+
+    user : {
+      name : "Dummy Name"
+      },
+      qualification : "Dummy Qualification",
+      casesSolved : 0,
+      available : true,
+      department  : {
+      }
+  };
   selectedSymptoms : string[] = [];
   datePicker = document.getElementById("datePicker");
   page = 1;
@@ -44,6 +56,8 @@ export class BookAppointmentComponent implements OnInit{
   size = 5;
   sortBy = 'user.name';
   search = '';
+  availableTimeSlots : TimeSlot[] = [];
+
 
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
@@ -193,6 +207,13 @@ export class BookAppointmentComponent implements OnInit{
 
   selectDoctor(index : number){
     this.currentDoctor = this.doctorList[index];
+    this.currentDoctor.availableTimeSlots = this.currentDoctor.availableTimeSlots?.filter((timeSlot)=>{
+      if((new Date()).getTime() < (timeSlot.startTime as number)){
+        return true;
+      }
+      return false;
+    })
+    
   }
 
   convertTimeStampToDate(timestamp : number | undefined){
@@ -272,6 +293,8 @@ export class BookAppointmentComponent implements OnInit{
     this.page = pageNumber ;
     this.getData();
   }
+
+  
 
 
 }
