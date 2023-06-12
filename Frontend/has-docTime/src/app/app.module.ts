@@ -44,6 +44,9 @@ import { PatientPastAppointmentByIdComponent } from './components/patient-appoin
 import { TooltipDirective } from './directives/tooltip.directive';
 import { ToastrModule } from 'ngx-toastr';
 import { CreateDepartmentComponent } from './components/department/create-department/create-department.component';
+import { AngularFireModule } from '@angular/fire/compat'
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [

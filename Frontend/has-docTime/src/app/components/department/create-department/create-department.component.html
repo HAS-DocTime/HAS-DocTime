@@ -1,0 +1,67 @@
+<div class="container">
+  <h1>Create Department</h1>
+
+  <!-- Upload Photo -->
+  <div class="upload-photo row text-center align-items-center">
+    <label for="photo" class="cloud-upload-label" style="color: blue;">
+      <input type="file" id="photo" name="photo" style="display: none;">
+      <i class="fa fa-cloud-upload fa-4x"></i>
+    </label>
+    <h5 class="mt-1">Upload Photo</h5>
+  </div>
+
+  <!-- Department Details -->
+  <div class="department-details row">
+    <div class="form-group dept-name col-md-8 col-sm-4">
+      <input type="text" id="department-name" name="department-name" class="form-control  fs-2 fw-bold text-primary" placeholder="Enter Department Name">
+
+    </div>
+    <div class="col-md-4 col-sm-4">
+      <div class="form-group">
+        <label for="time-duration" class="fs-4 fw-bold">Time Duration</label>
+        <div class="row">
+          <div class="col-md-8">
+            <input type="text" id="time-duration" name="time-duration" class="form-control fs-5" placeholder="Time Duration">
+          </div>
+          <div class="col-md-4 pt-3">
+            <p class="fs-5">minutes</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="building"  class="fs-4 fw-bold">Building</label>
+        <div>
+          <input type="text" id="building" name="building" class="form-control fs-5" placeholder="Building">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Symptom Section -->
+  <div class="symptom-section">
+    <h3>Symptoms</h3>
+    <div class="form-group">
+      <label for="symptom">Symptom</label>
+      <input type="text" id="symptom" name="symptom" class="form-control" placeholder="Search Symptom">
+      <button type="button" class="btn btn-primary">+</button>
+    </div>
+  </div>
+
+  <!-- Doctor Section -->
+  <div class="doctor-section row d-flex mb-4 text-center mt-5">
+    <h3>Doctors</h3>
+    <div class="col">
+      <button type="button" class="btn btn-primary justify-content-between">Add New Doctor</button>
+    </div>
+    <div class="col">
+      <button type="button" class="btn btn-primary justify-content-between">Add Existing Doctor</button>
+    </div>
+
+  </div>
+
+  <!-- Submit Button -->
+  <div class="submit-button">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</div>
