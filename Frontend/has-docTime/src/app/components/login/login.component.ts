@@ -2,6 +2,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Token } from 'src/app/models/token.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { LoginService } from 'src/app/services/login.service';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
@@ -25,7 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   passwordType : string = "password";
 
 
-  constructor(private loginService: LoginService, private router: Router, private userService: UserService, private toast : ToastMessageService) {
+  constructor(private loginService: LoginService, private router: Router, private userService: UserService, private toast : ToastMessageService, private authService : AuthService) {
   }
 
   ngOnInit(){
@@ -68,12 +70,9 @@ export class LoginComponent implements OnInit, OnDestroy{
       sessionStorage.clear();
       sessionStorage.setItem('token',data.token);
 
-      const token = sessionStorage.getItem('token');
-      if (token) {
-        let store = token?.split('.');
-        this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-        this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length-1);
-      }
+      const decoded_token : Token = this.authService.decodeToken();
+
+      this.tokenRole = decoded_token.role;
       if(this.tokenRole === "PATIENT" || this.tokenRole === "ADMIN"){
         this.router.navigate(['/dashboard/appointment']);
       }else {

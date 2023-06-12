@@ -16,6 +16,8 @@ import { FileUpload } from 'src/app/models/fileUpload.model';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs';
+import { Token } from 'src/app/models/token.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -34,7 +36,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private location : Location,
     private countryService : CountryService,
     private toast : ToastMessageService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private authService : AuthService
   ) {}
 
   user?: User;
@@ -57,23 +60,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.editForm.get("contact")?.get("countryCode")?.valueChanges.subscribe((data)=> {
-      console.log(data);
     })
     this.route.url.subscribe((data) => {
-      // console.log("data", data);
       this.urlPath = data[0].path;
       const token = sessionStorage.getItem('token');
-      if (token) {
-        let store = token?.split('.');
-        this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-        this.id = parseInt(
-          atob(store[1])
-            .split(',')[1]
-            .split(':')[1]
-            .substring(1, this.tokenRole.length - 1)
-        );
+      const decoded_token : Token = this.authService.decodeToken();
 
-        this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
+    this.tokenRole = decoded_token.role;
+    this.id = parseInt(decoded_token.id);
 
         if (this.tokenRole === 'ADMIN') {
           if (data[0].path === 'users') {
@@ -94,7 +88,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         } else {
           this.getUser(this.id);
         }
-      }
     });
   }
 
@@ -346,24 +339,17 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.isLoading = true;
     if (this.selectedFile != null) {
-      console.log(this.selectedFile);
       const filePath = `profiles/${this.user?.id}`;
       const storageRef = this.storage.ref(filePath);
       const uploadTask = this.storage.upload(filePath, this.selectedFile);
 
-      console.log("uploadTask", uploadTask);
-
       uploadTask.snapshotChanges().pipe(
         finalize(() => {
           storageRef.getDownloadURL().subscribe(downloadURL => {
-            console.log("data ", downloadURL);
             (this.selectedFile as FileUpload).url = downloadURL;
-            console.log("selectedfiles ", this.selectedFile);
             this.imageUrl = downloadURL;
             this.user!.imageUrl = downloadURL;
-            console.log("user before", this.user);
             this.submitProfile();
-            console.log("user", this.user);
           });
         })
       ).subscribe();
@@ -375,7 +361,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
-    console.log("image ", this.selectedFile);
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -387,30 +372,21 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   // uploadProfilePicture(){
-  //   console.log("submit");
 
   //   if(this.selectedFile){
-
-  //     console.log(this.selectedFile);
   //     const filePath = `profiles/${this.selectedFile.name}`;
   //     const storageRef = this.storage.ref(filePath);
   //     const uploadTask = this.storage.upload(filePath, this.selectedFile);
 
-  //     console.log("uploadTask", uploadTask);
-
   //     uploadTask.snapshotChanges().pipe(
   //       finalize(() => {
   //         storageRef.getDownloadURL().subscribe(downloadURL => {
-  //           console.log("data ", downloadURL);
   //           (this.selectedFile as FileUpload).url = downloadURL;
-  //           console.log("selectedfiles ", this.selectedFile);
   //           this.imageUrl = downloadURL;
   //         });
   //       })
   //     ).subscribe();
   //   }
-
-  //   console.log("after data subscribe");
   // }
 
   toggleDisable() {
