@@ -103,6 +103,8 @@ public class UserController {
      */
     @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") int id, @Valid @RequestBody User theUser) throws DoesNotExistException, MissingParameterException {
+        System.out.println("=====================================================");
+        System.out.println("Update User" + theUser);
         User user = userService.updateUser(id, theUser);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -135,7 +137,7 @@ public class UserController {
     ){
         Page<User> users = userService.getPatients(page, size, sortBy, search);
         if(users.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }

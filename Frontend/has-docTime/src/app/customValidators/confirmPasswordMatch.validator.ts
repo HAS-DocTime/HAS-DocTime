@@ -6,6 +6,7 @@ export function confirmPasswordValidator() : ValidatorFn{
     const confirmPasswordField = control.get('confirmPassword');
     if (passwordField?.value !== confirmPasswordField?.value) {
       control.get('confirmPassword')?.setErrors({passwordMismatch : true})
+
       return { 'passwordMismatch': true };
     }
     else if(confirmPasswordField?.value===""){

@@ -10,6 +10,10 @@ import { Admin } from 'src/app/models/admin.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs';
+import { FileUpload } from 'src/app/models/fileUpload.model';
 
 @Component({
   selector: 'app-profile-page',
@@ -25,7 +29,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private adminService: AdminService,
     private route: ActivatedRoute,
     private router: Router,
-    private location : Location
+    private location : Location,
+    private toast : ToastMessageService,
+    private storage: AngularFireStorage
   ) {}
 
   user?: User;
@@ -40,9 +46,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   formattedDate = this.datePipe.transform(this.dateFromAPI, 'yyyy-MM-dd');
   urlPath!: string;
   doctors!: Doctor[];
+  selectedFile: FileUpload | null = null;
+  imageUrl!: string;
+  isLoading: boolean = false;
 
   ngOnInit(): void {
     this.route.url.subscribe((data) => {
+      // console.log("data", data);
       this.urlPath = data[0].path;
       const token = sessionStorage.getItem('token');
       if (token) {
@@ -64,6 +74,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
               this.userService.getUser(this.id).subscribe((data) => {
                 this.user = data;
                 this.id = data.id as number;
+                this.imageUrl = data.imageUrl as string;
                 const nameArray: string[] =
                   this.user?.name?.split(' ', 2) ?? [];
                 this.firstName = nameArray[0];
@@ -78,6 +89,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
                 );
 
                 this.editForm.patchValue({
+                  imageUrl: this.imageUrl,
                   firstName: this.firstName,
                   lastName: this.lastName,
                   email: this.user.email,
@@ -96,6 +108,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
               this.doctorService.getDoctor(this.id).subscribe((data) => {
                 this.doctor = data;
                 this.user = data.user;
+                this.imageUrl = data.user.imageUrl as string;
                 this.id = data.id as number;
                 const docNameArray: string[] =
                   this.doctor?.user?.name?.split(' ', 2) ?? [];
@@ -110,6 +123,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
                 );
 
                 this.editForm.patchValue({
+                  imageUrl: this.imageUrl,
                   firstName: this.firstName,
                   lastName: this.lastName,
                   email: this.doctor.user.email,
@@ -128,6 +142,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             this.adminService.getAdmin(this.id).subscribe((data) => {
               this.admin = data;
               this.user = data.user;
+              this.imageUrl = data.user?.imageUrl as string;
               this.id = data.id as number;
               const adminNameArray: string[] =
                 this.admin?.user?.name?.split(' ', 2) ?? [];
@@ -143,6 +158,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
               );
 
               this.editForm.patchValue({
+                imageUrl: this.imageUrl,
                 firstName: this.firstName,
                 lastName: this.lastName,
                 email: this.admin?.user?.email,
@@ -159,6 +175,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.doctorService.getDoctor(this.id).subscribe((data) => {
             this.doctor = data;
             this.user = data.user;
+            this.imageUrl = data.user.imageUrl as string;
             this.id = data.id as number;
             const docNameArray: string[] =
               this.doctor?.user?.name?.split(' ', 2) ?? [];
@@ -173,6 +190,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             );
 
             this.editForm.patchValue({
+              imageUrl: this.imageUrl,
               firstName: this.firstName,
               lastName: this.lastName,
               email: this.doctor.user.email,
@@ -189,6 +207,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         } else {
           this.userService.getUser(this.id).subscribe((data) => {
             this.user = data;
+
             this.id = data.id as number;
             const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
             this.firstName = nameArray[0];
@@ -196,13 +215,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             if (data.dob) {
               this.dateFromAPI = new Date(data?.dob);
             }
-
+            this.imageUrl = data.imageUrl as string;
             this.formattedDate = this.datePipe.transform(
               this.dateFromAPI,
               'yyyy-MM-dd'
             );
 
             this.editForm.patchValue({
+              imageUrl: this.imageUrl,
               firstName: this.firstName,
               lastName: this.lastName,
               email: this.user.email,
@@ -220,6 +240,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   editForm: FormGroup = new FormGroup({
+    imageUrl: new FormControl({ value: '', disabled: this.disable }),
+
     firstName: new FormControl({ value: '', disabled: this.disable }, [
       Validators.required, trimmedInputValidateSpace()
     ]),
@@ -248,9 +270,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     patientChronicIllness: new FormArray([]),
   });
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void { }
 
-  onSubmit() {
+  submitProfile() {
+
     const date = new Date();
     this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
     this.editForm.value['lastName'] = this.editForm.value["lastName"].trim();
@@ -283,6 +306,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     if (this.tokenRole === 'PATIENT' || this.urlPath === 'users') {
       user.role = this.user?.role;
       user.email = this.user?.email;
+      user.imageUrl = this.imageUrl;
 
       this.userService.updateUser(user, this.id).subscribe((data) => {
         this.toggleDisable();
@@ -290,12 +314,20 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
         this.userService.getUser(this.id).subscribe((data) => {
           this.user = data;
+          this.isLoading = false;
         });
+        this.toast.showSuccess("User Updated Successfully", "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     } else if (this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors') {
       user.id = this.doctor?.user?.id;
       user.role = this.doctor?.user.role;
       user.email = this.doctor?.user.email;
+      user.imageUrl = this.imageUrl;
+
       let doctor: Doctor = {
         user: user,
         qualification: this.editForm.value.qualification,
@@ -311,8 +343,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.doctor = data;
           this.user = data.user;
           this.cdr.detectChanges();
+          this.isLoading = false;
         });
         this.toggleDisable();
+        this.toast.showSuccess("Doctor Updated Successfully",  "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     } else if (
       this.tokenRole === 'ADMIN' &&
@@ -322,6 +360,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       let userId = 0;
       user.role = this.admin?.user?.role;
       user.email = this.admin?.user?.email;
+      user.imageUrl = this.imageUrl;
+
       let admin: Admin = {
         user: user,
       };
@@ -330,11 +370,87 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.admin = data;
           this.user = data.user;
           this.cdr.detectChanges();
+          this.isLoading != this.isLoading;
         });
         this.toggleDisable();
+        this.toast.showSuccess("User Updated Successfully", "Success");
+      }, (err)=> {
+        if(err){
+          this.toast.showError("Unexpected Error Occurred", "Error");
+        }
       });
     }
   }
+
+  onSubmit() {
+    this.isLoading = true;
+    if (this.selectedFile != null) {
+      console.log(this.selectedFile);
+      const filePath = `profiles/${this.user?.id}`;
+      const storageRef = this.storage.ref(filePath);
+      const uploadTask = this.storage.upload(filePath, this.selectedFile);
+
+      console.log("uploadTask", uploadTask);
+
+      uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe(downloadURL => {
+            console.log("data ", downloadURL);
+            (this.selectedFile as FileUpload).url = downloadURL;
+            console.log("selectedfiles ", this.selectedFile);
+            this.imageUrl = downloadURL;
+            this.user!.imageUrl = downloadURL;
+            console.log("user before", this.user);
+            this.submitProfile();
+            console.log("user", this.user);
+          });
+        })
+      ).subscribe();
+    }
+    else {
+      this.submitProfile();
+    }
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    console.log("image ", this.selectedFile);
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imageUrl = e.target.result;
+    };
+    if (this.selectedFile) {
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+
+  // uploadProfilePicture(){
+  //   console.log("submit");
+
+  //   if(this.selectedFile){
+
+  //     console.log(this.selectedFile);
+  //     const filePath = `profiles/${this.selectedFile.name}`;
+  //     const storageRef = this.storage.ref(filePath);
+  //     const uploadTask = this.storage.upload(filePath, this.selectedFile);
+
+  //     console.log("uploadTask", uploadTask);
+
+  //     uploadTask.snapshotChanges().pipe(
+  //       finalize(() => {
+  //         storageRef.getDownloadURL().subscribe(downloadURL => {
+  //           console.log("data ", downloadURL);
+  //           (this.selectedFile as FileUpload).url = downloadURL;
+  //           console.log("selectedfiles ", this.selectedFile);
+  //           this.imageUrl = downloadURL;
+  //         });
+  //       })
+  //     ).subscribe();
+  //   }
+
+  //   console.log("after data subscribe");
+  // }
 
   toggleDisable() {
     this.disable = !this.disable;
@@ -353,6 +469,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     if (this.urlPath === 'users') {
       this.adminService.deleteUser(this.id).subscribe((data) => {
         this.router.navigate(['../'], { relativeTo: this.route });
+        this.toast.show(`Patient with ID ${this.id} deleted`, "Patient Deleted");
       });
     }
   }
@@ -366,7 +483,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
   get minDate(): string {
     const date = new Date();
-    date.setFullYear(date.getFullYear()-150);
+    date.setFullYear(date.getFullYear() - 150);
     return date.toISOString().split('T')[0];
   }
 }

@@ -38,6 +38,7 @@ public interface DoctorInterface {
      * @return Doctor object representing doctor of corresponding id 
      */
     public Doctor getDoctor(int id) throws DoesNotExistException;
+    
     /**
      * Retrieves a list of doctors based on the department ID.
      *
