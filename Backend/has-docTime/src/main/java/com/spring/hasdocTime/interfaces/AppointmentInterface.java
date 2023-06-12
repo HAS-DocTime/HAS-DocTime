@@ -6,17 +6,20 @@ package com.spring.hasdocTime.interfaces;
 import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface AppointmentInterface {
+
+    public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search);
 
     /**
      * Retrieves a list of all appointments.
      *
      * @return List of Appointment objects representing all appointments.
      */
-    public List<Appointment> getAllAppointments();
+    public List<Appointment> getAllAppointmentList();
 
     /**
      * Retrieves the appointment with the specified ID.
@@ -57,6 +60,8 @@ public interface AppointmentInterface {
      */
     public Appointment deleteAppointment(int id) throws DoesNotExistException;
 
+    public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException;
+
     /**
      * Retrieves a list of appointments for a specific user.
      *
@@ -64,7 +69,7 @@ public interface AppointmentInterface {
      * @return List of Appointment objects representing appointments for the user
      * @throws DoesNotExistException if the user does not exist
      */
-    public List<Appointment> getAppointmentsByUser(int userId) throws DoesNotExistException;
+    public List<Appointment> getAppointmentListByUser(int userId) throws DoesNotExistException;
 
     /**
      * Retrieves a list of appointments for a specific doctor.
@@ -73,6 +78,6 @@ public interface AppointmentInterface {
      * @return List of Appointment objects representing appointments for the doctor
      * @throws DoesNotExistException if the doctor does not exist
      */
-    public List<Appointment> getAppointmentsOfDoctor(int id) throws DoesNotExistException;
+    public Page<Appointment> getAppointmentsOfDoctor( int id, int page, int size, String sortBy, String search) throws DoesNotExistException;
 
 }

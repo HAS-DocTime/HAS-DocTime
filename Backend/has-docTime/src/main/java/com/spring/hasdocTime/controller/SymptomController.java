@@ -7,6 +7,7 @@ import com.spring.hasdocTime.interfaces.SymptomInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,9 +30,21 @@ public class SymptomController {
      * @return A list of all symptoms.
      */
     @GetMapping("")
-    public List<Symptom> getAllSymptom(){
-        return symptomService.getAllSymptom();
+    public Page<Symptom> getAllSymptom(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "name") String sortBy,     //sortBy name only
+            @RequestParam(required = false) String search
+    ){
+        Page<Symptom> symptoms = symptomService.getAllSymptom(page, size, sortBy, search);
+        return symptoms;
     }
+
+    @GetMapping("list")
+    public List<Symptom> getAllSymptom(){
+        return symptomService.getAllSymptomList();
+    }
+
 
     /**
      * Retrieves a symptom by ID.

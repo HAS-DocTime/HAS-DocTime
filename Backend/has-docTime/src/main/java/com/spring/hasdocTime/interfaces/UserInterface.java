@@ -6,18 +6,18 @@ package com.spring.hasdocTime.interfaces;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
 
 public interface UserInterface {
-
     /**
      * Retrieves all users.
      *
      * @return a list of User objects representing all users
      */
-    List<User> getAllUser();
+    Page<User> getAllUser(int page, int size, String sortBy, String search);
 
     /**
      * Retrieves a user by ID.
@@ -72,7 +72,7 @@ public interface UserInterface {
      *
      * @return a list of User objects representing all patients
      */
-    List<User> getPatients();
+    Page<User> getPatients(int page, int size, String sortBy, String search);
 
     /**
      * Retrieves patients by chronic illness ID.
@@ -81,5 +81,5 @@ public interface UserInterface {
      * @return a set of User objects representing patients with the specified chronic illness
      * @throws DoesNotExistException if the chronic illness does not exist
      */
-    Set<User> getPatientsByChronicIllnessId(int id) throws DoesNotExistException;
+    Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException;
 }

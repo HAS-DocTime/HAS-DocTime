@@ -23,13 +23,13 @@ public class PatientChronicIllness {
     @EmbeddedId
     private CompositeKeyPatientChronicIllness id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("patientId")
     @JoinColumn(name="patient_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value={"patientChronicIllness", "doctor", "admin", "appointmentData", "appointments", "symptoms"}, allowSetters = true)
     private User user;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
     @MapsId("chronicIllnessId")
     @JoinColumn(name="chronic_illness_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = "patientChronicIllnesses", allowSetters = true)

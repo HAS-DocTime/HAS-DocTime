@@ -16,34 +16,6 @@ app-sidebar{
     margin: 0;
   }
 
-
-
-  thead {
-    line-height: 4em;
-    font-size: larger;
-    text-align: center;
-  }
-
-  th {
-    background-color: #009EFF;
-    color: #ffffff;
-  }
-
-  tbody {
-    line-height: 4em;
-    font-size: large;
-  }
-
-  tr {
-    color: transparent;
-    background-color: transparent;
-  }
-   td {
-    color: transparent;
-    background-color: transparent;
-   }
-
-
    i.fa-caret-right {
     font-size: 1.4em;
   }
@@ -52,3 +24,8 @@ app-sidebar{
     font-size: 30px;
     cursor: pointer;
   }
+
+  .page-item
+{
+  cursor: pointer;
+}

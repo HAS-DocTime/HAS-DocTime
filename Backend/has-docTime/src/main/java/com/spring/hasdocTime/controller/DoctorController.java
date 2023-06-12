@@ -13,6 +13,8 @@ import io.jsonwebtoken.Jwt;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.endpoint.SecurityContext;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,10 +58,15 @@ public class DoctorController {
      * or HttpStatus.NO_CONTENT if no Doctors are found.
      */
     @RequestMapping(method = RequestMethod.GET, value = "")
-    public ResponseEntity<List<Doctor>> getAllDoctors() {
-        List<Doctor> doctors = doctorService.getAllDoctors();
-        if (doctors.isEmpty()) {
-            return new ResponseEntity<>(doctors, HttpStatus.NO_CONTENT);
+    public ResponseEntity<Page<Doctor>> getAllDoctors(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "user.name") String sortBy,        //Sort by user.name, user.dob(can place on age)
+            @RequestParam(required = false) String search
+    ){
+        Page<Doctor> doctors = doctorService.getAllDoctors(page, size, sortBy, search);
+        if(doctors.isEmpty()){
+            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(doctors, HttpStatus.OK);
     }
@@ -72,10 +79,16 @@ public class DoctorController {
      * or HttpStatus.NO_CONTENT if no Doctors are found in the Department.
      */
     @RequestMapping(method = RequestMethod.GET, value = "department/{departmentId}")
-    public ResponseEntity<List<Doctor>> getDoctorsByDepartmentId(@PathVariable("departmentId") int id) {
-        List<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id);
-        if (doctors.isEmpty()) {
-            return new ResponseEntity<>(doctors, HttpStatus.NO_CONTENT);
+    public ResponseEntity<Page<Doctor>> getDoctorsByDepartmentId(
+            @PathVariable("departmentId") int id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "user.name") String sortBy,
+            @RequestParam(required = false) String search
+    ){
+        Page<Doctor> doctors = doctorService.getDoctorsByDepartmentId(id, page, size, sortBy, search);
+        if(doctors.isEmpty()){
+            return new ResponseEntity(doctors, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(doctors, HttpStatus.OK);
     }

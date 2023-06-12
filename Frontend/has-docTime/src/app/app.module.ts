@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http'
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -43,6 +43,13 @@ import { AppointmentDetailFromDoctorComponent } from './components/patient-appoi
 import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
 import { TooltipDirective } from './directives/tooltip.directive';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ToastrModule } from 'ngx-toastr';
+import { environment } from 'src/environments/environment';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+
+// const firebaseConfig = environment.firebase;
+// firebase.initializeApp(environment.firebase);
 
 @NgModule({
   declarations: [
@@ -90,7 +97,16 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     RouterModule,
     CommonModule,
     NgbModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    FormsModule,
+    ToastrModule.forRoot({
+      positionClass: "toast-top-right",
+      preventDuplicates : true,
+      timeOut: 2500
+    }),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireStorageModule,
+    FormsModule
   ],
   providers: [
     {

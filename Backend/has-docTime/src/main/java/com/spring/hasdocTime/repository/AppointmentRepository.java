@@ -3,6 +3,8 @@ package com.spring.hasdocTime.repository;
 import com.spring.hasdocTime.entity.Appointment;
 import com.spring.hasdocTime.entity.Doctor;
 import com.spring.hasdocTime.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,13 +28,21 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query("DELETE FROM Appointment a where a.id=:id")
     void deleteById(@Param("id") int id);
 
+    @Query("SELECT a FROM Appointment a WHERE LOWER(a.user.name) LIKE %:search% ")
+    Page<Appointment> findAllAndUserNameContainsIgnoreCase(@Param("search")String search, Pageable pageable);
+
     /**
      * Retrieves a list of appointments associated with the specified user.
      *
      * @param user the user entity
      * @return a list of appointments associated with the user
      */
-    List<Appointment> findByUser(User user);
+    Page<Appointment> findByUserId(@Param("userId")int userId, Pageable pageable);
+
+    List<Appointment> findListByUserId(int userId);
+
+    @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId AND LOWER(a.doctor.user.name) LIKE %:search%")
+    Page<Appointment> findByUserIdAndDoctorNameContainsIgnoreCase(@Param("userId")int userId, @Param("search") String search, Pageable pageable);
 
     /**
      * Retrieves a list of appointments associated with the specified doctor.
@@ -40,5 +50,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
      * @param doctor the doctor entity
      * @return a list of appointments associated with the doctor
      */
-    List<Appointment> findByDoctor(Doctor doctor);
+    Page<Appointment> findByDoctorId(@Param("doctorId")int doctorId, Pageable pageable);
+
+    Page<Appointment> findByDoctorIdAndUserNameContainsIgnoreCase(@Param("doctorId") int doctorId, @Param("search") String search,Pageable pageable);
+
+
 }

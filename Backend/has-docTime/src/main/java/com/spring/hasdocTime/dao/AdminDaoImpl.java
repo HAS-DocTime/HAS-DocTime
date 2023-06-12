@@ -9,6 +9,7 @@ import com.spring.hasdocTime.interfaces.UserInterface;
 import com.spring.hasdocTime.repository.AdminRepository;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.utills.Role;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,7 @@ public class AdminDaoImpl implements AdminInterface {
         Admin admin = null;
         if(optionalAdmin.isPresent()){
             admin = optionalAdmin.get();
+            Hibernate.initialize(admin.getUser());
             return admin;
         }
         throw new DoesNotExistException("Admin");
