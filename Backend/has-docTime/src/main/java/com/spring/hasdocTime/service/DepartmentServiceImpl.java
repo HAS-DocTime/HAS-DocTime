@@ -92,4 +92,9 @@ public class DepartmentServiceImpl implements DepartmentInterface {
         return departmentDao.deleteDepartment(id);
     }
 
+    @Override
+    public List<Department> getAllDepartments() {
+        return departmentDao.getAllDepartments();
+    }
+
 }

@@ -56,4 +56,6 @@ public interface DepartmentInterface {
      * @throws DoesNotExistException if the department does not exist
      */
     public Department deleteDepartment(int id) throws DoesNotExistException;
+
+    public List<Department> getAllDepartments();
 }
