@@ -58,7 +58,8 @@ export class SymptomComponent implements OnInit{
 
     this.symptomService.getSymptoms(params).subscribe((data)=>{
       if(data.content.length !== 0){
-        for(let i=0; i<data.totalElements; i++){
+
+        for(let i=0; i<data.numberOfElements; i++){
           let departmentArray : Department[] = [];
           this.symptom = data.content[i].name as string;
           this.symptomService.getDiseaseListWithCaseCountFromSymptom(this.symptom).subscribe((data1)=>{
@@ -71,29 +72,11 @@ export class SymptomComponent implements OnInit{
             data.content[i].caseCount = this.pastAppointmentLength;
           })
 
-
-          const departmentLength : number | undefined = data.content[i].departments?.length;
-          for(let j=0; j<(departmentLength as number); j++){
-            let departmentObj : Department | undefined = data.content[i].departments?.[j];
-            if(departmentObj?.id){
-              departmentArray.push(departmentObj as Department);
-            }
-            else{
-              this.departmentService.getDepartmentById(departmentObj as number).subscribe(
-                (data)=> {
-                  let dep = data;
-                  departmentArray.push(dep);
-                }
-              );
-            }
-          }
-          data.content[i].departments = departmentArray;
-          data.content[i].caseCount = this.pastAppointmentLength;
-
-        this.symptoms = data.content;
-        this.totalPages = data.totalPages;
-        this.noDataFound = false;
-      }} else {
+          this.symptoms = data.content;
+          this.totalPages = data.totalPages;
+          this.noDataFound = false;
+        }
+      } else {
         this.noDataFound = true;
       }
 

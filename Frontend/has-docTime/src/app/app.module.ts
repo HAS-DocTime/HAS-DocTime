@@ -42,6 +42,7 @@ import { PastHistoryComponent } from './components/patient-appointment-detail/pa
 import { AppointmentDetailFromDoctorComponent } from './components/patient-appointment-detail/appointment-detail-from-doctor/appointment-detail-from-doctor.component';
 import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
 import { TooltipDirective } from './directives/tooltip.directive';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ToastrModule } from 'ngx-toastr';
 import { CreateDepartmentComponent } from './components/department/create-department/create-department.component';
 import { AngularFireModule } from '@angular/fire/compat'
@@ -79,7 +80,8 @@ import { environment } from 'src/environments/environment';
     PastAppointmentComponent,
     DetailedPastAppointmentComponent,
     TooltipDirective,
-    CreateDepartmentComponent
+    CreateDepartmentComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
