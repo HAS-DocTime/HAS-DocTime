@@ -127,7 +127,7 @@ export class AppointmentComponent implements OnInit{
             this.appointments = data.content as Appointment[];
           });
         }
-        this.toast.show(`The Appointment is deleted`, "Appointment deleted");
+        this.toast.showError(`The Appointment is deleted`, "Appointment deleted");
     })
     }
 

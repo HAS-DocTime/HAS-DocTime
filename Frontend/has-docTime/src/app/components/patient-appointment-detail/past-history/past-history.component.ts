@@ -64,7 +64,14 @@ export class PastHistoryComponent {
 
     this.pastAppointmentService.getPastAppointmentDataByUser(this.userId, params).subscribe(
       data => {
-        this.postAppointmentDataList = data;
+
+        if(data.content.length !== 0){
+          this.postAppointmentDataList = data.content;
+          this.totalPages = data.totalPages;
+        }
+        else{
+          this.noDataFound = true;
+        }
       }
     );
   }

@@ -3,13 +3,31 @@
   <div class="row">
     <div class="col-md-3 border-right">
       <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-        <img
+        <form [formGroup]="editForm" enctype="multipart/form-data">
+          <div class="row">
+            <span *ngIf="imageUrl !== null || selectedFile !== null">
+              <img class="rounded-circle mt-5 mb-3" width="150px" [src]="imageUrl" alt="Selected Picture"/>
+            </span>
+            <span *ngIf="imageUrl === null && selectedFile === null">
+              <img class="rounded-circle mt-5 mb-3" width="150px" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Selected Picture"/>
+            </span>
+          </div>
+          <!-- <img
           class="rounded-circle mt-5"
           width="150px"
-          src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
-        />
-        <span class="font-weight-bold" >{{ editForm.get('firstName')?.value }} {{editForm.get('lastName')?.value}}</span>
-        <span class="text-black-50">{{ editForm.get('email')?.value }}</span>
+          src="{{ imageUrl }}"
+        /> -->
+
+        <div class="row">
+          <button type="submit" class="btn btn-outline-primary mt-3" (click)="file.click()" *ngIf="!disable">
+            Upload File
+          </button>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
+            <!-- <button *ngIf="!disable" type="button" (click)="uploadProfilePicture()">Upload</button> -->
+        </div>
+        </form>
+        <span class="font-weight-bold mt-2">{{ editForm.get('firstName')?.value }} {{editForm.get('lastName')?.value}}</span>
+        <span class="text-black-50 mt-1">{{ editForm.get('email')?.value }}</span>
       </div>
     </div>
     <div class="col-md-7 border-right">
@@ -20,112 +38,69 @@
         <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
           <div class="row mt-2 mb-3">
             <div class="col-md-6">
-              <label class="labels"
-                >First Name
-                <span *ngIf="!disable" class="required-asterisk">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control"
-                placeholder="first name"
-                formControlName="firstName"
-                [ngClass]="
+              <label class="labels">First Name
+                <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input type="text" class="form-control" placeholder="first name" formControlName="firstName" [ngClass]="
                   editForm.get('firstName')?.errors &&
                   editForm.get('firstName')?.touched
                     ? 'errored-input'
                     : ''
-                "
-              />
-              <div
-                class="text-danger errored-input"
-                *ngIf="
+                " />
+              <div class="text-danger errored-input" *ngIf="
                   editForm.get('firstName')?.touched &&
                   editForm.get('firstName')?.invalid
-                "
-              >
-                <span *ngIf="editForm.get('firstName')?.errors?.['required']"
-                  >First Name is Required</span
-                >
-                <span *ngIf="editForm.get('firstName')?.errors?.['pattern'] && !editForm.get('firstName')?.errors?.['containsSpace']"
-                  >Only Alphabets are allowed</span
-                >
+                ">
+                <span *ngIf="editForm.get('firstName')?.errors?.['required']">First Name is Required</span>
+                <span
+                  *ngIf="editForm.get('firstName')?.errors?.['pattern'] && !editForm.get('firstName')?.errors?.['containsSpace']">Only
+                  Alphabets are allowed</span>
                 <span *ngIf="editForm.get('firstName')?.errors?.['containsSpace']">Whitespaces are not allowed</span>
 
               </div>
             </div>
             <div class="col-md-6">
-              <label class="labels"
-                >Last Name
-                <span *ngIf="!disable" class="required-asterisk">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control"
-                placeholder="last name"
-                formControlName="lastName"
-                [ngClass]="
+              <label class="labels">Last Name
+                <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input type="text" class="form-control" placeholder="last name" formControlName="lastName" [ngClass]="
                   editForm.get('lastName')?.errors &&
                   editForm.get('lastName')?.touched
                     ? 'errored-input'
                     : ''
-                "
-              />
-              <div
-                class="text-danger errored-input"
-                *ngIf="
+                " />
+              <div class="text-danger errored-input" *ngIf="
                   editForm.get('lastName')?.touched &&
                   editForm.get('lastName')?.invalid
-                "
-              >
-                <span *ngIf="editForm.get('lastName')?.errors?.['required']"
-                  >Last Name is Required</span
-                >
-                <span *ngIf="editForm.get('lastName')?.errors?.['pattern'] && !editForm.get('lastName')?.errors?.['containsSpace']"
-                  >Only Alphabets are allowed</span
-                >
+                ">
+                <span *ngIf="editForm.get('lastName')?.errors?.['required']">Last Name is Required</span>
+                <span
+                  *ngIf="editForm.get('lastName')?.errors?.['pattern'] && !editForm.get('lastName')?.errors?.['containsSpace']">Only
+                  Alphabets are allowed</span>
                 <span *ngIf="editForm.get('lastName')?.errors?.['containsSpace']">Whitespaces are not allowed</span>
               </div>
             </div>
           </div>
           <div class="row mt-3">
             <div class="col-md-12 mb-3">
-              <label class="labels"
-                >Mobile Number
-                <span *ngIf="!disable" class="required-asterisk">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control"
-                placeholder="enter phone number"
-                formControlName="contact"
-                pattern="^\+[0-9]{1,3}-[0-9]{10}$"
-                [ngClass]="
+              <label class="labels">Mobile Number
+                <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <input type="text" class="form-control" placeholder="enter phone number" formControlName="contact"
+                pattern="^\+[0-9]{1,3}-[0-9]{10}$" [ngClass]="
                   editForm.get('contact')?.errors &&
                   editForm.get('contact')?.touched
                     ? 'errored-input'
                     : ''
-                "
-              />
-              <div
-                class="text-danger errored-input"
-                *ngIf="
+                " />
+              <div class="text-danger errored-input" *ngIf="
                   editForm.get('contact')?.touched &&
                   editForm.get('contact')?.invalid
-                "
-              >
-                <span *ngIf="editForm.get('contact')?.errors?.['required']"
-                  >Contact is Required</span
-                >
-                <span *ngIf="editForm.get('contact')?.errors?.['pattern']"
-                  >Enter Valid Contact Number</span
-                >
+                ">
+                <span *ngIf="editForm.get('contact')?.errors?.['required']">Contact is Required</span>
+                <span *ngIf="editForm.get('contact')?.errors?.['pattern']">Enter Valid Contact Number</span>
               </div>
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels"
-                >Gender
-                <span *ngIf="!disable" class="required-asterisk">*</span></label
-              >
+              <label class="labels">Gender
+                <span *ngIf="!disable" class="required-asterisk">*</span></label>
               <select class="form-select" id="gender" formControlName="gender">
                 <option value="MALE">MALE</option>
                 <option value="FEMALE">FEMALE</option>
@@ -134,15 +109,9 @@
             </div>
 
             <div class="form-group mb-4">
-              <label for="bloodGroup"
-                >Blood Group
-                <span *ngIf="!disable" class="required-asterisk">*</span></label
-              >
-              <select
-                class="form-select"
-                id="bloodGroup"
-                formControlName="bloodGroup"
-              >
+              <label for="bloodGroup">Blood Group
+                <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <select class="form-select" id="bloodGroup" formControlName="bloodGroup">
                 <option value="A_POSITIVE">A+</option>
                 <option value="A_NEGATIVE">A-</option>
                 <option value="B_POSITIVE">B+</option>
@@ -154,132 +123,67 @@
               </select>
             </div>
             <div class="form-group mb-4">
-              <label for="dob"
-                >Date of Birth
-                <span *ngIf="!disable" class="required-asterisk">*</span></label
-              >
+              <label for="dob">Date of Birth
+                <span *ngIf="!disable" class="required-asterisk">*</span></label>
               <p>{{ this.user?.dob?.getDate?.toString }}</p>
 
-              <input
-                type="date"
-                class="form-control"
-                id="dob"
-                [placeholder]="user?.dob"
-                formControlName="dob"
-                [max]="maxDate"
-                [min]="minDate"
-                [ngClass]="
+              <input type="date" class="form-control" id="dob" [placeholder]="user?.dob" formControlName="dob"
+                [max]="maxDate" [min]="minDate" [ngClass]="
                   editForm.get('dob')?.errors && editForm.get('dob')?.touched
                     ? 'errored-input'
                     : ''
-                "
-              />
-              <div
-                class="text-danger errored-input"
-                *ngIf="
+                " />
+              <div class="text-danger errored-input" *ngIf="
                 editForm.get('dob')?.touched &&
                 editForm.get('dob')?.invalid
-                "
-              >
-                <span *ngIf="editForm.get('dob')?.errors?.['required']"
-                  >Date of Birth is Required</span
-                >
-                <span *ngIf="editForm.get('dob')?.errors?.['unrealisticDate']"
-                  >Enter Realistic Date of Birth</span
-                >
+                ">
+                <span *ngIf="editForm.get('dob')?.errors?.['required']">Date of Birth is Required</span>
+                <span *ngIf="editForm.get('dob')?.errors?.['unrealisticDate']">Enter Realistic Date of Birth</span>
               </div>
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels"
-                >Email
-                <span *ngIf="!disable" class="required-asterisk">*</span></label
-              ><input
-                type="text"
-                class="form-control"
-                formControlName="email"
-              />
+              <label class="labels">Email
+                <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text" class="form-control"
+                formControlName="email" />
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels">Height</label
-              ><input
-                type="number"
-                min="1"
-                max="10"
-                class="form-control"
-                placeholder="enter address line 2"
-                formControlName="height"
-              />
-              <div
-          class="text-danger errored-input"
-          *ngIf="
+              <label class="labels">Height</label><input type="number" min="1" max="10" class="form-control"
+                placeholder="Enter Your Height in Feet ( Eg : 6.2 )" formControlName="height" />
+              <div class="text-danger errored-input" *ngIf="
             editForm.get('height')?.touched &&
             editForm.get('height')?.invalid
-          "
-        >
-          <span *ngIf="editForm.get('height')?.errors?.['max']"
-            >Enter Valid Height ( Max -> 10.0)</span
-          >
-          <span *ngIf="editForm.get('height')?.errors?.['min']"
-            >Enter Valid Height (Min -> 0.0)</span
-          >
-        </div>
+          ">
+                <span *ngIf="editForm.get('height')?.errors?.['max']">Enter Valid Height ( Max -> 10.0)</span>
+                <span *ngIf="editForm.get('height')?.errors?.['min']">Enter Valid Height (Min -> 0.0)</span>
+              </div>
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels">Weight</label
-              ><input
-                type="number"
-                min="1"
-                max="300"
-                class="form-control"
-                placeholder="enter email id"
-                formControlName="weight"
-              />
-              <div
-          class="text-danger errored-input"
-          *ngIf="
+              <label class="labels">Weight</label><input type="number" min="1" max="300" class="form-control"
+                placeholder="Enter Your Weight in Kg ( Eg : 78 )" formControlName="weight" />
+              <div class="text-danger errored-input" *ngIf="
             editForm.get('weight')?.touched &&
             editForm.get('weight')?.invalid
-          "
-        >
-          <span *ngIf="editForm.get('weight')?.errors?.['max']"
-            >Enter Valid Weight ( Max -> 300.0)</span
-          >
-          <span *ngIf="editForm.get('weight')?.errors?.['min']"
-            >Enter Valid Weight (Min -> 1.0)</span
-          >
-        </div>
+          ">
+                <span *ngIf="editForm.get('weight')?.errors?.['max']">Enter Valid Weight ( Max -> 300.0)</span>
+                <span *ngIf="editForm.get('weight')?.errors?.['min']">Enter Valid Weight (Min -> 1.0)</span>
+              </div>
             </div>
           </div>
 
-          <div
-            *ngIf="this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors'"
-          >
+          <div *ngIf="this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors'">
             <div class="col-md-12 mb-3">
-              <label class="labels"
-                >Qualification
-                <span *ngIf="!disable" class="required-asterisk">*</span></label
-              ><input
-                type="text"
-                class="form-control"
-                formControlName="qualification"
-              />
+              <label class="labels">Qualification
+                <span *ngIf="!disable" class="required-asterisk">*</span></label><input placeholder="Enter Your Qualification ( Eg : MBBS )" type="text" class="form-control"
+                formControlName="qualification" />
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels">Cases Solved </label
-              ><input
-                type="number"
-                class="form-control"
-                formControlName="casesSolved"
-              />
+              <label class="labels">Cases Solved </label><input type="number" class="form-control"
+                formControlName="casesSolved" />
             </div>
           </div>
           <div class="row d-flex mb-4 text-center mt-5">
             <div *ngIf="disable" class="col">
-              <button
-                type="button"
-                class="btn btn-outline-primary"
-                (click)="toggleDisable()"
-              >
+              <button type="button" class="btn btn-outline-primary" (click)="toggleDisable()">
                 Edit
               </button>
             </div>
@@ -287,16 +191,12 @@
               <button type="submit" class="btn btn-outline-primary" [disabled]="editForm.invalid">
                 Update
               </button>
+              <div *ngIf="isLoading" class="spinner-border ms-2 spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
-            <div
-              *ngIf="urlPath === 'users' || urlPath === 'doctors'"
-              class="col"
-            >
-              <button
-                type="button"
-                class="btn btn-outline-danger"
-                (click)="delete()"
-              >
+            <div *ngIf="urlPath === 'users' || urlPath === 'doctors'" class="col">
+              <button type="button" class="btn btn-outline-danger" (click)="delete()">
                 Delete
               </button>
             </div>
