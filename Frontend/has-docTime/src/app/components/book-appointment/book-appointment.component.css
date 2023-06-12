@@ -154,3 +154,15 @@ i{
   display: none;
 }
 
+.noData{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.noData p{
+  margin-top: 2.5%;
+  font-size: 2rem;
+}
+

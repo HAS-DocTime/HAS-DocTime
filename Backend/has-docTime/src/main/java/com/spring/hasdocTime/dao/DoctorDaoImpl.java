@@ -26,9 +26,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the DoctorInterface for performing CRUD operations on Doctor entities.
@@ -251,7 +251,7 @@ public class DoctorDaoImpl implements DoctorInterface {
             symptom = optionalSymptom.get();
             symptoms.add(symptom);
         }
-        Set<Doctor> doctors = new HashSet<>();
+        Set<Doctor> doctors = new LinkedHashSet<>();
         for(Symptom symptom: symptoms){
             for(Department department: symptom.getDepartments()) {;
                 for (Doctor doctor : department.getDoctors()) {
@@ -277,8 +277,37 @@ public class DoctorDaoImpl implements DoctorInterface {
                 }
             }
         }
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortBy));
         List<Doctor> doctorList = new ArrayList<>(doctors);
-        return new PageImpl<>(doctorList, pageRequest, doctorList.size());
+        if(sortBy.equals("doctor.user.name")){
+            doctorList.sort((d1, d2)-> {
+                return d1.getUser().getName().compareToIgnoreCase(d2.getUser().getName());
+            });
+        }
+        else if(sortBy.equals("doctor.user.age")){
+            doctorList.sort((d1, d2)-> {
+                return d1.getUser().getAge() > d2.getUser().getAge() ? 1 : -1;
+            });
+        }
+        else if(sortBy.equals("doctor.user.gender")) {
+            doctorList.sort((d1, d2) -> {
+                return d1.getUser().getGender().compareTo(d2.getUser().getGender());
+            });
+        }
+        else if(sortBy.equals("doctor.qualification")){
+            doctorList.sort((d1, d2)-> {
+                return d1.getQualification().compareToIgnoreCase(d2.getQualification());
+            });
+        }
+        System.out.println(search);
+        if (search != null && !search.isEmpty()) {
+            doctorList = doctorList.stream()
+                    .filter(doctor -> doctor.getUser().getName().toLowerCase().contains(search.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), doctorList.size());
+        List<Doctor> pageData = doctorList.subList(start, end);
+        return new PageImpl<>(pageData, pageRequest, doctorList.size());
     }
 }
