@@ -299,7 +299,6 @@ public class DoctorDaoImpl implements DoctorInterface {
                 return d1.getQualification().compareToIgnoreCase(d2.getQualification());
             });
         }
-        System.out.println(search);
         if (search != null && !search.isEmpty()) {
             doctorList = doctorList.stream()
                     .filter(doctor -> doctor.getUser().getName().toLowerCase().contains(search.toLowerCase()))
