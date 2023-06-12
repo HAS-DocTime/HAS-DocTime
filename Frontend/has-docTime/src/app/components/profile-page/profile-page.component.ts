@@ -10,10 +10,12 @@ import { Admin } from 'src/app/models/admin.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { CountryService } from 'src/app/services/country.service';
+import { Country } from 'src/app/models/country.model';
+import { FileUpload } from 'src/app/models/fileUpload.model';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs';
-import { FileUpload } from 'src/app/models/fileUpload.model';
 
 @Component({
   selector: 'app-profile-page',
@@ -30,6 +32,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private location : Location,
+    private countryService : CountryService,
     private toast : ToastMessageService,
     private storage: AngularFireStorage
   ) {}
@@ -46,11 +49,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   formattedDate = this.datePipe.transform(this.dateFromAPI, 'yyyy-MM-dd');
   urlPath!: string;
   doctors!: Doctor[];
+  countries : Country[] = [];
   selectedFile: FileUpload | null = null;
   imageUrl!: string;
   isLoading: boolean = false;
 
   ngOnInit(): void {
+
+    this.editForm.get("contact")?.get("countryCode")?.valueChanges.subscribe((data)=> {
+      console.log(data);
+    })
     this.route.url.subscribe((data) => {
       // console.log("data", data);
       this.urlPath = data[0].path;
@@ -71,169 +79,20 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           if (data[0].path === 'users') {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
-              this.userService.getUser(this.id).subscribe((data) => {
-                this.user = data;
-                this.id = data.id as number;
-                this.imageUrl = data.imageUrl as string;
-                const nameArray: string[] =
-                  this.user?.name?.split(' ', 2) ?? [];
-                this.firstName = nameArray[0];
-                this.lastName = nameArray[1];
-                if (data.dob) {
-                  this.dateFromAPI = new Date(data?.dob);
-                }
-
-                this.formattedDate = this.datePipe.transform(
-                  this.dateFromAPI,
-                  'yyyy-MM-dd'
-                );
-
-                this.editForm.patchValue({
-                  imageUrl: this.imageUrl,
-                  firstName: this.firstName,
-                  lastName: this.lastName,
-                  email: this.user.email,
-                  gender: this.user.gender,
-                  bloodGroup: this.user.bloodGroup,
-                  contact: this.user.contact,
-                  height: this.user.height,
-                  weight: this.user.weight,
-                  dob: this.formattedDate,
-                });
-              });
+              this.getUser(this.id);
             });
           } else if (data[0].path === 'doctors') {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
-              this.doctorService.getDoctor(this.id).subscribe((data) => {
-                this.doctor = data;
-                this.user = data.user;
-                this.imageUrl = data.user.imageUrl as string;
-                this.id = data.id as number;
-                const docNameArray: string[] =
-                  this.doctor?.user?.name?.split(' ', 2) ?? [];
-                this.firstName = docNameArray[0];
-                this.lastName = docNameArray[1];
-                if (data.user.dob) {
-                  this.dateFromAPI = new Date(data.user.dob);
-                }
-                this.formattedDate = this.datePipe.transform(
-                  this.dateFromAPI,
-                  'yyyy-MM-dd'
-                );
-
-                this.editForm.patchValue({
-                  imageUrl: this.imageUrl,
-                  firstName: this.firstName,
-                  lastName: this.lastName,
-                  email: this.doctor.user.email,
-                  gender: this.doctor.user.gender,
-                  bloodGroup: this.doctor.user.bloodGroup,
-                  contact: this.doctor.user.contact,
-                  height: this.doctor.user.height,
-                  weight: this.doctor.user.weight,
-                  dob: this.formattedDate,
-                  qualification: this.doctor.qualification,
-                  casesSolved: this.doctor.casesSolved,
-                });
-              });
+              this.getDoctor(this.id);
             });
           } else {
-            this.adminService.getAdmin(this.id).subscribe((data) => {
-              this.admin = data;
-              this.user = data.user;
-              this.imageUrl = data.user?.imageUrl as string;
-              this.id = data.id as number;
-              const adminNameArray: string[] =
-                this.admin?.user?.name?.split(' ', 2) ?? [];
-              this.firstName = adminNameArray[0];
-              this.lastName = adminNameArray[1];
-              if (data?.user?.dob) {
-                this.dateFromAPI = new Date(data?.user?.dob);
-              }
-
-              this.formattedDate = this.datePipe.transform(
-                this.dateFromAPI,
-                'yyyy-MM-dd'
-              );
-
-              this.editForm.patchValue({
-                imageUrl: this.imageUrl,
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.admin?.user?.email,
-                gender: this.admin?.user?.gender,
-                bloodGroup: this.admin?.user?.bloodGroup,
-                contact: this.admin?.user?.contact,
-                height: this.admin?.user?.height,
-                weight: this.admin?.user?.weight,
-                dob: this.formattedDate,
-              });
-            });
+            this.getAdmin(this.id);
           }
         } else if (this.tokenRole === 'DOCTOR') {
-          this.doctorService.getDoctor(this.id).subscribe((data) => {
-            this.doctor = data;
-            this.user = data.user;
-            this.imageUrl = data.user.imageUrl as string;
-            this.id = data.id as number;
-            const docNameArray: string[] =
-              this.doctor?.user?.name?.split(' ', 2) ?? [];
-            this.firstName = docNameArray[0];
-            this.lastName = docNameArray[1];
-            if (data.user.dob) {
-              this.dateFromAPI = new Date(data.user.dob);
-            }
-            this.formattedDate = this.datePipe.transform(
-              this.dateFromAPI,
-              'yyyy-MM-dd'
-            );
-
-            this.editForm.patchValue({
-              imageUrl: this.imageUrl,
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.doctor.user.email,
-              gender: this.doctor.user.gender,
-              bloodGroup: this.doctor.user.bloodGroup,
-              contact: this.doctor.user.contact,
-              height: this.doctor.user.height,
-              weight: this.doctor.user.weight,
-              dob: this.formattedDate,
-              qualification: this.doctor.qualification,
-              casesSolved: this.doctor.casesSolved,
-            });
-          });
+          this.getDoctor(this.id)
         } else {
-          this.userService.getUser(this.id).subscribe((data) => {
-            this.user = data;
-
-            this.id = data.id as number;
-            const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
-            this.firstName = nameArray[0];
-            this.lastName = nameArray[1];
-            if (data.dob) {
-              this.dateFromAPI = new Date(data?.dob);
-            }
-            this.imageUrl = data.imageUrl as string;
-            this.formattedDate = this.datePipe.transform(
-              this.dateFromAPI,
-              'yyyy-MM-dd'
-            );
-
-            this.editForm.patchValue({
-              imageUrl: this.imageUrl,
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.user.email,
-              gender: this.user.gender,
-              bloodGroup: this.user.bloodGroup,
-              contact: this.user.contact,
-              height: this.user.height,
-              weight: this.user.weight,
-              dob: this.formattedDate,
-            });
-          });
+          this.getUser(this.id);
         }
       }
     });
@@ -257,9 +116,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     bloodGroup: new FormControl({ value: '', disabled: this.disable }, [
       Validators.required,
     ]),
-    contact: new FormControl({ value: '', disabled: this.disable }, [
-      Validators.required,
-    ]),
+    contact: new FormGroup({
+      countryCode: new FormControl({ value: '', disabled: this.disable}, [Validators.required]),
+      number: new FormControl({ value: '', disabled: this.disable}, [Validators.required])
+    }),
     height: new FormControl({ value: '', disabled: this.disable }),
     weight: new FormControl({ value: '', disabled: this.disable }),
     email: new FormControl({ value: '', disabled: this.disable }, [
@@ -270,10 +130,110 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     patientChronicIllness: new FormArray([]),
   });
 
-  ngOnDestroy(): void { }
+  private getAdmin(id: number) {
+    this.adminService.getAdmin(this.id).subscribe((data) => {
+      this.admin = data;
+      this.user = data.user;
+      this.id = data.id as number;
+      const adminNameArray: string[] = this.admin?.user?.name?.split(' ', 2) ?? [];
+      this.firstName = adminNameArray[0];
+      this.lastName = adminNameArray[1];
+      if (data?.user?.dob) {
+        this.dateFromAPI = new Date(data?.user?.dob);
+      }
 
+      this.formattedDate = this.datePipe.transform(
+        this.dateFromAPI,
+        'yyyy-MM-dd'
+      );
+      this.countryCodeDropdownMethod();
+      this.editFormPatchValue();
+    });
+  }
+
+  private getDoctor(id: number) {
+    this.doctorService.getDoctor(id).subscribe((data) => {
+      this.doctor = data;
+      this.user = data.user;
+      this.id = data.id as number;
+      const docNameArray: string[] = this.doctor?.user?.name?.split(' ', 2) ?? [];
+      this.firstName = docNameArray[0];
+      this.lastName = docNameArray[1];
+      if (data.user.dob) {
+        this.dateFromAPI = new Date(data.user.dob);
+      }
+      this.formattedDate = this.datePipe.transform(
+        this.dateFromAPI,
+        'yyyy-MM-dd'
+      );
+      this.countryCodeDropdownMethod();
+      this.editFormPatchValue();
+    });
+  }
+
+  private getUser(id: number) {
+    this.userService.getUser(id).subscribe((data) => {
+      this.user = data;
+      this.id = data.id as number;
+      const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
+      this.firstName = nameArray[0];
+      this.lastName = nameArray[1];
+      if (data.dob) {
+        this.dateFromAPI = new Date(data?.dob);
+      }
+
+      this.formattedDate = this.datePipe.transform(
+        this.dateFromAPI,
+        'yyyy-MM-dd'
+      );
+      this.countryCodeDropdownMethod();
+      this.editFormPatchValue();
+    });
+  }
+
+  private editFormPatchValue() {
+    this.editForm.patchValue({
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.user?.email,
+      gender: this.user?.gender,
+      bloodGroup: this.user?.bloodGroup,
+      contact: {
+        number: this.user?.contact?.split("-")[1]
+      },
+      height: this.user?.height,
+      weight: this.user?.weight,
+      dob: this.formattedDate,
+      qualification: this.doctor?.qualification,
+      casesSolved: this.doctor?.casesSolved,
+    });
+  }
+
+  private countryCodeDropdownMethod() {
+    this.countries = [];
+    this.countryService.getAllCountries().then((data) => {
+      this.countries = data;
+      var dropdown = document.getElementById('countryCodeDropdown');
+      this.countries.forEach(country => {
+        if (country.code === this.user?.contact?.split("-")[0]) {
+          var option = document.createElement('option');
+          option.value = country.code;
+          option.textContent = country.code + ":" + country.name;
+          option.selected = true;
+          dropdown?.prepend(option);
+        } else {
+          var option = document.createElement('option');
+          option.value = country.code;
+          option.textContent = country.code + ":" + country.name;
+          dropdown?.appendChild(option);
+        }
+
+      });
+    });
+  }
+
+  ngOnDestroy(): void {}
   submitProfile() {
-
     const date = new Date();
     this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
     this.editForm.value['lastName'] = this.editForm.value["lastName"].trim();
@@ -290,6 +250,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       }
       user.age = age;
     }
+    user.contact = this.editForm.get('contact')?.get('countryCode')?.value + "-" + this.editForm.get('contact')?.get('number')?.value;
     user.name = user.firstName + ' ' + user.lastName;
     let chronicIllnesses = [];
     for (let i = 0; i < user.patientChronicIllness.length; i++) {

@@ -11,6 +11,8 @@ import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswo
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { validatePassword } from 'src/app/customValidators/validatePassword.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { CountryService } from 'src/app/services/country.service';
+import { Country } from 'src/app/models/country.model';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { FileUpload } from 'src/app/models/fileUpload.model';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -29,12 +31,15 @@ import { User } from 'src/app/models/user.model';
 
 export class SignupComponent implements OnInit, OnDestroy {
 
-constructor(private userService : UserService,
-   private doctorService : DoctorService,
-    private router: Router,
-     private chhronicIllnessService : ChronicIllnessService,
-      private toast: ToastMessageService,
-      private storage: AngularFireStorage){}
+constructor(
+  private userService : UserService, 
+  private doctorService : DoctorService, 
+  private router: Router, 
+  private chhronicIllnessService : ChronicIllnessService,
+  private countryService : CountryService,
+  private toast: ToastMessageService,
+  private storage: AngularFireStorage
+  ){}
 
   savedChronicIllnesses: ChronicIllness[] = [];
   selectedValue: string = "";
@@ -45,10 +50,25 @@ constructor(private userService : UserService,
   confirmPasswordType: string = "password";
   selectedFile: FileUpload | null = null;
   imageUrl!: string;
+  countries : Country[] = [];
 
-  ngOnInit() {
-    this.signupForm.get("role")?.valueChanges.subscribe(value => {
-      if (value === "DOCTOR") {
+  ngOnInit(){
+      
+      this.countryService.getAllCountries().then((data) => {
+        this.countries = data;
+        var dropdown =document.getElementById('countryCodeDropdown');
+        this.countries.forEach( country => {
+          var option = document.createElement('option');
+          option.value = country.code;
+          option.textContent = country.code + ":" + country.name;
+          dropdown?.appendChild(option);
+          this.signupForm.get("contact")?.get("countryCode")?.valueChanges.subscribe((data)=> {
+            console.log(data);
+          })
+      });
+      });
+      this.signupForm.get("role")?.valueChanges.subscribe(value => {
+      if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
         this.signupForm.get("casesSolved")?.addValidators(Validators.required);
       }
@@ -86,23 +106,25 @@ constructor(private userService : UserService,
     this.userService.isLoggedIn.next(true)
   }
 
-  signupForm: FormGroup = new FormGroup({
-    imageUrl: new FormControl(),
-    firstName: new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
-    lastName: new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
-    dob: new FormControl("2001-01-01", [Validators.required, validateDateValidator()]),
-    gender: new FormControl("MALE", [Validators.required]),
-    bloodGroup: new FormControl("O_POSITIVE", [Validators.required]),
-    contact: new FormControl("", [Validators.required]),
-    height: new FormControl(),
-    weight: new FormControl(),
-    email: new FormControl("", [Validators.required, Validators.email]),
-    password: new FormControl("", [Validators.required, validatePassword()]),
-    confirmPassword: new FormControl("", [Validators.required]),
-    role: new FormControl("PATIENT", [Validators.required]),
-    qualification: new FormControl(""),
-    casesSolved: new FormControl(0),
-    patientChronicIllness: new FormArray([])
+  signupForm : FormGroup = new FormGroup({
+    firstName : new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
+    lastName : new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
+    dob : new FormControl("2001-01-01", [Validators.required, validateDateValidator()]),
+    gender : new FormControl("MALE", [Validators.required]),
+    bloodGroup : new FormControl("O_POSITIVE", [Validators.required]),
+    contact : new FormGroup({
+      countryCode : new FormControl("", [Validators.required]),
+      number : new FormControl("", [Validators.required])
+    }),
+    height : new FormControl(),
+    weight : new FormControl(),
+    email : new FormControl("", [Validators.required, Validators.email]),
+    password : new FormControl("", [Validators.required, validatePassword()]),
+    confirmPassword : new FormControl("", [Validators.required]),
+    role : new FormControl("PATIENT", [Validators.required]),
+    qualification : new FormControl(""),
+    casesSolved : new FormControl(0),
+    patientChronicIllness : new FormArray([])
   },
     { validators: confirmPasswordValidator() }
   )
@@ -128,9 +150,10 @@ constructor(private userService : UserService,
     let signupDetail: LoginDetails = { "email": email, "password": password };
 
     user = this.signupForm.value;
-    if (date.getFullYear() > new Date(user.dob as Date).getFullYear()) {
-      let age = date.getFullYear() - new Date(user.dob as Date).getFullYear() - 1;
-      if (date.getMonth() > new Date(user.dob as Date).getMonth()) {
+    user.contact = this.signupForm.get('contact')?.get('countryCode')?.value + "-" + this.signupForm.get('contact')?.get('number')?.value;
+    if(date.getFullYear() > new Date(user.dob as Date).getFullYear()){
+      let age = date.getFullYear() - new Date(user.dob as Date).getFullYear() -  1;
+      if(date.getMonth() > new Date(user.dob as Date).getMonth()){
         age++;
       }
       else if (date.getMonth() === (new Date(user.dob as Date).getMonth())) {
