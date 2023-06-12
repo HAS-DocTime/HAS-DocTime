@@ -1,8 +1,8 @@
 <div><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
 <div class="container my-5">
-
+  <h1 class="mb-4 text-center">Appointment Details</h1>
       <!-- Patient Information -->
-  <div class="card mb-4">
+  <div class="card mb-4" *ngIf="tokenRole !== 'PATIENT'">
     <div class="card-header bg-primary text-white">
       <h5 class="mt-1 mb-1">Patient Information</h5>
     </div>
@@ -21,10 +21,7 @@
           <p class="mb-4">{{ pastAppointment?.user?.age }} years</p>
         </div>
       </div>
-      <!-- <div class="row">
 
-
-      </div> -->
       <div class="row">
         <div class="col-md-4">
           <p class="fw-bold">Height:</p>
@@ -51,33 +48,33 @@
       </div>
     </div>
   </div>
-    <div class="card mb-4">
-      <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Doctor Details</h5>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-6">
-            <p class="fw-bold">Doctor Name:</p>
-            <p class="mb-4">{{ pastAppointment?.doctor?.user?.name }}</p>
-          </div>
-          <div class="col-md-6">
-            <p class="fw-bold">Department:</p>
-            <p class="mb-4">{{ pastAppointment?.doctor?.department?.name }}</p>
-          </div>
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Doctor Details</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="fw-bold">Doctor Name:</p>
+          <p class="mb-4">{{ pastAppointment?.doctor?.user?.name }}</p>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <p class="fw-bold">Qualification</p>
-            <p class="mb-4">{{ pastAppointment?.doctor?.qualification }}</p>
-          </div>
-          <div class="col-md-6">
-            <p class="fw-bold">Contact:</p>
-            <p class="mb-4">{{ pastAppointment?.doctor?.user?.contact }}</p>
-          </div>
+        <div class="col-md-6">
+          <p class="fw-bold">Department:</p>
+          <p class="mb-4">{{ pastAppointment?.doctor?.department?.name }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <p class="fw-bold">Qualification</p>
+          <p class="mb-4">{{ pastAppointment?.doctor?.qualification }}</p>
+        </div>
+        <div class="col-md-6">
+          <p class="fw-bold">Contact:</p>
+          <p class="mb-4">{{ pastAppointment?.doctor?.user?.contact }}</p>
         </div>
       </div>
     </div>
+  </div>
     <!-- Disease Details -->
   <div class="card mb-4">
     <div class="card-header bg-primary text-white">

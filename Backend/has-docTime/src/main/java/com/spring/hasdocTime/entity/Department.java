@@ -4,15 +4,16 @@
  */
 package com.spring.hasdocTime.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import java.util.List;
-
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,10 +28,6 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @ToString
-@JsonIdentityInfo(
-        scope = Department.class,
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Department {
     
     @Column(name="id")
@@ -49,8 +46,9 @@ public class Department {
     private String building;
     
     @Column(name="time_duration")
-    @NotBlank(message = "Please enter Time Duration")
-    @Size(min=0, max=60, message = "Please enter valid minutes")
+    @NotNull(message = "Please enter Time Duration")
+    @Min(value = 0, message = "Please enter valid minutes")
+    @Max(value = 180, message = "Please enter valid minutes")
     private int timeDuration;
     
     @Column(name="description")
@@ -71,9 +69,9 @@ public class Department {
     @JsonIgnoreProperties(value = {"departments", "users", "appointments"}, allowSetters = true)
     private List<Symptom> symptoms;
     
-    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
-    private List<TimeSlot> timeSlots;
+    private List<TimeSlot> timeSlots = new ArrayList<>();
 
 
     /**

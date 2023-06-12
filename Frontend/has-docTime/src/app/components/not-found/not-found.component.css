@@ -1,0 +1,30 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+h1 {
+  font-size: 48px;
+  font-weight: bold;
+}
+p {
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding: 16px;
+  text-align: center;
+}
+button {
+  width: 140px;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  border-radius: 5px;
+  background-color: black;
+  color: #fefefe;
+  font-size: 20px;
+}

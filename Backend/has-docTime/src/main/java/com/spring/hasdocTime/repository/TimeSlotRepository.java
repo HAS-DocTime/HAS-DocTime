@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+
 @Repository
 public interface TimeSlotRepository extends JpaRepository<TimeSlot, Integer> {
 
@@ -30,4 +32,7 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlot, Integer> {
     @Modifying
     @Query("DELETE FROM TimeSlot t WHERE t.department.id = :departmentId")
     void deleteByDepartment(@Param("departmentId") int departmentId);
+
+    @Query("SELECT t from TimeSlot t where startTime = :startTime and endTime = :endTime and department.id = :departmentId")
+    TimeSlot checkIfTimeSlotExists(@Param("startTime") Timestamp startTime, @Param("endTime") Timestamp endTime, @Param("departmentId") int departmentId);
 }

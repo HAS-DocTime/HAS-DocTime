@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
-import { Department } from 'src/app/models/department.model';
 import { Doctor } from 'src/app/models/doctor.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { DepartmentService } from 'src/app/services/department.service';
+import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
 
 interface SortByOption {
@@ -20,19 +20,19 @@ interface SortByOption {
 
 export class AppointmentComponent implements OnInit{
 
-  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService){}
+  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService, private toast : ToastMessageService){}
 
   appointments : Appointment[] = [];
 
   id : number = 0;
   tokenRole : string = "";
   page = 1;
-  totalPages = 1;
+  totalPages = 0;
   size = 5;
   sortBy = 'user.name';
   search = '';
   urlPath!: string;
-
+  totalElements: number = 0;
   sizeOptions = [5, 10, 15];
   range(totalPages: number): number[] {
     return Array(totalPages).fill(0).map((_, index) => index + 1);
@@ -42,9 +42,12 @@ export class AppointmentComponent implements OnInit{
     { label: 'StartTime', value: 'timeSlotForAppointment.startTime' },
     { label: 'Doctor Name', value: 'doctor.user.name' }
   ];
+  params : any = {};
+
 
 
   ngOnInit(){
+
 
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -65,51 +68,45 @@ export class AppointmentComponent implements OnInit{
       this.sortByOptions.push({ label: 'Patient Name', value: 'user.name' });
     }
 
-    this.getData(0);
+    this.getData();
 
   }
 
-  getData(page : number){
-    let params: any = {};
-
+  getData(){
     // Add query parameters based on selected options
     if (this.size) {
-      params.size = this.size;
+      this.params.size = this.size;
     }
     if (this.sortBy) {
-      params.sortBy = this.sortBy;
+      this.params.sortBy = this.sortBy;
     }
     if (this.search) {
-      params.search = this.search;
+      this.params.search = this.search;
     }
-    params.page = this.page-1;
+    else{
+      this.params.search = "";
+    }
+    this.params.page = this.page-1;
 
     if(this.tokenRole==='ADMIN'){
-        this.appointmentService.getAppointments(params).subscribe((data)=>{
-          for(let appointment of data.content){
-            if(!appointment?.doctor?.department?.id){
-              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                (appointment.doctor as Doctor).department = data;
-              });
-            }
-          }
-          this.appointments = data.content;
+        this.appointmentService.getAppointments(this.params).subscribe((data)=>{
+          this.appointments = data.content as Appointment[];
           this.totalPages = data.totalPages;
         })
       }
-      else {
-        this.appointmentService.getAppointmentByUser((this.id.toString()), params).subscribe((data)=> {
-          for(let appointment of data.content){
-            if(!appointment?.doctor?.department?.id){
-              this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                (appointment.doctor as Doctor).department = data;
-              });
-            }
-          }
-          this.appointments = data.content;
+    else {
+      this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
+        console.log(data);
+        if(data){
+          this.appointments = data.content as Appointment[];
           this.totalPages = data.totalPages;
-        });
-      }
+        }
+        else{
+          this.appointments = [];
+          this.totalPages = 0;
+        }
+      });
+    }
 
     }
 
@@ -119,52 +116,52 @@ export class AppointmentComponent implements OnInit{
   }
 
   deleteAppointment(id : number | undefined){
+    if (this.size) {
+      this.params.size = this.size;
+    }
+    if (this.sortBy) {
+      this.params.sortBy = this.sortBy;
+    }
+    if (this.search) {
+      this.params.search = this.search;
+    }
+    this.params.page = this.page-1;
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
         if(this.tokenRole==="ADMIN"){
-          this.appointmentService.getAppointmentList().subscribe((data)=> {
-            for(let appointment of data){
-              if(!appointment?.doctor?.department?.id){
-                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                  (appointment.doctor as Doctor).department = data;
-                });
-              }
-            }
-            this.appointments = data;
+          this.appointmentService.getAppointments(this.params).subscribe((data)=> {
+            console.log(data);
+            this.appointments = data.content as Appointment[];
+            this.totalPages = data.totalPages;
           });
         }
         else{
-          this.appointmentService.getAppointmentListByUser((this.id?.toString())).subscribe((data)=> {
-            for(let appointment of data){
-              if(!appointment?.doctor?.department?.id){
-                this.departmentService.getDepartmentById(appointment.doctor?.department as number).subscribe((data)=> {
-                  (appointment.doctor as Doctor).department = data;
-                });
-              }
-            }
-            this.appointments = data;
+          this.appointmentService.getAppointmentByUser(this.id.toString(), this.params).subscribe((data)=> {
+            this.appointments = data.content as Appointment[];
+            this.totalPages = data.totalPages;
           });
         }
+        this.toast.showError(`The Appointment is deleted`, "Appointment deleted");
     })
     }
 
   onPageSizeChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSortByChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSearch() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
-    this.getData(this.page);
+    this.getData();
   }
 
 }

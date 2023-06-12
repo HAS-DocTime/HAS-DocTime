@@ -28,6 +28,7 @@ export class DoctorScheduleAppointmentsComponent {
   size = 5;
   sortBy = 'user.name';
   search = '';
+  noDataBySearch: Boolean = false;
 
   sizeOptions = [5, 10, 15];
   range(totalPages: number): number[] {
@@ -46,7 +47,6 @@ export class DoctorScheduleAppointmentsComponent {
         this.id = atob(store[1]).split(',')[1].split(':')[1];
         this.id = this.id.substring(1, this.id.length-1);
       }
-
       this.getData(0);
   }
 
@@ -69,8 +69,14 @@ export class DoctorScheduleAppointmentsComponent {
     this.appointmentService.getAppointmentsByDoctor(this.id, params)
     .subscribe(
       (data) => {
-        this.appointments = data.content;
-        this.totalPages = data.totalPages;
+        if(data === null){
+          this.noDataBySearch = true;
+          this.appointments = [];
+        } else{
+          this.noDataBySearch = false;
+          this.appointments = data.content;
+          this.totalPages = data.totalPages;
+        }
       },
       (error: any) => {
         console.error('Error getting doctor apppointments', error);
@@ -90,7 +96,6 @@ export class DoctorScheduleAppointmentsComponent {
     sessionStorage.setItem('appointmentId', this.appointments[i].id.toString());
     this.router.navigate(['patientAppointmentDetail/appointmentDetails'], {relativeTo:this.route});
   }
-
 
   onPageSizeChange() {
     this.page = 1;

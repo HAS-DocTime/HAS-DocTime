@@ -3,6 +3,25 @@
   <div class="container">
     <h2 class="heading text-lg-center pt-4">Registration Form</h2>
     <form [formGroup]="signupForm" class="registerForm" (ngSubmit)="register()">
+      
+      <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+        <div class="row">
+          <span *ngIf="imageUrl != null || selectedFile != null">
+            <img class="rounded-circle" width="150px" [src]="imageUrl" alt="Selected Picture"/>
+          </span>
+          <span *ngIf="imageUrl == null && selectedFile == null">
+            <img class="rounded-circle" width="150px" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Selected Picture"/>
+          </span>
+        </div>
+        <div class="row">
+          <button type="button" class="btn btn-outline-primary mt-3" (click)="file.click()">
+            Upload File
+          </button>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
+            <!-- <button *ngIf="!disable" type="button" (click)="uploadProfilePicture()">Upload</button> -->
+        </div>
+      </div>
+
       <div class="form-group my-4">
         <label for="firstName">First Name <span class="required-asterisk">*</span></label>
         <input
@@ -449,26 +468,4 @@
     </div>
   </form>
 </div>
-<div>
-  <table>
-    <tr>
-      <th>
-        Science
-      </th>
-    <th>
-      Social
-    </th>
-    </tr>
-     <tr>
-      <td>
-        95
-      </td>
-      <td>
-        87
-      </td>
-      <td>
-        75
-      </td>
-     </tr>
-  </table>
-</div>
+

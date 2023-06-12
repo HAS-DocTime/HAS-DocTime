@@ -8,9 +8,8 @@ import jakarta.validation.constraints.Future;
 import lombok.*;
 
 import java.sql.Time;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.*;
 
 
 /**
@@ -34,11 +33,11 @@ public class TimeSlot {
 
     @Column(name = "start_time")
     @Future(message = "Timestamp must be in the future")
-    private Time startTime;
+    private Timestamp startTime;
 
     @Column(name = "end_Time")
     @Future(message = "Timestamp must be in the future")
-    private Time endTime;
+    private Timestamp endTime;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id")
@@ -52,7 +51,7 @@ public class TimeSlot {
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
     @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
-    private List<Doctor> availableDoctors;
+    private Set<Doctor> availableDoctors = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -63,13 +62,13 @@ public class TimeSlot {
     @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
     private List<Doctor> bookedDoctors;
 
-    @OneToOne(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"timeSlotForAppointmentData", "user", "doctor"}, allowSetters = true)
-    private PostAppointmentData appointmentData;
+    private Set<PostAppointmentData> appointmentData;
 
-    @OneToOne(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "timeSlotForAppointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"timeSlotForAppointment", "symptoms", "user", "doctor"}, allowSetters = true)
-    private Appointment appointment;
+    private Set<Appointment> appointment;
 
     /**
      * Checks if the current TimeSlot object is equal to the given object.
@@ -93,5 +92,15 @@ public class TimeSlot {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void addAvailableDoctor(Doctor doctor) {
+        this.availableDoctors.add(doctor);
+        doctor.getAvailableTimeSlots().add(this);
+    }
+
+    public void addBookedDoctor(Doctor doctor) {
+        this.bookedDoctors.add(doctor);
+        doctor.getBookedTimeSlots().add(this);
     }
 }

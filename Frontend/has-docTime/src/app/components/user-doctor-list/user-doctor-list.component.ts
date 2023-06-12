@@ -29,6 +29,7 @@ export class UserDoctorListComponent implements OnInit{
   search = '';
   sizeOptions = [5, 10, 15];
   idForSearch! :string;
+  placeholderString : string = "";
   range(totalPages: number): number[] {
     return Array(totalPages).fill(0).map((_, index) => index + 1);
   }
@@ -74,38 +75,45 @@ export class UserDoctorListComponent implements OnInit{
     params.page = this.page-1;
 
     if(this.urlPath==="chronicIllness"){
+      this.placeholderString = "Search by Patient Name";
       this.chronicIllnessId = parseInt(id);
       this.adminService.getPatientsByChronicIllnessId(this.chronicIllnessId, params).subscribe(data => {
         if(data === null){
           this.noDataFound = true;
         }else {
           this.users = data.content;
-        this.totalPages = data.totalPages;
+          this.totalPages = data.totalPages;
+          this.noDataFound = false;
         }
       })
     }
     else if(this.urlPath==="users"){
+      this.placeholderString = "Search by Patient Name";
       this.adminService.getAllUsers(params).subscribe(data=>{
         if(data === null){
           this.noDataFound = true;
         } else {
           this.users = data.content;
           this.totalPages = data.totalPages;
+          this.noDataFound = false;
         }
       })
     }
     else if(this.urlPath==="doctors"){
+      this.placeholderString = "Search by Doctor Name";
       this.adminService.getAllDoctors(params).subscribe(data=> {
         if(data === null){
           this.noDataFound = true;
         } else{
           this.doctors=data.content;
           this.totalPages = data.totalPages;
+          this.noDataFound = false;
         }
       })
     }
 
     else if(this.urlPath === "departments") {
+      this.placeholderString = "Search by Doctor Name";
       this.departmentId = parseInt(id);
       this.adminService.getDoctorsByDepartmentId(this.departmentId, params).subscribe(data => {
         if(data === null){
@@ -113,6 +121,7 @@ export class UserDoctorListComponent implements OnInit{
         }else {
           this.doctors = data.content;
           this.totalPages = data.totalPages;
+          this.noDataFound = false;
         }
       })
     }

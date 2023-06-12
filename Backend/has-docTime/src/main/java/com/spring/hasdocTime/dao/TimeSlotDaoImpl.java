@@ -5,10 +5,17 @@ import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.TimeSlotInterface;
 import com.spring.hasdocTime.repository.*;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.print.Doc;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -17,8 +24,8 @@ import java.util.*;
 @Service
 public class TimeSlotDaoImpl implements TimeSlotInterface {
 
-    private final Time hospitalStartTime = new Time(9,0,0);
-    private final Time hospitalEndTime = new Time(21,0,0);
+    private final Timestamp hospitalStartTime = new Timestamp(1970, 1, 1, 9,0,0,0);
+    private final Timestamp hospitalEndTime = new Timestamp(2050, 12,31,21,0,0,0);
 
     private TimeSlotRepository timeSlotRepository;
     private DepartmentRepository departmentRepository;
@@ -43,8 +50,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             DoctorRepository doctorRepository,
             AppointmentRepository appointmentRepository,
             PostAppointmentDataRepository postAppointmentDataRepository
-
-
     ){
         this.timeSlotRepository = timeSlotRepository;
         this.doctorRepository = doctorRepository;
@@ -111,23 +116,32 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         Department department = optionalDepartment.get();
         timeSlot.setDepartment(department);
         if(timeSlot.getAppointment() != null){
-            Optional<Appointment> optionalAppointment = appointmentRepository.findById(timeSlot.getAppointment().getId());
-            if(optionalAppointment.isEmpty()){
-                throw new DoesNotExistException("Appointment");
+            Set<Appointment> appointmentList = new HashSet<>();
+            for(Appointment appointment : timeSlot.getAppointment()){
+                Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointment.getId());
+                if(optionalAppointment.isEmpty()){
+                    throw new DoesNotExistException("Appointment");
+                }
+                Appointment foundAppointment = optionalAppointment.get();
+                appointmentList.add(foundAppointment);
             }
-            Appointment appointment = optionalAppointment.get();
-            timeSlot.setAppointment(appointment);
+            timeSlot.setAppointment(appointmentList);
+
         }
         if(timeSlot.getAppointmentData() != null){
-            Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId());
-            if(optionalPostAppointmentData.isEmpty()){
-                throw new DoesNotExistException("Post Appointment");
+            Set<PostAppointmentData> postAppointmentDataList = new HashSet<>();
+            for(PostAppointmentData postAppointmentData : timeSlot.getAppointmentData()) {
+                Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(postAppointmentData.getId());
+                if (optionalPostAppointmentData.isEmpty()) {
+                    throw new DoesNotExistException("Post Appointment");
+                }
+                PostAppointmentData foundPostAppointmentData = optionalPostAppointmentData.get();
+                postAppointmentDataList.add(foundPostAppointmentData);
             }
-            PostAppointmentData postAppointmentData = optionalPostAppointmentData.get();
-            timeSlot.setAppointmentData(postAppointmentData);
+            timeSlot.setAppointmentData(postAppointmentDataList);
         }
 
-        List<Doctor> availableDoctors = new ArrayList<>();
+        Set<Doctor> availableDoctors = new HashSet<>();
         if(timeSlot.getAvailableDoctors() != null){
             for(Doctor d: timeSlot.getAvailableDoctors()){
                 if(d.getId() != 0){
@@ -197,25 +211,31 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             }
 
             if(timeSlot.getAppointment() != null){
-                Optional<Appointment> optionalAppointment = appointmentRepository.findById(timeSlot.getAppointment().getId());
-                if(optionalAppointment.isEmpty()){
-                    throw new DoesNotExistException("Appointment");
+                Set<Appointment> appointments = new HashSet<>();
+                for(Appointment appointment : timeSlot.getAppointment()){
+                    Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointment.getId());
+                    if(optionalAppointment.isEmpty()){
+                        throw new DoesNotExistException("Appointment");
+                    }
+                    Appointment foundAppointment = optionalAppointment.get();
+                    appointments.add(foundAppointment);
                 }
-                Appointment appointment = optionalAppointment.get();
-                timeSlot.setAppointment(appointment);
+                timeSlot.setAppointment(appointments);
             }
 
             if(timeSlot.getAppointmentData() != null){
-                Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(timeSlot.getAppointmentData().getId());
-                if(optionalPostAppointmentData.isEmpty()){
-                    throw new DoesNotExistException("Post Appointment");
+                Set<PostAppointmentData> postAppointmentDataList = new HashSet<>();
+                for(PostAppointmentData postAppointmentData : timeSlot.getAppointmentData()){
+                    Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(postAppointmentData.getId());
+                    if(optionalPostAppointmentData.isEmpty()){
+                        throw new DoesNotExistException("Post Appointment");
+                    }
+                    PostAppointmentData foundPostAppointmentData = optionalPostAppointmentData.get();
+                    postAppointmentDataList.add(foundPostAppointmentData);
                 }
-                PostAppointmentData postAppointmentData = optionalPostAppointmentData.get();
-                timeSlot.setAppointmentData(postAppointmentData);
+                timeSlot.setAppointmentData(postAppointmentDataList);
             }
-            
-
-            List<Doctor> availableDoctors = new ArrayList<>();
+            Set<Doctor> availableDoctors = new HashSet<>();
             if(timeSlot.getAvailableDoctors() != null){
                 for(Doctor d: timeSlot.getAvailableDoctors()){
                     if(d.getId() != 0){
@@ -229,7 +249,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
                     }
                 }
             }
-            
 
             List<Doctor> bookedDoctors = new ArrayList<>();
             if(timeSlot.getBookedDoctors() != null){
@@ -270,30 +289,140 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     /**
-     * Creates time slots from a department.
-     *
-     * @param department The department to create time slots for.
-     * @return The list of created time slots.
-     */
-    public List<TimeSlot> createTimeSlotsFromDepartment(Department department){
-        // clone is required as Java takes value as pass by reference and changes the value of both the objects
-        Time timeSlotStartTime = (Time)hospitalStartTime.clone();
+         * Creates time slots from a department.
+         *
+         * @param department The department to create time slots for.
+         * @return The list of created time slots.
+         */
+    public List<TimeSlot> createTimeSlots(Department department, int index, List<TimeSlot> timeSlots){
+        Timestamp timeSlotStartTime;
+        if(index == 0){
+            timeSlotStartTime = roundTheTimeSlot(new Timestamp(System.currentTimeMillis()));
+        }else{
+            timeSlotStartTime = (Timestamp) hospitalStartTime.clone();
+        }
+
+        Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
+        timeSlotStartTime.setYear(currentTimeStamp.getYear());
+        timeSlotStartTime.setMonth(currentTimeStamp.getMonth());
+        timeSlotStartTime.setDate(currentTimeStamp.getDate()+index);
         int timeDuration = department.getTimeDuration();
-        Time timeSlotEndTime = (Time)timeSlotStartTime.clone();
+        Timestamp timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
         timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
-        int timeLimit = timeSlotEndTime.compareTo(hospitalEndTime);
-        List<TimeSlot> timeSlots = new ArrayList<>();
+        Timestamp tentativeEndTime = (Timestamp) hospitalEndTime.clone();
+        tentativeEndTime.setYear(currentTimeStamp.getYear());
+        tentativeEndTime.setMonth(currentTimeStamp.getMonth());
+        tentativeEndTime.setDate(currentTimeStamp.getDate()+index);
+        int timeLimit = timeSlotEndTime.compareTo(tentativeEndTime);
         while(timeLimit<=0){
             TimeSlot timeSlot = new TimeSlot();
             timeSlot.setStartTime(timeSlotStartTime);
             timeSlot.setEndTime(timeSlotEndTime);
             timeSlot.setDepartment(department);
-            timeSlots.add(timeSlot);
-            timeSlotStartTime = (Time)timeSlotEndTime.clone();
-            timeSlotEndTime = (Time)timeSlotStartTime.clone();
+            TimeSlot checkTimeSlot = timeSlotRepository.checkIfTimeSlotExists(timeSlot.getStartTime(), timeSlot.getEndTime(), timeSlot.getDepartment().getId());
+            if(checkTimeSlot == null){
+                System.out.println("Adding TimeSlot");
+                timeSlots.add(timeSlot);
+            }
+            timeSlotStartTime = (Timestamp) timeSlotEndTime.clone();
+            timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
             timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
-            timeLimit = timeSlotEndTime.compareTo(hospitalEndTime);
+            timeLimit = timeSlotEndTime.compareTo(tentativeEndTime);
         }
         return timeSlots;
     }
+
+    public List<TimeSlot> createTimeSlotsFromDepartment(Department department){
+
+        // clone is required as Java takes value as pass by reference and changes the value of both the objects
+        int weekDays = 7;
+        List<TimeSlot> timeSlots = new ArrayList<>();
+        if(department.getTimeSlots().isEmpty()){
+            for(int i=0; i<weekDays; i++){
+                timeSlots = createTimeSlots(department, i, timeSlots);
+            }
+        }else{
+            timeSlots = createTimeSlots(department, 6, timeSlots);
+        }
+            
+        
+        
+//        for(int i=0; i<weekDays; i++){
+//            Timestamp timeSlotStartTime = (Timestamp) hospitalStartTime.clone();
+//            Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
+//            timeSlotStartTime.setYear(currentTimeStamp.getYear());
+//            timeSlotStartTime.setMonth(currentTimeStamp.getMonth());
+//            timeSlotStartTime.setDate(currentTimeStamp.getDate()+i);
+//            int timeDuration = department.getTimeDuration();
+//            Timestamp timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
+//            timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
+//            Timestamp tentativeEndTime = (Timestamp) hospitalEndTime.clone();
+//            tentativeEndTime.setYear(currentTimeStamp.getYear());
+//            tentativeEndTime.setMonth(currentTimeStamp.getMonth());
+//            tentativeEndTime.setDate(currentTimeStamp.getDate()+i);
+//            int timeLimit = timeSlotEndTime.compareTo(tentativeEndTime);
+//            while(timeLimit<=0){
+//                TimeSlot timeSlot = new TimeSlot();
+//                timeSlot.setStartTime(timeSlotStartTime);
+//                timeSlot.setEndTime(timeSlotEndTime);
+//                timeSlot.setDepartment(department);
+//                timeSlots.add(timeSlot);
+//                timeSlotStartTime = (Timestamp) timeSlotEndTime.clone();
+//                timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
+//                timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
+//                timeLimit = timeSlotEndTime.compareTo(tentativeEndTime);
+//            }
+//        }
+        return timeSlots;
+    }
+
+    @Transactional
+//    @Scheduled(cron = "00 16 18 ? * *", zone = "Asia/Kolkata") // For Testing
+    @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
+    public void refreshTimeSlots(){
+        Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
+        List<TimeSlot> timeSlots = timeSlotRepository.findAll();
+        List<TimeSlot> timeSlotsToSave = new ArrayList<>();
+        for(TimeSlot timeSlot : timeSlots){
+            if(timeSlot.getStartTime().before(currentTimeStamp)){
+                timeSlotRepository.deleteById(timeSlot.getId());
+            }
+        }
+        List<Department> departments = departmentRepository.findAll();
+        for(Department department : departments){
+            Hibernate.initialize(department.getDoctors());
+            Department dep = departmentRepository.findById(department.getId()).get();
+            List<TimeSlot> timeslots = createTimeSlotsFromDepartment(department);
+            for(TimeSlot timeSlot : timeslots){
+                timeSlot.setDepartment(dep);
+                Hibernate.initialize(timeSlot.getDepartment().getDoctors());
+                List<Doctor> doctors = timeSlot.getDepartment().getDoctors();
+                for(Doctor doctor: doctors){
+                    timeSlot.addAvailableDoctor(doctor);
+                }
+            }
+            timeSlotsToSave.addAll(timeslots);
+        }
+        timeSlotRepository.saveAll(timeSlotsToSave);
+    }
+
+    public Timestamp roundTheTimeSlot(Timestamp timestamp){
+        LocalDateTime now = timestamp.toLocalDateTime();
+        LocalDateTime roundedDateTime;
+
+        if (now.getMinute() >= 30) {
+            // Already in the second half of the hour, round to the next hour
+            roundedDateTime = now.plusHours(1).truncatedTo(ChronoUnit.HOURS);
+        } else {
+            // Round to the next 30-minute increment
+            roundedDateTime = now.plusMinutes(30 - (now.getMinute() % 30)).truncatedTo(ChronoUnit.MINUTES);
+        }
+
+        roundedDateTime = roundedDateTime.withSecond(0); // Truncate seconds to zero
+
+        Timestamp roundedTimestamp = Timestamp.valueOf(roundedDateTime);
+
+        return roundedTimestamp;
+    }
+
 }

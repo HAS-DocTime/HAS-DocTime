@@ -1,4 +1,5 @@
 import { Department } from "./department.model";
+import { TimeSlot } from "./timeSlot.model";
 import { User } from "./user.model";
 
 export type Doctor = {
@@ -8,4 +9,5 @@ export type Doctor = {
   casesSolved : number;
   available : boolean;
   department : Department;
+  availableTimeSlots? : TimeSlot[]
 }
