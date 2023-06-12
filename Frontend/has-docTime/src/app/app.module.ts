@@ -43,12 +43,6 @@ import { AppointmentDetailFromDoctorComponent } from './components/patient-appoi
 import { PatientPastAppointmentByIdComponent } from './components/patient-appointment-detail/past-history/patient-past-appointment-by-id/patient-past-appointment-by-id.component';
 import { TooltipDirective } from './directives/tooltip.directive';
 import { ToastrModule } from 'ngx-toastr';
-import { environment } from 'src/environments/environment';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
-
-// const firebaseConfig = environment.firebase;
-// firebase.initializeApp(environment.firebase);
 import { CreateDepartmentComponent } from './components/department/create-department/create-department.component';
 
 @NgModule({
