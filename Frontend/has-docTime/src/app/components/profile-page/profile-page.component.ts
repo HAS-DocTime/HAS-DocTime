@@ -16,6 +16,7 @@ import { FileUpload } from 'src/app/models/fileUpload.model';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs';
+import { DepartmentService } from 'src/app/services/department.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -34,7 +35,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private location : Location,
     private countryService : CountryService,
     private toast : ToastMessageService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private departmentService : DepartmentService
   ) {}
 
   user?: User;
@@ -56,9 +58,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.editForm.get("contact")?.get("countryCode")?.valueChanges.subscribe((data)=> {
-      console.log(data);
-    })
     this.route.url.subscribe((data) => {
       // console.log("data", data);
       this.urlPath = data[0].path;
@@ -126,6 +125,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       Validators.required,
     ]),
     qualification: new FormControl({ value: '', disabled: this.disable }),
+    department: new FormControl({ value: '', disabled: this.disable }, [Validators.required]),
     casesSolved: new FormControl({ value: '', disabled: true }),
     patientChronicIllness: new FormArray([]),
   });
@@ -166,6 +166,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.dateFromAPI,
         'yyyy-MM-dd'
       );
+      this.departmentDropDownMethod();
       this.countryCodeDropdownMethod();
       this.editFormPatchValue();
     });
@@ -221,6 +222,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           option.textContent = country.code + ":" + country.name;
           option.selected = true;
           dropdown?.prepend(option);
+          this.editForm.patchValue({
+            contact : {
+              countryCode: country.code,
+            }
+          });
         } else {
           var option = document.createElement('option');
           option.value = country.code;
@@ -228,6 +234,29 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           dropdown?.appendChild(option);
         }
 
+      });
+    });
+  }
+
+  private departmentDropDownMethod(){
+    this.departmentService.getDepartmentsWithoutPagination().subscribe(data => {
+      var dropdown = document.getElementById('departmentDropDown');
+      data.forEach(department => {
+        if(department.id === this.doctor?.department.id){
+          var option = document.createElement('option');
+          option.value = department.id?.toString() as string;
+          option.textContent = department.name as string;
+          option.selected = true;
+          dropdown?.prepend(option);
+          this.editForm.patchValue({
+            department : department.id,
+          });
+        }else{
+          var option = document.createElement('option');
+          option.value = department.id?.toString() as string;
+          option.textContent = department.name as string;
+          dropdown?.appendChild(option);
+        }
       });
     });
   }

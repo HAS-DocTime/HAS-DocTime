@@ -25,4 +25,8 @@ export class DepartmentService {
   getDepartmentById(id: number){
     return this.http.get<Department>(`${this.base_url}department/${id}`);
   }
+
+  getDepartmentsWithoutPagination(){
+    return this.http.get<Department[]>(`${this.base_url}department/withoutPagination`);
+  }
 }

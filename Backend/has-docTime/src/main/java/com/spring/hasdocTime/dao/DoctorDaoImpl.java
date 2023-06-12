@@ -162,6 +162,7 @@ public class DoctorDaoImpl implements DoctorInterface {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         if(doctor.isPresent()){
             Hibernate.initialize(doctor.get().getUser());
+            Hibernate.initialize(doctor.get().getDepartment());
             return doctor.get();
         }
         throw new DoesNotExistException("Doctor");

@@ -196,5 +196,10 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         }
         throw new DoesNotExistException("Department");
     }
-    
+
+    @Override
+    public List<Department> getAllDepartments() {
+        return departmentRepository.findAll();
+    }
+
 }

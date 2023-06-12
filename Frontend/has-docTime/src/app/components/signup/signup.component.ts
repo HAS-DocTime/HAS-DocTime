@@ -20,6 +20,8 @@ import { finalize } from 'rxjs';
 import jwt_decode from 'jwt-decode';
 import { Payload } from 'src/app/models/payload.model';
 import { User } from 'src/app/models/user.model';
+import { Department } from 'src/app/models/department.model';
+import { DepartmentService } from 'src/app/services/department.service';
 
 
 @Component({
@@ -38,7 +40,8 @@ constructor(
   private chhronicIllnessService : ChronicIllnessService,
   private countryService : CountryService,
   private toast: ToastMessageService,
-  private storage: AngularFireStorage
+  private storage: AngularFireStorage,
+  private departmentService : DepartmentService
   ){}
 
   savedChronicIllnesses: ChronicIllness[] = [];
@@ -51,8 +54,13 @@ constructor(
   selectedFile: FileUpload | null = null;
   imageUrl!: string;
   countries : Country[] = [];
+  departments : Department[] = [];
 
   ngOnInit(){
+
+    this.departmentService.getDepartmentsWithoutPagination().subscribe(data => {
+      this.departments = data;
+    });
       
       this.countryService.getAllCountries().then((data) => {
         this.countries = data;
@@ -124,7 +132,8 @@ constructor(
     role : new FormControl("PATIENT", [Validators.required]),
     qualification : new FormControl(""),
     casesSolved : new FormControl(0),
-    patientChronicIllness : new FormArray([])
+    patientChronicIllness : new FormArray([]),
+    department: new FormControl('', [Validators.required])
   },
     { validators: confirmPasswordValidator() }
   )
@@ -183,7 +192,7 @@ constructor(
       "casesSolved": this.signupForm.value.casesSolved,
       "available": true,
       "department": {
-        id: 1
+        id: this.signupForm.value.department
       }
     };
     doctor.qualification = this.signupForm.value.qualification;

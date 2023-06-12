@@ -192,6 +192,23 @@
                 <span *ngIf="!disable" class="required-asterisk">*</span></label><input placeholder="Enter Your Qualification ( Eg : MBBS )" type="text" class="form-control"
                 formControlName="qualification" />
             </div>
+            <div class="clo-md-12 mb-3">
+              <label for="Department">Department <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <select class="form-select" id="departmentDropDown" formControlName="department">
+                <!-- add-elements -->
+              </select>
+              <div
+          class="text-danger errored-input"
+          *ngIf="
+            editForm.get('department')?.touched &&
+            editForm.get('department')?.invalid
+          "
+        >
+          <span *ngIf="editForm.get('department')?.errors?.['required']"
+            >department is Required</span
+          >
+        </div>
+            </div>
             <div class="col-md-12 mb-3">
               <label class="labels">Cases Solved </label><input type="number" class="form-control"
                 formControlName="casesSolved" />
