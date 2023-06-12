@@ -58,6 +58,7 @@ export class BookAppointmentComponent implements OnInit{
   sortBy = 'user.name';
   search = '';
   availableTimeSlots : TimeSlot[] = [];
+  doctorsShowed : boolean = false;
 
 
 
@@ -111,9 +112,12 @@ export class BookAppointmentComponent implements OnInit{
   }
 
   sortByOptions: SortByOption[] = [
-    { label: 'StartTime', value: 'timeSlotForAppointment.startTime' },
-    { label: 'Doctor Name', value: 'doctor.user.name' }
-  ];
+    { label: 'Doctor Name', value: 'doctor.user.name' },
+    { label: 'Gender', value: 'doctor.user.gender' },
+    { label: 'Age', value: 'doctor.user.age' },
+    { label: 'Qualfication', value: 'doctor.qualification' }
+  ];  
+
   params : any = {};
 
 
@@ -127,13 +131,14 @@ export class BookAppointmentComponent implements OnInit{
     this.bookAppointment.value["timeSlotStartTime"] = this.startTimeInString;
     this.bookAppointment.value["timeSlotEndTime"] = this.endTimeInString;
     this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value, this.params).subscribe((data)=> {
-      console.log(data);
       this.doctorList = data.content as Doctor[];
+      this.totalPages = data.totalPages;
       if(this.doctorList.length<=0){
         this.noDataFound = true;
       }
       else{
         this.noDataFound = false;
+        this.doctorsShowed = true;
       }
     });
 
@@ -255,8 +260,10 @@ export class BookAppointmentComponent implements OnInit{
     if (this.search) {
       this.params.search = this.search;
     }
+    else{
+      this.params.search = "";
+    }
     this.params.page = this.page-1;
-
     this.startTime = this.bookAppointment.value["timeSlot"].split("-")[0];
     this.endTime = this.bookAppointment.value["timeSlot"].split("-")[1];
     this.date = this.bookAppointment.value["date"];
@@ -265,8 +272,8 @@ export class BookAppointmentComponent implements OnInit{
     this.bookAppointment.value["timeSlotStartTime"] = this.startTimeInString;
     this.bookAppointment.value["timeSlotEndTime"] = this.endTimeInString;
     this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value, this.params).subscribe((data)=> {
-      console.log(data);
       this.doctorList = data.content as Doctor[];
+      this.totalPages = data.totalPages;
       if(this.doctorList.length<=0){
         this.noDataFound = true;
       }
