@@ -168,6 +168,20 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         }
         TimeSlot timeSlot = optionalTimeSlot.get();
         appointment.setTimeSlotForAppointment(timeSlot);
+        for(Doctor d : timeSlot.getAvailableDoctors()){
+            System.out.println(d.getId());
+        }
+        timeSlot.getAvailableDoctors().remove(doctor);
+        System.out.println("-------------------------------------------------------------------------");
+        for(Doctor d : timeSlot.getAvailableDoctors()){
+            System.out.println(d.getId());
+        }
+        timeSlot.addBookedDoctor(doctor);
+        timeSlotRepository.save(timeSlot);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        for(Doctor d : timeSlot.getAvailableDoctors()){
+            System.out.println(d.getId());
+        }
         List<Symptom> symptoms = new ArrayList<>();
         for(Symptom s: appointment.getSymptoms()){
             if(s.getId() != 0){

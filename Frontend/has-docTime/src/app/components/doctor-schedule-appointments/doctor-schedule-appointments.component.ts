@@ -71,6 +71,7 @@ export class DoctorScheduleAppointmentsComponent {
       (data) => {
         if(data === null){
           this.noDataBySearch = true;
+          this.appointments = [];
         } else{
           this.noDataBySearch = false;
           this.appointments = data.content;

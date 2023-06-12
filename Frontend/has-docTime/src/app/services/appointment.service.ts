@@ -18,7 +18,7 @@ export class AppointmentService {
   search : string = '';
   sortBy : string = '';
 
-  getAppointmentByUser(userId : string | undefined, params : any): Observable<any> {
+  getAppointmentByUser(userId : string | undefined, params : any): Observable<PagedObject> {
     let httpParams = new HttpParams();
     Object.keys(params).forEach((key) => {
       httpParams = httpParams.set(key, params[key]);
@@ -42,7 +42,7 @@ export class AppointmentService {
     return this.http.get<Appointment>(`${this.baseUrl}appointment/${id}`);
   }
 
-  getAppointments(params: any): Observable<any> {
+  getAppointments(params: any): Observable<PagedObject> {
 
     // Create HttpParams object from params object
     let httpParams = new HttpParams();

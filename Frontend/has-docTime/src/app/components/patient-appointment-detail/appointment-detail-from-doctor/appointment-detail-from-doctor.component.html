@@ -35,9 +35,15 @@
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-6">
           <div class="form-group row mb-2">
+            <label for="" class="col-5 col-form-label"><strong>Date</strong></label>
+            <div class="col-7">
+              <p class="form-control-plaintext">{{ appointment.timeSlotForAppointment?.startTime | date : 'mediumDate'}}</p>
+            </div>
+          </div>
+          <div class="form-group row mb-2">
             <label for="" class="col-5 col-form-label"><strong>Time Slot</strong></label>
             <div class="col-7">
-              <p class="form-control-plaintext">{{ appointment.timeSlotForAppointment?.startTime }} - {{ appointment.timeSlotForAppointment?.endTime }}</p>
+              <p class="form-control-plaintext">{{ appointment.timeSlotForAppointment?.startTime | date : 'mediumTime'}} - {{ appointment.timeSlotForAppointment?.endTime | date : 'mediumTime'}}</p>
             </div>
           </div>
           <div class="form-group row mb-2">

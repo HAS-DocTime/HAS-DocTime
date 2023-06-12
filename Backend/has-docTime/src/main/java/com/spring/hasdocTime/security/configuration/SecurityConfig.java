@@ -32,12 +32,6 @@ public class SecurityConfig{
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
-//    @Bean
-//    protected UserDetailsService userDetailsService(){
-//        return new CustomUserDetailService();
-//    }
-
-
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -77,6 +71,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests((authorize)->
                     authorize
                         .requestMatchers("/admin", "/admin/**", "/user", "/doctor").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/doctor/bookAppointment").hasAnyAuthority("ADMIN", "DOCTOR", "PATIENT")
                         .requestMatchers("/doctor/*").hasAnyAuthority("ADMIN", "DOCTOR")
                             .requestMatchers("/doctor/department/*").hasAnyAuthority("ADMIN")
                         .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")

@@ -27,7 +27,7 @@ export class AppointmentComponent implements OnInit{
   id : number = 0;
   tokenRole : string = "";
   page = 1;
-  totalPages = 1;
+  totalPages = 0;
   size = 5;
   sortBy = 'user.name';
   search = '';
@@ -42,9 +42,12 @@ export class AppointmentComponent implements OnInit{
     { label: 'StartTime', value: 'timeSlotForAppointment.startTime' },
     { label: 'Doctor Name', value: 'doctor.user.name' }
   ];
+  params : any = {};
+
 
 
   ngOnInit(){
+
 
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -65,36 +68,34 @@ export class AppointmentComponent implements OnInit{
       this.sortByOptions.push({ label: 'Patient Name', value: 'user.name' });
     }
 
-    this.getData(0);
+    this.getData();
 
   }
 
-  getData(page : number){
-    let params: any = {};
-
+  getData(){
     // Add query parameters based on selected options
     if (this.size) {
-      params.size = this.size;
+      this.params.size = this.size;
     }
     if (this.sortBy) {
-      params.sortBy = this.sortBy;
+      this.params.sortBy = this.sortBy;
     }
     if (this.search) {
-      params.search = this.search;
+      this.params.search = this.search;
     }
-    params.page = this.page-1;
+    this.params.page = this.page-1;
 
     if(this.tokenRole==='ADMIN'){
-        this.appointmentService.getAppointments(params).subscribe((data)=>{
-          this.appointments = data.content;
+        this.appointmentService.getAppointments(this.params).subscribe((data)=>{
+          this.appointments = data.content as Appointment[];
           this.totalPages = data.totalPages;
         })
       }
       else {
-        this.appointmentService.getAppointmentByUser((this.id.toString()), params).subscribe((data)=> {
+        this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
           console.log(data);
           if(data){
-            this.appointments = data.content;
+            this.appointments = data.content as Appointment[];
             this.totalPages = data.totalPages;
           }
           else{
@@ -111,16 +112,27 @@ export class AppointmentComponent implements OnInit{
   }
 
   deleteAppointment(id : number | undefined){
+    if (this.size) {
+      this.params.size = this.size;
+    }
+    if (this.sortBy) {
+      this.params.sortBy = this.sortBy;
+    }
+    if (this.search) {
+      this.params.search = this.search;
+    }
+    this.params.page = this.page-1;
     this.appointmentService.deleteAppointment(id).subscribe((data)=> {
         if(this.tokenRole==="ADMIN"){
-          this.appointmentService.getAppointmentList().subscribe((data)=> {
-            this.appointments = data;
-
+          this.appointmentService.getAppointments(this.params).subscribe((data)=> {
+            this.appointments = data.content as Appointment[];
+            this.totalPages = data.totalPages;
           });
         }
         else{
-          this.appointmentService.getAppointmentListByUser((this.id?.toString())).subscribe((data)=> {
-            this.appointments = data;
+          this.appointmentService.getAppointmentByUser(this.id.toString(), this.params).subscribe((data)=> {
+            this.appointments = data.content as Appointment[];
+            this.totalPages = data.totalPages;
           });
         }
         this.toast.showError(`The Appointment is deleted`, "Appointment deleted");
@@ -129,22 +141,22 @@ export class AppointmentComponent implements OnInit{
 
   onPageSizeChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSortByChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSearch() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
-    this.getData(this.page);
+    this.getData();
   }
 
 }
