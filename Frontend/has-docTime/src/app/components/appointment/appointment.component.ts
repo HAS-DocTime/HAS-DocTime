@@ -6,6 +6,7 @@ import { Token } from 'src/app/models/token.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { DepartmentService } from 'src/app/services/department.service';
+import { DynamicTimeZoneService } from 'src/app/services/dynamic-time-zone.service';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -22,10 +23,9 @@ interface SortByOption {
 
 export class AppointmentComponent implements OnInit{
 
-  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService, private toast : ToastMessageService, private authService : AuthService){}
+  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService, private toast : ToastMessageService, private authService : AuthService, private dynamicTimeSlotService : DynamicTimeZoneService){}
 
   appointments : Appointment[] = [];
-
   id : number = 0;
   tokenRole : string = "";
   page = 1;
@@ -39,17 +39,15 @@ export class AppointmentComponent implements OnInit{
   range(totalPages: number): number[] {
     return Array(totalPages).fill(0).map((_, index) => index + 1);
   }
-
   sortByOptions: SortByOption[] = [
     { label: 'StartTime', value: 'timeSlotForAppointment.startTime' },
     { label: 'Doctor Name', value: 'doctor.user.name' }
   ];
   params : any = {};
 
-
-
   ngOnInit(){
 
+    this.dynamicTimeSlotService.convertToTimeZone(100);
 
     const decoded_token : Token = this.authService.decodeToken();
 
