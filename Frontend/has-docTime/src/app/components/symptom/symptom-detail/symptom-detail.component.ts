@@ -3,6 +3,8 @@ import { SymptomService } from 'src/app/services/symptom.service';
 import { ApexChart, ApexDataLabels, ApexNonAxisChartSeries, ApexTitleSubtitle } from 'ng-apexcharts';
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common';
+import { Token } from 'src/app/models/token.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -16,7 +18,7 @@ export class SymptomDetailComponent implements OnInit{
   id?: number;
 
   symptom : string = "";
-  constructor(private symptomService: SymptomService, private route : ActivatedRoute, private router : Router, private location : Location) { }
+  constructor(private symptomService: SymptomService, private route : ActivatedRoute, private router : Router, private location : Location, private authService : AuthService) { }
 
   noDataFound : boolean = false;
   noDataFoundImg : string = "https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/dataNotFound.png?alt=media&token=2533f507-7433-4a70-989d-ba861273e537";
@@ -49,18 +51,10 @@ export class SymptomDetailComponent implements OnInit{
 
   ngOnInit() {
 
-    const token = sessionStorage.getItem('token');
-      if (token) {
-        let store = token?.split('.');
-        this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-        this.id = parseInt(
-          atob(store[1])
-            .split(',')[1]
-            .split(':')[1]
-            .substring(1, this.tokenRole.length - 1)
-        );
+    const decoded_token : Token = this.authService.decodeToken();
 
-        this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
+    this.tokenRole = decoded_token.role;
+    this.id = parseInt(decoded_token.id);
 
     this.route.url.subscribe((data)=> {
       this.symptomService.getSymptomById(parseInt(data[1].path)).subscribe((data)=> {
@@ -86,8 +80,6 @@ export class SymptomDetailComponent implements OnInit{
         )
       })
     })
-
-  }
   }
 
   navigateBack(){

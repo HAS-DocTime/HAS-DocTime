@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Department } from 'src/app/models/department.model';
+import { Token } from 'src/app/models/token.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { DepartmentService } from 'src/app/services/department.service';
 
 @Component({
@@ -12,7 +14,7 @@ export class OurServicesComponent implements OnInit{
 
   @Input() title = '';
 
-  constructor(private departmentService : DepartmentService, private router : Router, private route : ActivatedRoute){}
+  constructor(private departmentService : DepartmentService, private router : Router, private route : ActivatedRoute, private authService : AuthService){}
 
   departments : Department[] = [];
   id : number = 0;
@@ -31,16 +33,10 @@ export class OurServicesComponent implements OnInit{
 
   ngOnInit(){
 
-    const token = sessionStorage.getItem('token');
-    if (token) {
+    const decoded_token : Token = this.authService.decodeToken();
 
-      let store = token?.split('.');
-      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-
-      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
-
-      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
-    }
+    this.tokenRole = decoded_token.role;
+    this.id = parseInt(decoded_token.id);
 
     this.getData(0);
   }
