@@ -90,22 +90,28 @@
           <div class="row mt-3">
             <div class="col-md-12 mb-3">
               <label class="labels"
-                >Mobile Number
+                >Contact
                 <span *ngIf="!disable" class="required-asterisk">*</span></label
               >
-              <input
-                type="text"
-                class="form-control"
-                placeholder="enter phone number"
-                formControlName="contact"
-                pattern="^\+[0-9]{1,3}-[0-9]{10}$"
-                [ngClass]="
-                  editForm.get('contact')?.errors &&
-                  editForm.get('contact')?.touched
-                    ? 'errored-input'
-                    : ''
-                "
-              />
+              <div class="d-flex" formGroupName="contact">
+                <select class="form-select countryCode" id="countryCodeDropdown" formControlName="countryCode">
+                  
+                  <!-- Add more options here -->
+                </select>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="enter phone number"
+                  formControlName="number"
+                  pattern="^[0-9]{10}$"
+                  [ngClass]="
+                    editForm.get('contact')?.errors &&
+                    editForm.get('contact')?.touched
+                      ? 'errored-input'
+                      : ''
+                  "
+                />
+              </div>
               <div
                 class="text-danger errored-input"
                 *ngIf="

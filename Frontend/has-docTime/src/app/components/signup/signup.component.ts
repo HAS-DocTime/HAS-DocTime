@@ -44,7 +44,7 @@ constructor(
   countries : Country[] = [];
 
   ngOnInit(){
-
+      
       this.countryService.getAllCountries().then((data) => {
         this.countries = data;
         var dropdown =document.getElementById('countryCodeDropdown');
