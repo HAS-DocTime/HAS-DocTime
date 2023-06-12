@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from 'src/app/services/shared.service';
 import { PastAppointmentService } from 'src/app/services/past-appointment.service';
 import { PastAppointment } from 'src/app/models/pastAppointment.model';
+import { Token } from 'src/app/models/token.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 interface SortByOption {
   label: string;
@@ -16,7 +18,7 @@ interface SortByOption {
 })
 export class ResolvedCasesArchiveComponent implements OnInit{
 
-  constructor(private pastAppointment: PastAppointmentService, private router: Router, private sharedService: SharedService, private route: ActivatedRoute){}
+  constructor(private pastAppointment: PastAppointmentService, private router: Router, private sharedService: SharedService, private route: ActivatedRoute, private authService : AuthService){}
 
   id : string = "";
   resolvedCases?: PastAppointment[];
@@ -40,12 +42,8 @@ export class ResolvedCasesArchiveComponent implements OnInit{
   ];
 
   ngOnInit(): void {
-    const token = sessionStorage.getItem('token');
-      if (token) {
-        let store = token?.split('.');
-        this.id = atob(store[1]).split(',')[1].split(':')[1];
-        this.id = this.id.substring(1, this.id.length-1);
-      };
+    const decoded_token : Token = this.authService.decodeToken();
+    this.id = decoded_token.id;
 
       this.getData(0);
   }

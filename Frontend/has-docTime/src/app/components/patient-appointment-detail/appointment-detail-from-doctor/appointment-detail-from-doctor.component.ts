@@ -21,7 +21,6 @@ export class AppointmentDetailFromDoctorComponent implements OnInit{
     this.appointmentService.getAppointment(parseInt(this.appointmentId as string)).subscribe(data => {
       
       this.appointment = data;
-      console.log(this.appointment);
     });
     
   }

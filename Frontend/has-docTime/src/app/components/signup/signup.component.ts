@@ -71,7 +71,6 @@ constructor(
           option.textContent = country.code + ":" + country.name;
           dropdown?.appendChild(option);
           this.signupForm.get("contact")?.get("countryCode")?.valueChanges.subscribe((data)=> {
-            console.log(data);
           })
       });
       });

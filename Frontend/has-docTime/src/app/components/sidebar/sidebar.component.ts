@@ -1,4 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { Token } from 'src/app/models/token.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -35,18 +37,12 @@ export class SidebarComponent implements OnInit{
 
   ngOnInit(): void {
 
-    const token = sessionStorage.getItem('token');
-    if (token) {
+    const decoded_token : Token = this.authService.decodeToken();
 
-      let store = token?.split('.');
-      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-
-      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
-
-      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
-    }
+    this.tokenRole = decoded_token.role;
+    this.id = parseInt(decoded_token.id);
   }
-constructor() { }
+constructor(private authService : AuthService) { }
   scrollToTop() {
     window.scrollTo({ top: 0 , behavior: 'smooth' });
   }
