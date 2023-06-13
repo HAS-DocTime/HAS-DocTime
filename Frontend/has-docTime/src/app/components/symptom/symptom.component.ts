@@ -37,10 +37,10 @@ export class SymptomComponent implements OnInit{
 
   ngOnInit(){
 
-    this.getData(0);
+    this.getData();
   }
 
-  getData(page : number) {
+  getData() {
 
     let params: any = {};
 
@@ -85,22 +85,22 @@ export class SymptomComponent implements OnInit{
 
   onPageSizeChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSortByChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSearch() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
-    this.getData(this.page);
+    this.getData();
   }
 
 }

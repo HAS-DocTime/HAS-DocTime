@@ -54,10 +54,10 @@ export class PastAppointmentComponent implements OnInit{
     this.tokenRole = decoded_token.role;
     this.id = parseInt(decoded_token.id);
 
-    this.getData(0);
+    this.getData();
   }
 
-  getData(page : number){
+  getData(){
     let params: any = {};
 
     // Add query parameters based on selected options
@@ -147,21 +147,21 @@ export class PastAppointmentComponent implements OnInit{
 
   onPageSizeChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSortByChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSearch() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
-    this.getData(this.page);
+    this.getData();
   }
 }
