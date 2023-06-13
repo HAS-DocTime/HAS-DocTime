@@ -155,6 +155,5 @@ export class UserDoctorListComponent implements OnInit{
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
     this.getDataById(this.idForSearch);
-
   }
 }

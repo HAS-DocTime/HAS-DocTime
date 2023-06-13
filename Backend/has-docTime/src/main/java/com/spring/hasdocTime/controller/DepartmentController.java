@@ -70,6 +70,16 @@ public class DepartmentController {
         return new ResponseEntity<>(departments, HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/withoutPagination")
+    public ResponseEntity<List<Department>> getAllDepartments(
+    ){
+        List<Department> departments = departmentService.getAllDepartments();
+        if(departments.isEmpty()){
+            return new ResponseEntity(departments, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(departments, HttpStatus.OK);
+    }
+
     /**
      * Retrieves a single Department by its ID.
      *
@@ -123,13 +133,5 @@ public class DepartmentController {
         return new ResponseEntity<>(dep, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/withoutPagination")
-    public ResponseEntity<List<Department>> getAllDepartments(
-    ){
-        List<Department> departments = departmentService.getAllDepartments();
-        if(departments.isEmpty()){
-            return new ResponseEntity(departments, HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(departments, HttpStatus.OK);
-    }
+
 }

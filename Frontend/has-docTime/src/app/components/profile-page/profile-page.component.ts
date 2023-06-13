@@ -56,7 +56,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   doctors!: Doctor[];
   countries : Country[] = [];
   selectedFile: FileUpload | null = null;
-  imageUrl!: string;
+  imageUrl: string = "";
   isLoading: boolean = false;
 
   ngOnInit(): void {
@@ -149,6 +149,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.doctorService.getDoctor(id).subscribe((data) => {
       this.doctor = data;
       this.user = data.user;
+      this.imageUrl = this.user.imageUrl as string;
       this.id = data.id as number;
       const docNameArray: string[] = this.doctor?.user?.name?.split(' ', 2) ?? [];
       this.firstName = docNameArray[0];
@@ -169,6 +170,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private getUser(id: number) {
     this.userService.getUser(id).subscribe((data) => {
       this.user = data;
+      this.imageUrl = this.user.imageUrl as string;
       this.id = data.id as number;
       const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
       this.firstName = nameArray[0];
@@ -336,6 +338,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.toast.showError("Unexpected Error Occurred", "Error");
         }
       });
+      console.log(this.imageUrl);
     } else if (
       this.tokenRole === 'ADMIN' &&
       this.urlPath !== 'users' &&
