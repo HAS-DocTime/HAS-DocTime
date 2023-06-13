@@ -110,8 +110,8 @@
                   editForm.get('contact')?.touched &&
                   editForm.get('contact')?.invalid
                 ">
-                <span *ngIf="editForm.get('contact')?.errors?.['required']">Contact is Required</span>
-                <span *ngIf="editForm.get('contact')?.errors?.['pattern']">Enter Valid Contact Number</span>
+                <span *ngIf="editForm.get('contact')?.get('number')?.errors?.['required']">Contact is Required</span>
+                <span *ngIf="editForm.get('contact')?.get('number')?.errors?.['pattern']">Enter Valid Contact Number</span>
               </div>
             </div>
             <div class="col-md-12 mb-3">

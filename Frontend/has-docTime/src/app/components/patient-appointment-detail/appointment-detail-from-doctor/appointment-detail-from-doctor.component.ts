@@ -11,7 +11,12 @@ import { AppointmentService } from 'src/app/services/appointment.service';
 })
 export class AppointmentDetailFromDoctorComponent implements OnInit{
 
-  appointment! : Appointment;
+  appointment : Appointment = {
+    id : 1,
+    user : {
+      name : 'Dummy Data'
+    }
+  };
   appointmentId?: string | null;
 
   constructor(private appointmentService: AppointmentService){}
@@ -19,7 +24,6 @@ export class AppointmentDetailFromDoctorComponent implements OnInit{
   ngOnInit(){
     this.appointmentId = sessionStorage.getItem('appointmentId');
     this.appointmentService.getAppointment(parseInt(this.appointmentId as string)).subscribe(data => {
-      
       this.appointment = data;
     });
     
