@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Doctor } from '../models/doctor.model';
 import { Admin } from '../models/admin.model';
 import { environment } from 'src/environments/environment';
@@ -54,6 +54,12 @@ export class UserService {
   onCancel(){
     this.isLoggedIn.next(false);
   }
+
+  updateEmail(obj : {email : string, id : number, role : string}) : Observable<{token : string}>{
+    return this.http.put<{token : string}>(`${this.baseUrl}user/updateEmail`, obj);
+  }
+
+  userObject : Subject<number> = new Subject();
 
 }
 

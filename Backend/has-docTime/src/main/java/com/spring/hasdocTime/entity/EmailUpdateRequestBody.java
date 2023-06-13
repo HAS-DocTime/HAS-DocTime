@@ -1,5 +1,6 @@
 package com.spring.hasdocTime.entity;
 
+import com.spring.hasdocTime.utills.Role;
 import lombok.*;
 
 @Data
@@ -11,5 +12,6 @@ public class EmailUpdateRequestBody {
 
     private int id;
     private String email;
+    private Role role;
 
 }

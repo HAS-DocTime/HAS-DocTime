@@ -8,7 +8,7 @@ import { PastAppointmentComponent } from './components/past-appointment/past-app
 import { DetailedPastAppointmentComponent } from './components/past-appointment/detailed-past-appointment/detailed-past-appointment.component';
 import { AppointmentDetailComponent } from './components/appointment-detail/appointment-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { ProfilePageComponent } from './components/profile-dashboard/profile-page/profile-page.component';
 import { BookAppointmentComponent } from './components/book-appointment/book-appointment.component';
 import { UserDoctorListComponent } from './components/user-doctor-list/user-doctor-list.component';
 import { DepartmentComponent } from './components/department/department.component';
@@ -29,6 +29,9 @@ import { AuthGuard } from './guards/auth.guard';
 import { DashboardGuard } from './guards/dashboard.guard';
 import { RoleGuard } from './guards/role.guard';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { EmailComponent } from './components/profile-dashboard/email/email.component';
+import { SecurityComponent } from './components/profile-dashboard/security/security.component';
+import { ProfileDashboardComponent } from './components/profile-dashboard/profile-dashboard.component';
 
 
 const routes: Routes = [
@@ -53,16 +56,42 @@ const routes: Routes = [
         roles : ["DOCTOR", "ADMIN"]
       }}
     ], data : {roles : ["DOCTOR", "ADMIN"]}},
-    {path : "profile", component : ProfilePageComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}},
+    {path : "profile", component : ProfileDashboardComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}, children : [
+      {
+        path : "", redirectTo : "detail", pathMatch : "full"
+      },
+      {
+        path : "detail", component : ProfilePageComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}
+      },
+      {
+        path : "email", component : EmailComponent, canActivate : [RoleGuard], data : {roles : ['PATIENT', "DOCTOR", "ADMIN"]}
+      },
+      {
+        path : "security", component : SecurityComponent, canActivate : [RoleGuard], data : {roles : ['PATIENT', "DOCTOR", "ADMIN"]}
+      }
+    ]},
     {path : "ourServices", component : OurServicesComponent, canActivate: [RoleGuard], data : {roles : ["DOCTOR", "ADMIN"]}},
     {path : "appointment/book", component : BookAppointmentComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}},
     {path : "appointment/:id", component : AppointmentDetailComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}},
     {path : "pastAppointments", component : PastAppointmentComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}},
     {path : "pastAppointments/:id", component : DetailedPastAppointmentComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}},
     {path : "users", component : UserDoctorListComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},
-    {path : "users/:id", component : ProfilePageComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},
+    {path : "users/:id", component : ProfileDashboardComponent, canActivate: [RoleGuard], children : [
+      {
+        path : "", redirectTo : "detail", pathMatch : "full"
+      },
+      {
+        path : "detail", component : ProfilePageComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}
+      },
+      {
+        path : "email", component : EmailComponent, canActivate : [RoleGuard], data : {roles : ['PATIENT', "DOCTOR", "ADMIN"]}
+      },
+      {
+        path : "security", component : SecurityComponent, canActivate : [RoleGuard], data : {roles : ['PATIENT', "DOCTOR", "ADMIN"]}
+      }
+    ], data : {roles : ["ADMIN"]}},
     {path : "doctors", component : UserDoctorListComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},
-    {path : "doctors/:id", component : ProfilePageComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},
+    {path : "doctors/:id", component : ProfileDashboardComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},
     {path : "departments", component : DepartmentComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},
     {path : "departments/:id", component : DeptDetailComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},
     {path : "symptoms", component : SymptomComponent, canActivate: [RoleGuard], data : {roles : ["DOCTOR", "ADMIN"]}},

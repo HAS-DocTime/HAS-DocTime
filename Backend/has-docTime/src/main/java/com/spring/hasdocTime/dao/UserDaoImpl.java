@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.hibernate.Hibernate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -293,6 +294,7 @@ public class UserDaoImpl implements UserInterface {
     }
 
     @Override
+    @Transactional
     public AuthenticationResponse updateEmailOfUser(EmailUpdateRequestBody emailUpdateRequestBody) {
 
         Optional<User> oldUser = userRepository.findById(emailUpdateRequestBody.getId());
@@ -300,8 +302,18 @@ public class UserDaoImpl implements UserInterface {
             User oldUserObj = oldUser.get();
             oldUserObj.setEmail(emailUpdateRequestBody.getEmail());
             userRepository.save(oldUserObj);
-
-            UserDetailForToken userDetailForToken = new UserDetailForToken(oldUserObj.getEmail(), oldUserObj.getId(), oldUserObj.getRole());
+            UserDetailForToken userDetailForToken;
+            if(emailUpdateRequestBody.getRole().equals(Role.PATIENT)){
+                 userDetailForToken = new UserDetailForToken(oldUserObj.getEmail(), oldUserObj.getId(), oldUserObj.getRole());
+            }
+            else if(emailUpdateRequestBody.getRole().equals(Role.DOCTOR)){
+                Hibernate.initialize(oldUserObj.getDoctor());
+                userDetailForToken = new UserDetailForToken(oldUserObj.getEmail(), oldUserObj.getDoctor().getId(), oldUserObj.getRole());
+            }
+            else{
+                Hibernate.initialize(oldUserObj.getAdmin());
+                userDetailForToken = new UserDetailForToken(oldUserObj.getEmail(), oldUserObj.getAdmin().getId(), oldUserObj.getRole());
+            }
             var jwtToken = jwtService.generateToken(userDetailForToken);
             return AuthenticationResponse.builder().token(jwtToken).build();
         }

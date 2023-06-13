@@ -61,8 +61,10 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.route.url.subscribe((data) => {
-      this.urlPath = data[0].path;
+    const currentUrl = this.router.url;
+    console.log(currentUrl, "------------------------");
+    
+    
       const token = sessionStorage.getItem('token');
       const decoded_token : Token = this.authService.decodeToken();
 
@@ -70,12 +72,12 @@ export class ProfilePageComponent implements OnInit {
     this.id = parseInt(decoded_token.id);
 
         if (this.tokenRole === 'ADMIN') {
-          if (data[0].path === 'users') {
+          if (currentUrl.includes('/users')) {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
               this.getUser(this.id);
             });
-          } else if (data[0].path === 'doctors') {
+          } else if (currentUrl.includes('/doctors')) {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
               this.getDoctor(this.id);
@@ -88,7 +90,7 @@ export class ProfilePageComponent implements OnInit {
         } else {
           this.getUser(this.id);
         }
-    });
+
   }
 
   editForm: FormGroup = new FormGroup({
@@ -142,6 +144,7 @@ export class ProfilePageComponent implements OnInit {
       );
       this.countryCodeDropdownMethod();
       this.editFormPatchValue();
+      this.userService.userObject.next(this.user?.id!);
     });
   }
 
@@ -164,6 +167,7 @@ export class ProfilePageComponent implements OnInit {
       this.departmentDropDownMethod();
       this.countryCodeDropdownMethod();
       this.editFormPatchValue();
+      this.userService.userObject.next(this.user.id!);
     });
   }
 
@@ -185,6 +189,7 @@ export class ProfilePageComponent implements OnInit {
       );
       this.countryCodeDropdownMethod();
       this.editFormPatchValue();
+      this.userService.userObject.next(this.user.id!);
     });
   }
 
