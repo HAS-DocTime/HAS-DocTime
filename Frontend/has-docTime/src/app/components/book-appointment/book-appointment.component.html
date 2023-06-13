@@ -279,7 +279,7 @@
       <div class="modal-body">
         <form [formGroup]="confirmAppointment">
           <div class="symptoms d-flex field">
-            <p class="label">Symptoms</p>
+            <p class="label fw-bold">Symptoms:</p>
             <div class="symptom-list value">
               <div class="card p-0 mx-1 my-1 shadow-none border-dark badge bg-secondary" *ngFor="let symptom of selectedSymptoms">
                 <div class="card-body py-0 text-light" >
@@ -289,19 +289,19 @@
             </div>
           </div>
           <div class="timeSlot d-flex field">
-            <p class="label">Preferred Time Slot</p>
+            <p class="label fw-bold">Preferred Time Slot:</p>
             <div class="value">{{bookAppointment.get('timeSlot')?.value}}</div>
           </div>
           <div class="description d-flex field">
-            <p class="label">Description</p>
+            <p class="label fw-bold">Description:</p>
             <div class="value">{{bookAppointment.get('description')?.value}}</div>
           </div>
           <div class="doctor d-flex field">
-            <p class="label">Doctor Name</p>
+            <p class="label fw-bold">Doctor Name:</p>
             <div class="value">{{currentDoctor.user.name}}</div>
           </div>
           <div class="availableTimeSlot d-flex field">
-              <p class="label">Select Date</p>
+              <p class="label fw-bold">Select Timeslot:</p>
               <div>
                 <select class="form-select timeSlot-select value" id="timeSlot" formControlName="timeSlot">
                   <option value="" selected disabled>Select TimeSlot</option>

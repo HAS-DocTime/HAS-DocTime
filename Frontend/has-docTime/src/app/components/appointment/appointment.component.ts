@@ -36,6 +36,8 @@ export class AppointmentComponent implements OnInit{
   urlPath!: string;
   totalElements: number = 0;
   sizeOptions = [5, 10, 15];
+  startTimeAccordingToCurrentTimeZone : any;
+  endTimeAccordingToCurrentTimeZone : any;
   range(totalPages: number): number[] {
     return Array(totalPages).fill(0).map((_, index) => index + 1);
   }
@@ -93,6 +95,10 @@ export class AppointmentComponent implements OnInit{
       this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
         if(data){
           this.appointments = data.content as Appointment[];
+          // for(let appointment of this.appointments){
+          //   appointment.timeSlotForAppointment!.startTime = new Date(this.dynamicTimeSlotService.convertToTimeZone(appointment.timeSlotForAppointment?.startTime!)).getTime();
+          //   appointment.timeSlotForAppointment!.endTime = new Date(this.dynamicTimeSlotService.convertToTimeZone(appointment.timeSlotForAppointment?.endTime!)).getTime();
+          // }
           this.totalPages = data.totalPages;
         }
         else{

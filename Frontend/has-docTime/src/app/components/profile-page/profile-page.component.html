@@ -204,6 +204,7 @@
               </button>
             </div>
             <div *ngIf="!disable" class="col">
+              {{this.editForm.value | json}}
               <button type="submit" class="btn btn-outline-primary" [disabled]="editForm.invalid">
                 Update
               </button>

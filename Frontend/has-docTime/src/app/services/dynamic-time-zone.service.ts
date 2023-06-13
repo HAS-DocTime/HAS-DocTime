@@ -10,15 +10,14 @@ import 'moment-timezone';
   providedIn: 'root'
 })
 export class DynamicTimeZoneService {
-  defaultOffset = -330;
-
   constructor(private datePipe : DatePipe) { }
 
   convertToTimeZone(timestamp : number){
     const userTimeZone = jstz.determine().name();
     console.log('User\'s time zone: ' + userTimeZone);
     const convertedTimeStamp = moment(timestamp).tz(userTimeZone).format('YYYY-MM-DD HH:mm:ss');
-    console.log(convertedTimeStamp);    
+    console.log(convertedTimeStamp);
+    return convertedTimeStamp;    
   }
   
 }
