@@ -73,15 +73,13 @@ export class ProfilePageComponent implements OnInit {
 
         if (this.tokenRole === 'ADMIN') {
           if (currentUrl.includes('/users')) {
-            this.route.params.subscribe((data) => {
-              this.id = parseInt(data['id']);
+              const id = this.route.parent?.snapshot.paramMap.get('id');
+              this.id = parseInt(id as string);
               this.getUser(this.id);
-            });
           } else if (currentUrl.includes('/doctors')) {
-            this.route.params.subscribe((data) => {
-              this.id = parseInt(data['id']);
+              const id = this.route.parent?.snapshot.paramMap.get('id');
+              this.id = parseInt(id as string);
               this.getDoctor(this.id);
-            });
           } else {
             this.getAdmin(this.id);
           }
