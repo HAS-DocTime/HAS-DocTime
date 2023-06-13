@@ -11,9 +11,6 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "allowedCommonJsDependencies": [
-            "moment/moment"
-          ],
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/has-doc-time",
@@ -91,9 +88,6 @@
           }
         },
         "test": {
-          "allowedCommonJsDependencies": [
-            "moment/moment"
-          ],
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": [
