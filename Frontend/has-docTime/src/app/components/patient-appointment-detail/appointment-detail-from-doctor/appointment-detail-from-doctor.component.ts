@@ -24,7 +24,6 @@ export class AppointmentDetailFromDoctorComponent implements OnInit{
   ngOnInit(){
     this.appointmentId = sessionStorage.getItem('appointmentId');
     this.appointmentService.getAppointment(parseInt(this.appointmentId as string)).subscribe(data => {
-      console.log(data);
       this.appointment = data;
     });
     

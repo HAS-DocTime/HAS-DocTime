@@ -119,7 +119,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       Validators.required,
     ]),
     qualification: new FormControl({ value: '', disabled: this.disable }),
-    department: new FormControl({ value: '', disabled: this.disable }, [Validators.required]),
+    department: new FormControl({ value: '', disabled: this.disable }),
     casesSolved: new FormControl({ value: '', disabled: true }),
     patientChronicIllness: new FormArray([]),
   });
