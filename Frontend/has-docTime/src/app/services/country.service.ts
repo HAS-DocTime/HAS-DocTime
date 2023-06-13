@@ -24,7 +24,6 @@ export class CountryService {
               name : country.name.common + flag 
             });
           });
-
           this.countries.sort((a, b) => a.name.localeCompare(b.name));
         }
       });

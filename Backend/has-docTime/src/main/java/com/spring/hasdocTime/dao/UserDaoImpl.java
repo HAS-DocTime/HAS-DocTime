@@ -9,6 +9,8 @@ import com.spring.hasdocTime.interfaces.UserInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import com.spring.hasdocTime.repository.UserRepository;
+import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
+import com.spring.hasdocTime.security.jwt.JwtService;
 import com.spring.hasdocTime.utills.Role;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class UserDaoImpl implements UserInterface {
     private final ChronicIllnessRepository chronicIllnessRepository;
     private final SymptomRepository symptomRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     /**
      * Retrieves all users.
@@ -289,6 +292,22 @@ public class UserDaoImpl implements UserInterface {
         return userPage;
     }
 
+    @Override
+    public AuthenticationResponse updateEmailOfUser(EmailUpdateRequestBody emailUpdateRequestBody) {
+
+        Optional<User> oldUser = userRepository.findById(emailUpdateRequestBody.getId());
+        if(oldUser.isPresent()){
+            User oldUserObj = oldUser.get();
+            oldUserObj.setEmail(emailUpdateRequestBody.getEmail());
+            userRepository.save(oldUserObj);
+
+            UserDetailForToken userDetailForToken = new UserDetailForToken(oldUserObj.getEmail(), oldUserObj.getId(), oldUserObj.getRole());
+            var jwtToken = jwtService.generateToken(userDetailForToken);
+            return AuthenticationResponse.builder().token(jwtToken).build();
+        }
+
+        return null;
+    }
 
 
 }

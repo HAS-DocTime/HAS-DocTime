@@ -1,4 +1,6 @@
 package com.spring.hasdocTime.controller;
+import com.spring.hasdocTime.entity.AuthenticationResponse;
+import com.spring.hasdocTime.entity.EmailUpdateRequestBody;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
@@ -103,8 +105,6 @@ public class UserController {
      */
     @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") int id, @Valid @RequestBody User theUser) throws DoesNotExistException, MissingParameterException {
-        System.out.println("=====================================================");
-        System.out.println("Update User" + theUser);
         User user = userService.updateUser(id, theUser);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -163,5 +163,12 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/updateEmail")
+    public ResponseEntity<AuthenticationResponse> updateEmailOfUser(@RequestBody EmailUpdateRequestBody emailUpdateRequestBody){
+
+        return ResponseEntity.ok(userService.updateEmailOfUser(emailUpdateRequestBody));
+
     }
 }

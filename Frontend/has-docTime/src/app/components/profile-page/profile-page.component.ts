@@ -25,7 +25,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
 })
-export class ProfilePageComponent implements OnInit, OnDestroy {
+export class ProfilePageComponent implements OnInit {
   constructor(
     private datePipe: DatePipe,
     private userService: UserService,
@@ -256,8 +256,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       });
     });
   }
-
-  ngOnDestroy(): void {}
   submitProfile() {
     const date = new Date();
     this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
