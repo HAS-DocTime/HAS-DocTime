@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      *
      * @return a list of post-appointment data
      */
+    @Transactional
     @Override
     public Page<PostAppointmentData> getAllPostAppointmentData(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -80,6 +82,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return the post-appointment data with the specified ID
      * @throws DoesNotExistException if the post-appointment data does not exist
      */
+    @Transactional
     @Override
     public PostAppointmentData getPostAppointmentDataById(int id) throws DoesNotExistException {
         Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(id);
@@ -104,6 +107,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @param email the email of the user
      * @return a list of post-appointment data associated with the user's email
      */
+    @Transactional
     @Override
     public Page<PostAppointmentData> getPostAppointmentDataByEmail(String email,int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -128,6 +132,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @throws MissingParameterException if any required parameters are missing
      * @throws DoesNotExistException    if the associated user, doctor, or time slot does not exist
      */
+    @Transactional
     @Override
     public PostAppointmentData createPostAppointmentData(PostAppointmentData postAppointmentData) throws MissingParameterException, DoesNotExistException {
         // Check for missing parameters
@@ -186,6 +191,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @throws DoesNotExistException    if the post-appointment data or associated user, doctor, or time slot does not exist
      * @throws MissingParameterException if any required parameters are missing
      */
+    @Transactional
     @Override
     public PostAppointmentData updatePostAppointmentData(int id, PostAppointmentData postAppointmentData) throws DoesNotExistException, MissingParameterException {
         // Check for missing parameters
@@ -250,6 +256,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a message indicating the success of the deletion
      * @throws DoesNotExistException if the post-appointment data does not exist
      */
+    @Transactional
     @Override
     public String deletePostAppointmentData(int id) throws DoesNotExistException {
         Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(id);
@@ -268,6 +275,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a list of maps containing the diseases grouped by symptom
      * @throws DoesNotExistException if no post-appointment data exists for the specified symptom
      */
+    @Transactional
     @Override
     public List<Map<String, Integer>> getDiseaseListGroupedBySymptom(String symptom) throws DoesNotExistException {
         return postAppointmentDataRepository.findDiseaseListGroupedBySymptom(symptom);
@@ -280,6 +288,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a list of post-appointment data for the specified symptom
      * @throws DoesNotExistException if no post-appointment data exists for the specified symptom
      */
+    @Transactional
     @Override
     public Page<PostAppointmentData> getPostAppointmentDataBySymptom(String symptom, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -306,6 +315,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a list of post-appointment data associated with the specified doctor
      * @throws DoesNotExistException if the doctor does not exist
      */
+    @Transactional
     @Override
     public Page<PostAppointmentData> getPostAppointmentsDataOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException{
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
@@ -334,6 +344,7 @@ public class PostAppointmentDataDaoImpl implements PostAppointmentDataInterface 
      * @return a list of post-appointment data associated with the specified user
      * @throws DoesNotExistException if the user does not exist
      */
+    @Transactional
     @Override
     public Page<PostAppointmentData> getPostAppointmentDataByUserId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<User> user = userRepository.findById(id);

@@ -84,6 +84,7 @@
               <div class="row" formGroupName="contact">
                 <div class="col-md-6">
                   <select class="form-select countryCode" id="countryCodeDropdown" formControlName="countryCode">
+                    <option value="" selected disabled>Select Country Code</option>
                   </select>
                 </div>
                 <div class="col-md-6">
@@ -161,7 +162,7 @@
             editForm.get('height')?.invalid
           ">
                 <span *ngIf="editForm.get('height')?.errors?.['max']">Enter Valid Height ( Max -> 10.0)</span>
-                <span *ngIf="editForm.get('height')?.errors?.['min']">Enter Valid Height (Min -> 0.0)</span>
+                <span *ngIf="editForm.get('height')?.errors?.['min']">Enter Valid Height (Min -> 1.0)</span>
               </div>
             </div>
             <div class="col-md-12 mb-3">

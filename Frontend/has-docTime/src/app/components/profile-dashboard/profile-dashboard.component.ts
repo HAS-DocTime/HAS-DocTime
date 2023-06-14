@@ -1,14 +1,32 @@
 import { Location } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile-dashboard',
   templateUrl: './profile-dashboard.component.html',
   styleUrls: ['./profile-dashboard.component.css']
 })
-export class ProfileDashboardComponent {
+export class ProfileDashboardComponent implements OnInit{
 
-  constructor(private location : Location){}
+  role! : string;
+  currentUrl! : string;
+
+  constructor(
+    private location : Location, 
+    private authService : AuthService, 
+    private route: ActivatedRoute,
+    private router: Router
+    ){}
+
+  ngOnInit(): void {
+      this.currentUrl = this.router.url;
+      console.log(this.currentUrl);
+      
+      const token = this.authService.decodeToken();
+      this.role = token.role;
+  }
 
   navigateBack(){
     this.location.back();

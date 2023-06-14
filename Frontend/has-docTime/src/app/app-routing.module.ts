@@ -82,12 +82,6 @@ const routes: Routes = [
       },
       {
         path : "detail", component : ProfilePageComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}
-      },
-      {
-        path : "email", component : EmailComponent, canActivate : [RoleGuard], data : {roles : ['PATIENT', "DOCTOR", "ADMIN"]}
-      },
-      {
-        path : "security", component : SecurityComponent, canActivate : [RoleGuard], data : {roles : ['PATIENT', "DOCTOR", "ADMIN"]}
       }
     ], data : {roles : ["ADMIN"]}},
     {path : "doctors", component : UserDoctorListComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},
@@ -97,12 +91,6 @@ const routes: Routes = [
       },
       {
         path : "detail", component : ProfilePageComponent, canActivate: [RoleGuard], data : {roles : ["PATIENT", "DOCTOR", "ADMIN"]}
-      },
-      {
-        path : "email", component : EmailComponent, canActivate : [RoleGuard], data : {roles : ['PATIENT', "DOCTOR", "ADMIN"]}
-      },
-      {
-        path : "security", component : SecurityComponent, canActivate : [RoleGuard], data : {roles : ['PATIENT', "DOCTOR", "ADMIN"]}
       }
     ], data : {roles : ["ADMIN"]}},
     {path : "departments", component : DepartmentComponent, canActivate: [RoleGuard], data : {roles : ["ADMIN"]}},

@@ -132,7 +132,7 @@ constructor(
     qualification : new FormControl(""),
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([]),
-    department: new FormControl('', [Validators.required])
+    department: new FormControl('')
   },
     { validators: confirmPasswordValidator() }
   )

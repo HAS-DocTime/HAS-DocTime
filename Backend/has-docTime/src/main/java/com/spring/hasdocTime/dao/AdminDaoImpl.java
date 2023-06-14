@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -39,6 +40,7 @@ public class AdminDaoImpl implements AdminInterface {
      *
      * @return the list of all admin entities
      */
+    @Transactional
     @Override
     public List<Admin> getAllAdmin(){
         return adminRepository.findAll();
@@ -51,6 +53,7 @@ public class AdminDaoImpl implements AdminInterface {
      * @return the retrieved admin entity
      * @throws DoesNotExistException if the admin entity does not exist
      */
+    @Transactional
     @Override
     public Admin getAdmin(int id) throws DoesNotExistException {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
@@ -72,6 +75,7 @@ public class AdminDaoImpl implements AdminInterface {
      * @throws DoesNotExistException     if the admin entity does not exist
      * @throws MissingParameterException if a required parameter is missing
      */
+    @Transactional
     @Override
     public Admin updateAdmin(int id, Admin admin) throws DoesNotExistException, MissingParameterException{
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
@@ -128,6 +132,7 @@ public class AdminDaoImpl implements AdminInterface {
      * @return true if the admin entity is successfully deleted, false otherwise
      * @throws DoesNotExistException if the admin entity does not exist
      */
+    @Transactional
     @Override
     public boolean deleteAdmin(int id) throws DoesNotExistException{
         Optional<Admin> optionalAdmin = adminRepository.findById(id);
@@ -148,6 +153,7 @@ public class AdminDaoImpl implements AdminInterface {
      * @throws MissingParameterException if a required parameter is missing
      * @throws DoesNotExistException     if the user entity does not exist
      */
+    @Transactional
     @Override
     public Admin createAdmin(Admin admin) throws MissingParameterException, DoesNotExistException {
         if(admin.getUser()==null){

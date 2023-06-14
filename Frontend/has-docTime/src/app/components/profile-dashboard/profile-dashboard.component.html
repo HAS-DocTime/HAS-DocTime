@@ -5,10 +5,10 @@
       <li class="nav-item">
         <a class="nav-link fs-5" routerLink="detail" aria-current="page" routerLinkActive="active">Profile</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!(currentUrl.includes('/users') || currentUrl.includes('/doctors'))">
         <a class="nav-link fs-5" routerLink="email" routerLinkActive="active">Email</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!(currentUrl.includes('/users') || currentUrl.includes('/doctors'))">
         <a class="nav-link fs-5" routerLink="security" routerLinkActive="active">Security</a>
       </li>
     </ul>

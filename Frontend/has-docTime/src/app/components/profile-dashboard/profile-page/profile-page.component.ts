@@ -58,11 +58,12 @@ export class ProfilePageComponent implements OnInit {
   selectedFile: FileUpload | null = null;
   imageUrl: string = "";
   isLoading: boolean = false;
+  currentUrl! : any;
 
   ngOnInit(): void {
 
-    const currentUrl = this.router.url;
-    console.log(currentUrl, "------------------------");
+    this.currentUrl = this.router.url;
+    console.log(this.currentUrl);
     
     
       const token = sessionStorage.getItem('token');
@@ -72,11 +73,11 @@ export class ProfilePageComponent implements OnInit {
     this.id = parseInt(decoded_token.id);
 
         if (this.tokenRole === 'ADMIN') {
-          if (currentUrl.includes('/users')) {
+          if (this.currentUrl.includes('/users')) {
               const id = this.route.parent?.snapshot.paramMap.get('id');
               this.id = parseInt(id as string);
               this.getUser(this.id);
-          } else if (currentUrl.includes('/doctors')) {
+          } else if (this.currentUrl.includes('/doctors')) {
               const id = this.route.parent?.snapshot.paramMap.get('id');
               this.id = parseInt(id as string);
               this.getDoctor(this.id);
@@ -128,6 +129,7 @@ export class ProfilePageComponent implements OnInit {
     this.adminService.getAdmin(this.id).subscribe((data) => {
       this.admin = data;
       this.user = data.user;
+      this.imageUrl = this.user?.imageUrl as string;
       this.id = data.id as number;
       const adminNameArray: string[] = this.admin?.user?.name?.split(' ', 2) ?? [];
       this.firstName = adminNameArray[0];
@@ -142,7 +144,6 @@ export class ProfilePageComponent implements OnInit {
       );
       this.countryCodeDropdownMethod();
       this.editFormPatchValue();
-      this.userService.userObject.next(this.user?.id!);
     });
   }
 
@@ -165,7 +166,6 @@ export class ProfilePageComponent implements OnInit {
       this.departmentDropDownMethod();
       this.countryCodeDropdownMethod();
       this.editFormPatchValue();
-      this.userService.userObject.next(this.user.id!);
     });
   }
 
@@ -187,7 +187,6 @@ export class ProfilePageComponent implements OnInit {
       );
       this.countryCodeDropdownMethod();
       this.editFormPatchValue();
-      this.userService.userObject.next(this.user.id!);
     });
   }
 
@@ -290,7 +289,7 @@ export class ProfilePageComponent implements OnInit {
     }
     user.patientChronicIllness = chronicIllnesses;
 
-    if (this.tokenRole === 'PATIENT' || this.urlPath === 'users') {
+    if (this.tokenRole === 'PATIENT' || this.currentUrl.includes('/users')) {
       user.role = this.user?.role;
       user.email = this.user?.email;
       user.imageUrl = this.imageUrl;
@@ -303,13 +302,13 @@ export class ProfilePageComponent implements OnInit {
           this.user = data;
           this.isLoading = false;
         });
-        this.toast.showSuccess("User Updated Successfully", "Success");
+        this.toast.showSuccess("Patient Updated Successfully", "Success");
       }, (err)=> {
         if(err){
           this.toast.showError("Unexpected Error Occurred", "Error");
         }
       });
-    } else if (this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors') {
+    } else if (this.tokenRole === 'DOCTOR' || this.currentUrl.includes('/doctors')) {
       user.id = this.doctor?.user?.id;
       user.role = this.doctor?.user.role;
       user.email = this.doctor?.user.email;
@@ -361,7 +360,7 @@ export class ProfilePageComponent implements OnInit {
           this.isLoading != this.isLoading;
         });
         this.toggleDisable();
-        this.toast.showSuccess("User Updated Successfully", "Success");
+        this.toast.showSuccess("Admin Updated Successfully", "Success");
       }, (err)=> {
         if(err){
           this.toast.showError("Unexpected Error Occurred", "Error");

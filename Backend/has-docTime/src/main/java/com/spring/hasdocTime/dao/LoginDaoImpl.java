@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -33,6 +34,7 @@ public class LoginDaoImpl implements LoginInterface {
      * @return an AuthenticationResponse containing the generated JWT token
      * @throws MissingParameterException if any required parameter is missing
      */
+    @Transactional
     @Override
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) throws MissingParameterException {
 

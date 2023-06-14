@@ -12,7 +12,7 @@ import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
 import com.spring.hasdocTime.security.jwt.JwtService;
 import com.spring.hasdocTime.utills.Role;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.hibernate.Hibernate;
@@ -40,6 +40,7 @@ public class UserDaoImpl implements UserInterface {
      *
      * @return The list of all users.
      */
+    @Transactional
     @Override
     public Page<User> getAllUser(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -59,6 +60,7 @@ public class UserDaoImpl implements UserInterface {
      * @return The user with the specified ID.
      * @throws DoesNotExistException if the user does not exist.
      */
+    @Transactional
     @Override
     public User getUser(int id) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(id);
@@ -78,6 +80,8 @@ public class UserDaoImpl implements UserInterface {
      * @throws DoesNotExistException     if the user does not exist.
      * @throws MissingParameterException if any required parameter is missing.
      */
+
+    @Transactional
     public User updateUserWithPassword(User user) throws DoesNotExistException, MissingParameterException{
         // Validate required parameters
         if(user.getName() == null || user.getName().equals("")){
@@ -151,6 +155,7 @@ public class UserDaoImpl implements UserInterface {
      * @throws MissingParameterException if any required parameter is missing.
      * @throws DoesNotExistException     if the chronic illness does not exist.
      */
+    @Transactional
     @Override
     public User createUser(User user) throws MissingParameterException, DoesNotExistException{
         // Validate required parameters
@@ -199,6 +204,7 @@ public class UserDaoImpl implements UserInterface {
      * @throws DoesNotExistException     if the user does not exist.
      * @throws MissingParameterException if any required parameter is missing.
      */
+    @Transactional
     @Override
     public User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException{
         Optional<User> oldUser = userRepository.findById(id);
@@ -239,6 +245,7 @@ public class UserDaoImpl implements UserInterface {
      * @return The user with the specified email.
      * @throws DoesNotExistException if the user does not exist.
      */
+    @Transactional
     @Override
     public User getUserByEmail(String email) throws DoesNotExistException{
         Optional<User> user = userRepository.findByEmail(email);
@@ -253,6 +260,7 @@ public class UserDaoImpl implements UserInterface {
      *
      * @return The list of all patients.
      */
+    @Transactional
     @Override
     public Page<User> getPatients(int page, int size, String sortBy, String search) {
         Page<User> userList;
@@ -272,6 +280,7 @@ public class UserDaoImpl implements UserInterface {
      * @return A set of users who have the specified chronic illness.
      * @throws DoesNotExistException if the chronic illness does not exist.
      */
+    @Transactional
     @Override
     public Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);

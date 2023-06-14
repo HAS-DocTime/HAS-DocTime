@@ -11,6 +11,7 @@ import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
 import com.spring.hasdocTime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -33,6 +34,7 @@ public class RegisterDaoImpl implements RegisterInterface {
      * @throws DoesNotExistException     if the user or admin does not exist
      * @throws MissingParameterException if a required parameter is missing
      */
+    @Transactional
     @Override
     public AuthenticationResponse registerAdmin(Admin admin) throws DoesNotExistException, MissingParameterException {
         var createdUser = userDao.createUser(admin.getUser());
@@ -54,6 +56,7 @@ public class RegisterDaoImpl implements RegisterInterface {
      * @throws DoesNotExistException     if the user does not exist
      */
     @Override
+    @Transactional
     public AuthenticationResponse registerUser(User user) throws MissingParameterException, DoesNotExistException {
         var createdUser = userDao.createUser(user);
 
@@ -71,6 +74,7 @@ public class RegisterDaoImpl implements RegisterInterface {
      * @throws MissingParameterException if a required parameter is missing
      * @throws DoesNotExistException     if the doctor or user does not exist
      */
+    @Transactional
     @Override
     public AuthenticationResponse registerDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException {
         var createdUser = userDao.createUser(doctor.getUser());

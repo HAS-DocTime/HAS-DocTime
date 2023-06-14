@@ -7,6 +7,7 @@ import com.spring.hasdocTime.interfaces.PatientChronicIllnessInterface;
 import com.spring.hasdocTime.repository.PatientChronicIllnessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
      *
      * @return a list of patient chronic illnesses
      */
+    @Transactional
     @Override
     public List<PatientChronicIllness> getAllPatientChronicIllness() {
         return patientChronicIllnessRepository.findAll();
@@ -42,6 +44,7 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
      * @return the patient chronic illness with the specified composite key
      * @throws DoesNotExistException if the patient chronic illness does not exist
      */
+    @Transactional
     @Override
     public PatientChronicIllness getPatientChronicIllness(CompositeKeyPatientChronicIllness id) throws DoesNotExistException {
         Optional<PatientChronicIllness> patientChronicIllness = patientChronicIllnessRepository.findById(id);
@@ -57,6 +60,7 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
      * @param patientChronicIllness the patient chronic illness to create
      * @return the created patient chronic illness
      */
+    @Transactional
     @Override
     public PatientChronicIllness createPatientChronicIllness(PatientChronicIllness patientChronicIllness) {
         return patientChronicIllnessRepository.save(patientChronicIllness);
@@ -70,6 +74,7 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
      * @return the updated patient chronic illness
      * @throws DoesNotExistException if the patient chronic illness does not exist
      */
+    @Transactional
     @Override
     public PatientChronicIllness updatePatientChronicIllness(CompositeKeyPatientChronicIllness id, PatientChronicIllness patientChronicIllness) throws DoesNotExistException{
         Optional<PatientChronicIllness> oldPatientChronicIllness = patientChronicIllnessRepository.findById(id);
@@ -86,6 +91,7 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
      * @param id the composite key of the patient chronic illness to delete
      * @throws DoesNotExistException if the patient chronic illness does not exist
      */
+    @Transactional
     @Override
     public void deletePatientChronicIllness(CompositeKeyPatientChronicIllness id) throws DoesNotExistException{
         Optional<PatientChronicIllness> patientChronicIllness =  patientChronicIllnessRepository.findById(id);

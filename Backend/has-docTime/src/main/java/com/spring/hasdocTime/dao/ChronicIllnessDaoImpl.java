@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +49,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
      * @return The created ChronicIllness.
      * @throws MissingParameterException if the name of the ChronicIllness is missing.
      */
+    @Transactional
     @Override
     public ChronicIllness createChronicIllness(ChronicIllness chronicIllness) throws MissingParameterException{
         if(chronicIllness.getName()==null || chronicIllness.getName().equals("")){
@@ -61,6 +63,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
      *
      * @return The list of all ChronicIllness entities.
      */
+    @Transactional
     @Override
     public Page<ChronicIllness> getAllChronicIllness(int page, int size, String sortBy, String search){
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -76,6 +79,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
         return chronicIllnessPage;
     }
 
+    @Transactional
     @Override
     public List<ChronicIllness> getAllChronicIllnesses() {
         return chronicIllnessRepository.findAll();
@@ -89,6 +93,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
      * @return The retrieved ChronicIllness.
      * @throws DoesNotExistException if the ChronicIllness with the specified ID does not exist.
      */
+    @Transactional
     @Override
     public ChronicIllness getChronicIllness(int id) throws DoesNotExistException {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
@@ -107,6 +112,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
      * @throws DoesNotExistException     if the ChronicIllness with the specified ID does not exist.
      * @throws MissingParameterException if the name of the ChronicIllness is missing.
      */
+    @Transactional
     @Override
     public ChronicIllness updateChronicIllness(int id, ChronicIllness chronicIllness) throws DoesNotExistException, MissingParameterException {
         if(chronicIllness.getName()==null || chronicIllness.getName().equals("")){
@@ -129,6 +135,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
      * @return true if the ChronicIllness was successfully deleted, false otherwise.
      * @throws DoesNotExistException if the ChronicIllness with the specified ID does not exist.
      */
+    @Transactional
     @Override
     public boolean deleteChronicIllness(int id) throws DoesNotExistException{
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);

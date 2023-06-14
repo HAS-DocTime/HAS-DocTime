@@ -63,6 +63,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
      *
      * @return A list of all time slots.
      */
+    @Transactional
     @Override
     public List<TimeSlot> getAllTimeSlots() {
         List<TimeSlot> allTimeSlots= timeSlotRepository.findAll();
@@ -76,6 +77,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
      * @return The time slot with the given ID.
      * @throws DoesNotExistException if the time slot does not exist.
      */
+    @Transactional
     @Override
     public TimeSlot getTimeSlotById(int id) throws DoesNotExistException {
         Optional<TimeSlot> optionalTimeSlot = timeSlotRepository.findById(id);
@@ -95,6 +97,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
      * @throws MissingParameterException if a required parameter is missing.
      * @throws DoesNotExistException     if the department, appointment, or post-appointment data does not exist.
      */
+    @Transactional
     @Override
     public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException, DoesNotExistException{
         if(timeSlot.getStartTime()==null){
@@ -183,6 +186,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
      * @throws DoesNotExistException     if the time slot, department, appointment, or post-appointment data does not exist.
      * @throws MissingParameterException if a required parameter is missing.
      */
+    @Transactional
     @Override
     public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException{
         if(timeSlot.getStartTime()==null){
@@ -278,6 +282,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
      * @return A message indicating the success of the operation.
      * @throws DoesNotExistException if the time slot does not exist.
      */
+    @Transactional
     @Override
     public String deleteTimeSlot(int id) throws DoesNotExistException{
         Optional<TimeSlot> optionalTimeSlot = timeSlotRepository.findById(id);
@@ -294,6 +299,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
          * @param department The department to create time slots for.
          * @return The list of created time slots.
          */
+    @Transactional
     public List<TimeSlot> createTimeSlots(Department department, int index, List<TimeSlot> timeSlots){
         Timestamp timeSlotStartTime;
         if(index == 0){
@@ -332,6 +338,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         return timeSlots;
     }
 
+    @Transactional
     public List<TimeSlot> createTimeSlotsFromDepartment(Department department){
 
         // clone is required as Java takes value as pass by reference and changes the value of both the objects
@@ -377,7 +384,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     }
 
     @Transactional
-//    @Scheduled(cron = "00 16 18 ? * *", zone = "Asia/Kolkata") // For Testing
+//    @Scheduled(cron = "20 42 13 ? * *", zone = "Asia/Kolkata") // For Testing
     @Scheduled(cron = "0 0 0 ? * *", zone = "Asia/Kolkata")
     public void refreshTimeSlots(){
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
@@ -406,6 +413,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         timeSlotRepository.saveAll(timeSlotsToSave);
     }
 
+    @Transactional
     public Timestamp roundTheTimeSlot(Timestamp timestamp){
         LocalDateTime now = timestamp.toLocalDateTime();
         LocalDateTime roundedDateTime;
