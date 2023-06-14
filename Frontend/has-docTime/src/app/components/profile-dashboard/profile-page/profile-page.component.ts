@@ -66,7 +66,6 @@ export class ProfilePageComponent implements OnInit {
     console.log(this.currentUrl);
     
     
-      const token = sessionStorage.getItem('token');
       const decoded_token : Token = this.authService.decodeToken();
 
     this.tokenRole = decoded_token.role;

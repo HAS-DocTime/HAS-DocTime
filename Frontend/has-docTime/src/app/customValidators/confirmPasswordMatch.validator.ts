@@ -2,7 +2,7 @@ import { AbstractControl, FormGroup, ValidatorFn } from "@angular/forms";
 
 export function confirmPasswordValidator() : ValidatorFn{
   return (control: AbstractControl): { [key: string]: any } | null => {
-    const passwordField = control.get('password');
+    const passwordField = control.get('password') || control.get('newPassword');
     const confirmPasswordField = control.get('confirmPassword');
     if (passwordField?.value !== confirmPasswordField?.value) {
       control.get('confirmPassword')?.setErrors({passwordMismatch : true})

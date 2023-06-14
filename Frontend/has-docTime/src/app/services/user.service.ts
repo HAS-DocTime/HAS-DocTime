@@ -58,5 +58,10 @@ export class UserService {
   updateEmail(obj : {email : string, id : number, role : string}) : Observable<{token : string}>{
     return this.http.put<{token : string}>(`${this.baseUrl}user/updateEmail`, obj);
   }
+
+  updatePassword(obj : {id : number, oldPassword : string, newPassword : string}) : Observable<{message : string}>{
+    return this.http.put<{message : string}>(`${this.baseUrl}user/updatePassword`, obj);
+  }
+
 }
 
