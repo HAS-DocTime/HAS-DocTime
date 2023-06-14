@@ -6,8 +6,10 @@ import { validateDateForBookingDoctorValidator } from 'src/app/customValidators/
 import { Doctor } from 'src/app/models/doctor.model';
 import { Symptom } from 'src/app/models/symptom.model';
 import { TimeSlot } from 'src/app/models/timeSlot.model';
+import { Token } from 'src/app/models/token.model';
 import { User } from 'src/app/models/user.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { DoctorService } from 'src/app/services/doctor.service';
 import { SymptomService } from 'src/app/services/symptom.service';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
@@ -58,25 +60,20 @@ export class BookAppointmentComponent implements OnInit{
   sortBy = 'user.name';
   search = '';
   availableTimeSlots : TimeSlot[] = [];
+  doctorsShowed : boolean = false;
 
 
 
   constructor(private symptomService : SymptomService, private appointmentService : AppointmentService,
-     private userService : UserService, private router : Router, private route : ActivatedRoute, private doctorService : DoctorService, private location : Location, private toast: ToastMessageService){}
+     private userService : UserService, private router : Router, private route : ActivatedRoute, private doctorService : DoctorService, private location : Location, private toast: ToastMessageService, private authService : AuthService){}
 
 
 
   ngOnInit(){
-    const token = sessionStorage.getItem('token');
-    if (token) {
+    const decoded_token : Token = this.authService.decodeToken();
 
-      let store = token?.split('.');
-      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-
-      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
-
-      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
-    }
+    this.tokenRole = decoded_token.role;
+    this.id = parseInt(decoded_token.id);
     this.symptomService.getSymptomsList().subscribe((data)=> {
       this.symptoms = data;
     })
@@ -111,9 +108,12 @@ export class BookAppointmentComponent implements OnInit{
   }
 
   sortByOptions: SortByOption[] = [
-    { label: 'StartTime', value: 'timeSlotForAppointment.startTime' },
-    { label: 'Doctor Name', value: 'doctor.user.name' }
-  ];
+    { label: 'Doctor Name', value: 'doctor.user.name' },
+    { label: 'Gender', value: 'doctor.user.gender' },
+    { label: 'Age', value: 'doctor.user.age' },
+    { label: 'Qualfication', value: 'doctor.qualification' }
+  ];  
+
   params : any = {};
 
 
@@ -127,13 +127,14 @@ export class BookAppointmentComponent implements OnInit{
     this.bookAppointment.value["timeSlotStartTime"] = this.startTimeInString;
     this.bookAppointment.value["timeSlotEndTime"] = this.endTimeInString;
     this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value, this.params).subscribe((data)=> {
-      console.log(data);
       this.doctorList = data.content as Doctor[];
+      this.totalPages = data.totalPages;
       if(this.doctorList.length<=0){
         this.noDataFound = true;
       }
       else{
         this.noDataFound = false;
+        this.doctorsShowed = true;
       }
     });
 
@@ -169,7 +170,6 @@ export class BookAppointmentComponent implements OnInit{
     this.bookAppointment.value["timeSlotForAppointment"] = {
       "id": this.confirmAppointment.get('timeSlot')?.value
     }
-    console.log(this.bookAppointment.value);
     this.closeModal();
     this.appointmentService.createAppointment(this.bookAppointment.value).subscribe((data)=> {
       this.router.navigate(["../"], {relativeTo : this.route});
@@ -255,8 +255,10 @@ export class BookAppointmentComponent implements OnInit{
     if (this.search) {
       this.params.search = this.search;
     }
+    else{
+      this.params.search = "";
+    }
     this.params.page = this.page-1;
-
     this.startTime = this.bookAppointment.value["timeSlot"].split("-")[0];
     this.endTime = this.bookAppointment.value["timeSlot"].split("-")[1];
     this.date = this.bookAppointment.value["date"];
@@ -265,8 +267,8 @@ export class BookAppointmentComponent implements OnInit{
     this.bookAppointment.value["timeSlotStartTime"] = this.startTimeInString;
     this.bookAppointment.value["timeSlotEndTime"] = this.endTimeInString;
     this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value, this.params).subscribe((data)=> {
-      console.log(data);
       this.doctorList = data.content as Doctor[];
+      this.totalPages = data.totalPages;
       if(this.doctorList.length<=0){
         this.noDataFound = true;
       }

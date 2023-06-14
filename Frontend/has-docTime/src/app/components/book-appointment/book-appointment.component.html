@@ -196,36 +196,31 @@
   <div class="d-flex justify-content-center align-items-center mt-5">
     <button class="btn btn-primary" (click)="getDoctorsBySymptomAndTimeSlot()" [disabled]="bookAppointment.invalid">Show Doctors</button>
   </div>
-  <div class="show-doctos" *ngIf="doctorList.length>0">
-    <div *ngIf = "noDataFound" class="noData">
-      <img [src]="noDataFoundImg" alt="No Data Found">
-      <p>No Data Found!!</p>
-    </div>
-    <div *ngIf = "!noDataFound" class="col m-0 p-0 mt-5">
+  <div class="show-doctos">
+    <div  class="col m-0 p-0 mt-5">
       <div class="container">
-        <h3 class="mb-4 text-center">Available Doctors</h3>
+        <h3 class="mb-4 text-center" *ngIf="doctorList.length>0">Available Doctors</h3>
         <hr>
-
         <div class="row mb-3" >
-          <div class="col-sm-4" *ngIf="totalPages > 1">
+          <div class="col-sm-4" *ngIf="totalPages > 0">
             <label for="pageSize">Size:</label>
             <select class="form-select" id="size" [(ngModel)]="size" (change)="onPageSizeChange()">
               <option *ngFor="let sizeOption of sizeOptions" [value]="sizeOption">{{ sizeOption }}</option>
             </select>
           </div>
-          <div class="col-sm-4" *ngIf="totalPages > 1">
+          <div class="col-sm-4" *ngIf="totalPages > 0">
             <label for="sortBy">Sort By:</label>
             <select class="form-select" id="sortBy" [(ngModel)]="sortBy" (change)="onSortByChange()">
               <option *ngFor="let sortByOption of sortByOptions" [value]="sortByOption.value">{{ sortByOption.label }}</option>
             </select>
           </div>
-          <div class="col-sm-4" *ngIf="totalPages >= 0">
+          <div class="col-sm-4" *ngIf="doctorsShowed">
             <label for="search">Search:</label>
             <input class="form-control" type="text" id="search" [(ngModel)]="search" (keyup)="onSearch()">
           </div>
         </div>
 
-        <div class="table-responsive m-0 p-0" >
+        <div class="table-responsive m-0 p-0" *ngIf="doctorList.length>0">
           <table class="table table-striped table-dark mb-5 p-0" >
             <thead class="text-center">
               <tr>
@@ -266,7 +261,10 @@
 
       </div>
     </div>
-
+    <div *ngIf = "noDataFound" class="noData">
+      <img [src]="noDataFoundImg" alt="No Data Found">
+      <p>No Data Found!!</p>
+    </div>
   </div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
 import { Doctor } from 'src/app/models/doctor.model';
+import { Token } from 'src/app/models/token.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { DepartmentService } from 'src/app/services/department.service';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
@@ -20,7 +22,7 @@ interface SortByOption {
 
 export class AppointmentComponent implements OnInit{
 
-  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService, private toast : ToastMessageService){}
+  constructor(private appointmentService : AppointmentService, private userService : UserService, private router : Router, private route : ActivatedRoute, private departmentService : DepartmentService, private toast : ToastMessageService, private authService : AuthService){}
 
   appointments : Appointment[] = [];
 
@@ -49,16 +51,11 @@ export class AppointmentComponent implements OnInit{
   ngOnInit(){
 
 
-    const token = sessionStorage.getItem('token');
-    if (token) {
+    const decoded_token : Token = this.authService.decodeToken();
 
-      let store = token?.split('.');
-      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-
-      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
-
-      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
-    }
+    this.tokenRole = decoded_token.role;
+    this.id = parseInt(decoded_token.id);
+    
     this.route.url.subscribe((data) => {
       this.urlPath = data[0].path
 
@@ -83,6 +80,9 @@ export class AppointmentComponent implements OnInit{
     if (this.search) {
       this.params.search = this.search;
     }
+    else{
+      this.params.search = "";
+    }
     this.params.page = this.page-1;
 
     if(this.tokenRole==='ADMIN'){
@@ -91,18 +91,18 @@ export class AppointmentComponent implements OnInit{
           this.totalPages = data.totalPages;
         })
       }
-      else {
-        this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
-          console.log(data);
-          if(data){
-            this.appointments = data.content as Appointment[];
-            this.totalPages = data.totalPages;
-          }
-          else{
-            this.appointments = [];
-          }
-        });
-      }
+    else {
+      this.appointmentService.getAppointmentByUser((this.id.toString()), this.params).subscribe((data)=> {
+        if(data){
+          this.appointments = data.content as Appointment[];
+          this.totalPages = data.totalPages;
+        }
+        else{
+          this.appointments = [];
+          this.totalPages = 0;
+        }
+      });
+    }
 
     }
 

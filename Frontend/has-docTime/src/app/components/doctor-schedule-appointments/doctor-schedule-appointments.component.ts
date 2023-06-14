@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
+import { Token } from 'src/app/models/token.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { SharedService } from 'src/app/services/shared.service';
 
 interface SortByOption {
@@ -18,7 +20,8 @@ export class DoctorScheduleAppointmentsComponent {
   constructor(private appointmentService: AppointmentService,
     private router : Router,
     private route : ActivatedRoute,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private authService : AuthService
     ){}
 
   appointments: Appointment[]=[];
@@ -41,16 +44,12 @@ export class DoctorScheduleAppointmentsComponent {
   ];
 
   ngOnInit() {
-    const token = sessionStorage.getItem('token');
-      if (token) {
-        let store = token?.split('.');
-        this.id = atob(store[1]).split(',')[1].split(':')[1];
-        this.id = this.id.substring(1, this.id.length-1);
-      }
-      this.getData(0);
+    const decoded_token : Token = this.authService.decodeToken();
+    this.id = decoded_token.id;
+      this.getData();
   }
 
-  getData(page : number){
+  getData(){
 
     let params: any = {};
 
@@ -90,7 +89,6 @@ export class DoctorScheduleAppointmentsComponent {
   }
 
   appointmentDetail(i : number){
-    console.log(this.appointments[i]);
 
     sessionStorage.setItem('userId', this.appointments[i].user.id?.toString() as string);
     sessionStorage.setItem('appointmentId', this.appointments[i].id.toString());
@@ -99,21 +97,21 @@ export class DoctorScheduleAppointmentsComponent {
 
   onPageSizeChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSortByChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSearch() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
-    this.getData(this.page);
+    this.getData();
   }
 }

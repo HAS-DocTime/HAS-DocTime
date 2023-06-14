@@ -10,10 +10,15 @@ import { Admin } from 'src/app/models/admin.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { validateDateValidator } from 'src/app/customValidators/validateDate.validator';
 import { trimmedInputValidateSpace } from 'src/app/customValidators/trimmedInputValidateSpace.validator';
+import { CountryService } from 'src/app/services/country.service';
+import { Country } from 'src/app/models/country.model';
+import { FileUpload } from 'src/app/models/fileUpload.model';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs';
-import { FileUpload } from 'src/app/models/fileUpload.model';
+import { DepartmentService } from 'src/app/services/department.service';
+import { Token } from 'src/app/models/token.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -30,8 +35,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private location : Location,
+    private countryService : CountryService,
     private toast : ToastMessageService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private departmentService : DepartmentService,
+    private authService : AuthService
   ) {}
 
   user?: User;
@@ -46,196 +54,40 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   formattedDate = this.datePipe.transform(this.dateFromAPI, 'yyyy-MM-dd');
   urlPath!: string;
   doctors!: Doctor[];
+  countries : Country[] = [];
   selectedFile: FileUpload | null = null;
-  imageUrl!: string;
+  imageUrl: string = "";
   isLoading: boolean = false;
 
   ngOnInit(): void {
+
     this.route.url.subscribe((data) => {
-      // console.log("data", data);
       this.urlPath = data[0].path;
       const token = sessionStorage.getItem('token');
-      if (token) {
-        let store = token?.split('.');
-        this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
-        this.id = parseInt(
-          atob(store[1])
-            .split(',')[1]
-            .split(':')[1]
-            .substring(1, this.tokenRole.length - 1)
-        );
+      const decoded_token : Token = this.authService.decodeToken();
 
-        this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
+    this.tokenRole = decoded_token.role;
+    this.id = parseInt(decoded_token.id);
 
         if (this.tokenRole === 'ADMIN') {
           if (data[0].path === 'users') {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
-              this.userService.getUser(this.id).subscribe((data) => {
-                this.user = data;
-                this.id = data.id as number;
-                this.imageUrl = data.imageUrl as string;
-                const nameArray: string[] =
-                  this.user?.name?.split(' ', 2) ?? [];
-                this.firstName = nameArray[0];
-                this.lastName = nameArray[1];
-                if (data.dob) {
-                  this.dateFromAPI = new Date(data?.dob);
-                }
-
-                this.formattedDate = this.datePipe.transform(
-                  this.dateFromAPI,
-                  'yyyy-MM-dd'
-                );
-
-                this.editForm.patchValue({
-                  imageUrl: this.imageUrl,
-                  firstName: this.firstName,
-                  lastName: this.lastName,
-                  email: this.user.email,
-                  gender: this.user.gender,
-                  bloodGroup: this.user.bloodGroup,
-                  contact: this.user.contact,
-                  height: this.user.height,
-                  weight: this.user.weight,
-                  dob: this.formattedDate,
-                });
-              });
+              this.getUser(this.id);
             });
           } else if (data[0].path === 'doctors') {
             this.route.params.subscribe((data) => {
               this.id = parseInt(data['id']);
-              this.doctorService.getDoctor(this.id).subscribe((data) => {
-                this.doctor = data;
-                this.user = data.user;
-                this.imageUrl = data.user.imageUrl as string;
-                this.id = data.id as number;
-                const docNameArray: string[] =
-                  this.doctor?.user?.name?.split(' ', 2) ?? [];
-                this.firstName = docNameArray[0];
-                this.lastName = docNameArray[1];
-                if (data.user.dob) {
-                  this.dateFromAPI = new Date(data.user.dob);
-                }
-                this.formattedDate = this.datePipe.transform(
-                  this.dateFromAPI,
-                  'yyyy-MM-dd'
-                );
-
-                this.editForm.patchValue({
-                  imageUrl: this.imageUrl,
-                  firstName: this.firstName,
-                  lastName: this.lastName,
-                  email: this.doctor.user.email,
-                  gender: this.doctor.user.gender,
-                  bloodGroup: this.doctor.user.bloodGroup,
-                  contact: this.doctor.user.contact,
-                  height: this.doctor.user.height,
-                  weight: this.doctor.user.weight,
-                  dob: this.formattedDate,
-                  qualification: this.doctor.qualification,
-                  casesSolved: this.doctor.casesSolved,
-                });
-              });
+              this.getDoctor(this.id);
             });
           } else {
-            this.adminService.getAdmin(this.id).subscribe((data) => {
-              this.admin = data;
-              this.user = data.user;
-              this.imageUrl = data.user?.imageUrl as string;
-              this.id = data.id as number;
-              const adminNameArray: string[] =
-                this.admin?.user?.name?.split(' ', 2) ?? [];
-              this.firstName = adminNameArray[0];
-              this.lastName = adminNameArray[1];
-              if (data?.user?.dob) {
-                this.dateFromAPI = new Date(data?.user?.dob);
-              }
-
-              this.formattedDate = this.datePipe.transform(
-                this.dateFromAPI,
-                'yyyy-MM-dd'
-              );
-
-              this.editForm.patchValue({
-                imageUrl: this.imageUrl,
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.admin?.user?.email,
-                gender: this.admin?.user?.gender,
-                bloodGroup: this.admin?.user?.bloodGroup,
-                contact: this.admin?.user?.contact,
-                height: this.admin?.user?.height,
-                weight: this.admin?.user?.weight,
-                dob: this.formattedDate,
-              });
-            });
+            this.getAdmin(this.id);
           }
         } else if (this.tokenRole === 'DOCTOR') {
-          this.doctorService.getDoctor(this.id).subscribe((data) => {
-            this.doctor = data;
-            this.user = data.user;
-            this.imageUrl = data.user.imageUrl as string;
-            this.id = data.id as number;
-            const docNameArray: string[] =
-              this.doctor?.user?.name?.split(' ', 2) ?? [];
-            this.firstName = docNameArray[0];
-            this.lastName = docNameArray[1];
-            if (data.user.dob) {
-              this.dateFromAPI = new Date(data.user.dob);
-            }
-            this.formattedDate = this.datePipe.transform(
-              this.dateFromAPI,
-              'yyyy-MM-dd'
-            );
-
-            this.editForm.patchValue({
-              imageUrl: this.imageUrl,
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.doctor.user.email,
-              gender: this.doctor.user.gender,
-              bloodGroup: this.doctor.user.bloodGroup,
-              contact: this.doctor.user.contact,
-              height: this.doctor.user.height,
-              weight: this.doctor.user.weight,
-              dob: this.formattedDate,
-              qualification: this.doctor.qualification,
-              casesSolved: this.doctor.casesSolved,
-            });
-          });
+          this.getDoctor(this.id)
         } else {
-          this.userService.getUser(this.id).subscribe((data) => {
-            this.user = data;
-
-            this.id = data.id as number;
-            const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
-            this.firstName = nameArray[0];
-            this.lastName = nameArray[1];
-            if (data.dob) {
-              this.dateFromAPI = new Date(data?.dob);
-            }
-            this.imageUrl = data.imageUrl as string;
-            this.formattedDate = this.datePipe.transform(
-              this.dateFromAPI,
-              'yyyy-MM-dd'
-            );
-
-            this.editForm.patchValue({
-              imageUrl: this.imageUrl,
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.user.email,
-              gender: this.user.gender,
-              bloodGroup: this.user.bloodGroup,
-              contact: this.user.contact,
-              height: this.user.height,
-              weight: this.user.weight,
-              dob: this.formattedDate,
-            });
-          });
+          this.getUser(this.id);
         }
-      }
     });
   }
 
@@ -257,23 +109,156 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     bloodGroup: new FormControl({ value: '', disabled: this.disable }, [
       Validators.required,
     ]),
-    contact: new FormControl({ value: '', disabled: this.disable }, [
-      Validators.required,
-    ]),
+    contact: new FormGroup({
+      countryCode: new FormControl({ value: '', disabled: this.disable}, [Validators.required]),
+      number: new FormControl({ value: '', disabled: this.disable}, [Validators.required])
+    }),
     height: new FormControl({ value: '', disabled: this.disable }),
     weight: new FormControl({ value: '', disabled: this.disable }),
     email: new FormControl({ value: '', disabled: this.disable }, [
       Validators.required,
     ]),
     qualification: new FormControl({ value: '', disabled: this.disable }),
+    department: new FormControl({ value: '', disabled: this.disable }),
     casesSolved: new FormControl({ value: '', disabled: true }),
     patientChronicIllness: new FormArray([]),
   });
 
-  ngOnDestroy(): void { }
+  private getAdmin(id: number) {
+    this.adminService.getAdmin(this.id).subscribe((data) => {
+      this.admin = data;
+      this.user = data.user;
+      this.id = data.id as number;
+      const adminNameArray: string[] = this.admin?.user?.name?.split(' ', 2) ?? [];
+      this.firstName = adminNameArray[0];
+      this.lastName = adminNameArray[1];
+      if (data?.user?.dob) {
+        this.dateFromAPI = new Date(data?.user?.dob);
+      }
 
+      this.formattedDate = this.datePipe.transform(
+        this.dateFromAPI,
+        'yyyy-MM-dd'
+      );
+      this.countryCodeDropdownMethod();
+      this.editFormPatchValue();
+    });
+  }
+
+  private getDoctor(id: number) {
+    this.doctorService.getDoctor(id).subscribe((data) => {
+      this.doctor = data;
+      this.user = data.user;
+      this.imageUrl = this.user.imageUrl as string;
+      this.id = data.id as number;
+      const docNameArray: string[] = this.doctor?.user?.name?.split(' ', 2) ?? [];
+      this.firstName = docNameArray[0];
+      this.lastName = docNameArray[1];
+      if (data.user.dob) {
+        this.dateFromAPI = new Date(data.user.dob);
+      }
+      this.formattedDate = this.datePipe.transform(
+        this.dateFromAPI,
+        'yyyy-MM-dd'
+      );
+      this.departmentDropDownMethod();
+      this.countryCodeDropdownMethod();
+      this.editFormPatchValue();
+    });
+  }
+
+  private getUser(id: number) {
+    this.userService.getUser(id).subscribe((data) => {
+      this.user = data;
+      this.imageUrl = this.user.imageUrl as string;
+      this.id = data.id as number;
+      const nameArray: string[] = this.user?.name?.split(' ', 2) ?? [];
+      this.firstName = nameArray[0];
+      this.lastName = nameArray[1];
+      if (data.dob) {
+        this.dateFromAPI = new Date(data?.dob);
+      }
+
+      this.formattedDate = this.datePipe.transform(
+        this.dateFromAPI,
+        'yyyy-MM-dd'
+      );
+      this.countryCodeDropdownMethod();
+      this.editFormPatchValue();
+    });
+  }
+
+  private editFormPatchValue() {
+    this.editForm.patchValue({
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.user?.email,
+      gender: this.user?.gender,
+      bloodGroup: this.user?.bloodGroup,
+      contact: {
+        number: this.user?.contact?.split("-")[1]
+      },
+      height: this.user?.height,
+      weight: this.user?.weight,
+      dob: this.formattedDate,
+      qualification: this.doctor?.qualification,
+      casesSolved: this.doctor?.casesSolved,
+    });
+  }
+
+  private countryCodeDropdownMethod() {
+    this.countries = [];
+    this.countryService.getAllCountries().then((data) => {
+      this.countries = data;
+      var dropdown = document.getElementById('countryCodeDropdown');
+      this.countries.forEach(country => {
+        if (country.code === this.user?.contact?.split("-")[0]) {
+          var option = document.createElement('option');
+          option.value = country.code;
+          option.textContent = country.code + ":" + country.name;
+          option.selected = true;
+          dropdown?.prepend(option);
+          this.editForm.patchValue({
+            contact : {
+              countryCode: country.code,
+            }
+          });
+        } else {
+          var option = document.createElement('option');
+          option.value = country.code;
+          option.textContent = country.code + ":" + country.name;
+          dropdown?.appendChild(option);
+        }
+
+      });
+    });
+  }
+
+  private departmentDropDownMethod(){
+    this.departmentService.getDepartmentsWithoutPagination().subscribe(data => {
+      var dropdown = document.getElementById('departmentDropDown');
+      data.forEach(department => {
+        if(department.id === this.doctor?.department.id){
+          var option = document.createElement('option');
+          option.value = department.id?.toString() as string;
+          option.textContent = department.name as string;
+          option.selected = true;
+          dropdown?.prepend(option);
+          this.editForm.patchValue({
+            department : department.id,
+          });
+        }else{
+          var option = document.createElement('option');
+          option.value = department.id?.toString() as string;
+          option.textContent = department.name as string;
+          dropdown?.appendChild(option);
+        }
+      });
+    });
+  }
+
+  ngOnDestroy(): void {}
   submitProfile() {
-
     const date = new Date();
     this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
     this.editForm.value['lastName'] = this.editForm.value["lastName"].trim();
@@ -290,6 +275,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       }
       user.age = age;
     }
+    user.contact = this.editForm.get('contact')?.get('countryCode')?.value + "-" + this.editForm.get('contact')?.get('number')?.value;
     user.name = user.firstName + ' ' + user.lastName;
     let chronicIllnesses = [];
     for (let i = 0; i < user.patientChronicIllness.length; i++) {
@@ -352,6 +338,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.toast.showError("Unexpected Error Occurred", "Error");
         }
       });
+      console.log(this.imageUrl);
     } else if (
       this.tokenRole === 'ADMIN' &&
       this.urlPath !== 'users' &&
@@ -385,24 +372,17 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.isLoading = true;
     if (this.selectedFile != null) {
-      console.log(this.selectedFile);
       const filePath = `profiles/${this.user?.id}`;
       const storageRef = this.storage.ref(filePath);
       const uploadTask = this.storage.upload(filePath, this.selectedFile);
 
-      console.log("uploadTask", uploadTask);
-
       uploadTask.snapshotChanges().pipe(
         finalize(() => {
           storageRef.getDownloadURL().subscribe(downloadURL => {
-            console.log("data ", downloadURL);
             (this.selectedFile as FileUpload).url = downloadURL;
-            console.log("selectedfiles ", this.selectedFile);
             this.imageUrl = downloadURL;
             this.user!.imageUrl = downloadURL;
-            console.log("user before", this.user);
             this.submitProfile();
-            console.log("user", this.user);
           });
         })
       ).subscribe();
@@ -414,7 +394,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
-    console.log("image ", this.selectedFile);
 
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -426,30 +405,21 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   // uploadProfilePicture(){
-  //   console.log("submit");
 
   //   if(this.selectedFile){
-
-  //     console.log(this.selectedFile);
   //     const filePath = `profiles/${this.selectedFile.name}`;
   //     const storageRef = this.storage.ref(filePath);
   //     const uploadTask = this.storage.upload(filePath, this.selectedFile);
 
-  //     console.log("uploadTask", uploadTask);
-
   //     uploadTask.snapshotChanges().pipe(
   //       finalize(() => {
   //         storageRef.getDownloadURL().subscribe(downloadURL => {
-  //           console.log("data ", downloadURL);
   //           (this.selectedFile as FileUpload).url = downloadURL;
-  //           console.log("selectedfiles ", this.selectedFile);
   //           this.imageUrl = downloadURL;
   //         });
   //       })
   //     ).subscribe();
   //   }
-
-  //   console.log("after data subscribe");
   // }
 
   toggleDisable() {

@@ -52,14 +52,14 @@ export class UserDoctorListComponent implements OnInit{
         this.sortBy = "user.name";
         this.sortByOptions.push({ label: 'Name', value: 'user.name' }, { label: 'Email', value: 'user.email' }, { label: 'Gender', value: 'user.gender' })
       }
-      this.getDataById(this.urlPath, this.idForSearch, 0);
+      this.getDataById(this.idForSearch);
     })
 
   }
 
 
 
-  getDataById(urlPath: string,id: string ,page : number){
+  getDataById(id: string){
     let params: any = {};
 
     // Add query parameters based on selected options
@@ -139,22 +139,21 @@ export class UserDoctorListComponent implements OnInit{
 
   onPageSizeChange() {
     this.page = 1;
-    this.getDataById(this.urlPath, this.idForSearch,this.page);
+    this.getDataById(this.idForSearch);
   }
 
   onSortByChange() {
     this.page = 1;
-    this.getDataById(this.urlPath, this.idForSearch,this.page);
+    this.getDataById(this.idForSearch);
   }
 
   onSearch() {
     this.page = 1;
-    this.getDataById(this.urlPath, this.idForSearch,this.page);
+    this.getDataById(this.idForSearch);
   }
 
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
-    this.getDataById(this.urlPath, this.idForSearch,this.page);
-
+    this.getDataById(this.idForSearch);
   }
 }

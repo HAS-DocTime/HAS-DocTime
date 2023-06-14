@@ -81,21 +81,37 @@
           </div>
           <div class="row mt-3">
             <div class="col-md-12 mb-3">
-              <label class="labels">Mobile Number
-                <span *ngIf="!disable" class="required-asterisk">*</span></label>
-              <input type="text" class="form-control" placeholder="enter phone number" formControlName="contact"
-                pattern="^\+[0-9]{1,3}-[0-9]{10}$" [ngClass]="
-                  editForm.get('contact')?.errors &&
-                  editForm.get('contact')?.touched
-                    ? 'errored-input'
-                    : ''
-                " />
-              <div class="text-danger errored-input" *ngIf="
+              <label class="labels"
+                >Contact
+                <span *ngIf="!disable" class="required-asterisk">*</span></label
+              >
+              <div class="d-flex" formGroupName="contact">
+                <select class="form-select countryCode" id="countryCodeDropdown" formControlName="countryCode">
+                  
+                  <!-- Add more options here -->
+                </select>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="enter phone number"
+                  formControlName="number"
+                  pattern="^[0-9]{10}$"
+                  [ngClass]="
+                    editForm.get('contact')?.errors &&
+                    editForm.get('contact')?.touched
+                      ? 'errored-input'
+                      : ''
+                  "
+                />
+              </div>
+              <div
+                class="text-danger errored-input"
+                *ngIf="
                   editForm.get('contact')?.touched &&
                   editForm.get('contact')?.invalid
                 ">
-                <span *ngIf="editForm.get('contact')?.errors?.['required']">Contact is Required</span>
-                <span *ngIf="editForm.get('contact')?.errors?.['pattern']">Enter Valid Contact Number</span>
+                <span *ngIf="editForm.get('contact')?.get('number')?.errors?.['required']">Contact is Required</span>
+                <span *ngIf="editForm.get('contact')?.get('number')?.errors?.['pattern']">Enter Valid Contact Number</span>
               </div>
             </div>
             <div class="col-md-12 mb-3">
@@ -175,6 +191,23 @@
               <label class="labels">Qualification
                 <span *ngIf="!disable" class="required-asterisk">*</span></label><input placeholder="Enter Your Qualification ( Eg : MBBS )" type="text" class="form-control"
                 formControlName="qualification" />
+            </div>
+            <div class="clo-md-12 mb-3">
+              <label for="Department">Department <span *ngIf="!disable" class="required-asterisk">*</span></label>
+              <select class="form-select" id="departmentDropDown" formControlName="department">
+                <!-- add-elements -->
+              </select>
+              <div
+          class="text-danger errored-input"
+          *ngIf="
+            editForm.get('department')?.touched &&
+            editForm.get('department')?.invalid
+          "
+        >
+          <span *ngIf="editForm.get('department')?.errors?.['required']"
+            >department is Required</span
+          >
+        </div>
             </div>
             <div class="col-md-12 mb-3">
               <label class="labels">Cases Solved </label><input type="number" class="form-control"

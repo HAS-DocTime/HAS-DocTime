@@ -33,4 +33,8 @@ export class DepartmentService {
   updateDepartment(department : Department, id : number){
     return this.http.put<Department>(`${this.base_url}department/${id}`, department);
   }
+  
+  getDepartmentsWithoutPagination(){
+    return this.http.get<Department[]>(`${this.base_url}department/withoutPagination`);
+  }
 }

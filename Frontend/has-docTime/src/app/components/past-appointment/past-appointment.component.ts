@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PagedObject } from 'src/app/models/pagedObject.model';
 import { PastAppointment } from 'src/app/models/pastAppointment.model';
 import { Symptom } from 'src/app/models/symptom.model';
+import { Token } from 'src/app/models/token.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { PastAppointmentService } from 'src/app/services/past-appointment.service';
 import { SymptomService } from 'src/app/services/symptom.service';
 
@@ -19,7 +21,7 @@ interface SortByOption {
 export class PastAppointmentComponent implements OnInit{
 
 
-  constructor(private pastAppointmentService: PastAppointmentService, private symptomService: SymptomService, private router : Router, private route : ActivatedRoute){}
+  constructor(private pastAppointmentService: PastAppointmentService, private symptomService: SymptomService, private router : Router, private route : ActivatedRoute, private authService : AuthService){}
 
   id : number = 0;
   tokenRole : string = "";
@@ -47,21 +49,15 @@ export class PastAppointmentComponent implements OnInit{
 
 
   ngOnInit() {
-    const token = sessionStorage.getItem('token');
-    if (token) {
+    const decoded_token : Token = this.authService.decodeToken();
 
-      let store = token?.split('.');
-      this.tokenRole = atob(store[1]).split(',')[2].split(':')[1];
+    this.tokenRole = decoded_token.role;
+    this.id = parseInt(decoded_token.id);
 
-      this.id = parseInt(atob(store[1]).split(',')[1].split(':')[1].substring(1, this.tokenRole.length - 1));
-
-      this.tokenRole = this.tokenRole.substring(1, this.tokenRole.length - 1);
-    }
-
-    this.getData(0);
+    this.getData();
   }
 
-  getData(page : number){
+  getData(){
     let params: any = {};
 
     // Add query parameters based on selected options
@@ -151,21 +147,21 @@ export class PastAppointmentComponent implements OnInit{
 
   onPageSizeChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSortByChange() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onSearch() {
     this.page = 1;
-    this.getData(this.page);
+    this.getData();
   }
 
   onPageChange(pageNumber: number) {
     this.page = pageNumber ;
-    this.getData(this.page);
+    this.getData();
   }
 }
