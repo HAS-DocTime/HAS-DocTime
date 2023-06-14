@@ -3,6 +3,7 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.LoginDetail;
 import com.spring.hasdocTime.entity.OtpRequestBody;
+import com.spring.hasdocTime.entity.PasswordUpdateBody;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.LoginInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,14 @@ public class LoginController {
     public ResponseEntity<Void> otpVerification(@RequestBody OtpRequestBody otpRequestBody){
 
         if(loginService.otpVerification(otpRequestBody)){
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.badRequest().body(null);
+    }
+
+    @PostMapping("/saveNewPassword")
+    public ResponseEntity<Void> saveNewPassword(@RequestBody PasswordUpdateBody passwordUpdateBody){
+        if(loginService.saveNewPassword(passwordUpdateBody)){
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.badRequest().body(null);

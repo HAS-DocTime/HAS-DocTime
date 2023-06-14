@@ -12,11 +12,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 import java.util.Random;
 
 
@@ -31,6 +33,7 @@ public class LoginDaoImpl implements LoginInterface {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final JavaMailSender javaMailSender;
+    private final PasswordEncoder passwordEncoder;
     private static final int OTP_LENGTH = 6;
 
     HashMap<String, String> otpMap = new LinkedHashMap<>();
@@ -40,12 +43,14 @@ public class LoginDaoImpl implements LoginInterface {
             UserRepository userRepository,
             JwtService jwtService,
             AuthenticationManager authenticationManager,
-            JavaMailSender javaMailSender
+            JavaMailSender javaMailSender,
+            PasswordEncoder passwordEncoder
             ){
         this.userRepository = userRepository;
         this.javaMailSender = javaMailSender;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -96,7 +101,9 @@ public class LoginDaoImpl implements LoginInterface {
     public Void sendEmailForForgotPassword(String email) {
         String otp = generateRandomOtp();
 
-        otpMap.put(email, otp);
+        String emailWithoutQuotes = email.substring(1, email.length()-1);
+
+        otpMap.put(emailWithoutQuotes, otp);
 
         sendEmail(email, otp);
 
@@ -106,14 +113,7 @@ public class LoginDaoImpl implements LoginInterface {
     @Override
     public Boolean otpVerification(OtpRequestBody otpRequestBody) {
 
-        for(String a : otpMap.keySet()){
-            System.out.println(a+ "====================");
-            System.out.println(otpMap.get(a) + "========================");
-        }
-        System.out.println(otpRequestBody.getOtp() + "-----------------------");
-        System.out.println(otpRequestBody.getEmail() + "00000000000000000000");
         String storedOtp = otpMap.get(otpRequestBody.getEmail());
-        System.out.println(storedOtp + "++++++++++++++++++++++++");
 
         if(storedOtp != null && storedOtp.equals(otpRequestBody.getOtp())){
             otpMap.remove(otpRequestBody.getEmail());
@@ -125,10 +125,23 @@ public class LoginDaoImpl implements LoginInterface {
 
     }
 
+    @Override
+    public Boolean saveNewPassword(PasswordUpdateBody passwordUpdateBody) {
+        Optional<User> user = userRepository.findById(passwordUpdateBody.getId());
+
+        if(user.isPresent()){
+            if(passwordUpdateBody.getNewPassword().equals(passwordUpdateBody.getConfirmPassword())){
+                user.get().setPassword(passwordEncoder.encode(passwordUpdateBody.getNewPassword()));
+                userRepository.save(user.get());
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void sendEmail(String email, String otp) {
 
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setTo(email);
         message.setSubject("HAS - Forgot Password");
         message.setText("Kindly enter the given otp at the website: " + otp);
@@ -152,4 +165,6 @@ public class LoginDaoImpl implements LoginInterface {
         return otp.toString();
 
     }
+
+
 }
