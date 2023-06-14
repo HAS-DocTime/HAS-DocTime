@@ -5,11 +5,13 @@ package com.spring.hasdocTime.interfaces;
 
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.EmailUpdateRequestBody;
+import com.spring.hasdocTime.entity.PasswordUpdateRequestBody;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import org.springframework.data.domain.Page;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.Set;
 
@@ -86,4 +88,6 @@ public interface UserInterface {
     Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException;
 
     AuthenticationResponse updateEmailOfUser(EmailUpdateRequestBody emailUpdateRequestBody);
+
+    String updatePasswordOfUser(PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException, AuthenticationException;
 }

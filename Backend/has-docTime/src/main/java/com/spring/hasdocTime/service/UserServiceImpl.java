@@ -2,6 +2,7 @@ package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.EmailUpdateRequestBody;
+import com.spring.hasdocTime.entity.PasswordUpdateRequestBody;
 import com.spring.hasdocTime.entity.User;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.Set;
 
@@ -123,6 +125,11 @@ public class UserServiceImpl implements UserInterface {
 
     @Override
     public AuthenticationResponse updateEmailOfUser(EmailUpdateRequestBody emailUpdateRequestBody) {
-        return userDao.updateEmailOfUser((emailUpdateRequestBody));
+        return userDao.updateEmailOfUser(emailUpdateRequestBody);
+    }
+
+    @Override
+    public String updatePasswordOfUser(PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException, AuthenticationException {
+        return userDao.updatePasswordOfUser(passwordUpdateRequestBody);
     }
 }

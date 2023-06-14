@@ -16,10 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.hibernate.Hibernate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +39,7 @@ public class UserDaoImpl implements UserInterface {
     private final SymptomRepository symptomRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     /**
      * Retrieves all users.
@@ -326,8 +332,35 @@ public class UserDaoImpl implements UserInterface {
             var jwtToken = jwtService.generateToken(userDetailForToken);
             return AuthenticationResponse.builder().token(jwtToken).build();
         }
-
         return null;
+    }
+
+    @Override
+    @Transactional
+    public String updatePasswordOfUser(PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException, AuthenticationException {
+        System.out.println(passwordUpdateRequestBody.getId());
+        System.out.println(passwordUpdateRequestBody.getOldPassword());
+        System.out.println(passwordUpdateRequestBody.getNewPassword());
+        Optional<User> optionalUser = userRepository.findById(passwordUpdateRequestBody.getId());
+        if(optionalUser.isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        User user = optionalUser.get();
+//        String encodedOldPassword = passwordEncoder.encode(passwordUpdateRequestBody.getOldPassword());
+//        System.out.println("encodedOldPassword"+encodedOldPassword);
+        System.out.println("oldPassword" + user.getPassword());
+        System.out.println(passwordUpdateRequestBody.getOldPassword());
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                user.getEmail(),
+                passwordUpdateRequestBody.getOldPassword());
+        Authentication auth = authenticationManager.authenticate(
+                usernamePassword
+        );
+        String encodedNewPassword = passwordEncoder.encode(passwordUpdateRequestBody.getNewPassword());
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
+        return "Password updated successfully";
+
     }
 
 
