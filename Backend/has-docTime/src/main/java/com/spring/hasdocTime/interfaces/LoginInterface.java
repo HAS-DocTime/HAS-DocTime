@@ -5,6 +5,7 @@ package com.spring.hasdocTime.interfaces;
 
 import com.spring.hasdocTime.entity.AuthenticationResponse;
 import com.spring.hasdocTime.entity.LoginDetail;
+import com.spring.hasdocTime.entity.OtpRequestBody;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 
 public interface LoginInterface {
@@ -17,4 +18,7 @@ public interface LoginInterface {
      * @throws MissingParameterException if there are missing parameters in the login details
      */
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) throws MissingParameterException;
+
+    Void sendEmailForForgotPassword(String email);
+    Boolean otpVerification(OtpRequestBody otpRequestBody);
 }
