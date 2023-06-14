@@ -3,7 +3,7 @@
   <div class="container">
     <h2 class="heading text-lg-center pt-4">Registration Form</h2>
     <form [formGroup]="signupForm" class="registerForm" (ngSubmit)="register()">
-      
+
       <div class="d-flex flex-column align-items-center text-center p-3 py-5">
         <div class="row">
           <span *ngIf="imageUrl != null || selectedFile != null">
@@ -359,7 +359,7 @@
                   <span *ngIf="signupForm.get('patientChronicIllness.'+i+'.name')?.errors">Name is Required</span>
                 </div>
               </div>
-            <div>
+            <!-- <div>
               <label for="yearsOfIllness">Years of Illness <span class="required-asterisk">*</span></label>
               <input
                 type="number"
@@ -383,7 +383,7 @@
                   >Enter valid Years of Illness</span
                 >
               </div>
-            </div>
+            </div> -->
             <i class="bi bi-trash3-fill me-2 dlt" (click)="deleteChronicIllness(i)" style="cursor : pointer;"></i>
           </div>
         </div>

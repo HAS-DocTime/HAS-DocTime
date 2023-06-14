@@ -81,7 +81,7 @@
       </table>
     </div>
 
-    <nav *ngIf="totalPages > 1">
+    <nav *ngIf="totalPages > 1 && !noDataFound">
       <ul class="pagination">
         <li class="page-item"  [class.disabled]="page === 1">
           <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>

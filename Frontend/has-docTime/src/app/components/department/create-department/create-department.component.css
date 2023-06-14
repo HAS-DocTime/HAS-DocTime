@@ -15,7 +15,16 @@
   border-bottom: 2px solid #000;
   border-radius: 0;
   font-size: 14px;
-  padding: 5px 0;
+  
+  background-color: transparent;
+  box-shadow: none;
+}
+.text-area {
+  border: 1px solid #000;
+  border-radius: 0.5rem;
+  font-size: 16px;
+  padding: 5 0;
+  justify-content: space-evenly;
   background-color: transparent;
   box-shadow: none;
 }

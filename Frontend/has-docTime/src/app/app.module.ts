@@ -48,6 +48,7 @@ import { CreateDepartmentComponent } from './components/department/create-depart
 import { AngularFireModule } from '@angular/fire/compat'
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { environment } from 'src/environments/environment';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { environment } from 'src/environments/environment';
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
-    FormsModule
+    FormsModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
     {
