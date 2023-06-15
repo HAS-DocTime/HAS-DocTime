@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { confirmPasswordValidator } from 'src/app/customValidators/confirmPasswordMatch.validator';
+import { validatePassword } from 'src/app/customValidators/validatePassword.validator';
 import { LoginService } from 'src/app/services/login.service';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 
@@ -18,7 +20,7 @@ export class ForgotPasswordComponent implements OnInit{
   if (firstInput) {
     (firstInput as HTMLInputElement).focus();
   }
-      let otpFields = document.querySelectorAll(".otp-form .otp-field");
+let otpFields = document.querySelectorAll(".otp-form .otp-field");
       let otpValueField = document.querySelector(".otp-form .otp-value");
     
       otpFields.forEach(function (field) {
@@ -95,12 +97,36 @@ export class ForgotPasswordComponent implements OnInit{
 
     this.loginService.verifyOtp(verifyOtpBody).subscribe(()=> {
       this.toast.showSuccess("Success", "Verification Successful");
-      this.router.navigate(["/login", "changePassword"]);
-      
+      this.isVerified = true;
+      const div = document.querySelector(".hidden");
+      (div as HTMLDivElement).style.visibility = "hidden";
     }, (err)=> {
       this.toast.showError("Error", "Unexpected Error occured");
     });
 
+  }
+
+  changePasswordForm : FormGroup = new FormGroup({
+    password : new FormControl("", [validatePassword(), Validators.required]),
+    confirmPassword : new FormControl("", [Validators.required])
+  }, {
+    validators : confirmPasswordValidator()
+  })
+
+  showPassword : boolean = false;
+  showConfirmPassword : boolean = false;
+  passwordType : string = "password";
+  confirmPasswordType : string = "password";
+  isVerified : boolean = false;
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+    this.passwordType = this.showPassword ? "text" : "password";
+  }
+
+  toggleShowConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+    this.confirmPasswordType = this.showConfirmPassword ? "text" : "password";
   }
   
 }
