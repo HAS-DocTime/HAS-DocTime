@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PasswordUpdateBody {
 
-    private int id;
+    private String otp;
+    private String email;
     private String newPassword;
     private String confirmPassword;
 

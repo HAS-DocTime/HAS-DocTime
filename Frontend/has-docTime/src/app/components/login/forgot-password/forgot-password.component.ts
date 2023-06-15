@@ -96,6 +96,7 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
     }
 
     this.loginService.verifyOtp(verifyOtpBody).subscribe(()=> {
+      sessionStorage.setItem('otp', verifyOtpBody.otp);
       this.toast.showSuccess("Success", "Verification Successful");
       this.isVerified = true;
       const div = document.querySelector(".hidden");
@@ -104,6 +105,12 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
       this.toast.showError("Error", "Unexpected Error occured");
     });
 
+  }
+
+  updatePassword(){
+    this.changePasswordForm.value["email"] = sessionStorage.getItem("email") as string;
+    this.changePasswordForm.value["otp"] = sessionStorage.getItem("otp") as string;
+    
   }
 
   changePasswordForm : FormGroup = new FormGroup({

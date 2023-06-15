@@ -3,6 +3,7 @@ package com.spring.hasdocTime.controller;
 import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.LoginInterface;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +51,7 @@ public class LoginController {
     }
 
     @PostMapping("/forgotPassword")
-    public ResponseEntity<Void> sendEmailForForgotPassword(@RequestBody SendOtpEmail sendOtpEmail){
+    public ResponseEntity<Void> sendEmailForForgotPassword(@RequestBody SendOtpEmail sendOtpEmail) throws MessagingException {
         return ResponseEntity.ok(loginService.sendEmailForForgotPassword(sendOtpEmail));
     }
 

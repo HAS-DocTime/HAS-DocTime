@@ -3,6 +3,7 @@ package com.spring.hasdocTime.service;
 import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.LoginInterface;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class LoginServiceImpl implements LoginInterface {
     }
 
     @Override
-    public Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) {
+    public Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException {
         return loginDao.sendEmailForForgotPassword(sendOtpEmail);
     }
 

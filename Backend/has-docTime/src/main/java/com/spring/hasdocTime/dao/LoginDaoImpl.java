@@ -6,9 +6,12 @@ import com.spring.hasdocTime.interfaces.LoginInterface;
 import com.spring.hasdocTime.repository.UserRepository;
 import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
 import com.spring.hasdocTime.security.jwt.JwtService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -101,7 +104,7 @@ public class LoginDaoImpl implements LoginInterface {
     }
 
     @Override
-    public Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) {
+    public Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException {
         String otp = generateRandomOtp();
 
         addOtp(sendOtpEmail.getEmail(), otp);
@@ -128,24 +131,37 @@ public class LoginDaoImpl implements LoginInterface {
 
     @Override
     public Boolean saveNewPassword(PasswordUpdateBody passwordUpdateBody) {
-        Optional<User> user = userRepository.findById(passwordUpdateBody.getId());
+        Optional<User> user = userRepository.findByEmail(passwordUpdateBody.getEmail());
 
-        if(user.isPresent()){
+        String storedOtp = otpMap.get(passwordUpdateBody.getEmail());
+
+        if(storedOtp != null && storedOtp.equals(passwordUpdateBody.getOtp()) && user.isPresent()){
             if(passwordUpdateBody.getNewPassword().equals(passwordUpdateBody.getConfirmPassword())){
                 user.get().setPassword(passwordEncoder.encode(passwordUpdateBody.getNewPassword()));
                 userRepository.save(user.get());
+                otpMap.remove(passwordUpdateBody.getEmail());
                 return true;
             }
         }
         return false;
     }
 
-    private void sendEmail(String email, String otp) {
+    private void sendEmail(String email, String otp) throws MessagingException {
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("HAS - Forgot Password");
-        message.setText("Kindly enter the given otp at the website: " + otp);
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//        SimpleMailMessage message = new SimpleMailMessage();
+
+        helper.setTo(email);
+
+        String htmlContent = "<html><body>"
+                + "<h2 style=\"color: #007bff;\">HAS - Forgot Password</h2>"
+                + "<p>Kindly enter the given OTP at the website:</p>"
+                + "<p style=\"font-weight: bold; font-size: 18px;\">" + otp + "</p>"
+                + "</body></html>";
+
+        helper.setSubject("HAS - Forgot Password");
+        helper.setText(htmlContent, true);
 
         javaMailSender.send(message);
 

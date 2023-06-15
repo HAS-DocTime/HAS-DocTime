@@ -5,6 +5,7 @@ package com.spring.hasdocTime.interfaces;
 
 import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
+import jakarta.mail.MessagingException;
 
 public interface LoginInterface {
 
@@ -17,7 +18,7 @@ public interface LoginInterface {
      */
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) throws MissingParameterException;
 
-    Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail);
+    Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException;
     Boolean otpVerification(OtpRequestBody otpRequestBody);
 
     Boolean saveNewPassword(PasswordUpdateBody passwordUpdateBody);
