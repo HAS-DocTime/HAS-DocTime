@@ -28,13 +28,13 @@ ngAfterViewChecked(){
   ngOnInit(): void {
 
     this.route.url.subscribe(data=> {
-      if(data?.[1].path==="forgotPassword"){
+      if(data?.[1]?.path==="forgotPassword"){
         this.forgotPassword = true;
       }
       else{
         this.forgotPassword = false;
       }
-      if(data?.[1].path==="changePassword"){
+      if(data?.[1]?.path==="changePassword"){
         this.changePassword = true;
       }
       else{

@@ -14,17 +14,13 @@ import { ToastMessageService } from 'src/app/services/toast-message.service';
 export class ForgotPasswordComponent implements OnInit{
 
   ngOnInit(){
-    setTimeout(() => {
+    setTimeout(()=>{
       const otpForm = document.querySelector(".otp-form");
-  const firstInput = otpForm?.querySelector("input:not([type='hidden'])");
-  console.log(otpForm);
-  console.log(firstInput);
-  
-  
-  if (firstInput) {
-    (firstInput as HTMLInputElement).focus();
-  }
-let otpFields = document.querySelectorAll(".otp-form .otp-field");
+      const firstInput = otpForm?.querySelector("input:not([type='hidden'])");
+      if (firstInput) {
+        (firstInput as HTMLInputElement).focus();
+      }
+      let otpFields = document.querySelectorAll(".otp-form .otp-field");
       let otpValueField = document.querySelector(".otp-form .otp-value");
     
       otpFields.forEach(function (field) {
@@ -73,6 +69,9 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
   emailSent : boolean = false;
   remainingMinute : number = 1;
   remainingSecond : number = 59;
+  remainingMinuteForPasswordChange : number = 4;
+  remainingSecondForPasswordChange : number = 59;
+  loading : boolean = false;
 
   constructor(private loginService : LoginService, private toast : ToastMessageService, private router : Router){}
 
@@ -83,10 +82,13 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
   )
 
   sendMail(){
+    this.loading = true;
     console.log("Sending email");
     this.loginService.sendOtpMail(this.forgotPasswordForm.value).subscribe(()=> {
+      this.loading = false;
       sessionStorage.setItem("email", this.forgotPasswordForm.value["email"]);
       const div = document.querySelector(".hidden");
+      console.log(div);
       (div as HTMLDivElement).style.visibility = "visible";
       this.emailSent = true;
       this.toast.showSuccess("Success", "Email Sent Successfully");
@@ -109,7 +111,9 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
   }
 
   resendOtp(){
+    this.loading = true;
     this.loginService.sendOtpMail({email : sessionStorage.getItem("email") as string}).subscribe(()=> {
+      this.loading = false;
       this.emailSent = true;
       this.toast.showSuccess("Success", "Email Sent Successfully");
       let interval = setInterval(()=> {
@@ -131,17 +135,31 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
   }
 
   verifyOtp(){
+    this.loading = true;
     let verifyOtpBody = {
       email : sessionStorage.getItem("email") as string,
       otp : (document.querySelector(".otp-form .otp-value") as HTMLInputElement).value
     }
 
     this.loginService.verifyOtp(verifyOtpBody).subscribe(()=> {
+      this.loading = false;
       sessionStorage.setItem('otp', verifyOtpBody.otp);
       this.toast.showSuccess("Success", "Verification Successful");
       this.isVerified = true;
       const div = document.querySelector(".hidden");
       (div as HTMLDivElement).style.visibility = "hidden";
+      let intervalForPasswordChange = setInterval(()=> {
+        if(this.remainingMinuteForPasswordChange===0 && this.remainingSecondForPasswordChange===0){
+          clearInterval(intervalForPasswordChange);
+        }
+        if(this.remainingSecondForPasswordChange>0){
+          this.remainingSecondForPasswordChange--;
+        }
+        else if(this.remainingMinuteForPasswordChange>0){
+          this.remainingMinuteForPasswordChange--;
+          this.remainingSecondForPasswordChange = 59;
+        }
+      }, 1000);
     }, (err)=> {
       this.toast.showError("Error", "OTP expired");
     });
@@ -149,9 +167,11 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
   }
 
   updatePassword(){
+    this.loading = true;
     this.changePasswordForm.value["email"] = sessionStorage.getItem("email") as string;
     this.changePasswordForm.value["otp"] = sessionStorage.getItem("otp") as string;
     this.loginService.saveNewPassword(this.changePasswordForm.value).subscribe(data => {
+      this.loading = false;
       sessionStorage.removeItem("otp");
       sessionStorage.removeItem("email");
       this.toast.showSuccess("Success", "Password Updated Successfully");

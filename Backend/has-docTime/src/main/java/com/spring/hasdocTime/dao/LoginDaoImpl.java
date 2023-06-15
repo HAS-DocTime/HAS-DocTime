@@ -134,6 +134,7 @@ public class LoginDaoImpl implements LoginInterface {
 
     }
 
+    @Transactional
     @Override
     public Boolean saveNewPassword(PasswordUpdateBody passwordUpdateBody) {
         Optional<User> user = userRepository.findByEmail(passwordUpdateBody.getEmail());
