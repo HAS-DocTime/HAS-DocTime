@@ -33,6 +33,7 @@ import { EmailComponent } from './components/profile-dashboard/email/email.compo
 import { SecurityComponent } from './components/profile-dashboard/security/security.component';
 import { ProfileDashboardComponent } from './components/profile-dashboard/profile-dashboard.component';
 import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
+import { ChangePasswordComponent } from './components/login/change-password/change-password.component';
 
 
 const routes: Routes = [
@@ -40,6 +41,7 @@ const routes: Routes = [
   {path : "register", component : SignupComponent, canActivate: [DashboardGuard]},
   {path : "login", component : LoginComponent, canActivate: [DashboardGuard]},
   {path : "login/forgotPassword", component : ForgotPasswordComponent, canActivate: [DashboardGuard]},
+  {path : "login/changePassword", component : ChangePasswordComponent, canActivate: [DashboardGuard]},
   {path : "dashboard", component : DashboardComponent, children : [
     {path : "appointment", component : AppointmentComponent, canActivate: [RoleGuard], data : {
       roles : ["PATIENT", "DOCTOR", "ADMIN"]

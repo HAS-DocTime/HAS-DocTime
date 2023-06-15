@@ -51,6 +51,7 @@ import { EmailComponent } from './components/profile-dashboard/email/email.compo
 import { SecurityComponent } from './components/profile-dashboard/security/security.component';
 import { ProfileDashboardComponent } from './components/profile-dashboard/profile-dashboard.component';
 import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
+import { ChangePasswordComponent } from './components/login/change-password/change-password.component';
 
 // const firebaseConfig = environment.firebase;
 // firebase.initializeApp(environment.firebase);
@@ -90,7 +91,8 @@ import { ForgotPasswordComponent } from './components/login/forgot-password/forg
     EmailComponent,
     SecurityComponent,
     ProfileDashboardComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { environment } from "src/environments/environment";
+import { VerifyOtp } from "../models/verifyOtp.model";
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class LoginService{
 
   sendOtpMail(email : string){
     return this.http.post(`${this.loginUrl}/forgotPassword`, email);
+  }
+
+  verifyOtp(verifyOtpBody : VerifyOtp){
+    return this.http.post(`${this.loginUrl}/otpVerify`, verifyOtpBody);
   }
 }

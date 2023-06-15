@@ -23,6 +23,7 @@ ngAfterViewChecked(){
   inLoginForm!: Boolean;
   urlPath : string = "";
   forgotPassword : Boolean = false;
+  changePassword : Boolean = false;
 
   ngOnInit(): void {
 
@@ -33,6 +34,13 @@ ngAfterViewChecked(){
       else{
         this.forgotPassword = false;
       }
+      if(data?.[1].path==="changePassword"){
+        this.changePassword = true;
+      }
+      else{
+        this.changePassword = false;
+      }
+
     })
 
       this.userService.inSignup.subscribe(value => {
