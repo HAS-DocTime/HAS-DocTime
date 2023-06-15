@@ -16,10 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.*;
 
 
 /**
@@ -35,8 +33,12 @@ public class LoginDaoImpl implements LoginInterface {
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
     private static final int OTP_LENGTH = 6;
+    private static final long EXPIRATION_TIME = 130;  //60 seconds
 
     HashMap<String, String> otpMap = new LinkedHashMap<>();
+    private Map<String, ScheduledFuture<?>> expirationTasks = new ConcurrentHashMap<>();
+
+    private ScheduledExecutorService scheduledExecutorService;
 
     @Autowired
     public LoginDaoImpl(
@@ -51,6 +53,7 @@ public class LoginDaoImpl implements LoginInterface {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
     }
 
     /**
@@ -101,7 +104,7 @@ public class LoginDaoImpl implements LoginInterface {
     public Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) {
         String otp = generateRandomOtp();
 
-        otpMap.put(sendOtpEmail.getEmail(), otp);
+        addOtp(sendOtpEmail.getEmail(), otp);
 
         sendEmail(sendOtpEmail.getEmail(), otp);
 
@@ -114,7 +117,7 @@ public class LoginDaoImpl implements LoginInterface {
         String storedOtp = otpMap.get(otpRequestBody.getEmail());
 
         if(storedOtp != null && storedOtp.equals(otpRequestBody.getOtp())){
-            otpMap.remove(otpRequestBody.getEmail());
+            scheduleExpiration(otpRequestBody.getEmail(), 310);
             return true;
         }else{
             return false;
@@ -164,5 +167,22 @@ public class LoginDaoImpl implements LoginInterface {
 
     }
 
+    private void addOtp(String email, String otp){
+        otpMap.put(email, otp);
+        scheduleExpiration(email, 130);
+    }
+
+    private void scheduleExpiration(String key, int expirationTime){
+
+        ScheduledFuture<?> existingTask = expirationTasks.get(key);
+        if(existingTask != null){
+            existingTask.cancel(false);
+        }
+        ScheduledFuture<?> expirationTask = scheduledExecutorService.schedule(() -> {
+            otpMap.remove(key);;
+        }, expirationTime, TimeUnit.SECONDS);
+
+        expirationTasks.put(key, expirationTask);
+    }
 
 }

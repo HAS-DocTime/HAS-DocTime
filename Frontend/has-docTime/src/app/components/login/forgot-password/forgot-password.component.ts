@@ -80,6 +80,7 @@ export class ForgotPasswordComponent implements OnInit{
       sessionStorage.setItem("email", this.forgotPasswordForm.value["email"]);
       const div = document.querySelector(".hidden");
       (div as HTMLDivElement).style.visibility = "visible";
+      this.emailSent = true;
       this.toast.showSuccess("Success", "Email Sent Successfully");
     }, (err)=> {
       this.toast.showError("Error", "Unexpected Error occured");
