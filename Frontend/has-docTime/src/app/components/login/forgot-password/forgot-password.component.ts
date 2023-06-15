@@ -67,6 +67,8 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
   }
 
   emailSent : boolean = false;
+  remainingMinute : number = 1;
+  remainingSecond : number = 59;
 
   constructor(private loginService : LoginService, private toast : ToastMessageService, private router : Router){}
 
@@ -84,6 +86,18 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
       (div as HTMLDivElement).style.visibility = "visible";
       this.emailSent = true;
       this.toast.showSuccess("Success", "Email Sent Successfully");
+      let interval = setInterval(()=> {
+        if(this.remainingMinute===0 && this.remainingSecond===0){
+          clearInterval(interval);
+        }
+        if(this.remainingSecond>0){
+          this.remainingSecond--;
+        }
+        else if(this.remainingMinute>0){
+          this.remainingMinute--;
+          this.remainingSecond = 59;
+        }
+      }, 1000);
     }, (err)=> {
       this.toast.showError("Error", "Unexpected Error occured");
     });
