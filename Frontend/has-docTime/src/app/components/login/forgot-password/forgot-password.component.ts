@@ -13,10 +13,12 @@ import { ToastMessageService } from 'src/app/services/toast-message.service';
 })
 export class ForgotPasswordComponent implements OnInit{
 
+  otpForm! : any;
+
   ngOnInit(){
     setTimeout(()=>{
-      const otpForm = document.querySelector(".otp-form");
-      const firstInput = otpForm?.querySelector("input:not([type='hidden'])");
+      this.otpForm = document.querySelector(".otp-form");
+      const firstInput = this.otpForm?.querySelector("input:not([type='hidden'])");
       if (firstInput) {
         (firstInput as HTMLInputElement).focus();
       }
@@ -72,6 +74,7 @@ export class ForgotPasswordComponent implements OnInit{
   remainingMinuteForPasswordChange : number = 4;
   remainingSecondForPasswordChange : number = 59;
   loading : boolean = false;
+  interval! : any;
 
   constructor(private loginService : LoginService, private toast : ToastMessageService, private router : Router){}
 
@@ -92,9 +95,9 @@ export class ForgotPasswordComponent implements OnInit{
       (div as HTMLDivElement).style.visibility = "visible";
       this.emailSent = true;
       this.toast.showSuccess("Success", "Email Sent Successfully");
-      let interval = setInterval(()=> {
+      this.interval = setInterval(()=> {
         if(this.remainingMinute===0 && this.remainingSecond===0){
-          clearInterval(interval);
+          clearInterval(this.interval);
         }
         if(this.remainingSecond>0){
           this.remainingSecond--;
@@ -105,20 +108,29 @@ export class ForgotPasswordComponent implements OnInit{
         }
       }, 1000);
     }, (err)=> {
+      this.loading = false;
       this.forgotPasswordForm.reset();
       this.toast.showError("Error", "Enter email which is registered in this app.");
     });
   }
 
   resendOtp(){
+    clearInterval(this.interval);
+    this.remainingMinute = 1;
+    this.remainingSecond = 59;
     this.loading = true;
+    const div = document.querySelector(".hidden");
+      console.log(div);
+      (div as HTMLDivElement).style.visibility = "hidden";
     this.loginService.sendOtpMail({email : sessionStorage.getItem("email") as string}).subscribe(()=> {
       this.loading = false;
+      this.otpForm.reset();
+      (div as HTMLDivElement).style.visibility = "visible";
       this.emailSent = true;
       this.toast.showSuccess("Success", "Email Sent Successfully");
-      let interval = setInterval(()=> {
+      this.interval = setInterval(()=> {
         if(this.remainingMinute===0 && this.remainingSecond===0){
-          clearInterval(interval);
+          clearInterval(this.interval);
         }
         if(this.remainingSecond>0){
           this.remainingSecond--;
@@ -129,6 +141,7 @@ export class ForgotPasswordComponent implements OnInit{
         }
       }, 1000);
     }, (err)=> {
+      this.loading = false;
       this.forgotPasswordForm.reset();
       this.toast.showError("Error", "Unexpected Error occured.");
     });
@@ -151,6 +164,7 @@ export class ForgotPasswordComponent implements OnInit{
       let intervalForPasswordChange = setInterval(()=> {
         if(this.remainingMinuteForPasswordChange===0 && this.remainingSecondForPasswordChange===0){
           clearInterval(intervalForPasswordChange);
+          this.router.navigate(['/']);
         }
         if(this.remainingSecondForPasswordChange>0){
           this.remainingSecondForPasswordChange--;
@@ -161,7 +175,9 @@ export class ForgotPasswordComponent implements OnInit{
         }
       }, 1000);
     }, (err)=> {
-      this.toast.showError("Error", "OTP expired");
+      this.otpForm.reset();
+      this.loading = false;
+      this.toast.showError("Error", "OTP either wrong or expired");
     });
 
   }
@@ -177,6 +193,7 @@ export class ForgotPasswordComponent implements OnInit{
       this.toast.showSuccess("Success", "Password Updated Successfully");
       this.router.navigate(['/login']);
     }, (err) => {
+      this.loading = false;
       this.toast.showError("Error", "Unexpected Error occured");
     });
   }

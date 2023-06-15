@@ -29,6 +29,20 @@
   padding-left: 0;
 }
 
+.profile-picture {
+  width: 50px; /* Set the desired width of the profile picture */
+  height: 50px; /* Set the desired height of the profile picture */
+  border-radius: 50%; /* Apply circular border radius */
+  overflow: hidden; /* Hide any overflowing content */
+}
+
+.profile-picture img {
+  width: 100%; /* Ensure the image occupies the entire container */
+  height: 100%; /* Ensure the image occupies the entire container */
+  object-fit: cover; /* Maintain the aspect ratio and cover the entire container */
+}
+
+
 /* .show .example-button-row{
   display: flex;
   flex-direction: column;
