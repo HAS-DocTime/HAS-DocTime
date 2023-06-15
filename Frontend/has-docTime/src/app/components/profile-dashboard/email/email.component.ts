@@ -69,7 +69,7 @@ export class EmailComponent implements OnInit{
         this.updateEmailForm.controls['email'].patchValue("");
       }, (err) => {
         if(err){
-          this.toast.showError("Duplicate Email is found", "Error");
+          this.toast.showError("Email Already exists", "Error");
           this.updateEmailForm.controls['email'].patchValue("");
         }
       });

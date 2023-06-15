@@ -98,14 +98,12 @@ public class LoginDaoImpl implements LoginInterface {
     }
 
     @Override
-    public Void sendEmailForForgotPassword(String email) {
+    public Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) {
         String otp = generateRandomOtp();
 
-        String emailWithoutQuotes = email.substring(1, email.length()-1);
+        otpMap.put(sendOtpEmail.getEmail(), otp);
 
-        otpMap.put(emailWithoutQuotes, otp);
-
-        sendEmail(email, otp);
+        sendEmail(sendOtpEmail.getEmail(), otp);
 
         return null;
     }

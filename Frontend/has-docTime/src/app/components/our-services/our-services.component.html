@@ -20,7 +20,6 @@
         <input class="form-control" placeholder="Search Department Name" type="text" id="search" [(ngModel)]="search" (keyup)="onSearch()">
       </div>
     </div>
-
     <div class="search-error-bg d-flex justify-content-center align-items-center"*ngIf="search.length!==0 && noDataFound">
       <div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4 search-error d-flex flex-column justify-content-center align-items-center">
         <img src="https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/Not_found.png?alt=media&token=36069041-d278-4ab3-9d79-39b2119f2c48&_gl=1*pruqll*_ga*MTczNTQ4NTgzNC4xNjgwMDAxODUy*_ga_CW55HF8NVT*MTY4NjAzMjQyMy41LjEuMTY4NjAzMjQ0My4wLjAuMA.." width="70%" height="70%">
@@ -28,7 +27,6 @@
         <h5 class="search-error-text text-center">Please try searching with another term</h5>
       </div>
     </div>
-
     <div class="card-container" *ngIf="!noDataFound">
       <div class="admin-department" *ngIf="tokenRole==='ADMIN'">
         <div class="card admin-card py-3 px-3 my-3 mx-3" style="width: 18rem;" *ngFor="let department of departments" (click)="deptDetail(department?.id)" >
@@ -49,8 +47,7 @@
         </div>
       </div>
     </div>
-
-    <nav *ngIf="totalPages > 1">
+    <nav *ngIf="totalPages > 1 && !noDataFound">
       <ul class="pagination">
         <li class="page-item" [class.disabled]="page === 1">
           <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>
@@ -63,6 +60,5 @@
         </li>
       </ul>
     </nav>
-
   </div>
 </div>

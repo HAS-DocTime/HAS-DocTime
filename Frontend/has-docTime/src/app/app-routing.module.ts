@@ -32,12 +32,14 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { EmailComponent } from './components/profile-dashboard/email/email.component';
 import { SecurityComponent } from './components/profile-dashboard/security/security.component';
 import { ProfileDashboardComponent } from './components/profile-dashboard/profile-dashboard.component';
+import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
 
 
 const routes: Routes = [
   {path: "", component : HomeComponent, canActivate: [DashboardGuard]},
   {path : "register", component : SignupComponent, canActivate: [DashboardGuard]},
   {path : "login", component : LoginComponent, canActivate: [DashboardGuard]},
+  {path : "login/forgotPassword", component : ForgotPasswordComponent, canActivate: [DashboardGuard]},
   {path : "dashboard", component : DashboardComponent, children : [
     {path : "appointment", component : AppointmentComponent, canActivate: [RoleGuard], data : {
       roles : ["PATIENT", "DOCTOR", "ADMIN"]

@@ -20,4 +20,8 @@ export class LoginService{
 
     return this.http.post<{token : string}>(this.loginUrl, body);
   }
+
+  sendOtpMail(email : string){
+    return this.http.post(`${this.loginUrl}/forgotPassword`, email);
+  }
 }

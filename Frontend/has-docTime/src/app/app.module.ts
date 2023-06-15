@@ -50,6 +50,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { EmailComponent } from './components/profile-dashboard/email/email.component';
 import { SecurityComponent } from './components/profile-dashboard/security/security.component';
 import { ProfileDashboardComponent } from './components/profile-dashboard/profile-dashboard.component';
+import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
 
 // const firebaseConfig = environment.firebase;
 // firebase.initializeApp(environment.firebase);
@@ -88,7 +89,8 @@ import { ProfileDashboardComponent } from './components/profile-dashboard/profil
     NotFoundComponent,
     EmailComponent,
     SecurityComponent,
-    ProfileDashboardComponent
+    ProfileDashboardComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

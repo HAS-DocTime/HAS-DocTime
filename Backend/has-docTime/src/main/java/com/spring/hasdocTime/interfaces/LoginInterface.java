@@ -3,10 +3,7 @@
  */
 package com.spring.hasdocTime.interfaces;
 
-import com.spring.hasdocTime.entity.AuthenticationResponse;
-import com.spring.hasdocTime.entity.LoginDetail;
-import com.spring.hasdocTime.entity.OtpRequestBody;
-import com.spring.hasdocTime.entity.PasswordUpdateBody;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 
 public interface LoginInterface {
@@ -20,7 +17,7 @@ public interface LoginInterface {
      */
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) throws MissingParameterException;
 
-    Void sendEmailForForgotPassword(String email);
+    Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail);
     Boolean otpVerification(OtpRequestBody otpRequestBody);
 
     Boolean saveNewPassword(PasswordUpdateBody passwordUpdateBody);

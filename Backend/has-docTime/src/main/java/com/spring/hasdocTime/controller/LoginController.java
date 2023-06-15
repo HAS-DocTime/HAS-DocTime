@@ -1,9 +1,6 @@
 package com.spring.hasdocTime.controller;
 
-import com.spring.hasdocTime.entity.AuthenticationResponse;
-import com.spring.hasdocTime.entity.LoginDetail;
-import com.spring.hasdocTime.entity.OtpRequestBody;
-import com.spring.hasdocTime.entity.PasswordUpdateBody;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.LoginInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +50,8 @@ public class LoginController {
     }
 
     @PostMapping("/forgotPassword")
-    public ResponseEntity<Void> sendEmailForForgotPassword(@RequestBody String email){
-        return ResponseEntity.ok(loginService.sendEmailForForgotPassword(email));
+    public ResponseEntity<Void> sendEmailForForgotPassword(@RequestBody SendOtpEmail sendOtpEmail){
+        return ResponseEntity.ok(loginService.sendEmailForForgotPassword(sendOtpEmail));
     }
 
     @PostMapping("/otpVerify")

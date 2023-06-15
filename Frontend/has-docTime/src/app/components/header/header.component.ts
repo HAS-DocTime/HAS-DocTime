@@ -21,8 +21,19 @@ ngAfterViewChecked(){
   isLoggedIn!: Boolean;
   inSignupForm!: Boolean;
   inLoginForm!: Boolean;
+  urlPath : string = "";
+  forgotPassword : Boolean = false;
 
   ngOnInit(): void {
+
+    this.route.url.subscribe(data=> {
+      if(data?.[1].path==="forgotPassword"){
+        this.forgotPassword = true;
+      }
+      else{
+        this.forgotPassword = false;
+      }
+    })
 
       this.userService.inSignup.subscribe(value => {
       this.inSignupForm = value;

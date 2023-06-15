@@ -11,16 +11,16 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <section>
                 <div class="example-button-row" >
-                    <button *ngIf="(!inSignupForm && isLoggedIn) || inLoginForm"
+                    <button *ngIf="((!inSignupForm && isLoggedIn) || inLoginForm) && !forgotPassword"
                             style="margin-right: 10px;"
                             mat-raised-button color="primary"
                             routerLink="/register">Register</button>
 
-                    <button *ngIf="(!inLoginForm && isLoggedIn) || inSignupForm"
+                    <button *ngIf="((!inLoginForm && isLoggedIn) || inSignupForm) && !forgotPassword"
                             mat-raised-button color="accent"
                             routerLink="/login">Login</button>
 
-                    <button *ngIf="!isLoggedIn && !inSignupForm && !inLoginForm"
+                    <button *ngIf="!isLoggedIn && !inSignupForm && !inLoginForm && !forgotPassword"
                             mat-raised-button color="accent"
                             (click)="onLogout()"
                             routerLink="/register">Logout</button>
