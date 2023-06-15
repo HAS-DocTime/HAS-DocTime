@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { environment } from "src/environments/environment";
 import { VerifyOtp } from "../models/verifyOtp.model";
+import { PasswordUpdateBody } from "../models/passwordUpdateBody.model";
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +23,15 @@ export class LoginService{
     return this.http.post<{token : string}>(this.loginUrl, body);
   }
 
-  sendOtpMail(email : string){
-    return this.http.post(`${this.loginUrl}/forgotPassword`, email);
+  sendOtpMail(obj : {email : string}){
+    return this.http.post(`${this.loginUrl}/forgotPassword`, obj);
   }
 
   verifyOtp(verifyOtpBody : VerifyOtp){
     return this.http.post(`${this.loginUrl}/otpVerify`, verifyOtpBody);
+  }
+
+  saveNewPassword(passwordUpdateBody : PasswordUpdateBody){
+    return this.http.post(`${this.loginUrl}/saveNewPassword`, passwordUpdateBody);
   }
 }

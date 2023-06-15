@@ -31,7 +31,7 @@ public class LoginServiceImpl implements LoginInterface {
     }
 
     @Override
-    public Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException {
+    public Boolean sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException {
         return loginDao.sendEmailForForgotPassword(sendOtpEmail);
     }
 

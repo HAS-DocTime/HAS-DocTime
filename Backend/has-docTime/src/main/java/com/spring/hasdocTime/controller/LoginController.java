@@ -52,7 +52,13 @@ public class LoginController {
 
     @PostMapping("/forgotPassword")
     public ResponseEntity<Void> sendEmailForForgotPassword(@RequestBody SendOtpEmail sendOtpEmail) throws MessagingException {
-        return ResponseEntity.ok(loginService.sendEmailForForgotPassword(sendOtpEmail));
+
+        if(loginService.sendEmailForForgotPassword(sendOtpEmail)){
+            return ResponseEntity.ok(null);
+        }else{
+            return ResponseEntity.badRequest().body(null);
+        }
+
     }
 
     @PostMapping("/otpVerify")

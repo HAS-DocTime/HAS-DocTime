@@ -9,7 +9,6 @@ import com.spring.hasdocTime.security.jwt.JwtService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -104,14 +103,20 @@ public class LoginDaoImpl implements LoginInterface {
     }
 
     @Override
-    public Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException {
-        String otp = generateRandomOtp();
+    public Boolean sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException {
 
-        addOtp(sendOtpEmail.getEmail(), otp);
+        Optional<User> user = userRepository.findByEmail(sendOtpEmail.getEmail());
 
-        sendEmail(sendOtpEmail.getEmail(), otp);
+        if(user.isPresent()){
+            String otp = generateRandomOtp();
 
-        return null;
+            addOtp(sendOtpEmail.getEmail(), otp);
+
+            sendEmail(sendOtpEmail.getEmail(), otp);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -136,8 +141,8 @@ public class LoginDaoImpl implements LoginInterface {
         String storedOtp = otpMap.get(passwordUpdateBody.getEmail());
 
         if(storedOtp != null && storedOtp.equals(passwordUpdateBody.getOtp()) && user.isPresent()){
-            if(passwordUpdateBody.getNewPassword().equals(passwordUpdateBody.getConfirmPassword())){
-                user.get().setPassword(passwordEncoder.encode(passwordUpdateBody.getNewPassword()));
+            if(passwordUpdateBody.getPassword().equals(passwordUpdateBody.getConfirmPassword())){
+                user.get().setPassword(passwordEncoder.encode(passwordUpdateBody.getPassword()));
                 userRepository.save(user.get());
                 otpMap.remove(passwordUpdateBody.getEmail());
                 return true;

@@ -13,7 +13,7 @@ public class PasswordUpdateBody {
 
     private String otp;
     private String email;
-    private String newPassword;
+    private String password;
     private String confirmPassword;
 
 }

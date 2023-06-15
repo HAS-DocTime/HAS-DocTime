@@ -14,9 +14,13 @@ import { ToastMessageService } from 'src/app/services/toast-message.service';
 export class ForgotPasswordComponent implements OnInit{
 
   ngOnInit(){
-    document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(() => {
       const otpForm = document.querySelector(".otp-form");
   const firstInput = otpForm?.querySelector("input:not([type='hidden'])");
+  console.log(otpForm);
+  console.log(firstInput);
+  
+  
   if (firstInput) {
     (firstInput as HTMLInputElement).focus();
   }
@@ -62,7 +66,7 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
           });
         });
       });
-    });
+    }, 1000);
     
   }
 
@@ -99,7 +103,30 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
         }
       }, 1000);
     }, (err)=> {
-      this.toast.showError("Error", "Unexpected Error occured");
+      this.forgotPasswordForm.reset();
+      this.toast.showError("Error", "Enter email which is registered in this app.");
+    });
+  }
+
+  resendOtp(){
+    this.loginService.sendOtpMail({email : sessionStorage.getItem("email") as string}).subscribe(()=> {
+      this.emailSent = true;
+      this.toast.showSuccess("Success", "Email Sent Successfully");
+      let interval = setInterval(()=> {
+        if(this.remainingMinute===0 && this.remainingSecond===0){
+          clearInterval(interval);
+        }
+        if(this.remainingSecond>0){
+          this.remainingSecond--;
+        }
+        else if(this.remainingMinute>0){
+          this.remainingMinute--;
+          this.remainingSecond = 59;
+        }
+      }, 1000);
+    }, (err)=> {
+      this.forgotPasswordForm.reset();
+      this.toast.showError("Error", "Unexpected Error occured.");
     });
   }
 
@@ -116,7 +143,7 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
       const div = document.querySelector(".hidden");
       (div as HTMLDivElement).style.visibility = "hidden";
     }, (err)=> {
-      this.toast.showError("Error", "Unexpected Error occured");
+      this.toast.showError("Error", "OTP expired");
     });
 
   }
@@ -124,7 +151,14 @@ let otpFields = document.querySelectorAll(".otp-form .otp-field");
   updatePassword(){
     this.changePasswordForm.value["email"] = sessionStorage.getItem("email") as string;
     this.changePasswordForm.value["otp"] = sessionStorage.getItem("otp") as string;
-    
+    this.loginService.saveNewPassword(this.changePasswordForm.value).subscribe(data => {
+      sessionStorage.removeItem("otp");
+      sessionStorage.removeItem("email");
+      this.toast.showSuccess("Success", "Password Updated Successfully");
+      this.router.navigate(['/login']);
+    }, (err) => {
+      this.toast.showError("Error", "Unexpected Error occured");
+    });
   }
 
   changePasswordForm : FormGroup = new FormGroup({

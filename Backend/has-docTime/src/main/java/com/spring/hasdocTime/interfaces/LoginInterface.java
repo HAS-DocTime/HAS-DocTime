@@ -18,7 +18,7 @@ public interface LoginInterface {
      */
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) throws MissingParameterException;
 
-    Void sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException;
+    Boolean sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException;
     Boolean otpVerification(OtpRequestBody otpRequestBody);
 
     Boolean saveNewPassword(PasswordUpdateBody passwordUpdateBody);
