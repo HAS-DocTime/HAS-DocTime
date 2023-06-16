@@ -7,24 +7,39 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <section>
                 <div class="example-button-row" >
-                    <button *ngIf="((!inSignupForm && isLoggedIn) || inLoginForm) && !forgotPassword && !changePassword"
+                    <button *ngIf="(url.includes('login')) && !forgotPassword && !changePassword"
                             style="margin-right: 10px;"
                             mat-raised-button color="primary"
                             routerLink="/register">Register</button>
-
-                    <button *ngIf="((!inLoginForm && isLoggedIn) || inSignupForm) && !forgotPassword && !changePassword"
+                    <button *ngIf="(url.includes('register')) && !forgotPassword && !changePassword"
                             mat-raised-button color="accent"
                             routerLink="/login">Login</button>
-
-                    <!-- <div class="profile-picture">
-                        <img *ngIf="!imageUrl == null" [src]="imageUrl" alt="Profile Picture">
-                        <img *ngIf="imageUrl == null" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Picture">
-                    </div> -->
-                    <button *ngIf="!isLoggedIn && !inSignupForm && !inLoginForm && !forgotPassword && !changePassword"
+                    <div class="d-flex" *ngIf="isLoggedIn">
+                        <h5 class="pe-2">{{this.profileName}}</h5>
+                        <div class="profile-picture">
+                            <img
+                                class="dropdown-toggle profile"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                [defaultImage]="placeHolderImage"
+                                [lazyLoad]="imageUrl"
+                                (load)="onImageLoad()"
+                                data-bs-toggle="dropdown"
+                                id="dropdownMenuButton"
+                            />
+                            <div class="dropDown">
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" routerLink="profile">Profile</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" (click)="onLogout()">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <button *ngIf="!isLoggedIn && !inSignupForm && !inLoginForm && !forgotPassword && !changePassword"
                             mat-raised-button color="accent"
                             (click)="onLogout()"
                             routerLink="/register">Logout</button>
@@ -33,7 +48,6 @@
         </div>
     </div>
 </nav>
-
 <!-- <p>
     <mat-toolbar color="primary">
     <div>
