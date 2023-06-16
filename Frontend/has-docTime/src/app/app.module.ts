@@ -51,6 +51,7 @@ import { EmailComponent } from './components/profile-dashboard/email/email.compo
 import { SecurityComponent } from './components/profile-dashboard/security/security.component';
 import { ProfileDashboardComponent } from './components/profile-dashboard/profile-dashboard.component';
 import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 // const firebaseConfig = environment.firebase;
 // firebase.initializeApp(environment.firebase);
@@ -114,7 +115,8 @@ import { ForgotPasswordComponent } from './components/login/forgot-password/forg
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
-    FormsModule
+    FormsModule,
+    LazyLoadImageModule
   ],
   providers: [
     {
