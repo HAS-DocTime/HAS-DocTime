@@ -86,11 +86,11 @@ public class SecurityConfig{
                             .requestMatchers("/appointment/doctor**").permitAll()
                             .requestMatchers("/appointment/user/**").permitAll()
                         .requestMatchers("/chronicIllness/**").permitAll() // Should only be allowed when the user/doctor tries to edit his/her own chronic Illness
-                        .requestMatchers("/department").permitAll()
+                        .requestMatchers("/department").hasAnyAuthority("ADMIN")
                         .requestMatchers("/appointment/**", "/appointment").permitAll()
                         .requestMatchers( "/postAppointmentData/**", "/postAppointmentData/{id}").permitAll()
                         .requestMatchers("/symptom/**", "/symptom").permitAll()
-                        .requestMatchers("/department/**").permitAll() //Added temporarily to allow deleting from postman
+                        .requestMatchers("/department/**").hasAnyAuthority("ADMIN") //Added temporarily to allow deleting from postman
                         .requestMatchers("/postAppointmentData", "/postAppointmentData/**").hasAnyAuthority("ADMIN", "PATIENT", "DOCTOR")
                         .requestMatchers("/timeSlot", "/timeSlot/**").hasAnyAuthority("ADMIN")
                 )

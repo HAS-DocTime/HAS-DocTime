@@ -57,7 +57,7 @@ public class Department {
           
     @OneToMany(mappedBy = "department", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
     @JsonIgnoreProperties(value = {"user", "department", "appointments", "postAppointmentData"}, allowSetters = true)
-    private List<Doctor> doctors;
+    private Set<Doctor> doctors;
 
     @ManyToMany()
     @JoinTable(name = "department_symptom",
@@ -67,7 +67,7 @@ public class Department {
     @JsonIgnoreProperties(value = {"departments", "users", "appointments"}, allowSetters = true)
     private Set<Symptom> symptoms = new HashSet<>();
     
-    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
     @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
     private List<TimeSlot> timeSlots = new ArrayList<>();
 

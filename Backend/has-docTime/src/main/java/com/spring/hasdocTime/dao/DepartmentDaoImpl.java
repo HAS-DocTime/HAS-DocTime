@@ -100,19 +100,20 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         }
         department.setSymptoms(symptomsWithData);
 
-        timeSlotRepository.deleteByDepartment(department.getId());
+//        timeSlotRepository.deleteByDepartment(department.getId());
         List<TimeSlot> timeSlots = timeSlotDao.createTimeSlotsFromDepartment(department);
+
         department.setTimeSlots(timeSlots);
 
-        List<Doctor> doctors = department.getDoctors();
-        List<Doctor> doctorsWithData = new ArrayList<>();
+        Set<Doctor> doctors = department.getDoctors();
+        Set<Doctor> doctorsWithData = new HashSet<>();
         for(Doctor doctor : doctors) {
             Doctor doctorWithData;
             if(doctor.getId()!=0){
                 Optional<Doctor> doctorObj = doctorRepository.findById(doctor.getId());
                 if(doctorObj.isPresent()){
                     doctorWithData = doctorObj.get();
-//                    doctorWithData.setDepartment(department);
+                    doctorWithData.setDepartment(department);
                     doctorsWithData.add(doctorWithData);
                 } else {
                     throw new DoesNotExistException("Doctor");
@@ -157,6 +158,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         Optional<Department> department = departmentRepository.findById(id);
         if(department.isPresent()){
             Hibernate.initialize(department.get().getSymptoms());
+            Hibernate.initialize(department.get().getDoctors());
             return department.get();
         }
         throw new DoesNotExistException("Department");

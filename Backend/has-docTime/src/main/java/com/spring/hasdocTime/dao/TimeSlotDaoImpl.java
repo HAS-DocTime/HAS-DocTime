@@ -396,7 +396,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             for(TimeSlot timeSlot : timeslots){
                 timeSlot.setDepartment(dep);
                 Hibernate.initialize(timeSlot.getDepartment().getDoctors());
-                List<Doctor> doctors = timeSlot.getDepartment().getDoctors();
+                Set<Doctor> doctors = timeSlot.getDepartment().getDoctors();
                 for(Doctor doctor: doctors){
                     timeSlot.addAvailableDoctor(doctor);
                 }
