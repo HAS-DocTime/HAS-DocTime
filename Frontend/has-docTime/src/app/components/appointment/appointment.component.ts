@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Appointment } from 'src/app/models/appointment.model';
-import { Doctor } from 'src/app/models/doctor.model';
 import { Token } from 'src/app/models/token.model';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -55,7 +54,7 @@ export class AppointmentComponent implements OnInit{
 
     this.tokenRole = decoded_token.role;
     this.id = parseInt(decoded_token.id);
-    
+
     this.route.url.subscribe((data) => {
       this.urlPath = data[0].path
 

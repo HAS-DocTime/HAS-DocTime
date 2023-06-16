@@ -123,6 +123,7 @@ public class DoctorDaoImpl implements DoctorInterface {
         }
         for(Doctor d : doctors){
             Hibernate.initialize(d.getUser());
+            Hibernate.initialize(d.getDepartment());
         }
         return doctors;
     }

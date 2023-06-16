@@ -8,7 +8,10 @@
       <h1 class="mb-4 text-center" *ngIf="urlPath==='users' || urlPath==='chronicIllness'">Patients</h1>
       <h1 class="mb-4 text-center" *ngIf="urlPath==='doctors' || urlPath==='departments'">Doctors</h1>
     </div>
-
+    <div class="d-flex justify-content-center my-3">
+      <button class="btn btn-primary" *ngIf="urlPath==='users'" (click)="createUser()">Create User</button>
+      <button class="btn btn-primary" *ngIf="urlPath==='doctors'" (click)="createUser()">Create Doctor</button>
+    </div>
     <hr *ngIf="!noDataFound">
 
     <div class="row mb-3" *ngIf="totalPages >= 0">

@@ -7,7 +7,6 @@
 
   <div class="container pt-3">
     <h1 class="text-center pb-3" *ngIf="!noDataFound">{{ title }}</h1>
-
     <div class="d-flex justify-content-center my-3" *ngIf="tokenRole==='ADMIN' && urlPath === 'departments'">
       <button class="btn btn-primary" (click)="createDepartment()">Create Department</button>
     </div>

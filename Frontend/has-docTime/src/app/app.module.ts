@@ -107,7 +107,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     FormsModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+
   ],
   providers: [
     {

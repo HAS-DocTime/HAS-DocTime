@@ -44,7 +44,7 @@ public class Doctor {
     @Pattern(regexp = "[a-zA-Z0-9,.-]+( [a-zA-Z0-9,.-]+)*", message = "Invalid input. Please enter a valid string with alphanumeric characters, commas, periods, and dashes, allowing spaces in between.")
     private String qualification;
    
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH }, fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = {"doctors", "symptoms", "timeSlots"}, allowSetters = true)
     private Department department;

@@ -40,6 +40,10 @@ export class OurServicesComponent implements OnInit{
     this.id = parseInt(decoded_token.id);
 
     this.getData();
+
+    this.route.url.subscribe((data) => {
+      this.urlPath = data[0].path
+    })
   }
 
   getData(){

@@ -2,16 +2,16 @@
   <h1>Create Department</h1>
 <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
   <!-- Upload Photo -->
-  <div class="upload-photo row text-center align-items-center" *ngIf="imageUrl == null && selectedFile == null">
+  <div class="upload-photo row text-center align-items-center" *ngIf="departmentImage == null">
     <label for="photo" class="cloud-upload-label" style="color: blue;">
       <input type="file" id="photo" name="photo" style="display: none;">
       <i class="fa fa-cloud-upload fa-4x"></i>
     </label>
     <h5 class="mt-1">Upload Photo</h5>
   </div>
-  <!-- <div class="" *ngIf="imageUrl != null || selectedFile != null">
-    <img class="rectangle" width="150px" [src]="imageUrl" alt="Selected Picture" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
-  </div> -->
+  <div class="" *ngIf="departmentImage != null || selectedFile != null">
+    <img class="rectangle" width="150px" [src]="departmentImage" alt="Selected Picture" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
+  </div>
 
   <!-- Department Details -->
   <div class="department-details row">
@@ -112,13 +112,77 @@
   <!-- Doctor Section -->
   <div class="doctor-section row d-flex mb-4 text-center mt-5">
     <h3>Doctors</h3>
-    <div class="col">
+    <div class="col-6">
       <button type="button" class="btn btn-primary justify-content-between" (click)="registerDoctor()">Add New Doctor</button>
     </div>
-    <div class="col">
-      <button type="button" class="btn btn-primary justify-content-between">Add Existing Doctor</button>
+    <div class="col-6">
+      <button type="button" class="btn btn-primary justify-content-between" *ngIf="!isDivOpen" (click)="getAllDoctors()">Add Existing Doctor</button>
     </div>
+    <div class="col-12" *ngIf="isDivOpen">
+      <div *ngIf="search.length===0 && noDataFound" class="noData">
+        <img [src]="noDataFoundImg" alt="No Data Found">
+        <p>No Data Found!!</p>
+      </div>
 
+      <div class="row mb-3" *ngIf="totalPages >= 0">
+        <div class="col-sm-4" *ngIf="!noDataFound">
+          <label for="pageSize">Size:</label>
+          <select class="form-select" id="size" [(ngModel)]="size" [ngModelOptions]="{ standalone: true }" (change)="onPageSizeChange()">
+            <option *ngFor="let sizeOption of sizeOptions" [value]="sizeOption">{{ sizeOption }}</option>
+          </select>
+        </div>
+        <div class="col-sm-4" *ngIf="totalPages > 0">
+          <label for="sortBy">Sort By:</label>
+          <select class="form-select" id="sortBy" [(ngModel)]="sortBy" [ngModelOptions]="{ standalone: true }" (change)="onSortByChange()">
+            <option *ngFor="let sortByOption of sortByOptions" [value]="sortByOption.value">{{ sortByOption.label }}</option>
+          </select>
+        </div>
+        <div class="col-sm-4" >
+          <label for="search">Search:</label>
+          <input class="form-control" placeholder="Search by Doctor name" type="text" id="search" [(ngModel)]="search" [ngModelOptions]="{ standalone: true }" (keyup)="onSearch()">
+        </div>
+      </div>
+
+      <div class="search-error-bg d-flex justify-content-center align-items-center"*ngIf="search.length!==0 && noDataFound">
+        <div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4 search-error d-flex flex-column justify-content-center align-items-center">
+          <img src="https://firebasestorage.googleapis.com/v0/b/ng-hasdoctime-images.appspot.com/o/Not_found.png?alt=media&token=36069041-d278-4ab3-9d79-39b2119f2c48&_gl=1*pruqll*_ga*MTczNTQ4NTgzNC4xNjgwMDAxODUy*_ga_CW55HF8NVT*MTY4NjAzMjQyMy41LjEuMTY4NjAzMjQ0My4wLjAuMA.." width="70%" height="70%">
+          <h4 class="search-error-heading text-center">Sorry we couldn't find any matches for <b>"{{search}}"</b></h4>
+          <h5 class="search-error-text text-center">Please try searching with another term</h5>
+        </div>
+      </div>
+
+      <table class="table table-responsive table-striped table-dark mb-5 p-0" *ngIf="!noDataFound" >
+        <thead class="text-center">
+          <tr>
+            <th>Select</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Cases Solved</th>
+          </tr>
+        </thead>
+        <tbody class=" text-center" *ngFor="let doctor of doctorsList; let i = index" [ngClass]="{'table-secondary': i % 2 !== 0, 'table-light': i % 2 === 0}">
+          <tr>
+            <td><mat-checkbox [checked]="doctorSelected(doctor.id)"  (change)="toggleDoctorSelection(doctor.id)"></mat-checkbox></td>
+            <td>{{ doctor?.user?.name }}</td>
+            <td>{{ doctor?.department?.name }}</td>
+            <td>{{ doctor.casesSolved}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <nav *ngIf="totalPages > 1">
+        <ul class="pagination">
+          <li class="page-item cursor-pointer" [class.disabled]="page === 1">
+            <a class="page-link" (click)="onPageChange(page - 1)">Previous</a>
+          </li>
+          <li class="page-item cursor-pointer" [class.active]="page === currentPage " *ngFor="let currentPage of range(totalPages)">
+            <a class="page-link" (click)="onPageChange(currentPage)">{{ currentPage }}</a>
+          </li>
+          <li class="page-item cursor-pointer" [class.disabled]="page === totalPages">
+            <a class="page-link" (click)="onPageChange(page + 1)">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 
   <!-- Submit Button -->

@@ -2,6 +2,7 @@
 <div class="outer-container bg-body-tertiary">
   <div class="container">
     <h2 class="heading text-lg-center pt-4">Registration Form</h2>
+    <div *ngIf="tokenRole === 'ADMIN'"><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
     <form [formGroup]="signupForm" class="registerForm" (ngSubmit)="register()">
 
       <div class="d-flex flex-column align-items-center text-center p-3 py-5">
@@ -339,8 +340,7 @@
       <div class="form-group mb-4">
         <label for="role">Role <span class="required-asterisk">*</span></label>
         <select class="form-select" id="role" formControlName="role">
-          <option value="PATIENT">Patient</option>
-          <option value="DOCTOR">Doctor</option>
+          <option *ngFor="let roleOption of roleOptions" [value]="roleOption.value">{{ roleOption.label }}</option>
         </select>
       </div>
       <div class="form-group">
@@ -457,12 +457,15 @@
           >
         </div>
       </div>
-      <div class="form-group doctorDetail mb-4">
+      <div class="form-group doctorDetail mb-4" *ngIf="!fromDepartment">
         <label for="Department">Department<span class="required-asterisk">*</span></label>
         <select class="form-select" id="" formControlName="department">
           <option value="" selected disabled>Select Department</option>
           <option *ngFor="let department of departments" [value]="department.id">{{department.name}}</option>
         </select>
+        <div class="text-primary" *ngIf="fromDepartment">
+          <span>Select 'General' Department for now</span>
+        </div>
         <div
           class="text-danger errored-input"
           *ngIf="

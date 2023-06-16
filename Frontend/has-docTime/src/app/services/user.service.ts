@@ -21,14 +21,12 @@ export class UserService {
   baseUrl = environment.apiUrl;
   registerUser(user : User){
     this.isLoggedIn.next(true);
-    sessionStorage.clear();
     localStorage.clear();
     return this.http.post<{token : string}>(`${this.baseUrl}register/user`, user);
   }
 
   registerDoctor(doctor : Doctor){
     this.isLoggedIn.next(true);
-    sessionStorage.clear();
     localStorage.clear();
     return this.http.post<{token : string}>(`${this.baseUrl}register/doctor`, doctor);
   }

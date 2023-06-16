@@ -11,8 +11,8 @@ import com.spring.hasdocTime.entity.TimeSlot;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.repository.DepartmentRepository;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 
 import com.spring.hasdocTime.repository.TimeSlotRepository;
 import jakarta.transaction.Transactional;
@@ -27,7 +27,7 @@ import com.spring.hasdocTime.interfaces.DepartmentInterface;
 import com.spring.hasdocTime.interfaces.DoctorInterface;
 import com.spring.hasdocTime.repository.DoctorRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
-import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
@@ -68,7 +68,6 @@ public class DepartmentDaoImpl implements DepartmentInterface {
      * @throws DoesNotExistException     if a Symptom referenced by the Department does not exist.
      */
     @Override
-    @Transactional
     public Department createDepartment(Department department) throws MissingParameterException, DoesNotExistException{
         if(department.getName()==null || department.getName().equals("")){
             throw new MissingParameterException("Name");
@@ -82,14 +81,16 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         if(department.getSymptoms()==null || department.getSymptoms().size()==0){
             throw new MissingParameterException("Symptoms");
         }
-        List<Symptom> symptoms = department.getSymptoms();
-        List<Symptom> symptomsWithData = new ArrayList<>();
+
+        Set<Symptom> symptoms = department.getSymptoms();
+        Set<Symptom> symptomsWithData = new HashSet<>();
         for(Symptom symptom : symptoms){
             Symptom symptomWithData;
             if(symptom.getId()!=0){
                 Optional<Symptom> symptomObj = symptomRepository.findById(symptom.getId());
                 if(symptomObj.isPresent()){
                     symptomWithData = symptomObj.get();
+//                    symptomWithData.getDepartments().add(department);
                     symptomsWithData.add(symptomWithData);
                 }
                 else{
@@ -98,10 +99,29 @@ public class DepartmentDaoImpl implements DepartmentInterface {
             }
         }
         department.setSymptoms(symptomsWithData);
+
         timeSlotRepository.deleteByDepartment(department.getId());
         List<TimeSlot> timeSlots = timeSlotDao.createTimeSlotsFromDepartment(department);
         department.setTimeSlots(timeSlots);
-        return departmentRepository.save(department);
+
+        List<Doctor> doctors = department.getDoctors();
+        List<Doctor> doctorsWithData = new ArrayList<>();
+        for(Doctor doctor : doctors) {
+            Doctor doctorWithData;
+            if(doctor.getId()!=0){
+                Optional<Doctor> doctorObj = doctorRepository.findById(doctor.getId());
+                if(doctorObj.isPresent()){
+                    doctorWithData = doctorObj.get();
+//                    doctorWithData.setDepartment(department);
+                    doctorsWithData.add(doctorWithData);
+                } else {
+                    throw new DoesNotExistException("Doctor");
+                }
+            }
+        }
+        department.setDoctors(doctorsWithData);
+        Department departmentWithData = departmentRepository.save(department);
+        return departmentWithData;
     }
 
 
@@ -152,6 +172,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
      * @throws MissingParameterException if any required parameter is missing.
      */
     @Override
+    @Transactional
     public Department updateDepartent(int id, Department department) throws DoesNotExistException, MissingParameterException {
         if(department.getName()==null || department.getName().equals("")){
             throw new MissingParameterException("Name");

@@ -12,9 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * The Department class represents a department in the system.
@@ -57,7 +55,7 @@ public class Department {
     @Column(name="department_image")
     private String departmentImage;
           
-    @OneToMany(mappedBy = "department", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
     @JsonIgnoreProperties(value = {"user", "department", "appointments", "postAppointmentData"}, allowSetters = true)
     private List<Doctor> doctors;
 
@@ -67,9 +65,9 @@ public class Department {
             inverseJoinColumns = @JoinColumn(name="symptom_id")
     )
     @JsonIgnoreProperties(value = {"departments", "users", "appointments"}, allowSetters = true)
-    private List<Symptom> symptoms;
+    private Set<Symptom> symptoms = new HashSet<>();
     
-    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
     @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
     private List<TimeSlot> timeSlots = new ArrayList<>();
 

@@ -24,7 +24,7 @@ ngAfterViewChecked(){
 
   ngOnInit(): void {
 
-      this.userService.inSignup.subscribe(value => {
+    this.userService.inSignup.subscribe(value => {
       this.inSignupForm = value;
     })
     this.userService.inLogin.subscribe(value => {
@@ -33,6 +33,9 @@ ngAfterViewChecked(){
     this.userService.isLoggedIn.subscribe( (data) => {
       this.isLoggedIn = data;
     });
+    console.log("isLoggedIn: ", this.isLoggedIn);
+    console.log("inSignForm: ", this.inSignupForm);
+    console.log("inLoginFOrm: ", this.inLoginForm);
   }
 
   onLogout(){

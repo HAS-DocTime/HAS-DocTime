@@ -20,9 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Implementation of the SymptomInterface that interacts with the SymptomRepository to perform CRUD operations on Symptom entities.
@@ -121,8 +119,8 @@ public class SymptomDaoImpl implements SymptomInterface {
 
         // Departments
         if(symptom.getDepartments() != null){
-            List<Department> departments = symptom.getDepartments();
-            List<Department> departmentsWithData = new ArrayList<>();
+            Set<Department> departments = symptom.getDepartments();
+            Set<Department> departmentsWithData = new HashSet<>();
             for(Department department : departments){
                 Department departmentWithData = departmentDao.getDepartment(department.getId());
                 departmentsWithData.add(departmentWithData);

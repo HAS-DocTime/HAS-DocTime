@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Doctor } from 'src/app/models/doctor.model';
 import { User } from 'src/app/models/user.model';
 import { AdminService } from 'src/app/services/admin.service';
+import { PreviousPageUrlServiceService } from 'src/app/services/previous-page-url-service.service';
 
 interface SortByOption {
   label: string;
@@ -36,7 +37,7 @@ export class UserDoctorListComponent implements OnInit{
 
   sortByOptions: SortByOption[] = [];
 
-  constructor(private adminService : AdminService, private router : Router, private route : ActivatedRoute){}
+  constructor(private adminService : AdminService, private router : Router, private route : ActivatedRoute, private previousPageUrlService : PreviousPageUrlServiceService){}
 
   ngOnInit(): void {
 
@@ -57,7 +58,10 @@ export class UserDoctorListComponent implements OnInit{
 
   }
 
-
+  createUser(){
+    this.previousPageUrlService.setPreviousUrl(window.location.pathname);
+    this.router.navigate(["register"]);
+  }
 
   getDataById(id: string){
     let params: any = {};
@@ -116,6 +120,7 @@ export class UserDoctorListComponent implements OnInit{
       this.placeholderString = "Search by Doctor Name";
       this.departmentId = parseInt(id);
       this.adminService.getDoctorsByDepartmentId(this.departmentId, params).subscribe(data => {
+        console.log(data);  
         if(data === null){
           this.noDataFound = true;
         }else {

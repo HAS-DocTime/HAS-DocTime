@@ -337,7 +337,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         // clone is required as Java takes value as pass by reference and changes the value of both the objects
         int weekDays = 7;
         List<TimeSlot> timeSlots = new ArrayList<>();
-        if(department.getTimeSlots().isEmpty()){
+        if(department.getTimeSlots() == null || department.getTimeSlots().isEmpty()){
             for(int i=0; i<weekDays; i++){
                 timeSlots = createTimeSlots(department, i, timeSlots);
             }

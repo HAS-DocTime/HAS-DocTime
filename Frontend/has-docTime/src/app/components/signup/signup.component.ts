@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Form, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ChronicIllness } from 'src/app/models/chronicIllness.model';
 import { Router } from '@angular/router';
 import { Doctor } from 'src/app/models/doctor.model';
@@ -22,7 +22,15 @@ import { Payload } from 'src/app/models/payload.model';
 import { User } from 'src/app/models/user.model';
 import { Department } from 'src/app/models/department.model';
 import { DepartmentService } from 'src/app/services/department.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Token } from 'src/app/models/token.model';
+import { Location } from '@angular/common';
+import { PreviousPageUrlServiceService } from 'src/app/services/previous-page-url-service.service';
 
+interface RoleOption {
+  label: string;
+  value: string;
+}
 
 @Component({
   selector: 'app-signup',
@@ -34,16 +42,21 @@ import { DepartmentService } from 'src/app/services/department.service';
 export class SignupComponent implements OnInit, OnDestroy {
 
 constructor(
-  private userService : UserService, 
-  private doctorService : DoctorService, 
-  private router: Router, 
+  private userService : UserService,
+  private doctorService : DoctorService,
+  private router: Router,
   private chhronicIllnessService : ChronicIllnessService,
   private countryService : CountryService,
   private toast: ToastMessageService,
   private storage: AngularFireStorage,
-  private departmentService : DepartmentService
+  private departmentService : DepartmentService,
+  private authService : AuthService,
+  private location : Location,
+  private previousPageUrlService : PreviousPageUrlServiceService
   ){}
 
+  tokenRole : string = "";
+  previousUrl : string = "";
   savedChronicIllnesses: ChronicIllness[] = [];
   selectedValue: string = "";
   selectedIllness: number[] = [];
@@ -53,31 +66,67 @@ constructor(
   confirmPasswordType: string = "password";
   selectedFile: FileUpload | null = null;
   imageUrl!: string;
+  fromDepartment : boolean = false;
   countries : Country[] = [];
   departments : Department[] = [];
+  roleOptions: RoleOption[] = [];
+  createdUserToken?: string;
 
   ngOnInit(){
-
     this.departmentService.getDepartmentsWithoutPagination().subscribe(data => {
       this.departments = data;
+      console.log(this.departments);
     });
-      
-      this.countryService.getAllCountries().then((data) => {
-        this.countries = data;
-        var dropdown =document.getElementById('countryCodeDropdown');
-        this.countries.forEach( country => {
-          var option = document.createElement('option');
-          option.value = country.code;
-          option.textContent = country.code + ":" + country.name;
-          dropdown?.appendChild(option);
-          this.signupForm.get("contact")?.get("countryCode")?.valueChanges.subscribe((data)=> {
-          })
+    console.log("000000000000", sessionStorage.getItem('token'));
+
+    this.previousUrl = this.previousPageUrlService.getPreviousUrl();
+    console.log('Previous URL:', this.previousUrl);
+     if(this.previousUrl.includes('departments') || this.previousUrl.includes('doctors')){
+      if(this.previousUrl.includes('departments')){
+        this.fromDepartment = true;
+      } else {
+        this.fromDepartment = false;
+      }
+      this.roleOptions = [
+        {label: 'Doctor', value: 'DOCTOR'}
+      ]
+    }else if(this.previousUrl.includes('users')){
+      this.fromDepartment = false;
+      this.roleOptions = [
+        {label: 'Patient', value: 'PATIENT'}
+      ]
+    } else {
+      this.fromDepartment = false;
+      this.roleOptions = [
+        {label: 'Patient', value: 'PATIENT'},
+        {label: 'Doctor', value: 'DOCTOR'}
+      ]
+    }
+
+    const decoded_token : Token = this.authService.decodeToken();
+    this.tokenRole = decoded_token.role;
+
+
+    this.countryService.getAllCountries().then((data) => {
+      this.countries = data;
+      var dropdown =document.getElementById('countryCodeDropdown');
+      this.countries.forEach( country => {
+        var option = document.createElement('option');
+        option.value = country.code;
+        option.textContent = country.code + ":" + country.name;
+        dropdown?.appendChild(option);
+        this.signupForm.get("contact")?.get("countryCode")?.valueChanges.subscribe((data)=> {
+        })
       });
-      });
-      this.signupForm.get("role")?.valueChanges.subscribe(value => {
+    });
+
+    this.signupForm.get("role")?.valueChanges.subscribe(value => {
       if(value==="DOCTOR"){
         this.signupForm.get("qualification")?.addValidators(Validators.required);
         this.signupForm.get("casesSolved")?.addValidators(Validators.required);
+        if(this.fromDepartment !== true){
+          this.signupForm.get("department")?.addValidators(Validators.required);
+        }
       }
       else {
         this.signupForm.get("qualification")?.clearValidators();
@@ -85,6 +134,7 @@ constructor(
       }
       this.signupForm.controls['qualification'].updateValueAndValidity();
       this.signupForm.controls['casesSolved'].updateValueAndValidity();
+      this.signupForm.controls['department'].updateValueAndValidity();
     })
 
     this.chhronicIllnessService.getAllChronicIllnesses().subscribe(data => {
@@ -101,17 +151,31 @@ constructor(
     })
   }
 
+
   ngDoCheck() {
     this.userService.inSignup.next(true);
     this.userService.inLogin.next(false);
-    this.userService.isLoggedIn.next(false);
+    if(this.tokenRole ==="ADMIN"){
+      this.userService.isLoggedIn.next(true);
+    } else {
+      this.userService.isLoggedIn.next(false);
+    }
   }
 
   ngOnDestroy(): void {
     this.userService.inSignup.next(false)
     this.userService.inLogin.next(false)
-    this.userService.isLoggedIn.next(true)
+    if(this.tokenRole ==="ADMIN"){
+      this.userService.isLoggedIn.next(false);
+    } else {
+      this.userService.isLoggedIn.next(true);
+    }
   }
+
+  navigateBack(){
+    this.location.back();
+  }
+
 
   signupForm : FormGroup = new FormGroup({
     firstName : new FormControl("", [Validators.required, trimmedInputValidateSpace()]),
@@ -132,7 +196,7 @@ constructor(
     qualification : new FormControl(""),
     casesSolved : new FormControl(0),
     patientChronicIllness : new FormArray([]),
-    department: new FormControl('', [Validators.required])
+    department: new FormControl('')
   },
     { validators: confirmPasswordValidator() }
   )
@@ -185,6 +249,10 @@ constructor(
     }
     user.patientChronicIllness = chronicIllnesses;
 
+    if(this.fromDepartment){
+      this.signupForm.value.department = 1;
+    }
+
     let doctor: Doctor = {
       "user": user,
       "qualification": this.signupForm.value.qualification,
@@ -195,13 +263,29 @@ constructor(
       }
     };
     doctor.qualification = this.signupForm.value.qualification;
+
+
     if (user.role === "PATIENT") {
+
+      console.log("------000",sessionStorage.getItem('token'));
+
       this.userService.registerUser(user).subscribe((data) => {
-        sessionStorage.clear();
-        sessionStorage.setItem('token', data.token);
+        console.log(data);
+        console.log("-------------------------",( this.previousUrl.includes('users')));
+
+        if(!( this.previousUrl.includes('users'))){
+          sessionStorage.clear();
+          sessionStorage.setItem('token', data.token);
+        } else {
+          console.log("sessionStorageToken: ",sessionStorage.getItem('token'));
+          this.createdUserToken = data.token;
+        }
+        console.log("Previous page url", this.previousUrl);
+
+        console.log("createdUserToken:", this.createdUserToken);
 
         this.getToken(user);
-
+        
         this.signupForm.reset({
           firstName: "",
           lastName: "",
@@ -216,7 +300,14 @@ constructor(
           casesSolved: 0,
           patientChronicIllness: []
         });
-        this.router.navigate(["/dashboard/appointment"]);
+        if(this.previousUrl.includes('users')){
+          console.log("User Created Successfully! ;)");
+          this.toast.showSuccess("Patient Created Successfully", "Success");
+          this.router.navigate(['/dashboard/users']);
+        }else {
+          console.log("User Registered :(");
+          this.router.navigate(["/dashboard/appointment"]);
+        }
       }, (err) => {
         console.log(err);
       });
@@ -224,17 +315,16 @@ constructor(
     else if (user.role === "DOCTOR") {
       let userId = 0;
 
-      
       this.userService.registerDoctor(doctor).subscribe((data) => {
-
-        sessionStorage.clear();
-        localStorage.clear();
-        sessionStorage.setItem('token', data.token)
-        
+        if(!( this.previousUrl.includes('departments') || this.previousUrl.includes('doctors'))){
+          sessionStorage.clear();
+          sessionStorage.setItem('token', data.token);
+        } else {
+          this.createdUserToken = data.token;
+        }
 
         this.getToken(doctor.user);
 
-        window.sessionStorage.setItem('token', data.token);
         this.signupForm.reset({
           firstName: "",
           lastName: "",
@@ -249,8 +339,19 @@ constructor(
           casesSolved: 0,
           patientChronicIllness: []
         });
-        this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
-        this.toast.showSuccess("Registered Successfully!", "Success");
+        if(this.previousUrl.includes('departments') || this.previousUrl.includes('doctors')){
+          if(this.fromDepartment){
+            console.log("again in department!");
+            this.location.back();
+          } else{
+            this.router.navigate(['dashboard/doctors']);
+          }
+          console.log("Doctor Created Successfully! ;)");
+          this.toast.showSuccess("Doctor Created Successfully", "Success");
+        } else {
+          this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
+          this.toast.showSuccess("Registered Successfully!", "Success");
+        }
       }, (err)=> {
         console.log(err);
         this.toast.showError("Registration Unsuccessful","Failed");
@@ -275,14 +376,26 @@ constructor(
   }
 
   getToken(user: User) {
-;
-    const payload: Payload = jwt_decode(sessionStorage.getItem('token') as string);
-   
+    let payload :Payload = {
+      id: 0,
+      role: '',
+      email: ''
+    };
+    console.log("PreviousUrl during update: ",this.previousUrl );
+
+    if(!( this.previousUrl.includes('departments') || this.previousUrl.includes('doctors') || this.previousUrl.includes('users'))){
+      payload = jwt_decode(sessionStorage.getItem('token') as string);
+    } else {
+      payload= jwt_decode(this.createdUserToken as string);
+      console.log("payload when created user by admin: ", payload);
+    }
+
     if (payload.role === 'PATIENT' && this.selectedFile) {
 
       const filePath = `profiles/${payload.id}`;
       const storageRef = this.storage.ref(filePath);
       const uploadTask = this.storage.upload(filePath, this.selectedFile);
+      console.log("ImageFile: ",this.selectedFile);
 
 
       uploadTask.snapshotChanges().pipe(
@@ -291,9 +404,8 @@ constructor(
             (this.selectedFile as FileUpload).url = downloadURL;
             this.imageUrl = downloadURL;
             user.imageUrl = downloadURL;
-
+            console.log("firebaseUrl: ", user.imageUrl);
             this.setuserImageUrl(user, payload.id);
-
           });
         })
       ).subscribe();
@@ -306,6 +418,7 @@ constructor(
         const filePath = `profiles/${data.user.id}`;
         const storageRef = this.storage.ref(filePath);
         const uploadTask = this.storage.upload(filePath, this.selectedFile);
+        console.log("ImageFile: ",this.selectedFile);
 
         uploadTask.snapshotChanges().pipe(
           finalize(() => {
@@ -313,14 +426,13 @@ constructor(
               (this.selectedFile as FileUpload).url = downloadURL;
               this.imageUrl = downloadURL;
               doctor.user.imageUrl = downloadURL;
-
+              console.log("firebaseUrl: ", user.imageUrl);
               this.setDoctorImageUrl(doctor, id!);
 
             });
           })
         ).subscribe();
       });
-
     }
   }
 

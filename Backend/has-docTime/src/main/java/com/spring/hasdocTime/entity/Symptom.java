@@ -7,8 +7,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * The Symptom class represents a symptom in the system.
@@ -46,7 +48,7 @@ public class Symptom {
             joinColumns = @JoinColumn(name = "symptom_id"),
             inverseJoinColumns = @JoinColumn(name = "department_id"))
     @JsonIgnoreProperties(value = "symptoms", allowSetters = true)
-    private List<Department> departments;
+    private Set<Department> departments = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
