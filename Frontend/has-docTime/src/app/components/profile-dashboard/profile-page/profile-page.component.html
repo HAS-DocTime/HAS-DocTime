@@ -1,3 +1,5 @@
+
+
 <div *ngIf="urlPath==='users' || urlPath==='doctors'"><i class="bi bi-arrow-left-circle-fill" (click)="navigateBack()"></i></div>
 <div class="container rounded mt-5 mb-5">
   <div class="row">
@@ -12,18 +14,12 @@
               <img class="rounded-circle mt-5 mb-3" width="150px" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Selected Picture"/>
             </span>
           </div>
-          <!-- <img
-          class="rounded-circle mt-5"
-          width="150px"
-          src="{{ imageUrl }}"
-        /> -->
 
         <div class="row">
           <button type="submit" class="btn btn-outline-primary mt-3" (click)="file.click()" *ngIf="!disable">
             Upload File
           </button>
             <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #file/>
-            <!-- <button *ngIf="!disable" type="button" (click)="uploadProfilePicture()">Upload</button> -->
         </div>
         </form>
         <span class="font-weight-bold mt-2">{{ editForm.get('firstName')?.value }} {{editForm.get('lastName')?.value}}</span>
@@ -85,24 +81,27 @@
                 >Contact
                 <span *ngIf="!disable" class="required-asterisk">*</span></label
               >
-              <div class="d-flex" formGroupName="contact">
-                <select class="form-select countryCode" id="countryCodeDropdown" formControlName="countryCode">
-                  
-                  <!-- Add more options here -->
-                </select>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="enter phone number"
-                  formControlName="number"
-                  pattern="^[0-9]{10}$"
-                  [ngClass]="
-                    editForm.get('contact')?.errors &&
-                    editForm.get('contact')?.touched
-                      ? 'errored-input'
-                      : ''
-                  "
-                />
+              <div class="row" formGroupName="contact">
+                <div class="col-md-6">
+                  <select class="form-select countryCode" id="countryCodeDropdown" formControlName="countryCode">
+                    <option value="" selected disabled>Select Country Code</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="enter phone number"
+                    formControlName="number"
+                    pattern="^[0-9]{10}$"
+                    [ngClass]="
+                      editForm.get('contact')?.errors &&
+                      editForm.get('contact')?.touched
+                        ? 'errored-input'
+                        : ''
+                    "
+                  />
+                </div>
               </div>
               <div
                 class="text-danger errored-input"
@@ -141,8 +140,6 @@
             <div class="form-group mb-4">
               <label for="dob">Date of Birth
                 <span *ngIf="!disable" class="required-asterisk">*</span></label>
-              <p>{{ this.user?.dob?.getDate?.toString }}</p>
-
               <input type="date" class="form-control" id="dob" [placeholder]="user?.dob" formControlName="dob"
                 [max]="maxDate" [min]="minDate" [ngClass]="
                   editForm.get('dob')?.errors && editForm.get('dob')?.touched
@@ -158,11 +155,6 @@
               </div>
             </div>
             <div class="col-md-12 mb-3">
-              <label class="labels">Email
-                <span *ngIf="!disable" class="required-asterisk">*</span></label><input type="text" class="form-control"
-                formControlName="email" />
-            </div>
-            <div class="col-md-12 mb-3">
               <label class="labels">Height</label><input type="number" min="1" max="10" class="form-control"
                 placeholder="Enter Your Height in Feet ( Eg : 6.2 )" formControlName="height" />
               <div class="text-danger errored-input" *ngIf="
@@ -170,7 +162,7 @@
             editForm.get('height')?.invalid
           ">
                 <span *ngIf="editForm.get('height')?.errors?.['max']">Enter Valid Height ( Max -> 10.0)</span>
-                <span *ngIf="editForm.get('height')?.errors?.['min']">Enter Valid Height (Min -> 0.0)</span>
+                <span *ngIf="editForm.get('height')?.errors?.['min']">Enter Valid Height (Min -> 1.0)</span>
               </div>
             </div>
             <div class="col-md-12 mb-3">

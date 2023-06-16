@@ -18,7 +18,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { OurServicesComponent } from './components/our-services/our-services.component';
-import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { ProfilePageComponent } from './components/profile-dashboard/profile-page/profile-page.component';
 import { CommonModule, DatePipe } from '@angular/common';
 import { PastAppointmentComponent } from './components/past-appointment/past-appointment.component';
 import { DetailedPastAppointmentComponent } from './components/past-appointment/detailed-past-appointment/detailed-past-appointment.component';
@@ -47,6 +47,11 @@ import { ToastrModule } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { EmailComponent } from './components/profile-dashboard/email/email.component';
+import { SecurityComponent } from './components/profile-dashboard/security/security.component';
+import { ProfileDashboardComponent } from './components/profile-dashboard/profile-dashboard.component';
+import { ForgotPasswordComponent } from './components/login/forgot-password/forgot-password.component';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 // const firebaseConfig = environment.firebase;
 // firebase.initializeApp(environment.firebase);
@@ -82,7 +87,11 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     PastAppointmentComponent,
     DetailedPastAppointmentComponent,
     TooltipDirective,
-    NotFoundComponent
+    NotFoundComponent,
+    EmailComponent,
+    SecurityComponent,
+    ProfileDashboardComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -106,7 +115,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
-    FormsModule
+    FormsModule,
+    LazyLoadImageModule
   ],
   providers: [
     {

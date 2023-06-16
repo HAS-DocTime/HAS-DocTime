@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 /**
@@ -53,6 +54,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     }
 
 
+    @Transactional
     @Override
     public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -79,6 +81,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      *
      * @return A list of all appointments.
      */
+    @Transactional
     @Override
     public List<Appointment> getAllAppointmentList() {
         List<Appointment> allAppointments= appointmentRepository.findAll();
@@ -98,6 +101,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      * @return The appointment with the specified ID.
      * @throws DoesNotExistException If the appointment with the specified ID does not exist.
      */
+    @Transactional
     @Override
     public Appointment getAppointmentById(int id) throws DoesNotExistException {
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
@@ -124,6 +128,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      * @throws MissingParameterException If any required parameter is missing.
      * @throws DoesNotExistException     If any referenced entity does not exist.
      */
+    @Transactional
     @Override
     public Appointment createAppointment(Appointment appointment) throws MissingParameterException, DoesNotExistException{
         if(appointment.getDescription()==null){
@@ -201,6 +206,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      * @throws DoesNotExistException     If the appointment with the specified ID does not exist.
      * @throws MissingParameterException If any required parameter is missing.
      */
+    @Transactional
     @Override
     public Appointment updateAppointment(int id, Appointment appointment) throws DoesNotExistException, MissingParameterException{
         if(appointment.getDescription()==null){
@@ -273,6 +279,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      * @return The deleted appointment.
      * @throws DoesNotExistException If the appointment with the specified ID does not exist.
      */
+    @Transactional
     @Override
     public Appointment deleteAppointment(int id) throws DoesNotExistException{
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
@@ -290,6 +297,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      * @return A list of appointments associated with the specified user.
      * @throws DoesNotExistException If the user with the specified ID does not exist.
      */
+    @Transactional
     @Override
     public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(userId);
@@ -320,6 +328,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
      * @return A list of appointments associated with the specified doctor.
      * @throws DoesNotExistException If the doctor with the specified ID does not exist.
      */
+    @Transactional
     @Override
     public List<Appointment> getAppointmentListByUser(int userId) throws DoesNotExistException {
         Optional<User> user = userRepository.findById(userId);
@@ -331,7 +340,7 @@ public class AppointmentDaoImpl implements AppointmentInterface {
         return appointments;
     }
 
-
+    @Transactional
     @Override
     public Page<Appointment> getAppointmentsOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);

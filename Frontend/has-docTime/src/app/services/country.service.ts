@@ -13,6 +13,7 @@ export class CountryService {
 
     async getAllCountries() : Promise<Country[]> {
     const data = await this.http.get<any[]>(`https://restcountries.com/v3.1/all?fields=name,idd,flag`).toPromise();
+    this.countries = [];
       data?.forEach((country) => {
         if(country.idd){
           const countryCode = country.idd.root;
@@ -24,7 +25,6 @@ export class CountryService {
               name : country.name.common + flag 
             });
           });
-
           this.countries.sort((a, b) => a.name.localeCompare(b.name));
         }
       });

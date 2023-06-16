@@ -25,7 +25,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
 })
-export class ProfilePageComponent implements OnInit, OnDestroy {
+export class ProfilePageComponent implements OnInit {
   constructor(
     private datePipe: DatePipe,
     private userService: UserService,
@@ -58,28 +58,28 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   selectedFile: FileUpload | null = null;
   imageUrl: string = "";
   isLoading: boolean = false;
+  currentUrl! : any;
 
   ngOnInit(): void {
 
-    this.route.url.subscribe((data) => {
-      this.urlPath = data[0].path;
-      const token = sessionStorage.getItem('token');
+    this.currentUrl = this.router.url;
+    console.log(this.currentUrl);
+    
+    
       const decoded_token : Token = this.authService.decodeToken();
 
     this.tokenRole = decoded_token.role;
     this.id = parseInt(decoded_token.id);
 
         if (this.tokenRole === 'ADMIN') {
-          if (data[0].path === 'users') {
-            this.route.params.subscribe((data) => {
-              this.id = parseInt(data['id']);
+          if (this.currentUrl.includes('/users')) {
+              const id = this.route.parent?.snapshot.paramMap.get('id');
+              this.id = parseInt(id as string);
               this.getUser(this.id);
-            });
-          } else if (data[0].path === 'doctors') {
-            this.route.params.subscribe((data) => {
-              this.id = parseInt(data['id']);
+          } else if (this.currentUrl.includes('/doctors')) {
+              const id = this.route.parent?.snapshot.paramMap.get('id');
+              this.id = parseInt(id as string);
               this.getDoctor(this.id);
-            });
           } else {
             this.getAdmin(this.id);
           }
@@ -88,7 +88,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         } else {
           this.getUser(this.id);
         }
-    });
+
   }
 
   editForm: FormGroup = new FormGroup({
@@ -128,6 +128,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.adminService.getAdmin(this.id).subscribe((data) => {
       this.admin = data;
       this.user = data.user;
+      this.imageUrl = this.user?.imageUrl as string;
       this.id = data.id as number;
       const adminNameArray: string[] = this.admin?.user?.name?.split(' ', 2) ?? [];
       this.firstName = adminNameArray[0];
@@ -256,8 +257,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       });
     });
   }
-
-  ngOnDestroy(): void {}
   submitProfile() {
     const date = new Date();
     this.editForm.value['firstName'] = this.editForm.value["firstName"].trim();
@@ -289,7 +288,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     }
     user.patientChronicIllness = chronicIllnesses;
 
-    if (this.tokenRole === 'PATIENT' || this.urlPath === 'users') {
+    if (this.tokenRole === 'PATIENT' || this.currentUrl.includes('/users')) {
       user.role = this.user?.role;
       user.email = this.user?.email;
       user.imageUrl = this.imageUrl;
@@ -302,13 +301,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.user = data;
           this.isLoading = false;
         });
-        this.toast.showSuccess("User Updated Successfully", "Success");
+        this.toast.showSuccess("Patient Updated Successfully", "Success");
       }, (err)=> {
         if(err){
           this.toast.showError("Unexpected Error Occurred", "Error");
         }
       });
-    } else if (this.tokenRole === 'DOCTOR' || this.urlPath === 'doctors') {
+    } else if (this.tokenRole === 'DOCTOR' || this.currentUrl.includes('/doctors')) {
       user.id = this.doctor?.user?.id;
       user.role = this.doctor?.user.role;
       user.email = this.doctor?.user.email;
@@ -360,7 +359,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.isLoading != this.isLoading;
         });
         this.toggleDisable();
-        this.toast.showSuccess("User Updated Successfully", "Success");
+        this.toast.showSuccess("Admin Updated Successfully", "Success");
       }, (err)=> {
         if(err){
           this.toast.showError("Unexpected Error Occurred", "Error");

@@ -1,40 +1,79 @@
 import { ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { clippingParents } from '@popperjs/core';
+import { Token } from 'src/app/models/token.model';
+import { AdminService } from 'src/app/services/admin.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { DoctorService } from 'src/app/services/doctor.service';
 import { LoginService } from 'src/app/services/login.service';
 import { ToastMessageService } from 'src/app/services/toast-message.service';
 import { UserService } from 'src/app/services/user.service';
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit{
-
-  constructor(private cdr: ChangeDetectorRef,private loginService: LoginService, private userService: UserService, private router: Router, private route: ActivatedRoute, private toast: ToastMessageService){
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private loginService: LoginService,
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private toast: ToastMessageService,
+    private authService : AuthService,
+    private doctorService : DoctorService,
+    private adminService : AdminService
+    ){
   }
 ngAfterViewChecked(){
    //your code to update the model
    this.cdr.detectChanges();
 }
-
-  isLoggedIn!: Boolean;
-  inSignupForm!: Boolean;
-  inLoginForm!: Boolean;
-
-  ngOnInit(): void {
-
-      this.userService.inSignup.subscribe(value => {
-      this.inSignupForm = value;
-    })
-    this.userService.inLogin.subscribe(value => {
-      this.inLoginForm = value;
-    })
-    this.userService.isLoggedIn.subscribe( (data) => {
-      this.isLoggedIn = data;
-    });
+  isLoggedIn : boolean = false;
+  urlPath : string = "";
+  forgotPassword : Boolean = false;
+  changePassword : Boolean = false;
+  imageUrl! : string;
+  id: number = 0;
+  tokenRole: string = '';
+  placeHolderImage: string = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+  isImageLoaded = false;
+  profileName! : string;
+  url : string = this.router.url;
+  onImageLoad() {
+    this.isImageLoaded = true;
   }
+  ngOnInit(): void {
+    const decodedToken : Token = this.authService.decodeToken();
+    this.tokenRole = decodedToken.role;
+    this.id = parseInt(decodedToken.id);
+    if (this.tokenRole === 'ADMIN') {
+        this.getAdmin(this.id);
+    } else if (this.tokenRole === 'DOCTOR') {
+      this.getDoctor(this.id)
+    } else {
+      this.getUser(this.id);
+    }
+    this.route.url.subscribe(data=> {
+      if(data?.[1]?.path==="forgotPassword"){
+        this.forgotPassword = true;
+      }
+      else{
+        this.forgotPassword = false;
+      }
+      if(data?.[1]?.path==="changePassword"){
+        this.changePassword = true;
+      }
+      else{
+        this.changePassword = false;
+      }
+    })
 
+    if(!(this.url.includes('register') || this.url.includes('login'))){
+      this.isLoggedIn = true;
+    }
+  }
   onLogout(){
     if (window.confirm('Are you sure you want to log out?')) {
       this.userService.logOutUser();
@@ -44,5 +83,24 @@ ngAfterViewChecked(){
     }else{
       this.router.navigate([this.router.url]);
     }
+  }
+  private getAdmin(id: number) {
+    this.adminService.getAdmin(this.id).subscribe((data) => {
+      this.imageUrl = data.user?.imageUrl as string;
+      this.profileName = data.user?.name!;
+    });
+  }
+  private getDoctor(id: number) {
+    this.doctorService.getDoctor(id).subscribe((data) => {
+      this.imageUrl = data.user.imageUrl as string;
+      this.profileName = data.user.name!;
+    });
+  }
+  private getUser(id: number) {
+    this.userService.getUser(id).subscribe((data) => {
+      console.log(data);
+      this.imageUrl = data.imageUrl as string;
+      this.profileName = data.name!;
+    });
   }
 }

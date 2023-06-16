@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,7 @@ public class SymptomDaoImpl implements SymptomInterface {
      * @return The symptom with the given ID.
      * @throws DoesNotExistException if the symptom does not exist.
      */
+    @Transactional
     @Override
     public Symptom getSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
@@ -72,6 +74,7 @@ public class SymptomDaoImpl implements SymptomInterface {
      * Retrieves all symptoms.
      * @return A list of all symptoms.
      */
+    @Transactional
     @Override
     public Page<Symptom> getAllSymptom(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -87,6 +90,7 @@ public class SymptomDaoImpl implements SymptomInterface {
         return symptoms;
     }
 
+    @Transactional
     @Override
     public List<Symptom> getAllSymptomList() {
         return symptomRepository.findAll();
@@ -99,6 +103,7 @@ public class SymptomDaoImpl implements SymptomInterface {
      * @throws DoesNotExistException if the symptom does not exist.
      * @throws MissingParameterException if a required parameter is missing.
      */
+    @Transactional
     @Override
     public Symptom createSymptom(Symptom symptom) throws DoesNotExistException, MissingParameterException {
 //        symptom.setId(0);
@@ -152,6 +157,7 @@ public class SymptomDaoImpl implements SymptomInterface {
      * @throws DoesNotExistException if the symptom does not exist.
      * @throws MissingParameterException if a required parameter is missing.
      */
+    @Transactional
     @Override
     public Symptom updateSymptom(int id, Symptom symptom) throws DoesNotExistException, MissingParameterException{
         if(symptom.getName()==null || symptom.getName().equals("")){
@@ -172,6 +178,7 @@ public class SymptomDaoImpl implements SymptomInterface {
      * @return true if the symptom was successfully deleted, false otherwise.
      * @throws DoesNotExistException if the symptom does not exist.
      */
+    @Transactional
     @Override
     public boolean deleteSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);

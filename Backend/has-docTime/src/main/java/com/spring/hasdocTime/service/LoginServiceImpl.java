@@ -1,9 +1,9 @@
 package com.spring.hasdocTime.service;
 
-import com.spring.hasdocTime.entity.AuthenticationResponse;
-import com.spring.hasdocTime.entity.LoginDetail;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.LoginInterface;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -28,5 +28,20 @@ public class LoginServiceImpl implements LoginInterface {
     @Override
     public AuthenticationResponse loginRequest(LoginDetail loginDetail) throws MissingParameterException {
         return loginDao.loginRequest(loginDetail);
+    }
+
+    @Override
+    public Boolean sendEmailForForgotPassword(SendOtpEmail sendOtpEmail) throws MessagingException {
+        return loginDao.sendEmailForForgotPassword(sendOtpEmail);
+    }
+
+    @Override
+    public Boolean otpVerification(OtpRequestBody otpRequestBody) {
+        return loginDao.otpVerification(otpRequestBody);
+    }
+
+    @Override
+    public Boolean saveNewPassword(PasswordUpdateBody passwordUpdateBody) {
+        return loginDao.saveNewPassword(passwordUpdateBody);
     }
 }

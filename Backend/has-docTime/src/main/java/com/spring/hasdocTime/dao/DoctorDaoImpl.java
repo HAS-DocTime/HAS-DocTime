@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -68,6 +69,7 @@ public class DoctorDaoImpl implements DoctorInterface {
      * @throws MissingParameterException if any required parameter is missing.
      * @throws DoesNotExistException     if the referenced User or Department does not exist.
      */
+    @Transactional
     @Override
     public Doctor createDoctor(Doctor doctor) throws MissingParameterException, DoesNotExistException{
         if(doctor.getUser()==null){
@@ -110,6 +112,7 @@ public class DoctorDaoImpl implements DoctorInterface {
      *
      * @return A list of all Doctors.
      */
+    @Transactional
     @Override
     public Page<Doctor> getAllDoctors(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -133,6 +136,7 @@ public class DoctorDaoImpl implements DoctorInterface {
      * @param id The ID of the Department.
      * @return A list of Doctors in the specified Department.
      */
+    @Transactional
     @Override
     public Page<Doctor> getDoctorsByDepartmentId( int id, int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -157,6 +161,7 @@ public class DoctorDaoImpl implements DoctorInterface {
      * @return The retrieved Doctor.
      * @throws DoesNotExistException if the Doctor with the specified ID does not exist.
      */
+    @Transactional
     @Override
     public Doctor getDoctor(int id) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
@@ -177,6 +182,7 @@ public class DoctorDaoImpl implements DoctorInterface {
      * @throws DoesNotExistException     if the Doctor with the specified ID does not exist.
      * @throws MissingParameterException if any required parameter is missing.
      */
+    @Transactional
     @Override
     public Doctor updateDoctor(int id, Doctor doctor) throws DoesNotExistException, MissingParameterException {
         if(doctor.getUser()==null){
@@ -212,6 +218,7 @@ public class DoctorDaoImpl implements DoctorInterface {
      * @return The deleted Doctor.
      * @throws DoesNotExistException if the Doctor with the specified ID does not exist.
      */
+    @Transactional
     @Override
     public Doctor deleteDoctor(int id) throws DoesNotExistException{
         Optional<Doctor> doctor = doctorRepository.findById(id);
@@ -229,6 +236,7 @@ public class DoctorDaoImpl implements DoctorInterface {
         throw new DoesNotExistException("Doctor");
     }
 
+    @Transactional
     Timestamp manipulateTimeSlotBasedOnTimeZone(Timestamp timestamp){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("GMT+05:30"));
@@ -238,6 +246,7 @@ public class DoctorDaoImpl implements DoctorInterface {
         return new Timestamp(calendar.getTimeInMillis());
     }
 
+    @Transactional
     @Override
     public Page<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody, int page, int size, String sortBy, String search) throws  DoesNotExistException{
         filteredDoctorBody.setTimeSlotStartTime(manipulateTimeSlotBasedOnTimeZone(filteredDoctorBody.getTimeSlotStartTime()));

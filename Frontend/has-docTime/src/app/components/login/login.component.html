@@ -46,11 +46,12 @@
           </div>
         </div>
       </div>
-      <div class="mt-1 d-flex justify-content-center mt-3">
-        <div class="d-inline-block">
+      <!-- <div class="mt-1 d-flex justify-content-center mt-3"> -->
+        <div class="d-flex justify-content-around">
           <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Submit</button>
+          <a class="mt-2" routerLink="/login/forgotPassword">Forgot Password?</a>
         </div>
-      </div>
+      <!-- </div> -->
       <div *ngIf="submitted && invalidLogin" class="alert alert-danger mt-3">
         Incorrect email or password!
       </div>

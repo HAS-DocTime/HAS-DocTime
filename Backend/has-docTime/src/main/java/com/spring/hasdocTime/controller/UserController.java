@@ -1,16 +1,20 @@
 package com.spring.hasdocTime.controller;
-import com.spring.hasdocTime.entity.User;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.UserInterface;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.naming.AuthenticationException;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -41,9 +45,9 @@ public class UserController {
             @RequestParam(defaultValue = "2") int size,
             @RequestParam(defaultValue = "name") String sortBy,     //sortBy name only
             @RequestParam(required = false) String search
-    ){
+    ) {
         Page<User> users = userService.getAllUser(page, size, sortBy, search);
-        if(users.isEmpty()) {
+        if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return new ResponseEntity(users.getContent(), HttpStatus.OK);
@@ -103,8 +107,6 @@ public class UserController {
      */
     @PutMapping("{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") int id, @Valid @RequestBody User theUser) throws DoesNotExistException, MissingParameterException {
-        System.out.println("=====================================================");
-        System.out.println("Update User" + theUser);
         User user = userService.updateUser(id, theUser);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -134,9 +136,9 @@ public class UserController {
             @RequestParam(defaultValue = "2") int size,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(required = false) String search
-    ){
+    ) {
         Page<User> users = userService.getPatients(page, size, sortBy, search);
-        if(users.isEmpty()) {
+        if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -163,5 +165,19 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/updateEmail")
+    public ResponseEntity<AuthenticationResponse> updateEmailOfUser(@RequestBody EmailUpdateRequestBody emailUpdateRequestBody) {
+        return ResponseEntity.ok(userService.updateEmailOfUser(emailUpdateRequestBody));
+    }
+
+    @PutMapping("/updatePassword")
+    public ResponseEntity<PasswordUpdateResponse> updatePasswordOfUser(@RequestBody PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException, AuthenticationException {
+        try {
+            return ResponseEntity.ok(new PasswordUpdateResponse(userService.updatePasswordOfUser(passwordUpdateRequestBody)));
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>(new PasswordUpdateResponse("Enter Valid Old Password"), HttpStatus.UNAUTHORIZED);
+        }
     }
 }

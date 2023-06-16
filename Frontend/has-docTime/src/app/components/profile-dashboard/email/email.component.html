@@ -1,0 +1,21 @@
+<h3 class="mt-4">Current Email</h3>
+<p>Your current email address is <strong>{{userEmail}}</strong></p>
+
+<form class="form-group mb-4 mt-5" [formGroup]="updateEmailForm" >
+    <h5>Enter new Email</h5>
+    <input
+      type="email"
+      class="form-control w-50"
+      id="email"
+      placeholder="(Eg : johndoe@gmail.com)"
+      formControlName = "email"
+    />
+    <!-- <div
+      class="text-danger errored-input"
+      *ngIf=""
+    >
+      <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is Required</span>
+      <span *ngIf="signupForm.get('email')?.errors?.['email']">Enter Valid Email</span>
+    </div> -->
+    <button class="btn btn-primary mt-3" (click)="updateEmail()">Update Email</button>
+</form>

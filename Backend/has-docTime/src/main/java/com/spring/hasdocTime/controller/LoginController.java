@@ -1,9 +1,9 @@
 package com.spring.hasdocTime.controller;
 
-import com.spring.hasdocTime.entity.AuthenticationResponse;
-import com.spring.hasdocTime.entity.LoginDetail;
+import com.spring.hasdocTime.entity.*;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.LoginInterface;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,6 +48,34 @@ public class LoginController {
     @PostMapping("")
     public ResponseEntity<AuthenticationResponse> loginRequest(@RequestBody LoginDetail loginDetail) throws MissingParameterException {
         return ResponseEntity.ok(loginService.loginRequest(loginDetail));
+    }
+
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<Void> sendEmailForForgotPassword(@RequestBody SendOtpEmail sendOtpEmail) throws MessagingException {
+
+        if(loginService.sendEmailForForgotPassword(sendOtpEmail)){
+            return ResponseEntity.ok(null);
+        }else{
+            return ResponseEntity.badRequest().body(null);
+        }
+
+    }
+
+    @PostMapping("/otpVerify")
+    public ResponseEntity<Void> otpVerification(@RequestBody OtpRequestBody otpRequestBody){
+
+        if(loginService.otpVerification(otpRequestBody)){
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.badRequest().body(null);
+    }
+
+    @PostMapping("/saveNewPassword")
+    public ResponseEntity<Void> saveNewPassword(@RequestBody PasswordUpdateBody passwordUpdateBody){
+        if(loginService.saveNewPassword(passwordUpdateBody)){
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
 
 }

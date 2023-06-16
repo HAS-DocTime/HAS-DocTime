@@ -1,36 +1,54 @@
-
 .fontinc{
-    font-size: x-large;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  font-size: x-large;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
-
 .navbar{
-  border-bottom: 2px solid rgb(200, 202, 199);
-  --bs-navbar-padding-y: 0rem;
+border-bottom: 2px solid rgb(200, 202, 199);
+--bs-navbar-padding-y: 0rem;
 }
-
 .container-fluid{
-  padding-left: 0;
-  padding-right: 0;
+padding-left: 0;
+padding-right: 0;
 }
-
 .mat-mdc-raised-button.mat-primary{
-  background-color:#0074d9;
-  color: white;
+background-color:#0074d9;
+color: white;
 }
-
 .mat-mdc-raised-button.mat-accent{
-  background-color: #41831D;
-  color: white;
+background-color: #41831D;
+color: white;
 }
-
 .row>*{
-  padding-left: 0;
+padding-left: 0;
 }
-
+.profile-picture {
+width: 50px; /* Set the desired width of the profile picture */
+height: 50px; /* Set the desired height of the profile picture */
+border-radius: 50%; /* Apply circular border radius */
+overflow: hidden; /* Hide any overflowing content */
+}
+.profile-picture img {
+width: 100%; /* Ensure the image occupies the entire container */
+height: 100%; /* Ensure the image occupies the entire container */
+object-fit: cover; /* Maintain the aspect ratio and cover the entire container */
+}
+h5 {
+margin: 0;
+vertical-align: middle;
+line-height: 50px;
+height: 50px;
+}
+.dropDown {
+position: absolute;
+right: 160px;
+top: 56px;
+cursor: pointer;
+}
+.profile{
+cursor: pointer;
+}
 /* .show .example-button-row{
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 } */
-

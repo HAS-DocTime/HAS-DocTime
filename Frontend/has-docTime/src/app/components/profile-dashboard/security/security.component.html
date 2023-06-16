@@ -1,0 +1,114 @@
+<h3 class="my-4">Security</h3>
+<h5>Update your Password</h5>
+
+<form class="form-group mb-4 mt-5" [formGroup]="updatePasswordForm" >
+    <div class="form-group mb-4">
+        <div class="passwordInfo"><label for="password">Old Password <span class="required-asterisk">*</span></label></div>
+        <div class="password d-flex">
+          <input
+            [type]="oldPasswordType"
+            class="form-control w-50"
+            id="password"
+            placeholder="Enter Old Password"
+            formControlName="oldPassword"
+            [ngClass]="{'errored-input' : updatePasswordForm.get('oldPassword')?.errors && updatePasswordForm.get('oldPassword')?.touched}"
+          />
+          <button mat-icon-button (click)="toggleShowOldPassword()" type="button" class="showPasswordIconButton">
+            <mat-icon >{{ showOldPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+        </div>
+    </div>
+    <div class="form-group mb-4">
+        <div class="passwordInfo"><label for="password">New Password<span class="required-asterisk">*</span></label></div>
+        <div class="password d-flex">
+          <input
+            [type]="passwordType"
+            class="form-control w-50"
+            id="password"
+            placeholder="Enter New Password"
+            formControlName="newPassword"
+            [ngClass]="{'errored-input' : updatePasswordForm.get('newPassword')?.errors && updatePasswordForm.get('newPassword')?.touched}"
+          />
+          <button mat-icon-button (click)="toggleShowPassword()" type="button" class="showPasswordIconButton">
+            <mat-icon >{{ showPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+        </div>
+        <div
+          class="text-danger errored-input"
+          *ngIf="
+          updatePasswordForm.get('newPassword')?.touched &&
+          updatePasswordForm.get('newPassword')?.invalid
+          "
+        >
+          <span *ngIf="updatePasswordForm.get('newPassword')?.errors?.['required']"
+            >Password is Required</span
+          >
+          <span *ngIf="updatePasswordForm.get('newPassword')?.errors?.['containsWhitespace']"
+            >Password must not contain white-space characters
+            </span
+          >
+          <span *ngIf="updatePasswordForm.get('newPassword')?.errors?.['lacksUppercase']"
+            >Password must contain at least one uppercase character
+            </span
+          >
+          <span *ngIf="updatePasswordForm.get('newPassword')?.errors?.['lacksLowercase']"
+            >Password must contain at least one lowercase character
+            </span
+          >
+          <span *ngIf="updatePasswordForm.get('newPassword')?.errors?.['lacksSpecialChar']"
+            >Password must contain at least one special character [Allowed -> !@#$%^&+=\-_/]
+            </span
+          >
+          <span *ngIf="updatePasswordForm.get('newPassword')?.errors?.['lacksNumber']"
+            >Password must contain at least one number
+            </span
+          >
+          <span *ngIf="updatePasswordForm.get('newPassword')?.errors?.['minLength']"
+            >Password should at least be 8 characters long.
+            </span
+          >
+        </div>
+    </div>
+    <div class="form-group mb-4">
+        <label for="confirmPassword">Confirm Password <span class="required-asterisk">*</span></label>
+        <div class="password d-flex">
+        <input
+          [type]="confirmPasswordType"
+          class="form-control w-50"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+          pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&+=_\-\*/])(?=\S+$).{8,}$"
+          [ngClass]="updatePasswordForm.get('confirmPassword')?.errors && updatePasswordForm.get('confirmPassword')?.touched ? 'errored-input' : ''"
+        />
+        <button mat-icon-button (click)="toggleShowConfirmPassword()" type="button" class="showPasswordIconButton">
+          <mat-icon>{{ showConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+      </div>
+        <div
+          class="text-danger errored-input"
+          *ngIf="
+          updatePasswordForm.get('confirmPassword')?.touched &&
+          updatePasswordForm.get('confirmPassword')?.errors
+          "
+        >
+          <span *ngIf="updatePasswordForm.get('confirmPassword')?.errors?.['required']"
+            >
+            Password is Required</span
+          >
+          <span *ngIf="updatePasswordForm.get('confirmPassword')?.errors?.['pattern']"
+            >
+            Enter Valid Password</span
+          >
+        </div>
+        <div
+          class="text-danger errored-input"
+          *ngIf="updatePasswordForm.get('confirmPassword')?.hasError('passwordMismatch') && updatePasswordForm.get('confirmPassword')?.touched"
+        >
+        <span *ngIf="updatePasswordForm.get('confirmPassword')?.hasError('passwordMismatch')">
+          Passwords do not match.
+        </span>
+        </div>
+    </div>
+    <button class="btn btn-primary mt-3" (click)="updatePassword()" [disabled]="updatePasswordForm.invalid">Update Password</button>
+</form>

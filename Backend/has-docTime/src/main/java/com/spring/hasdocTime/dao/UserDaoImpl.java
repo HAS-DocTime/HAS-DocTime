@@ -9,14 +9,22 @@ import com.spring.hasdocTime.interfaces.UserInterface;
 import com.spring.hasdocTime.repository.ChronicIllnessRepository;
 import com.spring.hasdocTime.repository.SymptomRepository;
 import com.spring.hasdocTime.repository.UserRepository;
+import com.spring.hasdocTime.security.customUserClass.UserDetailForToken;
+import com.spring.hasdocTime.security.jwt.JwtService;
 import com.spring.hasdocTime.utills.Role;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.hibernate.Hibernate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,12 +38,15 @@ public class UserDaoImpl implements UserInterface {
     private final ChronicIllnessRepository chronicIllnessRepository;
     private final SymptomRepository symptomRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     /**
      * Retrieves all users.
      *
      * @return The list of all users.
      */
+    @Transactional
     @Override
     public Page<User> getAllUser(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -55,6 +66,7 @@ public class UserDaoImpl implements UserInterface {
      * @return The user with the specified ID.
      * @throws DoesNotExistException if the user does not exist.
      */
+    @Transactional
     @Override
     public User getUser(int id) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(id);
@@ -74,6 +86,8 @@ public class UserDaoImpl implements UserInterface {
      * @throws DoesNotExistException     if the user does not exist.
      * @throws MissingParameterException if any required parameter is missing.
      */
+
+    @Transactional
     public User updateUserWithPassword(User user) throws DoesNotExistException, MissingParameterException{
         // Validate required parameters
         if(user.getName() == null || user.getName().equals("")){
@@ -147,6 +161,7 @@ public class UserDaoImpl implements UserInterface {
      * @throws MissingParameterException if any required parameter is missing.
      * @throws DoesNotExistException     if the chronic illness does not exist.
      */
+    @Transactional
     @Override
     public User createUser(User user) throws MissingParameterException, DoesNotExistException{
         // Validate required parameters
@@ -195,6 +210,7 @@ public class UserDaoImpl implements UserInterface {
      * @throws DoesNotExistException     if the user does not exist.
      * @throws MissingParameterException if any required parameter is missing.
      */
+    @Transactional
     @Override
     public User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException{
         Optional<User> oldUser = userRepository.findById(id);
@@ -235,6 +251,7 @@ public class UserDaoImpl implements UserInterface {
      * @return The user with the specified email.
      * @throws DoesNotExistException if the user does not exist.
      */
+    @Transactional
     @Override
     public User getUserByEmail(String email) throws DoesNotExistException{
         Optional<User> user = userRepository.findByEmail(email);
@@ -249,6 +266,7 @@ public class UserDaoImpl implements UserInterface {
      *
      * @return The list of all patients.
      */
+    @Transactional
     @Override
     public Page<User> getPatients(int page, int size, String sortBy, String search) {
         Page<User> userList;
@@ -268,6 +286,7 @@ public class UserDaoImpl implements UserInterface {
      * @return A set of users who have the specified chronic illness.
      * @throws DoesNotExistException if the chronic illness does not exist.
      */
+    @Transactional
     @Override
     public Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
@@ -289,6 +308,60 @@ public class UserDaoImpl implements UserInterface {
         return userPage;
     }
 
+    @Override
+    @Transactional
+    public AuthenticationResponse updateEmailOfUser(EmailUpdateRequestBody emailUpdateRequestBody) {
+
+        Optional<User> oldUser = userRepository.findById(emailUpdateRequestBody.getId());
+        if(oldUser.isPresent()){
+            User oldUserObj = oldUser.get();
+            oldUserObj.setEmail(emailUpdateRequestBody.getEmail());
+            userRepository.save(oldUserObj);
+            UserDetailForToken userDetailForToken;
+            if(emailUpdateRequestBody.getRole().equals(Role.PATIENT)){
+                 userDetailForToken = new UserDetailForToken(oldUserObj.getEmail(), oldUserObj.getId(), oldUserObj.getRole());
+            }
+            else if(emailUpdateRequestBody.getRole().equals(Role.DOCTOR)){
+                Hibernate.initialize(oldUserObj.getDoctor());
+                userDetailForToken = new UserDetailForToken(oldUserObj.getEmail(), oldUserObj.getDoctor().getId(), oldUserObj.getRole());
+            }
+            else{
+                Hibernate.initialize(oldUserObj.getAdmin());
+                userDetailForToken = new UserDetailForToken(oldUserObj.getEmail(), oldUserObj.getAdmin().getId(), oldUserObj.getRole());
+            }
+            var jwtToken = jwtService.generateToken(userDetailForToken);
+            return AuthenticationResponse.builder().token(jwtToken).build();
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public String updatePasswordOfUser(PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException, AuthenticationException {
+        System.out.println(passwordUpdateRequestBody.getId());
+        System.out.println(passwordUpdateRequestBody.getOldPassword());
+        System.out.println(passwordUpdateRequestBody.getNewPassword());
+        Optional<User> optionalUser = userRepository.findById(passwordUpdateRequestBody.getId());
+        if(optionalUser.isEmpty()){
+            throw new DoesNotExistException("User");
+        }
+        User user = optionalUser.get();
+//        String encodedOldPassword = passwordEncoder.encode(passwordUpdateRequestBody.getOldPassword());
+//        System.out.println("encodedOldPassword"+encodedOldPassword);
+        System.out.println("oldPassword" + user.getPassword());
+        System.out.println(passwordUpdateRequestBody.getOldPassword());
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                user.getEmail(),
+                passwordUpdateRequestBody.getOldPassword());
+        Authentication auth = authenticationManager.authenticate(
+                usernamePassword
+        );
+        String encodedNewPassword = passwordEncoder.encode(passwordUpdateRequestBody.getNewPassword());
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
+        return "Password updated successfully";
+
+    }
 
 
 }

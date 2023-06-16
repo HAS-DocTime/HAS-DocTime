@@ -72,6 +72,9 @@ public class SecurityConfig{
                     authorize
                         .requestMatchers("/admin", "/admin/**", "/user", "/doctor").hasAnyAuthority("ADMIN")
                         .requestMatchers("/doctor/bookAppointment").hasAnyAuthority("ADMIN", "DOCTOR", "PATIENT")
+                            .requestMatchers("/login/forgotPassword", "/login/otpVerify", "/login/saveNewPassword").permitAll()
+                        .requestMatchers("/user/updateEmail").hasAnyAuthority("ADMIN", "DOCTOR", "PATIENT")
+                        .requestMatchers("/user/updatePassword").hasAnyAuthority("ADMIN", "DOCTOR", "PATIENT")
                         .requestMatchers("/doctor/*").hasAnyAuthority("ADMIN", "DOCTOR")
                             .requestMatchers("/doctor/department/*").hasAnyAuthority("ADMIN")
                         .requestMatchers("/user/findByEmail").hasAnyAuthority("PATIENT", "DOCTOR", "ADMIN")
