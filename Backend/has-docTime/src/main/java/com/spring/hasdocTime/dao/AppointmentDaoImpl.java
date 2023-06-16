@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.*;
 /**
  * This class implements the {@link AppointmentInterface} interface and provides the implementation for CRUD operations on appointment entities.
@@ -284,7 +286,20 @@ public class AppointmentDaoImpl implements AppointmentInterface {
     public Appointment deleteAppointment(int id) throws DoesNotExistException{
         Optional<Appointment> optionalAppointment = appointmentRepository.findById(id);
         if(optionalAppointment.isPresent()){
+            Appointment appointment = optionalAppointment.get();
+            Hibernate.initialize(appointment.getTimeSlotForAppointment());
+            Hibernate.initialize(appointment.getDoctor());
+            TimeSlot timeSlot = appointment.getTimeSlotForAppointment();
+            Hibernate.initialize(timeSlot.getBookedDoctors());
+            Hibernate.initialize(timeSlot.getAvailableDoctors());
+            Doctor doctor = appointment.getDoctor();
+            Hibernate.initialize(doctor.getBookedTimeSlots());
             appointmentRepository.deleteById(id);
+            if(timeSlot.getStartTime().after(new Timestamp(new Date().getTime()))){
+                timeSlot.removeBookedDoctor(doctor);
+                timeSlot.addAvailableDoctor(doctor);
+                timeSlotRepository.save(timeSlot);
+            }
             return optionalAppointment.get();
         }
         throw new DoesNotExistException("Appointment");

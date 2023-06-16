@@ -60,7 +60,7 @@ public class TimeSlot {
             inverseJoinColumns = @JoinColumn(name = "doctor_id")
     )
     @JsonIgnoreProperties(value = {"availableTimeSlots", "department","bookedTimeSlots", "appointments", "postAppointmentData"}, allowSetters = true)
-    private List<Doctor> bookedDoctors;
+    private Set<Doctor> bookedDoctors;
 
     @OneToMany(mappedBy = "timeSlotForAppointmentData", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"timeSlotForAppointmentData", "user", "doctor"}, allowSetters = true)
@@ -102,5 +102,10 @@ public class TimeSlot {
     public void addBookedDoctor(Doctor doctor) {
         this.bookedDoctors.add(doctor);
         doctor.getBookedTimeSlots().add(this);
+    }
+
+    public void removeBookedDoctor(Doctor doctor){
+        this.bookedDoctors.remove(doctor);
+        doctor.getBookedTimeSlots().remove(this);
     }
 }

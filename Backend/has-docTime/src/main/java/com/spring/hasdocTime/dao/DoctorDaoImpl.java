@@ -246,7 +246,6 @@ public class DoctorDaoImpl implements DoctorInterface {
         return new Timestamp(calendar.getTimeInMillis());
     }
 
-    @Transactional
     @Override
     public Page<Doctor> getDoctorsBySymptomsAndTimeSlot(FilteredDoctorBody filteredDoctorBody, int page, int size, String sortBy, String search) throws  DoesNotExistException{
         filteredDoctorBody.setTimeSlotStartTime(manipulateTimeSlotBasedOnTimeZone(filteredDoctorBody.getTimeSlotStartTime()));
@@ -267,7 +266,7 @@ public class DoctorDaoImpl implements DoctorInterface {
                 for (Doctor doctor : department.getDoctors()) {
                     Hibernate.initialize(doctor.getUser());
                     if(doctor.getAvailableTimeSlots()!=null){
-                        List<TimeSlot> availableTimeSlotsOfDoctor = new ArrayList<>();
+                        Set<TimeSlot> availableTimeSlotsOfDoctor = new HashSet<>();
                         for(TimeSlot timeSlot : doctor.getAvailableTimeSlots()){
                             Timestamp timeSlotStartTime = timeSlot.getStartTime();
                             Timestamp timeSlotEndTime = timeSlot.getEndTime();

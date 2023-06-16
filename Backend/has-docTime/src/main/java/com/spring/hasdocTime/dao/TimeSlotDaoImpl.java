@@ -159,7 +159,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             }
         }
 
-        List<Doctor> bookedDoctors = new ArrayList<>();
+        Set<Doctor> bookedDoctors = new HashSet<>();
         if(timeSlot.getBookedDoctors() != null){
             for(Doctor d: timeSlot.getBookedDoctors()){
                 if(d.getId() != 0){
@@ -254,7 +254,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
                 }
             }
 
-            List<Doctor> bookedDoctors = new ArrayList<>();
+            Set<Doctor> bookedDoctors = new HashSet<>();
             if(timeSlot.getBookedDoctors() != null){
                 for(Doctor d: timeSlot.getBookedDoctors()){
                     if(d.getId() != 0){

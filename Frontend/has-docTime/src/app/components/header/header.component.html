@@ -20,14 +20,14 @@
                             mat-raised-button color="accent"
                             routerLink="/login">Login</button>
 
-                    <div class="profile-picture">
+                    <!-- <div class="profile-picture">
                         <img *ngIf="!imageUrl == null" [src]="imageUrl" alt="Profile Picture">
                         <img *ngIf="imageUrl == null" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="Profile Picture">
-                    </div>
-                    <!-- <button *ngIf="!isLoggedIn && !inSignupForm && !inLoginForm && !forgotPassword && !changePassword"
+                    </div> -->
+                    <button *ngIf="!isLoggedIn && !inSignupForm && !inLoginForm && !forgotPassword && !changePassword"
                             mat-raised-button color="accent"
                             (click)="onLogout()"
-                            routerLink="/register">Logout</button> -->
+                            routerLink="/register">Logout</button>
                 </div>
             </section>
         </div>

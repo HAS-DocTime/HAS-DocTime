@@ -7,12 +7,10 @@ package com.spring.hasdocTime.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import java.util.Objects;
 
 /**
  * The Doctor class represents a doctor in the system.
@@ -59,13 +57,13 @@ public class Doctor {
     @NotNull(message = "Please enter boolean value")
     private boolean isAvailable;
     
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "availableDoctors")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "availableDoctors")
     @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
-    private List<TimeSlot> availableTimeSlots = new ArrayList<>();
+    private Set<TimeSlot> availableTimeSlots = new HashSet<>();
     
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "bookedDoctors")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE}, mappedBy = "bookedDoctors")
     @JsonIgnoreProperties(value = {"department", "availableDoctors", "bookedDoctors", "appointmentData", "appointment"}, allowSetters = true)
-    private List<TimeSlot> bookedTimeSlots;
+    private Set<TimeSlot> bookedTimeSlots = new HashSet<>();
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     @JsonIgnoreProperties(value = "doctor", allowSetters = true)
