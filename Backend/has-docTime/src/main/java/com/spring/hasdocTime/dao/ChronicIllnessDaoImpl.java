@@ -63,7 +63,6 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
      *
      * @return The list of all ChronicIllness entities.
      */
-    @Transactional
     @Override
     public Page<ChronicIllness> getAllChronicIllness(int page, int size, String sortBy, String search){
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -79,7 +78,6 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
         return chronicIllnessPage;
     }
 
-    @Transactional
     @Override
     public List<ChronicIllness> getAllChronicIllnesses() {
         return chronicIllnessRepository.findAll();
@@ -93,7 +91,6 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
      * @return The retrieved ChronicIllness.
      * @throws DoesNotExistException if the ChronicIllness with the specified ID does not exist.
      */
-    @Transactional
     @Override
     public ChronicIllness getChronicIllness(int id) throws DoesNotExistException {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);

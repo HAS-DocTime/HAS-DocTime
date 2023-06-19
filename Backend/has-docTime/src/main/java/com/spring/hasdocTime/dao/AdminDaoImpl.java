@@ -40,7 +40,7 @@ public class AdminDaoImpl implements AdminInterface {
      *
      * @return the list of all admin entities
      */
-    @Transactional
+
     @Override
     public List<Admin> getAllAdmin(){
         return adminRepository.findAll();
@@ -53,7 +53,7 @@ public class AdminDaoImpl implements AdminInterface {
      * @return the retrieved admin entity
      * @throws DoesNotExistException if the admin entity does not exist
      */
-    @Transactional
+
     @Override
     public Admin getAdmin(int id) throws DoesNotExistException {
         Optional<Admin> optionalAdmin = adminRepository.findById(id);

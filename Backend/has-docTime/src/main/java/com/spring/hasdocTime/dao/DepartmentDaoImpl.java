@@ -110,7 +110,6 @@ public class DepartmentDaoImpl implements DepartmentInterface {
      *
      * @return A list of all Departments.
      */
-    @Transactional
     @Override
     public Page<Department> getAllDepartments(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -133,7 +132,6 @@ public class DepartmentDaoImpl implements DepartmentInterface {
      * @return The retrieved Department.
      * @throws DoesNotExistException if the Department with the specified ID does not exist.
      */
-    @Transactional
     @Override
     public Department getDepartment(int id) throws DoesNotExistException{
         Optional<Department> department = departmentRepository.findById(id);
@@ -201,7 +199,6 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         throw new DoesNotExistException("Department");
     }
 
-    @Transactional
     @Override
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
