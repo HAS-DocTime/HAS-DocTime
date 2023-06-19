@@ -327,7 +327,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             timeSlot.setDepartment(department);
             TimeSlot checkTimeSlot = timeSlotRepository.checkIfTimeSlotExists(timeSlot.getStartTime(), timeSlot.getEndTime(), timeSlot.getDepartment().getId());
             if(checkTimeSlot == null){
-                System.out.println("Adding TimeSlot");
                 timeSlots.add(timeSlot);
             }
             timeSlotStartTime = (Timestamp) timeSlotEndTime.clone();

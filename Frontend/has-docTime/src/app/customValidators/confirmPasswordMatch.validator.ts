@@ -13,7 +13,7 @@ export function confirmPasswordValidator() : ValidatorFn{
       control.get('confirmPassword')?.setErrors({required : true});
       return {'required' : true};
     }
-    else if(confirmPasswordField?.value.match(new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&+=\\-_/])(?=\\S+$).{8,}$"))===null){
+    else if(confirmPasswordField?.value?.match(new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&+=\\-_/])(?=\\S+$).{8,}$"))===null){
       control.get('confirmPassword')?.setErrors({pattern : true});
       return {'pattern' : true};
     }

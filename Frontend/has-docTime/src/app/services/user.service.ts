@@ -63,5 +63,7 @@ export class UserService {
     return this.http.put<{message : string}>(`${this.baseUrl}user/updatePassword`, obj);
   }
 
+updateProfileImage : BehaviorSubject<string> = new BehaviorSubject("");
+
 }
 

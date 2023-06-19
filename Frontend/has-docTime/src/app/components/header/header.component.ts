@@ -45,6 +45,9 @@ ngAfterViewChecked(){
     this.isImageLoaded = true;
   }
   ngOnInit(): void {
+    this.userService.updateProfileImage.subscribe((data)=> {
+      this.imageUrl = data;
+    })
     const decodedToken : Token = this.authService.decodeToken();
     this.tokenRole = decodedToken.role;
     this.id = parseInt(decodedToken.id);
@@ -98,7 +101,6 @@ ngAfterViewChecked(){
   }
   private getUser(id: number) {
     this.userService.getUser(id).subscribe((data) => {
-      console.log(data);
       this.imageUrl = data.imageUrl as string;
       this.profileName = data.name!;
     });

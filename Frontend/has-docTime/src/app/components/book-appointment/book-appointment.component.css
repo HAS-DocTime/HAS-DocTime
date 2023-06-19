@@ -149,6 +149,10 @@ i{
   height: fit-content;
 }
 
+.pagination li{
+  cursor: pointer;
+}
+
 #datePicker::-webkit-inner-spin-button,
 #datePicker::-webkit-calendar-picker-indicator {
   display: none;

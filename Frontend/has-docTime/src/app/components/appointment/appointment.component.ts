@@ -131,8 +131,15 @@ export class AppointmentComponent implements OnInit{
         }
         else{
           this.appointmentService.getAppointmentByUser(this.id.toString(), this.params).subscribe((data)=> {
-            this.appointments = data.content as Appointment[];
-            this.totalPages = data.totalPages;
+            if(data===null){
+              this.appointments = [];
+              this.totalPages = 0;
+            }
+            else{
+              this.appointments = data.content as Appointment[];
+              this.totalPages = data.totalPages;
+            }
+            
           });
         }
         this.toast.showError(`The Appointment is deleted`, "Appointment deleted");

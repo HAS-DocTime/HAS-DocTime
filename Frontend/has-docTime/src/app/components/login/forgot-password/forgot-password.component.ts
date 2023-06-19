@@ -86,12 +86,10 @@ export class ForgotPasswordComponent implements OnInit{
 
   sendMail(){
     this.loading = true;
-    console.log("Sending email");
     this.loginService.sendOtpMail(this.forgotPasswordForm.value).subscribe(()=> {
       this.loading = false;
       sessionStorage.setItem("email", this.forgotPasswordForm.value["email"]);
       const div = document.querySelector(".hidden");
-      console.log(div);
       (div as HTMLDivElement).style.visibility = "visible";
       this.emailSent = true;
       this.toast.showSuccess("Success", "Email Sent Successfully");
@@ -120,7 +118,6 @@ export class ForgotPasswordComponent implements OnInit{
     this.remainingSecond = 59;
     this.loading = true;
     const div = document.querySelector(".hidden");
-      console.log(div);
       (div as HTMLDivElement).style.visibility = "hidden";
     this.loginService.sendOtpMail({email : sessionStorage.getItem("email") as string}).subscribe(()=> {
       this.loading = false;
