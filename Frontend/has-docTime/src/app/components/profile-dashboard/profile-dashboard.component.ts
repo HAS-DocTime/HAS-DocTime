@@ -22,8 +22,6 @@ export class ProfileDashboardComponent implements OnInit{
 
   ngOnInit(): void {
       this.currentUrl = this.router.url;
-      console.log(this.currentUrl);
-      
       const token = this.authService.decodeToken();
       this.role = token.role;
   }

@@ -333,18 +333,12 @@ public class UserDaoImpl implements UserInterface {
     @Transactional
     @Override
     public String updatePasswordOfUser(PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException, AuthenticationException {
-        System.out.println(passwordUpdateRequestBody.getId());
-        System.out.println(passwordUpdateRequestBody.getOldPassword());
-        System.out.println(passwordUpdateRequestBody.getNewPassword());
         Optional<User> optionalUser = userRepository.findById(passwordUpdateRequestBody.getId());
         if(optionalUser.isEmpty()){
             throw new DoesNotExistException("User");
         }
         User user = optionalUser.get();
 //        String encodedOldPassword = passwordEncoder.encode(passwordUpdateRequestBody.getOldPassword());
-//        System.out.println("encodedOldPassword"+encodedOldPassword);
-        System.out.println("oldPassword" + user.getPassword());
-        System.out.println(passwordUpdateRequestBody.getOldPassword());
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
                 user.getEmail(),
                 passwordUpdateRequestBody.getOldPassword());

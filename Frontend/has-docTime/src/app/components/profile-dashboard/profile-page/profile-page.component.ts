@@ -63,7 +63,6 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
 
     this.currentUrl = this.router.url;
-    console.log(this.currentUrl);
     
     
       const decoded_token : Token = this.authService.decodeToken();
@@ -129,6 +128,7 @@ export class ProfilePageComponent implements OnInit {
       this.admin = data;
       this.user = data.user;
       this.imageUrl = this.user?.imageUrl as string;
+      
       this.id = data.id as number;
       const adminNameArray: string[] = this.admin?.user?.name?.split(' ', 2) ?? [];
       this.firstName = adminNameArray[0];
@@ -292,7 +292,7 @@ export class ProfilePageComponent implements OnInit {
       user.role = this.user?.role;
       user.email = this.user?.email;
       user.imageUrl = this.imageUrl;
-
+      this.userService.updateProfileImage.next(user.imageUrl);
       this.userService.updateUser(user, this.id).subscribe((data) => {
         this.toggleDisable();
         this.cdr.detectChanges();
@@ -312,7 +312,7 @@ export class ProfilePageComponent implements OnInit {
       user.role = this.doctor?.user.role;
       user.email = this.doctor?.user.email;
       user.imageUrl = this.imageUrl;
-
+      this.userService.updateProfileImage.next(user.imageUrl);
       let doctor: Doctor = {
         user: user,
         qualification: this.editForm.value.qualification,
@@ -337,7 +337,6 @@ export class ProfilePageComponent implements OnInit {
           this.toast.showError("Unexpected Error Occurred", "Error");
         }
       });
-      console.log(this.imageUrl);
     } else if (
       this.tokenRole === 'ADMIN' &&
       this.urlPath !== 'users' &&
@@ -347,7 +346,7 @@ export class ProfilePageComponent implements OnInit {
       user.role = this.admin?.user?.role;
       user.email = this.admin?.user?.email;
       user.imageUrl = this.imageUrl;
-
+      this.userService.updateProfileImage.next(user.imageUrl);
       let admin: Admin = {
         user: user,
       };
@@ -374,13 +373,13 @@ export class ProfilePageComponent implements OnInit {
       const filePath = `profiles/${this.user?.id}`;
       const storageRef = this.storage.ref(filePath);
       const uploadTask = this.storage.upload(filePath, this.selectedFile);
-
       uploadTask.snapshotChanges().pipe(
         finalize(() => {
           storageRef.getDownloadURL().subscribe(downloadURL => {
             (this.selectedFile as FileUpload).url = downloadURL;
             this.imageUrl = downloadURL;
             this.user!.imageUrl = downloadURL;
+            this.userService.updateProfileImage.next(this.user?.imageUrl as string);
             this.submitProfile();
           });
         })

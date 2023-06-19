@@ -218,7 +218,7 @@ constructor(
         });
         this.router.navigate(["/dashboard/appointment"]);
       }, (err) => {
-        console.log(err);
+        this.toast.showError("Registration Unsuccessful","Failed");
       });
     }
     else if (user.role === "DOCTOR") {
@@ -252,7 +252,6 @@ constructor(
         this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
         this.toast.showSuccess("Registered Successfully!", "Success");
       }, (err)=> {
-        console.log(err);
         this.toast.showError("Registration Unsuccessful","Failed");
       });
     }

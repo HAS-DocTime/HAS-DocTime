@@ -55,10 +55,8 @@ export class EmailComponent implements OnInit{
 
   updateEmail(){
     const emailObj = this.updateEmailForm.value;
-    console.log(emailObj);
       emailObj['id'] = this.id;
       emailObj['role'] = this.userRole;
-      console.log(emailObj);
       
       this.userService.updateEmail(emailObj).subscribe((data)=> {
         const token : string = data.token;
