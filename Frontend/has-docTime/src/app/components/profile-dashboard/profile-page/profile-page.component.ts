@@ -65,6 +65,7 @@ export class ProfilePageComponent implements OnInit {
     this.currentUrl = this.router.url;
     
     
+    
       const decoded_token : Token = this.authService.decodeToken();
 
     this.tokenRole = decoded_token.role;
@@ -72,10 +73,12 @@ export class ProfilePageComponent implements OnInit {
 
         if (this.tokenRole === 'ADMIN') {
           if (this.currentUrl.includes('/users')) {
+              this.urlPath = "users";
               const id = this.route.parent?.snapshot.paramMap.get('id');
               this.id = parseInt(id as string);
               this.getUser(this.id);
           } else if (this.currentUrl.includes('/doctors')) {
+            this.urlPath = "doctors";
               const id = this.route.parent?.snapshot.paramMap.get('id');
               this.id = parseInt(id as string);
               this.getDoctor(this.id);

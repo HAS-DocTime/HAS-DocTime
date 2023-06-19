@@ -196,8 +196,8 @@
   <div class="d-flex justify-content-center align-items-center mt-5">
     <button class="btn btn-primary" (click)="getDoctorsBySymptomAndTimeSlot()" [disabled]="bookAppointment.invalid">Show Doctors</button>
   </div>
-  <div class="show-doctos">
-    <div  class="col m-0 p-0 mt-5">
+  <div class="show-doctor" id="showDoctors" #scrollToSection>
+    <div class="col m-0 p-0 mt-5">
       <div class="container">
         <h3 class="mb-4 text-center" *ngIf="doctorList.length>0">Available Doctors</h3>
         <hr>

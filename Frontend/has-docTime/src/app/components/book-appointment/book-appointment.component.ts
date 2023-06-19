@@ -136,6 +136,11 @@ export class BookAppointmentComponent implements OnInit{
         this.noDataFound = false;
         this.doctorsShowed = true;
       }
+      var showDoctorSection = document.getElementById("showDoctors");
+      if(showDoctorSection){
+        console.log(showDoctorSection);
+        showDoctorSection?.scrollIntoView({behavior : 'smooth'});
+      }
     });
 
   }
