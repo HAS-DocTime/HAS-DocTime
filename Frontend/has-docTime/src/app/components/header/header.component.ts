@@ -48,6 +48,29 @@ ngAfterViewChecked(){
     this.userService.updateProfileImage.subscribe((data)=> {
       this.imageUrl = data;
     })
+    this.userService.reloadProfile.subscribe((data)=>{
+      if(data){
+        const decodedToken = this.authService.decodeToken();
+        const role = decodedToken.role;
+        let id : number = parseInt(decodedToken.id);
+        if(role==="PATIENT"){
+          this.userService.getUser(id).subscribe((data)=> {
+            this.imageUrl = data.imageUrl as string;
+          })
+        }
+        else if(role==="DOCTOR"){
+          this.doctorService.getDoctor(id).subscribe((data)=> {
+            this.imageUrl = data.user.imageUrl as string;
+          }); 
+        }
+        else if(role==="ADMIN"){
+          this.adminService.getAdmin(id).subscribe((data)=> {
+            this.imageUrl = data.user?.imageUrl as string;
+          }); 
+        }
+        
+      }
+    })
     const decodedToken : Token = this.authService.decodeToken();
     this.tokenRole = decodedToken.role;
     this.id = parseInt(decodedToken.id);

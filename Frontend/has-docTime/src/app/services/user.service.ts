@@ -65,5 +65,7 @@ export class UserService {
 
 updateProfileImage : BehaviorSubject<string> = new BehaviorSubject("");
 
+reloadProfile : BehaviorSubject<boolean> = new BehaviorSubject(false);
+
 }
 

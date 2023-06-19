@@ -129,6 +129,7 @@ export class BookAppointmentComponent implements OnInit{
     this.doctorService.getDoctorsBySymptomAndTimeSlot(this.bookAppointment.value, this.params).subscribe((data)=> {
       this.doctorList = data.content as Doctor[];
       this.totalPages = data.totalPages;
+      console.log(this.totalPages);
       if(this.doctorList.length<=0){
         this.noDataFound = true;
       }

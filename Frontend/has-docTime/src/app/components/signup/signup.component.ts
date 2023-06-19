@@ -216,9 +216,16 @@ constructor(
           casesSolved: 0,
           patientChronicIllness: []
         });
-        this.router.navigate(["/dashboard/appointment"]);
+        this.userService.reloadProfile.next(true);
+        // this.router.navigate(["/dashboard/appointment"]);
       }, (err) => {
-        this.toast.showError("Registration Unsuccessful","Failed");
+        console.log(err);
+        if((err.error.message as string).includes("Duplicate entry")){
+          this.toast.showWarning("Failed", "Email already exists");
+        }
+        else{
+          this.toast.showError("Registration Unsuccessful","Failed");
+        }
       });
     }
     else if (user.role === "DOCTOR") {
@@ -249,10 +256,17 @@ constructor(
           casesSolved: 0,
           patientChronicIllness: []
         });
-        this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
-        this.toast.showSuccess("Registered Successfully!", "Success");
+        this.userService.reloadProfile.next(true);
+        // this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
+        // this.toast.showSuccess("Registered Successfully!", "Success");
       }, (err)=> {
-        this.toast.showError("Registration Unsuccessful","Failed");
+        console.log(err);
+        if((err.error.message as string).includes("Duplicate entry")){
+          this.toast.showWarning("Failed", "Email already exists");
+        }
+        else{
+          this.toast.showError("Registration Unsuccessful","Failed");
+        }
       });
     }
 
@@ -262,6 +276,8 @@ constructor(
   setuserImageUrl(user: User, id : number) {
     delete user['authorities'];
     this.userService.updateUser(user, id).subscribe((data) => {
+      this.router.navigate(["/dashboard/appointment"]);
+      this.toast.showSuccess("Registered Successfully!", "Success");
     });
 
   }
@@ -270,6 +286,8 @@ constructor(
 
     delete doctor.user['authorities'];
     this.userService.updateDoctor(doctor, id).subscribe((data) => {
+        this.router.navigate(["/dashboard", "doctorScheduleAppointments"]);
+        this.toast.showSuccess("Registered Successfully!", "Success");
     })
   }
 
