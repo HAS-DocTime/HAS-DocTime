@@ -46,7 +46,6 @@ public class UserDaoImpl implements UserInterface {
      *
      * @return The list of all users.
      */
-    @Transactional
     @Override
     public Page<User> getAllUser(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -66,7 +65,6 @@ public class UserDaoImpl implements UserInterface {
      * @return The user with the specified ID.
      * @throws DoesNotExistException if the user does not exist.
      */
-    @Transactional
     @Override
     public User getUser(int id) throws DoesNotExistException{
         Optional<User> user = userRepository.findById(id);
@@ -233,8 +231,8 @@ public class UserDaoImpl implements UserInterface {
      * @return The deleted user.
      * @throws DoesNotExistException if the user does not exist.
      */
-    @Override
     @Transactional
+    @Override
     public User deleteUser(int id) throws DoesNotExistException{
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()) {
@@ -251,7 +249,6 @@ public class UserDaoImpl implements UserInterface {
      * @return The user with the specified email.
      * @throws DoesNotExistException if the user does not exist.
      */
-    @Transactional
     @Override
     public User getUserByEmail(String email) throws DoesNotExistException{
         Optional<User> user = userRepository.findByEmail(email);
@@ -266,7 +263,6 @@ public class UserDaoImpl implements UserInterface {
      *
      * @return The list of all patients.
      */
-    @Transactional
     @Override
     public Page<User> getPatients(int page, int size, String sortBy, String search) {
         Page<User> userList;
@@ -286,7 +282,6 @@ public class UserDaoImpl implements UserInterface {
      * @return A set of users who have the specified chronic illness.
      * @throws DoesNotExistException if the chronic illness does not exist.
      */
-    @Transactional
     @Override
     public Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
@@ -308,8 +303,8 @@ public class UserDaoImpl implements UserInterface {
         return userPage;
     }
 
-    @Override
     @Transactional
+    @Override
     public AuthenticationResponse updateEmailOfUser(EmailUpdateRequestBody emailUpdateRequestBody) {
 
         Optional<User> oldUser = userRepository.findById(emailUpdateRequestBody.getId());
@@ -335,8 +330,8 @@ public class UserDaoImpl implements UserInterface {
         return null;
     }
 
-    @Override
     @Transactional
+    @Override
     public String updatePasswordOfUser(PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException, AuthenticationException {
         System.out.println(passwordUpdateRequestBody.getId());
         System.out.println(passwordUpdateRequestBody.getOldPassword());

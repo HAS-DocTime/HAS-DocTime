@@ -60,7 +60,6 @@ public class SymptomDaoImpl implements SymptomInterface {
      * @return The symptom with the given ID.
      * @throws DoesNotExistException if the symptom does not exist.
      */
-    @Transactional
     @Override
     public Symptom getSymptom(int id) throws DoesNotExistException{
         Optional<Symptom> optionalSymptom = symptomRepository.findById(id);
@@ -74,7 +73,6 @@ public class SymptomDaoImpl implements SymptomInterface {
      * Retrieves all symptoms.
      * @return A list of all symptoms.
      */
-    @Transactional
     @Override
     public Page<Symptom> getAllSymptom(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -90,7 +88,6 @@ public class SymptomDaoImpl implements SymptomInterface {
         return symptoms;
     }
 
-    @Transactional
     @Override
     public List<Symptom> getAllSymptomList() {
         return symptomRepository.findAll();

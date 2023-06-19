@@ -31,7 +31,6 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
      *
      * @return a list of patient chronic illnesses
      */
-    @Transactional
     @Override
     public List<PatientChronicIllness> getAllPatientChronicIllness() {
         return patientChronicIllnessRepository.findAll();
@@ -44,7 +43,6 @@ public class PatientChronicIllnessDaoImpl implements PatientChronicIllnessInterf
      * @return the patient chronic illness with the specified composite key
      * @throws DoesNotExistException if the patient chronic illness does not exist
      */
-    @Transactional
     @Override
     public PatientChronicIllness getPatientChronicIllness(CompositeKeyPatientChronicIllness id) throws DoesNotExistException {
         Optional<PatientChronicIllness> patientChronicIllness = patientChronicIllnessRepository.findById(id);

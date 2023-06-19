@@ -63,7 +63,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
      *
      * @return A list of all time slots.
      */
-    @Transactional
     @Override
     public List<TimeSlot> getAllTimeSlots() {
         List<TimeSlot> allTimeSlots= timeSlotRepository.findAll();
@@ -77,7 +76,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
      * @return The time slot with the given ID.
      * @throws DoesNotExistException if the time slot does not exist.
      */
-    @Transactional
     @Override
     public TimeSlot getTimeSlotById(int id) throws DoesNotExistException {
         Optional<TimeSlot> optionalTimeSlot = timeSlotRepository.findById(id);

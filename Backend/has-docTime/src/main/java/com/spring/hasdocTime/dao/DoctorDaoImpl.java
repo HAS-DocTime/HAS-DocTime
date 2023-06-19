@@ -112,7 +112,6 @@ public class DoctorDaoImpl implements DoctorInterface {
      *
      * @return A list of all Doctors.
      */
-    @Transactional
     @Override
     public Page<Doctor> getAllDoctors(int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -136,7 +135,6 @@ public class DoctorDaoImpl implements DoctorInterface {
      * @param id The ID of the Department.
      * @return A list of Doctors in the specified Department.
      */
-    @Transactional
     @Override
     public Page<Doctor> getDoctorsByDepartmentId( int id, int page, int size, String sortBy, String search) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -161,7 +159,6 @@ public class DoctorDaoImpl implements DoctorInterface {
      * @return The retrieved Doctor.
      * @throws DoesNotExistException if the Doctor with the specified ID does not exist.
      */
-    @Transactional
     @Override
     public Doctor getDoctor(int id) throws DoesNotExistException {
         Optional<Doctor> doctor = doctorRepository.findById(id);
