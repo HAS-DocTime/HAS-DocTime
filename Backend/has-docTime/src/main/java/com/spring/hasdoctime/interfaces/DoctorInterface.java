@@ -5,8 +5,8 @@ package com.spring.hasdoctime.interfaces;
 
 import com.spring.hasdoctime.entity.Doctor;
 import com.spring.hasdoctime.entity.FilteredDoctorBody;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import org.springframework.data.domain.Page;
 
 public interface DoctorInterface {

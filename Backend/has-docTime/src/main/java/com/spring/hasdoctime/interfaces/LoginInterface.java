@@ -4,7 +4,7 @@
 package com.spring.hasdoctime.interfaces;
 
 import com.spring.hasdoctime.entity.*;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import jakarta.mail.MessagingException;
 
 public interface LoginInterface {

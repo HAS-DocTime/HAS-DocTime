@@ -1,4 +1,4 @@
-package com.spring.hasdoctime.exceptionHandling.exception;
+package com.spring.hasdoctime.exceptionhandling.exception;
 
 /**
  * Exception class representing a "Missing Parameter" exception.

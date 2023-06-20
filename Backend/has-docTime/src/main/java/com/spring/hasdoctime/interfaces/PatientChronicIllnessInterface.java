@@ -5,7 +5,7 @@ package com.spring.hasdoctime.interfaces;
 
 import com.spring.hasdoctime.entity.CompositeKeyPatientChronicIllness;
 import com.spring.hasdoctime.entity.PatientChronicIllness;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
 
 import java.util.List;
 

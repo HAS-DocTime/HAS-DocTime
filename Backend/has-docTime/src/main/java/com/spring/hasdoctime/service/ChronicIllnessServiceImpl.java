@@ -1,8 +1,8 @@
 package com.spring.hasdoctime.service;
 
 import com.spring.hasdoctime.entity.ChronicIllness;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import com.spring.hasdoctime.interfaces.ChronicIllnessInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

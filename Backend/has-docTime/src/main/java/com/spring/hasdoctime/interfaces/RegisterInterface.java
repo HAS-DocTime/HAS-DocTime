@@ -7,8 +7,8 @@ import com.spring.hasdoctime.entity.Admin;
 import com.spring.hasdoctime.entity.AuthenticationResponse;
 import com.spring.hasdoctime.entity.Doctor;
 import com.spring.hasdoctime.entity.User;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 
 public interface RegisterInterface {
 

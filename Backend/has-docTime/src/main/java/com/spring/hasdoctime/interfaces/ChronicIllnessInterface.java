@@ -4,8 +4,8 @@
 package com.spring.hasdoctime.interfaces;
 
 import com.spring.hasdoctime.entity.ChronicIllness;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

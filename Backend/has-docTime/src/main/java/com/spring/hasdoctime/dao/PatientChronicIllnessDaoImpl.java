@@ -2,7 +2,7 @@ package com.spring.hasdoctime.dao;
 
 import com.spring.hasdoctime.entity.CompositeKeyPatientChronicIllness;
 import com.spring.hasdoctime.entity.PatientChronicIllness;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
 import com.spring.hasdoctime.interfaces.PatientChronicIllnessInterface;
 import com.spring.hasdoctime.repository.PatientChronicIllnessRepository;
 import org.springframework.beans.factory.annotation.Autowired;

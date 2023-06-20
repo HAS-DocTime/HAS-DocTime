@@ -1,8 +1,8 @@
 package com.spring.hasdoctime.dao;
 
 import com.spring.hasdoctime.entity.*;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import com.spring.hasdoctime.interfaces.PostAppointmentDataInterface;
 import com.spring.hasdoctime.interfaces.UserInterface;
 import com.spring.hasdoctime.repository.DoctorRepository;

@@ -7,8 +7,8 @@ package com.spring.hasdoctime.service;
 import com.spring.hasdoctime.entity.Doctor;
 
 import com.spring.hasdoctime.entity.FilteredDoctorBody;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

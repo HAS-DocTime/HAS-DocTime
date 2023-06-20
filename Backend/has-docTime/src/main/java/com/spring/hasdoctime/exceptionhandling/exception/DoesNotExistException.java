@@ -1,4 +1,4 @@
-package com.spring.hasdoctime.exceptionHandling.exception;
+package com.spring.hasdoctime.exceptionhandling.exception;
 
 /**
  * Exception class representing a "Does Not Exist" exception.

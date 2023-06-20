@@ -1,7 +1,7 @@
-package com.spring.hasdoctime.exceptionHandling.controllerAdvice;
+package com.spring.hasdoctime.exceptionhandling.controlleradvice;
 
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import com.spring.hasdoctime.utills.ErrorResponseBody;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -65,11 +65,14 @@ public class ExceptionController {
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity<ErrorResponseBody> handleException(ConstraintViolationException exception){
-        String invalidObjs = "";
+        StringBuilder invalidObjs = new StringBuilder();
+
         for(ConstraintViolation<?> cv : exception.getConstraintViolations()){
-            invalidObjs += ("Enter Valid " + cv.getPropertyPath().toString() + ".");
+            invalidObjs.append("Enter Valid ");
+            invalidObjs.append(cv.getPropertyPath().toString());
+            invalidObjs.append(".");
         }
-        ErrorResponseBody responseBody = new ErrorResponseBody(invalidObjs);
+        ErrorResponseBody responseBody = new ErrorResponseBody(invalidObjs.toString());
 
         return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
     }
@@ -82,11 +85,13 @@ public class ExceptionController {
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseBody> handleException(MethodArgumentNotValidException methodArgumentNotValidException){
-            String errors = "";
+            StringBuilder errors = new StringBuilder();
             for(ObjectError error : methodArgumentNotValidException.getBindingResult().getAllErrors()){
-                errors += ("Enter Valid " + ((FieldError) error).getField() + ".");
+                errors.append("Enter Valid ");
+                errors.append(((FieldError) error).getField());
+                errors.append(".");
             }
-            ErrorResponseBody errorResponseBody = new ErrorResponseBody(errors);
+            ErrorResponseBody errorResponseBody = new ErrorResponseBody(errors.toString());
             return new ResponseEntity<>(errorResponseBody, HttpStatus.BAD_REQUEST);
     }
 }

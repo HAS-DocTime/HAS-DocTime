@@ -1,7 +1,7 @@
 package com.spring.hasdoctime.dao;
 
 import com.spring.hasdoctime.entity.*;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import com.spring.hasdoctime.interfaces.LoginInterface;
 import com.spring.hasdoctime.repository.UserRepository;
 import com.spring.hasdoctime.security.customuserclass.UserDetailForToken;

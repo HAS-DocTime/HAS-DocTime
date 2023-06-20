@@ -7,8 +7,8 @@ import com.spring.hasdoctime.entity.AuthenticationResponse;
 import com.spring.hasdoctime.entity.EmailUpdateRequestBody;
 import com.spring.hasdoctime.entity.PasswordUpdateRequestBody;
 import com.spring.hasdoctime.entity.User;
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import org.springframework.data.domain.Page;
 
 import javax.naming.AuthenticationException;

@@ -1,7 +1,7 @@
 package com.spring.hasdoctime.controller;
 
 import com.spring.hasdoctime.entity.*;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import com.spring.hasdoctime.interfaces.LoginInterface;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;

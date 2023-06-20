@@ -7,8 +7,8 @@ package com.spring.hasdoctime.service;
 import com.spring.hasdoctime.entity.Department;
 import java.util.List;
 
-import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
-import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
+import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
+import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import com.spring.hasdoctime.interfaces.DepartmentInterface;
