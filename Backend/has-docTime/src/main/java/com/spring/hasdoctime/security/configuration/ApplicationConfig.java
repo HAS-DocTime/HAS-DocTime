@@ -24,7 +24,7 @@ import java.util.Optional;
 public class ApplicationConfig {
 
     @Value("${jwt.bcrypt.password.encoder.strength}")
-    final Optional<Integer> PASSWORD_ENCODER_STRENGTH = Optional.empty();
+    private final Optional<Integer> PASSWORD_ENCODER_STRENGTH = Optional.empty();
 
     private final UserRepository userRepository;
 
@@ -36,10 +36,8 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService(){
 
-        return username -> {
-            return userRepository.findByEmail(username)
+        return username -> userRepository.findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        };
     }
 
     /**
@@ -66,11 +64,6 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-//    @Bean
-//    public PasswordEncoder getPasswordEncoder(){
-//        return NoOpPasswordEncoder.getInstance();
-//    }
 
     /**
      * Configures the password encoder for user passwords.

@@ -77,7 +77,7 @@ public class AdminDaoImpl implements AdminInterface {
      * @throws MissingParameterException if a required parameter is missing
      */
 
-    public Admin exceptionHandlingForUpdateAdmin(Admin admin) throws MissingParameterException {
+    public void exceptionHandlingForUpdateAdmin(Admin admin) throws MissingParameterException {
 
 
             if(admin.getUser().getName() == null || admin.getUser().getName().equals("")){

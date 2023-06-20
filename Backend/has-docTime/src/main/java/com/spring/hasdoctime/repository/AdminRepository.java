@@ -13,9 +13,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
-//    @Query("DELETE FROM admin WHERE id = :id AND user_id = :userId")
-//    void deleteAdminByIdAndUserId(int id, int userId);
-
     /**
      * Deletes an admin by ID.
      *

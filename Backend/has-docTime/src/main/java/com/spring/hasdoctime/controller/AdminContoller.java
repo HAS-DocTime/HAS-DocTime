@@ -4,7 +4,6 @@ import com.spring.hasdoctime.entity.Admin;
 import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdoctime.interfaces.AdminInterface;
-import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
