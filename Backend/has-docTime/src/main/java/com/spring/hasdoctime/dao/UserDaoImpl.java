@@ -9,7 +9,7 @@ import com.spring.hasdoctime.interfaces.UserInterface;
 import com.spring.hasdoctime.repository.ChronicIllnessRepository;
 import com.spring.hasdoctime.repository.SymptomRepository;
 import com.spring.hasdoctime.repository.UserRepository;
-import com.spring.hasdoctime.security.customUserClass.UserDetailForToken;
+import com.spring.hasdoctime.security.customuserclass.UserDetailForToken;
 import com.spring.hasdoctime.security.jwt.JwtService;
 import com.spring.hasdoctime.utills.Role;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +18,8 @@ import org.springframework.data.domain.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.naming.AuthenticationException;
 import java.util.*;
 
 @Service
@@ -84,30 +81,7 @@ public class UserDaoImpl implements UserInterface {
     @Transactional
     public User updateUserWithPassword(User user) throws DoesNotExistException, MissingParameterException{
         // Validate required parameters
-        if(user.getName() == null || user.getName().equals("")){
-            throw new MissingParameterException("Name");
-        }
-        if(user.getDob() == null){
-            throw new MissingParameterException("Date of Birth");
-        }
-        if(user.getAge() == 0){
-            throw new MissingParameterException("Age");
-        }
-        if(user.getBloodGroup()==null){
-            throw new MissingParameterException("Blood Group");
-        }
-        if(user.getGender()==null){
-            throw new MissingParameterException("Gender");
-        }
-        if(user.getContact()==null){
-            throw new MissingParameterException("Contact");
-        }
-        if(user.getEmail()==null){
-            throw new MissingParameterException("Email");
-        }
-        if(user.getPassword()==null) {
-            throw new MissingParameterException("Password");
-        }
+        validateRequiredFields(user);
 
         // Validate and update symptoms
         List<Symptom> symptomList = user.getSymptoms();
@@ -145,25 +119,9 @@ public class UserDaoImpl implements UserInterface {
         return userRepository.save(user);
     }
 
-
-
-    /**
-     * Creates a new user with the provided data, including the password.
-     *
-     * @param user The user object to create.
-     * @return The created user.
-     * @throws MissingParameterException if any required parameter is missing.
-     * @throws DoesNotExistException     if the chronic illness does not exist.
-     */
-    @Transactional
-    @Override
-    public User createUser(User user) throws MissingParameterException, DoesNotExistException{
-        // Validate required parameters
+    private static void validateRequiredFields(User user) throws MissingParameterException {
         if(user.getName() == null || user.getName().equals("")){
             throw new MissingParameterException("Name");
-        }
-        if(user.getDob() == null){
-            throw new MissingParameterException("Date of Birth");
         }
         if(user.getAge() == 0){
             throw new MissingParameterException("Age");
@@ -180,9 +138,25 @@ public class UserDaoImpl implements UserInterface {
         if(user.getEmail()==null){
             throw new MissingParameterException("Email");
         }
-        if(user.getPassword()==null){
+        if(user.getPassword()==null) {
             throw new MissingParameterException("Password");
         }
+    }
+
+
+    /**
+     * Creates a new user with the provided data, including the password.
+     *
+     * @param user The user object to create.
+     * @return The created user.
+     * @throws MissingParameterException if any required parameter is missing.
+     * @throws DoesNotExistException     if the chronic illness does not exist.
+     */
+    @Transactional
+    @Override
+    public User createUser(User user) throws MissingParameterException, DoesNotExistException{
+        // Validate required parameters
+        validateRequiredFields(user);
         if(user.getRole()==null){
             user.setRole(Role.PATIENT);
         }
@@ -328,17 +302,16 @@ public class UserDaoImpl implements UserInterface {
 
     @Transactional
     @Override
-    public String updatePasswordOfUser(PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException, AuthenticationException {
+    public String updatePasswordOfUser(PasswordUpdateRequestBody passwordUpdateRequestBody) throws DoesNotExistException {
         Optional<User> optionalUser = userRepository.findById(passwordUpdateRequestBody.getId());
         if(optionalUser.isEmpty()){
             throw new DoesNotExistException("User");
         }
         User user = optionalUser.get();
-//        String encodedOldPassword = passwordEncoder.encode(passwordUpdateRequestBody.getOldPassword());
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
                 user.getEmail(),
                 passwordUpdateRequestBody.getOldPassword());
-        Authentication auth = authenticationManager.authenticate(
+        authenticationManager.authenticate(
                 usernamePassword
         );
         String encodedNewPassword = passwordEncoder.encode(passwordUpdateRequestBody.getNewPassword());

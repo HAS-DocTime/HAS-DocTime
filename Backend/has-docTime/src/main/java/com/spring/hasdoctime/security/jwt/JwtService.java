@@ -1,6 +1,6 @@
 package com.spring.hasdoctime.security.jwt;
 
-import com.spring.hasdoctime.security.customUserClass.UserDetailForToken;
+import com.spring.hasdoctime.security.customuserclass.UserDetailForToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

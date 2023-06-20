@@ -4,7 +4,7 @@ import com.spring.hasdoctime.entity.*;
 import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdoctime.interfaces.LoginInterface;
 import com.spring.hasdoctime.repository.UserRepository;
-import com.spring.hasdoctime.security.customUserClass.UserDetailForToken;
+import com.spring.hasdoctime.security.customuserclass.UserDetailForToken;
 import com.spring.hasdoctime.security.jwt.JwtService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

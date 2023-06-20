@@ -7,7 +7,7 @@ import com.spring.hasdoctime.entity.User;
 import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdoctime.interfaces.RegisterInterface;
-import com.spring.hasdoctime.security.customUserClass.UserDetailForToken;
+import com.spring.hasdoctime.security.customuserclass.UserDetailForToken;
 import com.spring.hasdoctime.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

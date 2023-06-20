@@ -1,7 +1,7 @@
 /**
  * Represents the user details included in the JWT token.
  */
-package com.spring.hasdoctime.security.customUserClass;
+package com.spring.hasdoctime.security.customuserclass;
 
 import com.spring.hasdoctime.utills.Role;
 import lombok.AllArgsConstructor;
