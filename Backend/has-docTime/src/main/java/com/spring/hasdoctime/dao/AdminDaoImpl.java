@@ -1,5 +1,6 @@
 package com.spring.hasdoctime.dao;
 
+import com.spring.hasdoctime.constants.Constant;
 import com.spring.hasdoctime.entity.Admin;
 import com.spring.hasdoctime.entity.User;
 import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
@@ -63,7 +64,7 @@ public class AdminDaoImpl implements AdminInterface {
             Hibernate.initialize(admin.getUser());
             return admin;
         }
-        throw new DoesNotExistException("Admin");
+        throw new DoesNotExistException(Constant.ADMIN);
     }
 
     /**
@@ -75,6 +76,33 @@ public class AdminDaoImpl implements AdminInterface {
      * @throws DoesNotExistException     if the admin entity does not exist
      * @throws MissingParameterException if a required parameter is missing
      */
+
+    public Admin exceptionHandlingForUpdateAdmin(Admin admin) throws MissingParameterException {
+
+
+            if(admin.getUser().getName() == null || admin.getUser().getName().equals("")){
+                throw new MissingParameterException("Name");
+            }
+            if(admin.getUser().getAge() == 0){
+                throw new MissingParameterException("Age");
+            }
+            if(admin.getUser().getBloodGroup()==null){
+                throw new MissingParameterException("Blood Group");
+            }
+            if(admin.getUser().getGender()==null){
+                throw new MissingParameterException("Gender");
+            }
+            if(admin.getUser().getContact()==null){
+                throw new MissingParameterException("Contact");
+            }
+            if(admin.getUser().getEmail()==null){
+                throw new MissingParameterException("Email");
+            }
+            if(admin.getUser().getPassword()==null){
+                throw new MissingParameterException("Password");
+            }
+    }
+
     @Transactional
     @Override
     public Admin updateAdmin(int id, Admin admin) throws DoesNotExistException, MissingParameterException{
@@ -87,31 +115,8 @@ public class AdminDaoImpl implements AdminInterface {
             if(admin.getUser()==null){
                 throw new MissingParameterException("User");
             }
-            if(admin.getUser().getId()==0){
-                if(admin.getUser().getName() == null || admin.getUser().getName().equals("")){
-                    throw new MissingParameterException("Name");
-                }
-                if(admin.getUser().getDob() == null){
-                    throw new MissingParameterException("Date of Birth");
-                }
-                if(admin.getUser().getAge() == 0){
-                    throw new MissingParameterException("Age");
-                }
-                if(admin.getUser().getBloodGroup()==null){
-                    throw new MissingParameterException("Blood Group");
-                }
-                if(admin.getUser().getGender()==null){
-                    throw new MissingParameterException("Gender");
-                }
-                if(admin.getUser().getContact()==null){
-                    throw new MissingParameterException("Contact");
-                }
-                if(admin.getUser().getEmail()==null){
-                    throw new MissingParameterException("Email");
-                }
-                if(admin.getUser().getPassword()==null){
-                    throw new MissingParameterException("Password");
-                }
+            if(admin.getUser().getId()==0) {
+                exceptionHandlingForUpdateAdmin(admin);
             }
             admin.setId(id); // setting admin id
             admin.getUser().setId(optionalAdmin.get().getUser().getId()); // setting user object id
@@ -160,30 +165,7 @@ public class AdminDaoImpl implements AdminInterface {
             throw new MissingParameterException("User");
         }
         if(admin.getUser().getId()==0){
-            if(admin.getUser().getName() == null || admin.getUser().getName().equals("")){
-                throw new MissingParameterException("Name");
-            }
-            if(admin.getUser().getDob() == null){
-                throw new MissingParameterException("Date of Birth");
-            }
-            if(admin.getUser().getAge() == 0){
-                throw new MissingParameterException("Age");
-            }
-            if(admin.getUser().getBloodGroup()==null){
-                throw new MissingParameterException("Blood Group");
-            }
-            if(admin.getUser().getGender()==null){
-                throw new MissingParameterException("Gender");
-            }
-            if(admin.getUser().getContact()==null){
-                throw new MissingParameterException("Contact");
-            }
-            if(admin.getUser().getEmail()==null){
-                throw new MissingParameterException("Email");
-            }
-            if(admin.getUser().getPassword()==null){
-                throw new MissingParameterException("Password");
-            }
+            exceptionHandlingForUpdateAdmin(admin);
             if(admin.getUser().getRole()==null){
                 throw new MissingParameterException("Role");
             }
