@@ -53,7 +53,7 @@ public class LoginController {
     @PostMapping("/forgotPassword")
     public ResponseEntity<Void> sendEmailForForgotPassword(@RequestBody SendOtpEmail sendOtpEmail) throws MessagingException {
 
-        if(loginService.sendEmailForForgotPassword(sendOtpEmail)){
+        if(loginService.sendEmailForForgotPassword(sendOtpEmail).equals(Boolean.TRUE)){
             return ResponseEntity.ok(null);
         }else{
             return ResponseEntity.badRequest().body(null);
@@ -64,7 +64,7 @@ public class LoginController {
     @PostMapping("/otpVerify")
     public ResponseEntity<Void> otpVerification(@RequestBody OtpRequestBody otpRequestBody){
 
-        if(loginService.otpVerification(otpRequestBody)){
+        if(loginService.otpVerification(otpRequestBody).equals(Boolean.TRUE)){
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.badRequest().body(null);
@@ -72,7 +72,7 @@ public class LoginController {
 
     @PostMapping("/saveNewPassword")
     public ResponseEntity<Void> saveNewPassword(@RequestBody PasswordUpdateBody passwordUpdateBody){
-        if(loginService.saveNewPassword(passwordUpdateBody)){
+        if(loginService.saveNewPassword(passwordUpdateBody).equals(Boolean.TRUE)){
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.badRequest().body(null);

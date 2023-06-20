@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -35,12 +37,14 @@ public class LoginDaoImpl implements LoginInterface {
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
     private static final int OTP_LENGTH = 6;
-    private static final long EXPIRATION_TIME = 130;  //60 seconds
 
     HashMap<String, String> otpMap = new LinkedHashMap<>();
     private Map<String, ScheduledFuture<?>> expirationTasks = new ConcurrentHashMap<>();
 
     private ScheduledExecutorService scheduledExecutorService;
+
+    private final Random random = new Random();
+
 
     @Autowired
     public LoginDaoImpl(
@@ -49,7 +53,7 @@ public class LoginDaoImpl implements LoginInterface {
             AuthenticationManager authenticationManager,
             JavaMailSender javaMailSender,
             PasswordEncoder passwordEncoder
-            ){
+            ) {
         this.userRepository = userRepository;
         this.javaMailSender = javaMailSender;
         this.jwtService = jwtService;
@@ -80,7 +84,7 @@ public class LoginDaoImpl implements LoginInterface {
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
                 loginDetail.getEmail(),
                 loginDetail.getPassword());
-        Authentication auth = authenticationManager.authenticate(
+        authenticationManager.authenticate(
                 usernamePassword
         );
 
@@ -141,13 +145,11 @@ public class LoginDaoImpl implements LoginInterface {
 
         String storedOtp = otpMap.get(passwordUpdateBody.getEmail());
 
-        if(storedOtp != null && storedOtp.equals(passwordUpdateBody.getOtp()) && user.isPresent()){
-            if(passwordUpdateBody.getPassword().equals(passwordUpdateBody.getConfirmPassword())){
+        if(storedOtp != null && storedOtp.equals(passwordUpdateBody.getOtp()) && user.isPresent() && passwordUpdateBody.getPassword().equals(passwordUpdateBody.getConfirmPassword())){
                 user.get().setPassword(passwordEncoder.encode(passwordUpdateBody.getPassword()));
                 userRepository.save(user.get());
                 otpMap.remove(passwordUpdateBody.getEmail());
                 return true;
-            }
         }
         return false;
     }
@@ -156,7 +158,6 @@ public class LoginDaoImpl implements LoginInterface {
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-//        SimpleMailMessage message = new SimpleMailMessage();
 
         helper.setTo(email);
 
@@ -178,10 +179,8 @@ public class LoginDaoImpl implements LoginInterface {
         String characters = "0123456789";
         StringBuilder otp = new StringBuilder();
 
-        Random random = new Random();
-
         for(int i=0; i<OTP_LENGTH; i++){
-            int index = random.nextInt(characters.length());
+            int index = this.random.nextInt(characters.length());
             otp.append(characters.charAt(index));
         }
 
@@ -201,7 +200,7 @@ public class LoginDaoImpl implements LoginInterface {
             existingTask.cancel(false);
         }
         ScheduledFuture<?> expirationTask = scheduledExecutorService.schedule(() -> {
-            otpMap.remove(key);;
+            otpMap.remove(key);
         }, expirationTime, TimeUnit.SECONDS);
 
         expirationTasks.put(key, expirationTask);

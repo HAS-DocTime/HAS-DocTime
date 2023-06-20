@@ -69,7 +69,7 @@ public class JwtService {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetailForToken.getEmail().toString())
+                .setSubject(userDetailForToken.getEmail())
                 .claim("id", userDetailForToken.getId().toString())
                 .claim("role", userDetailForToken.getRole().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
