@@ -4,6 +4,7 @@
  */
 package com.spring.hasdoctime.dao;
 
+import com.spring.hasdoctime.constants.Constant;
 import com.spring.hasdoctime.entity.*;
 import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdoctime.exceptionHandling.exception.MissingParameterException;
@@ -82,7 +83,7 @@ public class DoctorDaoImpl implements DoctorInterface {
             throw new MissingParameterException("Qualifications");
         }
         if(doctor.getDepartment()==null){
-            throw new MissingParameterException("Department");
+            throw new MissingParameterException(Constant.DEPARTMENT);
         }
         if(doctor.getDepartment().getId()==0){
             throw new MissingParameterException("DepartmentId");
@@ -94,15 +95,13 @@ public class DoctorDaoImpl implements DoctorInterface {
         User user = optionalUser.get();
         doctor.setUser(user);
         user.setRole(Role.DOCTOR);
-        if(doctor.getDepartment() != null){
-            if(doctor.getDepartment().getId() != 0){
+        if(doctor.getDepartment() != null && doctor.getDepartment().getId() != 0){
                 Optional<Department> optionalDepartment = departmentRepository.findById(doctor.getDepartment().getId());
                 if(optionalDepartment.isEmpty()){
                     throw new DoesNotExistException("Department");
                 }
                 Department department = optionalDepartment.get();
                 doctor.setDepartment(department);
-            }
         }
         return doctorRepository.save(doctor);
     }
@@ -167,7 +166,7 @@ public class DoctorDaoImpl implements DoctorInterface {
             Hibernate.initialize(doctor.get().getDepartment());
             return doctor.get();
         }
-        throw new DoesNotExistException("Doctor");
+        throw new DoesNotExistException(Constant.DOCTOR);
     }
 
     /**
@@ -200,7 +199,11 @@ public class DoctorDaoImpl implements DoctorInterface {
             oldDoctor.get().getUser().setRole(Role.PATIENT);
             User user = userDao.updateUser(oldDoctor.get().getUser().getId(), doctor.getUser());
             oldDoctor.get().setUser(user);
-            Department department = departmentRepository.findById(doctor.getDepartment().getId()).get();
+            Optional<Department> optionalDepartment = departmentRepository.findById(doctor.getDepartment().getId());
+            if(optionalDepartment.isEmpty()){
+                throw new DoesNotExistException(Constant.DEPARTMENT);
+            }
+            Department department = optionalDepartment.get();
             oldDoctor.get().setDepartment(department);
             oldDoctor.get().setQualification(doctor.getQualification());
             return doctorRepository.save(oldDoctor.get());
@@ -233,7 +236,6 @@ public class DoctorDaoImpl implements DoctorInterface {
         throw new DoesNotExistException("Doctor");
     }
 
-    @Transactional
     Timestamp manipulateTimeSlotBasedOnTimeZone(Timestamp timestamp){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeZone(TimeZone.getTimeZone("GMT+05:30"));
@@ -251,15 +253,12 @@ public class DoctorDaoImpl implements DoctorInterface {
         List<Symptom> symptoms = new ArrayList<>();
         for(Symptom symptom : givenSymptoms){
             Optional<Symptom> optionalSymptom = symptomRepository.findById(symptom.getId());
-            if(optionalSymptom.isEmpty()){
-                throw new DoesNotExistException("Symptom");
-            }
-            symptom = optionalSymptom.get();
+            symptom = optionalSymptom.orElseThrow(()->new DoesNotExistException(Constant.SYMPTOM));
             symptoms.add(symptom);
         }
         Set<Doctor> doctors = new LinkedHashSet<>();
         for(Symptom symptom: symptoms){
-            for(Department department: symptom.getDepartments()) {;
+            for(Department department: symptom.getDepartments()) {
                 for (Doctor doctor : department.getDoctors()) {
                     Hibernate.initialize(doctor.getUser());
                     if(doctor.getAvailableTimeSlots()!=null){
@@ -286,24 +285,16 @@ public class DoctorDaoImpl implements DoctorInterface {
         PageRequest pageRequest = PageRequest.of(page, size);
         List<Doctor> doctorList = new ArrayList<>(doctors);
         if(sortBy.equals("doctor.user.name")){
-            doctorList.sort((d1, d2)-> {
-                return d1.getUser().getName().compareToIgnoreCase(d2.getUser().getName());
-            });
+            doctorList.sort((d1, d2)-> d1.getUser().getName().compareToIgnoreCase(d2.getUser().getName()));
         }
         else if(sortBy.equals("doctor.user.age")){
-            doctorList.sort((d1, d2)-> {
-                return d1.getUser().getAge() > d2.getUser().getAge() ? 1 : -1;
-            });
+            doctorList.sort((d1, d2)-> d1.getUser().getAge() > d2.getUser().getAge() ? 1 : -1);
         }
         else if(sortBy.equals("doctor.user.gender")) {
-            doctorList.sort((d1, d2) -> {
-                return d1.getUser().getGender().compareTo(d2.getUser().getGender());
-            });
+            doctorList.sort((d1, d2) ->  d1.getUser().getGender().compareTo(d2.getUser().getGender()));
         }
         else if(sortBy.equals("doctor.qualification")){
-            doctorList.sort((d1, d2)-> {
-                return d1.getQualification().compareToIgnoreCase(d2.getQualification());
-            });
+            doctorList.sort((d1, d2)->  d1.getQualification().compareToIgnoreCase(d2.getQualification()));
         }
         if (search != null && !search.isEmpty()) {
             doctorList = doctorList.stream()
