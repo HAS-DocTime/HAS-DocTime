@@ -68,7 +68,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "has-docTime:build",
-            "host": "192.1.150.116"
+            "host": "192.1.150.119"
           },
           "configurations": {
             "production": {
