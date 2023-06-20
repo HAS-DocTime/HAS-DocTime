@@ -1,6 +1,7 @@
 package com.spring.hasdoctime.dao;
 
 
+import com.spring.hasdoctime.constants.Constant;
 import com.spring.hasdoctime.entity.ChronicIllness;
 import com.spring.hasdoctime.entity.PatientChronicIllness;
 import com.spring.hasdoctime.exceptionHandling.exception.DoesNotExistException;
@@ -53,7 +54,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
     @Override
     public ChronicIllness createChronicIllness(ChronicIllness chronicIllness) throws MissingParameterException{
         if(chronicIllness.getName()==null || chronicIllness.getName().equals("")){
-            throw new MissingParameterException("Chronic Illness");
+            throw new MissingParameterException(Constant.CHRONIC_ILLNESS);
         }
         return chronicIllnessRepository.save(chronicIllness);
     }
@@ -97,7 +98,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
         if(optionalChronicIllness.isPresent()) {
             return optionalChronicIllness.get();
         }
-        throw new DoesNotExistException("Chronic Illness");
+        throw new DoesNotExistException(Constant.CHRONIC_ILLNESS);
     }
 
     /**
@@ -113,7 +114,7 @@ public class ChronicIllnessDaoImpl implements ChronicIllnessInterface {
     @Override
     public ChronicIllness updateChronicIllness(int id, ChronicIllness chronicIllness) throws DoesNotExistException, MissingParameterException {
         if(chronicIllness.getName()==null || chronicIllness.getName().equals("")){
-            throw new MissingParameterException("Chronic Illness");
+            throw new MissingParameterException(Constant.CHRONIC_ILLNESS);
         }
         Optional<ChronicIllness> optionalChronicIllness = chronicIllnessRepository.findById(id);
         if(optionalChronicIllness.isPresent()){

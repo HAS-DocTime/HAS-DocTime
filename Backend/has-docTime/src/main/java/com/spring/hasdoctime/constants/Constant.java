@@ -12,4 +12,5 @@ public final class Constant {
     public static final String TIME_SLOT = "Time Slot";
 
     public static final String USER = "User";
+    public static final String CHRONIC_ILLNESS = "Chronic Illness";
 }

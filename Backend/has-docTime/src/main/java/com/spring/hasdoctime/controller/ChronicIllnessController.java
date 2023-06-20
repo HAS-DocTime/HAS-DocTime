@@ -51,7 +51,7 @@ public class ChronicIllnessController {
         if(chronicIllnessList.isEmpty()) {
             return new ResponseEntity<>(chronicIllnessList, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(chronicIllnessList, HttpStatus.OK);
+        return new ResponseEntity<>(chronicIllnessList, HttpStatus.OK);
     }
 
     @GetMapping("list")
