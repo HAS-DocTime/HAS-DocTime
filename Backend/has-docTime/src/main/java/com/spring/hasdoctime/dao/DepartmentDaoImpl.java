@@ -4,6 +4,7 @@
  */
 package com.spring.hasdoctime.dao;
 
+import com.spring.hasdoctime.constants.Constant;
 import com.spring.hasdoctime.entity.Department;
 import com.spring.hasdoctime.entity.Doctor;
 import com.spring.hasdoctime.entity.Symptom;
@@ -24,7 +25,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.spring.hasdoctime.interfaces.DepartmentInterface;
 import com.spring.hasdoctime.interfaces.DoctorInterface;
-import com.spring.hasdoctime.repository.DoctorRepository;
 import com.spring.hasdoctime.repository.SymptomRepository;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,8 +40,6 @@ public class DepartmentDaoImpl implements DepartmentInterface {
     
     private SymptomRepository symptomRepository;
     
-    private DoctorRepository doctorRepository;
-    
     private DoctorInterface doctorDao;
 
     private TimeSlotDaoImpl timeSlotDao;
@@ -49,10 +47,9 @@ public class DepartmentDaoImpl implements DepartmentInterface {
     private TimeSlotRepository timeSlotRepository;
     
     @Autowired
-    public DepartmentDaoImpl(DepartmentRepository departmentRepository, SymptomRepository symptomRepository, DoctorRepository doctorRepository, @Qualifier("doctorDaoImpl") DoctorInterface doctorDao,TimeSlotDaoImpl timeSlotDao, TimeSlotRepository timeSlotRepository){
+    public DepartmentDaoImpl(DepartmentRepository departmentRepository, SymptomRepository symptomRepository, @Qualifier("doctorDaoImpl") DoctorInterface doctorDao,TimeSlotDaoImpl timeSlotDao, TimeSlotRepository timeSlotRepository){
         this.departmentRepository = departmentRepository;
         this.symptomRepository = symptomRepository;
-        this.doctorRepository = doctorRepository;
         this.doctorDao = doctorDao;
         this.timeSlotDao = timeSlotDao;
         this.timeSlotRepository = timeSlotRepository;
@@ -79,7 +76,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         if(department.getTimeDuration()==0){
             throw new MissingParameterException("Time Duration");
         }
-        if(department.getSymptoms()==null || department.getSymptoms().size()==0){
+        if(department.getSymptoms()==null || department.getSymptoms().isEmpty()){
             throw new MissingParameterException("Symptoms");
         }
         List<Symptom> symptoms = department.getSymptoms();
@@ -139,7 +136,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
             Hibernate.initialize(department.get().getSymptoms());
             return department.get();
         }
-        throw new DoesNotExistException("Department");
+        throw new DoesNotExistException(Constant.DEPARTMENT);
     }
 
     /**
@@ -163,7 +160,7 @@ public class DepartmentDaoImpl implements DepartmentInterface {
         if(department.getTimeDuration()==0){
             throw new MissingParameterException("Time Duration");
         }
-        if(department.getSymptoms()==null || department.getSymptoms().size()==0){
+        if(department.getSymptoms()==null || department.getSymptoms().isEmpty()){
             throw new MissingParameterException("Symptoms");
         }
         Optional<Department> oldDepartment = departmentRepository.findById(id);

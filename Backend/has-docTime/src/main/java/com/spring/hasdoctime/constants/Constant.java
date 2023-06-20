@@ -13,4 +13,5 @@ public final class Constant {
 
     public static final String USER = "User";
     public static final String CHRONIC_ILLNESS = "Chronic Illness";
+    public static final String DEPARTMENT = "Department";
 }

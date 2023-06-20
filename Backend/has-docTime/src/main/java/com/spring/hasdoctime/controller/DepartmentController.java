@@ -44,7 +44,7 @@ public class DepartmentController {
      * @throws MissingParameterException If required parameters are missing in the creation request.
      * @throws DoesNotExistException     If the Department with the given ID does not exist.
      */
-    @RequestMapping(method = RequestMethod.POST, value = "")
+    @PostMapping(value = "")
     public ResponseEntity<Department> createDepartment(@Valid @RequestBody Department department) throws MissingParameterException, DoesNotExistException {
         Department dep = departmentService.createDepartment(department);
         return new ResponseEntity<>(dep, HttpStatus.OK);
@@ -56,7 +56,7 @@ public class DepartmentController {
      * @return ResponseEntity containing a list of all Departments and HttpStatus.OK if successful,
      * or HttpStatus.NO_CONTENT if no Departments are found.
      */
-    @RequestMapping(method = RequestMethod.GET, value = "")
+    @GetMapping(value = "")
     public ResponseEntity<Page<Department>> getAllDepartments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "4") int size,
@@ -65,17 +65,17 @@ public class DepartmentController {
     ){
         Page<Department> departments = departmentService.getAllDepartments(page, size, sortBy, search);
         if(departments.isEmpty()){
-            return new ResponseEntity(departments, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(departments, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(departments, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/withoutPagination")
+    @GetMapping(value = "/withoutPagination")
     public ResponseEntity<List<Department>> getAllDepartments(
     ){
         List<Department> departments = departmentService.getAllDepartments();
         if(departments.isEmpty()){
-            return new ResponseEntity(departments, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(departments, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(departments, HttpStatus.OK);
     }
@@ -88,7 +88,7 @@ public class DepartmentController {
      * or HttpStatus.NOT_FOUND if the Department does not exist.
      * @throws DoesNotExistException If the Department with the given ID does not exist.
      */
-    @RequestMapping(method = RequestMethod.GET, value = "{departmentId}")
+    @GetMapping(value = "{departmentId}")
     public ResponseEntity<Department> getDepartment(@PathVariable("departmentId") int id) throws DoesNotExistException {
         Department department = departmentService.getDepartment(id);
         if (department == null) {
@@ -107,7 +107,7 @@ public class DepartmentController {
      * @throws DoesNotExistException     If the Department with the given ID does not exist.
      * @throws MissingParameterException If required parameters are missing in the update request.
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "{departmentId}")
+    @PutMapping(value = "{departmentId}")
     public ResponseEntity<Department> updateDepartment(@PathVariable("departmentId") int id, @Valid @RequestBody Department department) throws DoesNotExistException, MissingParameterException {
         Department updatedDepartment = departmentService.updateDepartent(id, department);
         if (updatedDepartment == null) {
@@ -124,7 +124,7 @@ public class DepartmentController {
      * or HttpStatus.NOT_FOUND if the Department does not exist.
      * @throws DoesNotExistException If the Department with the given ID does not exist.
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "{departmentId}")
+    @DeleteMapping(value = "{departmentId}")
     public ResponseEntity<Department> deleteDepartment(@PathVariable("departmentId") int id) throws DoesNotExistException {
         Department dep = departmentService.deleteDepartment(id);
         if (dep == null) {
