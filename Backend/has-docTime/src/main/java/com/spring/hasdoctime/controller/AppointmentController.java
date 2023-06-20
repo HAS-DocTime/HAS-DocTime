@@ -47,7 +47,6 @@ public class AppointmentController {
         } catch (RuntimeException e) {
             return ResponseEntity.noContent().build();
         }
-//        return null;
     }
 
     /**
