@@ -49,7 +49,7 @@ public class UserController {
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return new ResponseEntity(users.getContent(), HttpStatus.OK);
+        return new ResponseEntity<>(users.getContent(), HttpStatus.OK);
     }
 
     /**
@@ -75,7 +75,6 @@ public class UserController {
      */
     @GetMapping("{patientId}")
     public ResponseEntity<User> getUser(@PathVariable("patientId") int id) throws AccessDeniedException, DoesNotExistException {
-        String authenticatedPatientId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package com.spring.hasdoctime.dao;
 
+import com.spring.hasdoctime.constants.Constant;
 import com.spring.hasdoctime.entity.*;
 import com.spring.hasdoctime.exceptionhandling.exception.DoesNotExistException;
 import com.spring.hasdoctime.exceptionhandling.exception.MissingParameterException;
@@ -22,8 +23,11 @@ import java.util.*;
 @Service
 public class TimeSlotDaoImpl implements TimeSlotInterface {
 
-    private final Timestamp hospitalStartTime = new Timestamp(1970, 1, 1, 9,0,0,0);
-    private final Timestamp hospitalEndTime = new Timestamp(2050, 12,31,21,0,0,0);
+    LocalDateTime localDateTimeForHospitalStartTime = LocalDateTime.of(1970, 1, 1, 9, 0, 0);
+    LocalDateTime localDateTimeForHospitalEndTime = LocalDateTime.of(2050, 12,31,21,0,0,0);
+
+    private final Timestamp hospitalStartTime = Timestamp.valueOf(localDateTimeForHospitalStartTime);
+    private final Timestamp hospitalEndTime = Timestamp.valueOf(localDateTimeForHospitalEndTime);
 
     private TimeSlotRepository timeSlotRepository;
     private DepartmentRepository departmentRepository;
@@ -63,8 +67,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
      */
     @Override
     public List<TimeSlot> getAllTimeSlots() {
-        List<TimeSlot> allTimeSlots= timeSlotRepository.findAll();
-        return allTimeSlots;
+        return timeSlotRepository.findAll();
     }
 
     /**
@@ -81,7 +84,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         if(optionalTimeSlot.isPresent()){
             return optionalTimeSlot.get();
         }
-        throw new DoesNotExistException("Time Slot");
+        throw new DoesNotExistException(Constant.TIME_SLOT);
     }
 
 
@@ -96,6 +99,76 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     @Transactional
     @Override
     public TimeSlot createTimeSlot(TimeSlot timeSlot) throws MissingParameterException, DoesNotExistException{
+        validateRequiredFields(timeSlot);
+        Optional<Department> optionalDepartment = departmentRepository.findById(timeSlot.getDepartment().getId());
+        if(optionalDepartment.isEmpty()){
+            throw new DoesNotExistException(Constant.DEPARTMENT);
+        }
+        Department department = optionalDepartment.get();
+        timeSlot.setDepartment(department);
+        if(timeSlot.getAppointment() != null){
+            Set<Appointment> appointmentList = new HashSet<>();
+            timeSlot.setAppointment(getSetOfAppointmentsWithWholeObject(timeSlot, appointmentList));
+
+        }
+        if(timeSlot.getAppointmentData() != null){
+            Set<PostAppointmentData> postAppointmentDataList = new HashSet<>();
+            timeSlot.setAppointmentData(getListOfPostAppointmentDataWithWholeObjects(timeSlot, postAppointmentDataList));
+        }
+
+        Set<Doctor> availableDoctors = new HashSet<>();
+        if(timeSlot.getAvailableDoctors() != null){
+            timeSlot.setAvailableDoctors(getSetOfAvailableDoctorsWithWholeObjects(timeSlot, availableDoctors));
+        }
+
+        Set<Doctor> bookedDoctors = new HashSet<>();
+        if(timeSlot.getBookedDoctors() != null){
+            timeSlot.setAvailableDoctors(getSetOfBookedDoctorsWithWholeObjects(timeSlot, bookedDoctors));
+        }
+        return timeSlotRepository.save(timeSlot);
+    }
+
+    private Set<PostAppointmentData> getListOfPostAppointmentDataWithWholeObjects(TimeSlot timeSlot, Set<PostAppointmentData> postAppointmentDataList) throws DoesNotExistException {
+        for(PostAppointmentData postAppointmentData : timeSlot.getAppointmentData()) {
+            Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(postAppointmentData.getId());
+            if (optionalPostAppointmentData.isEmpty()) {
+                throw new DoesNotExistException("Post Appointment");
+            }
+            PostAppointmentData foundPostAppointmentData = optionalPostAppointmentData.get();
+            postAppointmentDataList.add(foundPostAppointmentData);
+        }
+        return postAppointmentDataList;
+    }
+
+    private Set<Doctor> getSetOfAvailableDoctorsWithWholeObjects(TimeSlot timeSlot, Set<Doctor> availableDoctors) throws DoesNotExistException {
+        for(Doctor d: timeSlot.getAvailableDoctors()){
+            if(d.getId() != 0){
+                Optional<Doctor> optionalAvailableDoctor = doctorRepository.findById(d.getId());
+                if(optionalAvailableDoctor.isEmpty()){
+                    throw new DoesNotExistException("Doctor");
+                }
+                Doctor doctor = optionalAvailableDoctor.get();
+                availableDoctors.add(doctor);
+            }
+        }
+        return availableDoctors;
+    }
+
+    private Set<Doctor> getSetOfBookedDoctorsWithWholeObjects(TimeSlot timeSlot, Set<Doctor> bookedDoctors) throws DoesNotExistException {
+        for(Doctor d: timeSlot.getBookedDoctors()){
+            if(d.getId() != 0){
+                Optional<Doctor> optionalBookedDoctor = doctorRepository.findById(d.getId());
+                if(optionalBookedDoctor.isEmpty()){
+                    throw new DoesNotExistException("Doctor");
+                }
+                Doctor doctor = optionalBookedDoctor.get();
+                bookedDoctors.add(doctor);
+            }
+        }
+        return bookedDoctors;
+    }
+
+    private static void validateRequiredFields(TimeSlot timeSlot) throws MissingParameterException {
         if(timeSlot.getStartTime()==null){
             throw new MissingParameterException("Start Time");
         }
@@ -103,73 +176,11 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             throw new MissingParameterException("End Time");
         }
         if(timeSlot.getDepartment()==null){
-            throw new MissingParameterException("Department");
+            throw new MissingParameterException(Constant.DEPARTMENT);
         }
         if(timeSlot.getDepartment().getId()==0){
             throw new MissingParameterException("DepartmentId");
         }
-        Optional<Department> optionalDepartment = departmentRepository.findById(timeSlot.getDepartment().getId());
-        if(optionalDepartment.isEmpty()){
-            throw new DoesNotExistException("Department");
-        }
-        Department department = optionalDepartment.get();
-        timeSlot.setDepartment(department);
-        if(timeSlot.getAppointment() != null){
-            Set<Appointment> appointmentList = new HashSet<>();
-            for(Appointment appointment : timeSlot.getAppointment()){
-                Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointment.getId());
-                if(optionalAppointment.isEmpty()){
-                    throw new DoesNotExistException("Appointment");
-                }
-                Appointment foundAppointment = optionalAppointment.get();
-                appointmentList.add(foundAppointment);
-            }
-            timeSlot.setAppointment(appointmentList);
-
-        }
-        if(timeSlot.getAppointmentData() != null){
-            Set<PostAppointmentData> postAppointmentDataList = new HashSet<>();
-            for(PostAppointmentData postAppointmentData : timeSlot.getAppointmentData()) {
-                Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(postAppointmentData.getId());
-                if (optionalPostAppointmentData.isEmpty()) {
-                    throw new DoesNotExistException("Post Appointment");
-                }
-                PostAppointmentData foundPostAppointmentData = optionalPostAppointmentData.get();
-                postAppointmentDataList.add(foundPostAppointmentData);
-            }
-            timeSlot.setAppointmentData(postAppointmentDataList);
-        }
-
-        Set<Doctor> availableDoctors = new HashSet<>();
-        if(timeSlot.getAvailableDoctors() != null){
-            for(Doctor d: timeSlot.getAvailableDoctors()){
-                if(d.getId() != 0){
-                    Optional<Doctor> optionalAvailableDoctor = doctorRepository.findById(d.getId());
-                    if(optionalAvailableDoctor.isEmpty()){
-                        throw new DoesNotExistException("Doctor");
-                    }
-                    Doctor doctor = optionalAvailableDoctor.get();
-                    availableDoctors.add(doctor);
-                    timeSlot.setAvailableDoctors(availableDoctors);
-                }
-            }
-        }
-
-        Set<Doctor> bookedDoctors = new HashSet<>();
-        if(timeSlot.getBookedDoctors() != null){
-            for(Doctor d: timeSlot.getBookedDoctors()){
-                if(d.getId() != 0){
-                    Optional<Doctor> optionalBookedDoctor = doctorRepository.findById(d.getId());
-                    if(optionalBookedDoctor.isEmpty()){
-                        throw new DoesNotExistException("Doctor");
-                    }
-                    Doctor doctor = optionalBookedDoctor.get();
-                    bookedDoctors.add(doctor);
-                    timeSlot.setBookedDoctors(bookedDoctors);
-                }
-            }
-        }
-        return timeSlotRepository.save(timeSlot);
     }
 
 
@@ -185,26 +196,14 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
     @Transactional
     @Override
     public TimeSlot updateTimeSlot(int id, TimeSlot timeSlot) throws DoesNotExistException, MissingParameterException{
-        if(timeSlot.getStartTime()==null){
-            throw new MissingParameterException("Start Time");
-        }
-        if(timeSlot.getEndTime()==null){
-            throw new MissingParameterException("End Time");
-        }
-        if(timeSlot.getDepartment()==null){
-            throw new MissingParameterException("Department");
-        }
-        if(timeSlot.getDepartment().getId()==0){
-            throw new MissingParameterException("DepartmentId");
-        }
+        validateRequiredFields(timeSlot);
         Optional<TimeSlot> oldTimeSlot = timeSlotRepository.findById(id);
         if(oldTimeSlot.isPresent()) {
-            TimeSlot oldTimeSlotObj = oldTimeSlot.get();
             timeSlot.setId(id);
             if(timeSlot.getDepartment() != null){
                 Optional<Department> optionalDepartment = departmentRepository.findById(timeSlot.getDepartment().getId());
                 if(optionalDepartment.isEmpty()){
-                    throw new DoesNotExistException("Department");
+                    throw new DoesNotExistException(Constant.DEPARTMENT);
                 }
                 Department department = optionalDepartment.get();
                 timeSlot.setDepartment(department);
@@ -212,62 +211,38 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
 
             if(timeSlot.getAppointment() != null){
                 Set<Appointment> appointments = new HashSet<>();
-                for(Appointment appointment : timeSlot.getAppointment()){
-                    Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointment.getId());
-                    if(optionalAppointment.isEmpty()){
-                        throw new DoesNotExistException("Appointment");
-                    }
-                    Appointment foundAppointment = optionalAppointment.get();
-                    appointments.add(foundAppointment);
-                }
-                timeSlot.setAppointment(appointments);
+                timeSlot.setAppointment(getSetOfAppointmentsWithWholeObject(timeSlot, appointments));
             }
 
             if(timeSlot.getAppointmentData() != null){
                 Set<PostAppointmentData> postAppointmentDataList = new HashSet<>();
-                for(PostAppointmentData postAppointmentData : timeSlot.getAppointmentData()){
-                    Optional<PostAppointmentData> optionalPostAppointmentData = postAppointmentDataRepository.findById(postAppointmentData.getId());
-                    if(optionalPostAppointmentData.isEmpty()){
-                        throw new DoesNotExistException("Post Appointment");
-                    }
-                    PostAppointmentData foundPostAppointmentData = optionalPostAppointmentData.get();
-                    postAppointmentDataList.add(foundPostAppointmentData);
-                }
-                timeSlot.setAppointmentData(postAppointmentDataList);
+                timeSlot.setAppointmentData(getListOfPostAppointmentDataWithWholeObjects(timeSlot, postAppointmentDataList));
             }
             Set<Doctor> availableDoctors = new HashSet<>();
             if(timeSlot.getAvailableDoctors() != null){
-                for(Doctor d: timeSlot.getAvailableDoctors()){
-                    if(d.getId() != 0){
-                        Optional<Doctor> optionalAvailableDoctor = doctorRepository.findById(d.getId());
-                        if(optionalAvailableDoctor.isEmpty()){
-                            throw new DoesNotExistException("Doctor");
-                        }
-                        Doctor doctor = optionalAvailableDoctor.get();
-                        availableDoctors.add(doctor);
-                        timeSlot.setAvailableDoctors(availableDoctors);
-                    }
-                }
+                timeSlot.setAvailableDoctors(getSetOfAvailableDoctorsWithWholeObjects(timeSlot, availableDoctors));
             }
 
             Set<Doctor> bookedDoctors = new HashSet<>();
             if(timeSlot.getBookedDoctors() != null){
-                for(Doctor d: timeSlot.getBookedDoctors()){
-                    if(d.getId() != 0){
-                        Optional<Doctor> optionalBookedDoctor = doctorRepository.findById(d.getId());
-                        if(optionalBookedDoctor.isEmpty()){
-                            throw new DoesNotExistException("Doctor");
-                        }
-                        Doctor doctor = optionalBookedDoctor.get();
-                        bookedDoctors.add(doctor);
-                        timeSlot.setBookedDoctors(bookedDoctors);
-                    }
-                }
+                timeSlot.setBookedDoctors(getSetOfBookedDoctorsWithWholeObjects(timeSlot, bookedDoctors));
             }
             timeSlotRepository.save(timeSlot);
             return timeSlot;
         }
-        throw new DoesNotExistException("Time Slot");
+        throw new DoesNotExistException(Constant.TIME_SLOT);
+    }
+
+    private Set<Appointment> getSetOfAppointmentsWithWholeObject(TimeSlot timeSlot, Set<Appointment> appointments) throws DoesNotExistException {
+        for(Appointment appointment : timeSlot.getAppointment()){
+            Optional<Appointment> optionalAppointment = appointmentRepository.findById(appointment.getId());
+            if(optionalAppointment.isEmpty()){
+                throw new DoesNotExistException("Appointment");
+            }
+            Appointment foundAppointment = optionalAppointment.get();
+            appointments.add(foundAppointment);
+        }
+        return appointments;
     }
 
 
@@ -286,7 +261,7 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             timeSlotRepository.deleteById(id);
             return "timeSlot with id: " + id + " is deleted";
         }
-        throw new DoesNotExistException("Time Slot");
+        throw new DoesNotExistException(Constant.TIME_SLOT);
     }
 
     /**
@@ -304,17 +279,25 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             timeSlotStartTime = (Timestamp) hospitalStartTime.clone();
         }
 
+        LocalDateTime localDateTimeForTimeSlotStartTime = timeSlotStartTime.toLocalDateTime();
+
         Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
-        timeSlotStartTime.setYear(currentTimeStamp.getYear());
-        timeSlotStartTime.setMonth(currentTimeStamp.getMonth());
-        timeSlotStartTime.setDate(currentTimeStamp.getDate()+index);
+        LocalDateTime localDateTimeForCurrentTimeStamp = currentTimeStamp.toLocalDateTime();
+        localDateTimeForTimeSlotStartTime = localDateTimeForTimeSlotStartTime.withYear(localDateTimeForCurrentTimeStamp.getYear());
+        localDateTimeForTimeSlotStartTime = localDateTimeForTimeSlotStartTime.withMonth(localDateTimeForCurrentTimeStamp.getMonthValue());
+        localDateTimeForTimeSlotStartTime = localDateTimeForTimeSlotStartTime.withDayOfMonth(localDateTimeForCurrentTimeStamp.getDayOfMonth()+index);
+        timeSlotStartTime = Timestamp.valueOf(localDateTimeForTimeSlotStartTime);
         int timeDuration = department.getTimeDuration();
         Timestamp timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
-        timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
+        LocalDateTime localDateTimeForTimeSlotEndTime = timeSlotEndTime.toLocalDateTime();
+        localDateTimeForTimeSlotEndTime = localDateTimeForTimeSlotEndTime.withMinute(localDateTimeForTimeSlotEndTime.getMinute()+timeDuration);
+        timeSlotEndTime = Timestamp.valueOf(localDateTimeForTimeSlotEndTime);
         Timestamp tentativeEndTime = (Timestamp) hospitalEndTime.clone();
-        tentativeEndTime.setYear(currentTimeStamp.getYear());
-        tentativeEndTime.setMonth(currentTimeStamp.getMonth());
-        tentativeEndTime.setDate(currentTimeStamp.getDate()+index);
+        LocalDateTime localDateTimeForTentativeEndTime = tentativeEndTime.toLocalDateTime();
+        localDateTimeForTentativeEndTime = localDateTimeForTentativeEndTime.withYear(localDateTimeForCurrentTimeStamp.getYear());
+        localDateTimeForTentativeEndTime = localDateTimeForTentativeEndTime.withMonth(localDateTimeForCurrentTimeStamp.getMonthValue());
+        localDateTimeForTentativeEndTime = localDateTimeForTentativeEndTime.withDayOfMonth(localDateTimeForCurrentTimeStamp.getDayOfMonth()+index);
+        tentativeEndTime = Timestamp.valueOf(localDateTimeForTentativeEndTime);
         int timeLimit = timeSlotEndTime.compareTo(tentativeEndTime);
         while(timeLimit<=0){
             TimeSlot timeSlot = new TimeSlot();
@@ -327,7 +310,9 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             }
             timeSlotStartTime = (Timestamp) timeSlotEndTime.clone();
             timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
-            timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
+            localDateTimeForTimeSlotEndTime = timeSlotEndTime.toLocalDateTime();
+            localDateTimeForTimeSlotEndTime = localDateTimeForTimeSlotEndTime.withMinute(localDateTimeForTimeSlotEndTime.getMinute()+timeDuration);
+            timeSlotEndTime = Timestamp.valueOf(localDateTimeForTimeSlotEndTime);
             timeLimit = timeSlotEndTime.compareTo(tentativeEndTime);
         }
         return timeSlots;
@@ -346,35 +331,6 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
         }else{
             timeSlots = createTimeSlots(department, 6, timeSlots);
         }
-            
-        
-        
-//        for(int i=0; i<weekDays; i++){
-//            Timestamp timeSlotStartTime = (Timestamp) hospitalStartTime.clone();
-//            Timestamp currentTimeStamp = new Timestamp(System.currentTimeMillis());
-//            timeSlotStartTime.setYear(currentTimeStamp.getYear());
-//            timeSlotStartTime.setMonth(currentTimeStamp.getMonth());
-//            timeSlotStartTime.setDate(currentTimeStamp.getDate()+i);
-//            int timeDuration = department.getTimeDuration();
-//            Timestamp timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
-//            timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
-//            Timestamp tentativeEndTime = (Timestamp) hospitalEndTime.clone();
-//            tentativeEndTime.setYear(currentTimeStamp.getYear());
-//            tentativeEndTime.setMonth(currentTimeStamp.getMonth());
-//            tentativeEndTime.setDate(currentTimeStamp.getDate()+i);
-//            int timeLimit = timeSlotEndTime.compareTo(tentativeEndTime);
-//            while(timeLimit<=0){
-//                TimeSlot timeSlot = new TimeSlot();
-//                timeSlot.setStartTime(timeSlotStartTime);
-//                timeSlot.setEndTime(timeSlotEndTime);
-//                timeSlot.setDepartment(department);
-//                timeSlots.add(timeSlot);
-//                timeSlotStartTime = (Timestamp) timeSlotEndTime.clone();
-//                timeSlotEndTime = (Timestamp) timeSlotStartTime.clone();
-//                timeSlotEndTime.setMinutes(timeSlotEndTime.getMinutes()+timeDuration);
-//                timeLimit = timeSlotEndTime.compareTo(tentativeEndTime);
-//            }
-//        }
         return timeSlots;
     }
 
@@ -418,14 +374,12 @@ public class TimeSlotDaoImpl implements TimeSlotInterface {
             roundedDateTime = now.plusHours(1).truncatedTo(ChronoUnit.HOURS);
         } else {
             // Round to the next 30-minute increment
-            roundedDateTime = now.plusMinutes(30 - (now.getMinute() % 30)).truncatedTo(ChronoUnit.MINUTES);
+            roundedDateTime = now.plusMinutes((long)30 - (now.getMinute() % 30)).truncatedTo(ChronoUnit.MINUTES);
         }
 
         roundedDateTime = roundedDateTime.withSecond(0); // Truncate seconds to zero
 
-        Timestamp roundedTimestamp = Timestamp.valueOf(roundedDateTime);
-
-        return roundedTimestamp;
+        return Timestamp.valueOf(roundedDateTime);
     }
 
 }
