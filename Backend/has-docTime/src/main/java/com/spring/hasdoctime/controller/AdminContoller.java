@@ -35,7 +35,7 @@ public class AdminContoller {
     @GetMapping("")
     public ResponseEntity<List<Admin>> getAllAdmin(){
         List<Admin> responseAllAdmin = adminService.getAllAdmin();
-        return new ResponseEntity(responseAllAdmin, HttpStatus.OK);
+        return new ResponseEntity<>(responseAllAdmin, HttpStatus.OK);
     }
 
 
@@ -49,13 +49,8 @@ public class AdminContoller {
      */
     @GetMapping("{adminId}")
     public ResponseEntity<Admin> getAdmin(@PathVariable("adminId") int id) throws AccessDeniedException, DoesNotExistException {
-//        String authenticatedAdminEmailId = SecurityContextHolder.getContext().getAuthentication().getName();
         Admin admin = adminService.getAdmin(id);
-
-//        if(!authenticatedAdminEmailId.equals(admin.getUser().getEmail())){
-//            throw new AccessDeniedException("You do not have access to this resource");
-//        };
-        return new ResponseEntity(admin, HttpStatus.OK);
+        return new ResponseEntity<>(admin, HttpStatus.OK);
     }
 
 
@@ -74,9 +69,9 @@ public class AdminContoller {
         Admin responseAdmin = adminService.updateAdmin(id, admin);
 
         if(admin == null){
-            return new ResponseEntity(responseAdmin, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(responseAdmin, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(responseAdmin, HttpStatus.OK);
+        return new ResponseEntity<>(responseAdmin, HttpStatus.OK);
     }
 
 
@@ -92,10 +87,10 @@ public class AdminContoller {
     public ResponseEntity<Boolean> deleteAdmin(@PathVariable int id) throws DoesNotExistException {
         Boolean response = adminService.deleteAdmin(id);
 
-        if(response == false){
-            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
+        if(Boolean.FALSE.equals(response)){
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -114,9 +109,9 @@ public class AdminContoller {
 
         Admin responseAdmin = adminService.createAdmin(admin);
         if(responseAdmin == null){
-            return new ResponseEntity(responseAdmin, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(responseAdmin, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(responseAdmin, HttpStatus.OK);
+        return new ResponseEntity<>(responseAdmin, HttpStatus.OK);
     }
 
 }
