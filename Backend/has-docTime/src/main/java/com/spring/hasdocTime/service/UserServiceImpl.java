@@ -1,6 +1,8 @@
 package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.UserInterface;
@@ -17,6 +19,9 @@ import java.util.Set;
  */
 @Service
 public class UserServiceImpl implements UserInterface {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private UserInterface userDao;
 
     @Autowired
@@ -31,7 +36,10 @@ public class UserServiceImpl implements UserInterface {
      */
     @Override
     public Page<User> getAllUser(int page, int size, String sortBy, String search) {
-        return userDao.getAllUser(page, size, sortBy, search);
+        LOGGER.info("getAllUser called with page: {}, size: {}, sortBy: {}, search: {}", page, size, sortBy, search);
+        Page<User> result = userDao.getAllUser(page, size, sortBy, search);
+        LOGGER.info("getAllUser returned: {}", result);
+        return result;
     }
 
     /**
@@ -43,7 +51,15 @@ public class UserServiceImpl implements UserInterface {
      */
     @Override
     public User getUser(int id) throws DoesNotExistException{
-        return userDao.getUser(id);
+        LOGGER.info("getUser called with id: {}", id);
+        try {
+            User result = userDao.getUser(id);
+            LOGGER.info("getUser with id: {} returned: {}", id, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in getUser with id: {}", id, e);
+            throw e;
+        }
     }
 
     /**
@@ -56,7 +72,18 @@ public class UserServiceImpl implements UserInterface {
      */
     @Override
     public User createUser(User user) throws MissingParameterException, DoesNotExistException{
-        return userDao.createUser(user);
+        LOGGER.info("createUser called with user: {}", user);
+        try {
+            User result = userDao.createUser(user);
+            LOGGER.info("createUser returned: {}", result);
+            return result;
+        } catch (MissingParameterException e) {
+            LOGGER.error("MissingParameterException in createUser with user: {}", user, e);
+            throw e;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in createUser with user: {}", user, e);
+            throw e;
+        }
     }
 
     /**
@@ -70,7 +97,18 @@ public class UserServiceImpl implements UserInterface {
      */
     @Override
     public User updateUser(int id, User user) throws DoesNotExistException, MissingParameterException {
-        return userDao.updateUser(id, user);
+        LOGGER.info("updateUser called with id: {} and user: {}", id, user);
+        try {
+            User result = userDao.updateUser(id, user);
+            LOGGER.info("updateUser with id: {} returned: {}", id, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in updateUser with id: {}", id, e);
+            throw e;
+        } catch (MissingParameterException e) {
+            LOGGER.error("MissingParameterException in updateUser with id: {}", id, e);
+            throw e;
+        }
     }
 
     /**
@@ -82,7 +120,15 @@ public class UserServiceImpl implements UserInterface {
      */
     @Override
     public User deleteUser(int id) throws DoesNotExistException{
-        return userDao.deleteUser(id);
+        LOGGER.info("deleteUser called with id: {}", id);
+        try {
+            User result = userDao.deleteUser(id);
+            LOGGER.info("deleteUser with id: {} returned: {}", id, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in deleteUser with id: {}", id, e);
+            throw e;
+        }
     }
 
     /**
@@ -94,7 +140,15 @@ public class UserServiceImpl implements UserInterface {
      */
     @Override
     public User getUserByEmail(String email) throws DoesNotExistException{
-        return userDao.getUserByEmail(email);
+        LOGGER.info("getUserByEmail called with email: {}", email);
+        try {
+            User result = userDao.getUserByEmail(email);
+            LOGGER.info("getUserByEmail with email: {} returned: {}", email, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in getUserByEmail with email: {}", email, e);
+            throw e;
+        }
     }
 
     /**
@@ -104,7 +158,10 @@ public class UserServiceImpl implements UserInterface {
      */
     @Override
     public Page<User> getPatients(int page, int size, String sortBy, String search) {
-        return userDao.getPatients(page, size, sortBy, search);
+        LOGGER.info("getPatients called with page: {}, size: {}, sortBy: {}, search: {}", page, size, sortBy, search);
+        Page<User> result = userDao.getPatients(page, size, sortBy, search);
+        LOGGER.info("getPatients returned: {}", result);
+        return result;
     }
 
     /**
@@ -116,6 +173,14 @@ public class UserServiceImpl implements UserInterface {
      */
     @Override
     public Page<User> getPatientsByChronicIllnessId(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
-        return userDao.getPatientsByChronicIllnessId(id, page, size, sortBy, search);
+        LOGGER.info("getPatientsByChronicIllnessId called with id: {}, page: {}, size: {}, sortBy: {}, search: {}", id, page, size, sortBy, search);
+        try {
+            Page<User> result = userDao.getPatientsByChronicIllnessId(id, page, size, sortBy, search);
+            LOGGER.info("getPatientsByChronicIllnessId with id: {} returned: {}", id, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in getPatientsByChronicIllnessId with id: {}", id, e);
+            throw e;
+        }
     }
 }

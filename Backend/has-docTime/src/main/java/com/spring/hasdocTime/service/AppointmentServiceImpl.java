@@ -1,6 +1,8 @@
 package com.spring.hasdocTime.service;
 
 import com.spring.hasdocTime.entity.Appointment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.spring.hasdocTime.exceptionHandling.exception.DoesNotExistException;
 import com.spring.hasdocTime.exceptionHandling.exception.MissingParameterException;
 import com.spring.hasdocTime.interfaces.AppointmentInterface;
@@ -17,6 +19,8 @@ import java.util.List;
 @Service
 public class AppointmentServiceImpl implements AppointmentInterface {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentServiceImpl.class);
+
     private AppointmentInterface appointmentDao;
 
     /**
@@ -32,7 +36,10 @@ public class AppointmentServiceImpl implements AppointmentInterface {
 
     @Override
     public Page<Appointment> getAllAppointments(int page, int size, String sortBy, String search) {
-        return appointmentDao.getAllAppointments(page, size, sortBy, search);
+        LOGGER.info("getAllAppointments called with page: {}, size: {}, sortBy: {}, search: {}", page, size, sortBy, search);
+        Page<Appointment> result = appointmentDao.getAllAppointments(page, size, sortBy, search);
+        LOGGER.info("getAllAppointments returned: {}", result);
+        return result;
     }
 
     /**
@@ -42,7 +49,10 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      */
     @Override
     public List<Appointment> getAllAppointmentList() {
-        return appointmentDao.getAllAppointmentList();
+        LOGGER.info("getAllAppointmentList called");
+        List<Appointment> result = appointmentDao.getAllAppointmentList();
+        LOGGER.info("getAllAppointmentList returned: {}", result);
+        return result;
     }
 
     /**
@@ -54,7 +64,15 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      */
     @Override
     public Appointment getAppointmentById(int id) throws DoesNotExistException {
-        return appointmentDao.getAppointmentById(id);
+        LOGGER.info("getAppointmentById called with id: {}", id);
+        try {
+            Appointment result = appointmentDao.getAppointmentById(id);
+            LOGGER.info("getAppointmentById with id: {} returned: {}", id, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in getAppointmentById with id: {}", id, e);
+            throw e;
+        }
     }
 
     /**
@@ -67,7 +85,18 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      */
     @Override
     public Appointment createAppointment(Appointment appointment) throws MissingParameterException, DoesNotExistException {
-        return appointmentDao.createAppointment(appointment);
+        LOGGER.info("createAppointment called with appointment: {}", appointment);
+        try {
+            Appointment result = appointmentDao.createAppointment(appointment);
+            LOGGER.info("createAppointment returned: {}", result);
+            return result;
+        } catch (MissingParameterException e) {
+            LOGGER.error("MissingParameterException in createAppointment with appointment: {}", appointment, e);
+            throw e;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in createAppointment with appointment: {}", appointment, e);
+            throw e;
+        }
     }
 
     /**
@@ -81,7 +110,18 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      */
     @Override
     public Appointment updateAppointment(int id, Appointment appointment) throws DoesNotExistException, MissingParameterException {
-        return appointmentDao.updateAppointment(id, appointment);
+        LOGGER.info("updateAppointment called with id: {} and appointment: {}", id, appointment);
+        try {
+            Appointment result = appointmentDao.updateAppointment(id, appointment);
+            LOGGER.info("updateAppointment with id: {} returned: {}", id, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in updateAppointment with id: {}", id, e);
+            throw e;
+        } catch (MissingParameterException e) {
+            LOGGER.error("MissingParameterException in updateAppointment with id: {}", id, e);
+            throw e;
+        }
     }
 
     /**
@@ -93,7 +133,15 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      */
     @Override
     public Appointment deleteAppointment(int id) throws DoesNotExistException{
-        return appointmentDao.deleteAppointment(id);
+        LOGGER.info("deleteAppointment called with id: {}", id);
+        try {
+            Appointment result = appointmentDao.deleteAppointment(id);
+            LOGGER.info("deleteAppointment with id: {} returned: {}", id, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in deleteAppointment with id: {}", id, e);
+            throw e;
+        }
     }
 
     /**
@@ -105,7 +153,15 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      */
     @Override
     public Page<Appointment> getAppointmentsByUser(int userId, int page, int size, String sortBy, String search) throws DoesNotExistException{
-        return appointmentDao.getAppointmentsByUser(userId, page, size, sortBy, search);
+        LOGGER.info("getAppointmentsByUser called with userId: {}, page: {}, size: {}, sortBy: {}, search: {}", userId, page, size, sortBy, search);
+        try {
+            Page<Appointment> result = appointmentDao.getAppointmentsByUser(userId, page, size, sortBy, search);
+            LOGGER.info("getAppointmentsByUser with userId: {} returned: {}", userId, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in getAppointmentsByUser with userId: {}", userId, e);
+            throw e;
+        }
     }
 
     /**
@@ -117,11 +173,27 @@ public class AppointmentServiceImpl implements AppointmentInterface {
      */
     @Override
     public List<Appointment> getAppointmentListByUser(int userId) throws DoesNotExistException {
-        return appointmentDao.getAppointmentListByUser(userId);
+        LOGGER.info("getAppointmentListByUser called with userId: {}", userId);
+        try {
+            List<Appointment> result = appointmentDao.getAppointmentListByUser(userId);
+            LOGGER.info("getAppointmentListByUser with userId: {} returned: {}", userId, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in getAppointmentListByUser with userId: {}", userId, e);
+            throw e;
+        }
     }
 
     @Override
     public Page<Appointment> getAppointmentsOfDoctor(int id, int page, int size, String sortBy, String search) throws DoesNotExistException {
-        return appointmentDao.getAppointmentsOfDoctor(id, page, size, sortBy, search);
+        LOGGER.info("getAppointmentsOfDoctor called with id: {}, page: {}, size: {}, sortBy: {}, search: {}", id, page, size, sortBy, search);
+        try {
+            Page<Appointment> result = appointmentDao.getAppointmentsOfDoctor(id, page, size, sortBy, search);
+            LOGGER.info("getAppointmentsOfDoctor with id: {} returned: {}", id, result);
+            return result;
+        } catch (DoesNotExistException e) {
+            LOGGER.error("DoesNotExistException in getAppointmentsOfDoctor with id: {}", id, e);
+            throw e;
+        }
     }
 }
